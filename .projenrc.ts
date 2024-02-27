@@ -8,7 +8,7 @@ const GITHUB_USER = 'awslabs';
 const PUBLICATION_NAMESPACE = 'cdklabs';
 const PROJECT_NAME = 'sbt-aws';
 const CDK_VERSION: string = '2.114.1';
-const PROJEN_VERSION: string = '0.79.7';
+const PROJEN_VERSION: string = '0.80.2';
 
 const project = new awscdk.AwsCdkConstructLibrary({
   author: 'Amazon Web Services - SaaS Factory',

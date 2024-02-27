@@ -45,8 +45,3 @@ tsconfig.dev.json
 yarn.lock
 /.gitattributes
 /.projenrc.ts
-/docs
-*.drawio
-/scripts
-*.sh
-/images
