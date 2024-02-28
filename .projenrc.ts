@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { awscdk, javascript } from 'projen';
+import { GithubCredentials } from 'projen/lib/github';
 import { NpmAccess } from 'projen/lib/javascript';
 
 const GITHUB_USER = 'awslabs';
@@ -36,7 +37,6 @@ const project = new awscdk.AwsCdkConstructLibrary({
   prettier: true,
   projenrcTs: true,
   projenVersion: PROJEN_VERSION,
-  projenTokenSecret: 'GITHUB_TOKEN',
   repositoryUrl: `https://github.com/${GITHUB_USER}/${PROJECT_NAME}`,
   sampleCode: false,
   stability: 'experimental',
@@ -46,6 +46,9 @@ const project = new awscdk.AwsCdkConstructLibrary({
   npmAccess: NpmAccess.PUBLIC,
 
   githubOptions: {
+    projenCredentials: GithubCredentials.fromPersonalAccessToken({
+      secret: 'GITHUB_TOKEN',
+    }),
     pullRequestLintOptions: {
       contributorStatement:
         'By submitting this pull request, I confirm that you can use, modify, copy, and redistribute this contribution, under the terms of the project license.',
