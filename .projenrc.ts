@@ -36,6 +36,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   prettier: true,
   projenrcTs: true,
   projenVersion: PROJEN_VERSION,
+  projenTokenSecret: 'GITHUB_TOKEN',
   repositoryUrl: `https://github.com/${GITHUB_USER}/${PROJECT_NAME}`,
   sampleCode: false,
   stability: 'experimental',
