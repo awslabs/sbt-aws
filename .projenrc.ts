@@ -37,6 +37,27 @@ const project = new awscdk.AwsCdkConstructLibrary({
   prettier: true,
   projenrcTs: true,
   projenVersion: PROJEN_VERSION,
+  pullRequestTemplateContents: [
+    '### Issue # (if applicable)',
+    '',
+    'Closes #<issue number here>.',
+    '',
+    '### Reason for this change',
+    '',
+    '<!--What is the bug or use case behind this change?-->',
+    '',
+    '### Description of changes',
+    '',
+    '<!--What code changes did you make? Have you made any important design decisions?-->',
+    '',
+    '### Description of how you validated changes',
+    '',
+    '<!--Have you added any unit tests and/or integration tests?-->',
+    '',
+    '### Checklist',
+    '',
+    '- [ ] My code adheres to the [CONTRIBUTING GUIDE](https://github.com/awslabs/sbt-aws/blob/main/CONTRIBUTING.md)',
+  ],
   repositoryUrl: `https://github.com/${GITHUB_USER}/${PROJECT_NAME}`,
   sampleCode: false,
   stability: 'experimental',
@@ -44,14 +65,13 @@ const project = new awscdk.AwsCdkConstructLibrary({
 
   npmTokenSecret: 'NPM_TOKEN',
   npmAccess: NpmAccess.PUBLIC,
-
   githubOptions: {
     projenCredentials: GithubCredentials.fromPersonalAccessToken({
       secret: 'GITHUB_TOKEN',
     }),
     pullRequestLintOptions: {
       contributorStatement:
-        'By submitting this pull request, I confirm that you can use, modify, copy, and redistribute this contribution, under the terms of the project license.',
+        '\n*By submitting this pull request, I confirm that you can use, modify, copy, and redistribute this contribution, under the terms of the project license.*',
       contributorStatementOptions: {
         exemptUsers: ['amazon-auto', 'dependabot[bot]', 'github-actions'],
       },
