@@ -1,0 +1,7 @@
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+aws-lambda-powertools[all]==2.16.2
+jsonpickle
+simplejson
+python-jose[cryptography]
