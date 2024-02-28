@@ -8,8 +8,8 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/software.amazon.awscdk/aws-cdk-lib/badge.svg)](https://maven-badges.herokuapp.com/maven-central/software.amazon.awscdk/aws-cdk-lib)
 [![Go Reference](https://pkg.go.dev/badge/github.com/aws/aws-cdk-go/awscdk/v2.svg)](https://pkg.go.dev/github.com/aws/aws-cdk-go/awscdk/v2)
 [![Mergify](https://img.shields.io/endpoint.svg?url=https://gh.mergify.io/badges/aws/aws-cdk&style=flat)](https://mergify.io)-->
-
-[![View on Construct Hub](https://constructs.dev/packages/@cdklabs/sbt-aws)](https://constructs.dev/packages/@cdklabs/sbt-aws) 
+![build status](https://github.com/awslabs/sbt-aws/actions/workflows/release.yml/badge.svg)
+[![View on Construct Hub](https://constructs.dev/badge?package=%40cdklabs%2Fsbt-aws)](https://constructs.dev/packages/@cdklabs/sbt-aws)
 
 The **SaaS Builder Toolkit for AWS** is an open-source developer toolkit to implement SaaS best practices and increase developer velocity.
 
@@ -37,11 +37,11 @@ Jump To:
 
 -------
 
-SBT is built on top of the AWS Cloud Development Kit (CDK). It offers a number of higher-order constructs (L2, L2.5 and L3) to short-circuit the time required to build SaaS applications. Specifically, SBT attempts to codify several control plane and application plane concepts into reusable components, removing promoting reuse and reducing boilerplate code.
+SBT is built on top of the AWS Cloud Development Kit (CDK). It offers a number of higher-order constructs (L2, L2.5 and L3) to short-circuit the time required to build SaaS applications. Specifically, SBT attempts to codify several control plane and application plane concepts into reusable components, promoting reuse and reducing boilerplate code.
 
 ## Getting Started
 
-For a detailed walkthrough, see the [tutorial](https://docs.aws.amazon.com/cdk/latest/guide/getting_started.html#hello_world_tutorial) in the [developer guide](https://docs.aws.amazon.com/cdk/latest/guide/home.html).
+For a detailed walkthrough, see the [tutorial](https://github.com/awslabs/sbt-aws/blob/main/docs/public/README.md#tutorial) in the [developer guide](https://github.com/awslabs/sbt-aws/blob/main/docs/public/README.md).
 
 ### At a glance
 
