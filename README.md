@@ -1,6 +1,6 @@
 # SaaS Builder Toolkit for AWS
 
-![build status](https://github.com/awslabs/sbt-aws/actions/workflows/release.yml/badge.svg)
+![build status](https://github.com/awslabs/sbt-aws/actions/workflows/build.yml/badge.svg)
 [![npm version](https://badge.fury.io/js/@cdklabs%2Fsbt-aws.svg)](https://badge.fury.io/js/@cdklabs%2Fsbt-aws)
 
 [![View on Construct Hub](https://constructs.dev/badge?package=%40cdklabs%2Fsbt-aws)](https://constructs.dev/packages/@cdklabs/sbt-aws)
