@@ -22,9 +22,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           types: |-
+            build
+            chore
+            ci
+            docs
             feat
             fix
-            chore
+            style
+            refactor
+            perf
+            test
           requireScope: false
   contributorStatement:
     name: Require Contributor Statement

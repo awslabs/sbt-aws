@@ -55,6 +55,10 @@ const project = new awscdk.AwsCdkConstructLibrary({
       contributorStatementOptions: {
         exemptUsers: ['amazon-auto', 'dependabot[bot]', 'github-actions'],
       },
+      semanticTitle: true,
+      semanticTitleOptions: {
+        types: ['build', 'chore', 'ci', 'docs', 'feat', 'fix', 'style', 'refactor', 'perf', 'test'],
+      },
     },
   },
 
