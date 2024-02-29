@@ -32,7 +32,7 @@ Jump To:
 [Getting Started](#getting-started) |
 [Getting Help](#getting-help) |
 [Contributing](#contributing) |
-[Roadmap](https://github.com/aws/aws-cdk/blob/main/ROADMAP.md) |
+[Roadmap](#roadmap) |
 [More Resources](#more-resources)
 
 -------
