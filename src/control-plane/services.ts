@@ -3,21 +3,18 @@
 
 import * as path from 'path';
 import { PythonFunction } from '@aws-cdk/aws-lambda-python-alpha';
-import { Duration } from 'aws-cdk-lib';
-import { EventBus } from 'aws-cdk-lib/aws-events';
+import { Duration, Stack } from 'aws-cdk-lib';
 import { Role, ServicePrincipal, ManagedPolicy } from 'aws-cdk-lib/aws-iam';
 import { Runtime, LayerVersion, Function } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { Tables } from './tables';
+import { EventManager } from '../utils';
 
 export interface ServicesProps {
-  readonly eventBus: EventBus;
-  readonly idpDetails: string;
   readonly lambdaLayer: LayerVersion;
   readonly tables: Tables;
-  readonly onboardingDetailType: string;
-  readonly controlPlaneEventSource: string;
+  readonly eventManager: EventManager;
 }
 
 export class Services extends Construct {
@@ -31,7 +28,7 @@ export class Services extends Construct {
     });
 
     props.tables.tenantDetails.grantReadWriteData(tenantManagementExecRole);
-    props.eventBus.grantPutEventsTo(tenantManagementExecRole);
+    props.eventManager.eventBus.grantPutEventsTo(tenantManagementExecRole);
 
     tenantManagementExecRole.addManagedPolicy(
       ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')
@@ -65,18 +62,29 @@ export class Services extends Construct {
       true // applyToChildren = true, so that it applies to policies created for the role.
     );
 
+    // https://docs.powertools.aws.dev/lambda/python/2.31.0/#lambda-layer
+    const lambdaPowerToolsLayerARN = `arn:aws:lambda:${
+      Stack.of(this).region
+    }:017000801446:layer:AWSLambdaPowertoolsPythonV2:59`;
+
     const tenantManagementServices = new PythonFunction(this, 'TenantManagementServices', {
-      entry: path.join(__dirname, '../../resources/functions/'),
+      entry: path.join(__dirname, '../../resources/functions/tenant-management'),
       runtime: Runtime.PYTHON_3_12,
       index: 'tenant_management.py',
       handler: 'lambda_handler',
       timeout: Duration.seconds(60),
       role: tenantManagementExecRole,
-      layers: [props.lambdaLayer],
+      layers: [
+        LayerVersion.fromLayerVersionArn(this, 'LambdaPowerTools', lambdaPowerToolsLayerARN),
+      ],
       environment: {
-        EVENTBUS_NAME: props.eventBus.eventBusName,
-        EVENT_SOURCE: props.controlPlaneEventSource,
+        EVENTBUS_NAME: props.eventManager.eventBus.eventBusName,
+        EVENT_SOURCE: props.eventManager.controlPlaneEventSource,
         TENANT_DETAILS_TABLE: props.tables.tenantDetails.tableName,
+        ONBOARDING_DETAIL_TYPE: props.eventManager.eventMetadata.onboardingRequest.detailType![0],
+        OFFBOARDING_DETAIL_TYPE: props.eventManager.eventMetadata.offboardingRequest.detailType![0],
+        ACTIVATE_DETAIL_TYPE: props.eventManager.eventMetadata.activateRequest.detailType![0],
+        DEACTIVATE_DETAIL_TYPE: props.eventManager.eventMetadata.deactivateRequest.detailType![0],
       },
     });
 

@@ -8,8 +8,8 @@ import { NpmAccess } from 'projen/lib/javascript';
 const GITHUB_USER = 'awslabs';
 const PUBLICATION_NAMESPACE = 'cdklabs';
 const PROJECT_NAME = 'sbt-aws';
-const CDK_VERSION: string = '2.114.1';
 const PROJEN_VERSION: string = '0.80.2';
+const CDK_VERSION: string = '2.123.0';
 
 const project = new awscdk.AwsCdkConstructLibrary({
   author: 'Amazon Web Services - SaaS Factory',
@@ -20,10 +20,19 @@ const project = new awscdk.AwsCdkConstructLibrary({
   copyrightOwner: 'Amazon.com, Inc. or its affiliates. All Rights Reserved.',
   copyrightPeriod: '2024-',
   defaultReleaseBranch: 'main',
-  deps: ['@aws-cdk/aws-lambda-python-alpha', 'cdk-nag'],
+  deps: [
+    '@aws-cdk/aws-lambda-python-alpha',
+    'cdk-nag',
+    '@aws-cdk/aws-kinesisfirehose-alpha',
+    '@aws-cdk/aws-kinesisfirehose-destinations-alpha',
+  ],
   description:
     'SaaS Builder Toolkit for AWS is a developer toolkit to implement SaaS best practices and increase developer velocity.',
-  devDeps: ['eslint-plugin-header'],
+  devDeps: [
+    `aws-cdk@${CDK_VERSION}`,
+    'eslint-plugin-header',
+    '@aws-cdk/aws-kinesisfirehose-alpha@2.123.0-alpha.0',
+  ],
   github: true,
   jsiiVersion: '~5.2.0',
   keywords: ['constructs', 'aws-cdk', 'saas'],
@@ -34,6 +43,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   name: `@${PUBLICATION_NAMESPACE}/${PROJECT_NAME}`,
   npmignoreEnabled: true,
   packageManager: javascript.NodePackageManager.NPM,
+  peerDeps: ['@aws-cdk/aws-kinesisfirehose-alpha'],
   prettier: true,
   projenrcTs: true,
   projenVersion: PROJEN_VERSION,
@@ -90,6 +100,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     '!.ort.yml',
     '.idea',
     '.vscode',
+    'cdk.out',
   ],
 });
 

@@ -8,7 +8,7 @@ import { Construct } from 'constructs';
 import { BashJobOrchestrator } from './bash-job-orchestrator';
 import { BashJobRunner } from './bash-job-runner';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
-import { EventManager, setTemplateDesc } from '../utils';
+import { EventManager, setTemplateDesc, EventManagerEvent } from '../utils';
 
 /**
  * Provides metadata for outgoing events.
@@ -22,7 +22,7 @@ export interface OutgoingEventMetadata {
   /**
    * The source to set in the outgoing event.
    *
-   * @default CoreApplicationPlaneProps.applicationNamePlaneSource
+   * @default CoreApplicationPlaneProps.applicationPlaneEventSource
    */
   readonly source?: string;
 }
@@ -39,7 +39,7 @@ export interface IncomingEventMetadata {
   /**
    * The list of sources to listen for in the incoming event.
    *
-   * @default CoreApplicationPlaneProps.controlPlaneSource
+   * @default CoreApplicationPlaneProps.controlPlaneEventSource
    */
   readonly source?: string[];
 }
@@ -63,15 +63,9 @@ export interface CoreApplicationPlaneJobRunnerProps {
    */
   readonly script: string;
 
-  /**
-   * The IncomingEventMetadata to use when listening for the event that will trigger this CoreApplicationPlaneJobRunner.
-   */
-  readonly incomingEvent: IncomingEventMetadata;
+  readonly incomingEvent: EventManagerEvent;
 
-  /**
-   * The OutgoingEventMetadata to use when submitting a new event after this CoreApplicationPlaneJobRunner has executed.
-   */
-  readonly outgoingEvent: OutgoingEventMetadata;
+  readonly outgoingEvent: EventManagerEvent;
 
   /**
    * The bash script to run after the main script has completed.
@@ -81,12 +75,13 @@ export interface CoreApplicationPlaneJobRunnerProps {
   /**
    * The environment variables to import into the CoreApplicationPlaneJobRunner from event details field.
    */
-  readonly importedVariables?: string[];
+  readonly environmentStringVariablesFromIncomingEvent?: string[];
+  readonly environmentJSONVariablesFromIncomingEvent?: string[];
 
   /**
    * The environment variables to export into the outgoing event once the CoreApplicationPlaneJobRunner has finished.
    */
-  readonly exportedVariables?: string[];
+  readonly environmentVariablesToOutgoingEvent?: string[];
 
   /**
    * The variables to pass into the codebuild CoreApplicationPlaneJobRunner.
@@ -110,13 +105,13 @@ export interface CoreApplicationPlaneProps {
    * The source to use when listening for events coming from the SBT control plane.
    * This is used as the default if the IncomingEventMetadata source field is not set.
    */
-  readonly controlPlaneSource: string;
+  readonly controlPlaneEventSource: string;
 
   /**
    * The source to use for outgoing events that will be placed on the EventBus.
    * This is used as the default if the OutgoingEventMetadata source field is not set.
    */
-  readonly applicationNamePlaneSource: string;
+  readonly applicationPlaneEventSource: string;
 
   /**
    * The list of JobRunner definitions to create.
@@ -144,35 +139,40 @@ export class CoreApplicationPlane extends Construct {
     });
 
     props.jobRunnerPropsList?.forEach((jobRunnerProps) => {
+      // Only BashJobOrchestrator requires differentiating between
+      // strings and JSON variables pulled from the incoming event.
+      let envVarsFromIncomingEvent: string[] = [];
+      if (jobRunnerProps.environmentStringVariablesFromIncomingEvent) {
+        envVarsFromIncomingEvent.concat(jobRunnerProps.environmentStringVariablesFromIncomingEvent);
+      }
+
+      if (jobRunnerProps.environmentJSONVariablesFromIncomingEvent) {
+        envVarsFromIncomingEvent.concat(jobRunnerProps.environmentJSONVariablesFromIncomingEvent);
+      }
+
       let job = new BashJobRunner(this, jobRunnerProps.name, {
         name: jobRunnerProps.name,
         permissions: jobRunnerProps.permissions,
         script: jobRunnerProps.script,
         postScript: jobRunnerProps.postScript,
-        importedVariables: jobRunnerProps.importedVariables,
-        exportedVariables: jobRunnerProps.exportedVariables,
+        environmentVariablesFromIncomingEvent: envVarsFromIncomingEvent,
+        environmentVariablesToOutgoingEvent: jobRunnerProps.environmentVariablesToOutgoingEvent,
         scriptEnvironmentVariables: jobRunnerProps.scriptEnvironmentVariables,
-        eventBus: eventBus,
-        outgoingEventDetailType: jobRunnerProps.outgoingEvent.detailType,
-        outgoingEventSource:
-          jobRunnerProps.outgoingEvent.source || props.applicationNamePlaneSource,
       });
 
       let jobOrchestrator = new BashJobOrchestrator(this, `${jobRunnerProps.name}-orchestrator`, {
         targetEventBus: eventBus,
-        detailType: jobRunnerProps.outgoingEvent.detailType,
-        eventSource: jobRunnerProps.outgoingEvent.source || props.applicationNamePlaneSource,
-        exportedVariables: jobRunnerProps.exportedVariables,
-        importedVariables: jobRunnerProps.importedVariables,
+        detailType: eventManager.eventMetadata[jobRunnerProps.outgoingEvent].detailType![0],
+        eventSource: eventManager.eventMetadata[jobRunnerProps.outgoingEvent].source![0],
+        environmentVariablesToOutgoingEvent: jobRunnerProps.environmentVariablesToOutgoingEvent,
+        environmentStringVariablesFromIncomingEvent:
+          jobRunnerProps.environmentStringVariablesFromIncomingEvent,
+        environmentJSONVariablesFromIncomingEvent:
+          jobRunnerProps.environmentJSONVariablesFromIncomingEvent,
         bashJobRunner: job,
       });
 
-      eventManager.addRuleWithTarget(
-        jobRunnerProps.name,
-        jobRunnerProps.incomingEvent.source || [props.controlPlaneSource],
-        jobRunnerProps.incomingEvent.detailType,
-        jobOrchestrator.eventTarget
-      );
+      eventManager.addTargetToEvent(jobRunnerProps.incomingEvent, jobOrchestrator.eventTarget);
     });
   }
 }

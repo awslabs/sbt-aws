@@ -1,6 +1,11 @@
 {
   "dependencies": [
     {
+      "name": "@aws-cdk/aws-kinesisfirehose-alpha",
+      "version": "2.123.0-alpha.0",
+      "type": "build"
+    },
+    {
       "name": "@types/jest",
       "type": "build"
     },
@@ -17,6 +22,11 @@
     {
       "name": "@typescript-eslint/parser",
       "version": "^6",
+      "type": "build"
+    },
+    {
+      "name": "aws-cdk",
+      "version": "2.123.0",
       "type": "build"
     },
     {
@@ -102,14 +112,26 @@
       "type": "build"
     },
     {
+      "name": "@aws-cdk/aws-kinesisfirehose-alpha",
+      "type": "peer"
+    },
+    {
       "name": "aws-cdk-lib",
-      "version": "^2.114.1",
+      "version": "^2.123.0",
       "type": "peer"
     },
     {
       "name": "constructs",
       "version": "^10.0.5",
       "type": "peer"
+    },
+    {
+      "name": "@aws-cdk/aws-kinesisfirehose-alpha",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-cdk/aws-kinesisfirehose-destinations-alpha",
+      "type": "runtime"
     },
     {
       "name": "@aws-cdk/aws-lambda-python-alpha",

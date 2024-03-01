@@ -21,11 +21,12 @@ export interface ControlPlaneAPIProps {
 
 export class ControlPlaneAPI extends Construct {
   apiUrl: any;
+  public readonly billingResource: apigateway.Resource;
   public readonly tenantUpdateServiceTarget: targets.ApiGateway;
   constructor(scope: Construct, id: string, props: ControlPlaneAPIProps) {
     super(scope, id);
 
-    const controlPlaneAPILogGroup = new LogGroup(this, 'PrdLogs', {
+    const controlPlaneAPILogGroup = new LogGroup(this, 'controlPlaneAPILogGroup', {
       retention: RetentionDays.ONE_WEEK,
     });
     const controlPlaneAPI = new apigateway.RestApi(this, 'controlPlaneAPI', {
@@ -109,6 +110,21 @@ export class ControlPlaneAPI extends Construct {
       ]
     );
 
+    this.billingResource = controlPlaneAPI.root.addResource('billing');
+    NagSuppressions.addResourceSuppressionsByPath(
+      cdk.Stack.of(this),
+      `${this.billingResource}/OPTIONS/Resource`,
+      [
+        {
+          id: 'AwsSolutions-APIG4',
+          reason: 'Authorization not needed for OPTION method.',
+        },
+        {
+          id: 'AwsSolutions-COG4',
+          reason: 'Cognito Authorization not needed for OPTION method.',
+        },
+      ]
+    );
     const tenants = controlPlaneAPI.root.addResource('tenants');
     tenants.addMethod(
       'POST',
@@ -330,12 +346,14 @@ export class ControlPlaneAPI extends Construct {
     );
 
     const tenantConfig = controlPlaneAPI.root.addResource('tenant-config');
+    // todo: move to tenantConfig module
     tenantConfig.addMethod(
       'GET',
       new apigateway.LambdaIntegration(props.tenantConfigServiceLambda)
     );
 
     const tenantConfigNameResource = tenantConfig.addResource('{tenantName}');
+    // todo: move to tenantConfig module
     tenantConfigNameResource.addMethod(
       'GET',
       new apigateway.LambdaIntegration(props.tenantConfigServiceLambda)
