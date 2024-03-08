@@ -48,7 +48,7 @@ describe('No unsuppressed cdk-nag Warnings or Errors', () => {
   });
 });
 
-describe('ControlPlane without Description', () => {
+describe('ControlPlane', () => {
   const app = new cdk.App();
   interface TestStackProps extends cdk.StackProps {
     systemAdminEmail: string;
