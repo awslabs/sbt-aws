@@ -117,7 +117,7 @@ describe('ControlPlane without Description', () => {
   it('should have a fixed template description, when the containing stack does not have description', () => {
     const actual = controlPlaneTestStack.templateOptions.description;
     const expected = 'SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)';
-    expect(actual == expected);
+    expect(actual).toStrictEqual(expected);
   });
 
   it('should have a concatenated template description, when the containing stack has an existing desc', () => {
@@ -127,6 +127,6 @@ describe('ControlPlane without Description', () => {
     });
     const actual = stackWithDescription.templateOptions.description;
     const expected = 'ABC - SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)';
-    expect(expected === actual);
+    expect(expected).toStrictEqual(actual);
   });
 });
