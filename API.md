@@ -276,14 +276,14 @@ The environment variables to export into the outgoing event once the BashJobRunn
 ```typescript
 import { BillingProvider } from '@cdklabs/sbt-aws'
 
-new BillingProvider(scope: Construct, id: string, props: BillingProps)
+new BillingProvider(scope: Construct, id: string, props: BillingProviderProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.BillingProps">BillingProps</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.BillingProviderProps">BillingProviderProps</a></code> | *No description.* |
 
 ---
 
@@ -301,7 +301,7 @@ new BillingProvider(scope: Construct, id: string, props: BillingProps)
 
 ##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#@cdklabs/sbt-aws.BillingProps">BillingProps</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.BillingProviderProps">BillingProviderProps</a>
 
 ---
 
@@ -352,7 +352,7 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.BillingProvider.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.BillingProvider.property.controlPlaneAPIBillingWebhookResource">controlPlaneAPIBillingWebhookResource</a></code> | <code>aws-cdk-lib.aws_apigateway.IResource</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.BillingProvider.property.controlPlaneAPIBillingWebhookResource">controlPlaneAPIBillingWebhookResource</a></code> | <code>aws-cdk-lib.aws_apigateway.IResource</code> | The API Gateway resource containing the billing webhook resource. |
 
 ---
 
@@ -368,13 +368,17 @@ The tree node.
 
 ---
 
-##### `controlPlaneAPIBillingWebhookResource`<sup>Required</sup> <a name="controlPlaneAPIBillingWebhookResource" id="@cdklabs/sbt-aws.BillingProvider.property.controlPlaneAPIBillingWebhookResource"></a>
+##### `controlPlaneAPIBillingWebhookResource`<sup>Optional</sup> <a name="controlPlaneAPIBillingWebhookResource" id="@cdklabs/sbt-aws.BillingProvider.property.controlPlaneAPIBillingWebhookResource"></a>
 
 ```typescript
 public readonly controlPlaneAPIBillingWebhookResource: IResource;
 ```
 
 - *Type:* aws-cdk-lib.aws_apigateway.IResource
+
+The API Gateway resource containing the billing webhook resource.
+
+Only set when the IBilling webhookFunction is defined.
 
 ---
 
@@ -1046,7 +1050,7 @@ new EventManager(scope: Construct, id: string, props: EventManagerProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.EventManager.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@cdklabs/sbt-aws.EventManager.addTargetToEvent">addTargetToEvent</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.addTargetToEvent">addTargetToEvent</a></code> | Adds an IRuleTarget to an event. |
 
 ---
 
@@ -1064,15 +1068,21 @@ Returns a string representation of this construct.
 public addTargetToEvent(eventType: DetailType, target: IRuleTarget): void
 ```
 
+Adds an IRuleTarget to an event.
+
 ###### `eventType`<sup>Required</sup> <a name="eventType" id="@cdklabs/sbt-aws.EventManager.addTargetToEvent.parameter.eventType"></a>
 
 - *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+
+The name of the event to add a target to.
 
 ---
 
 ###### `target`<sup>Required</sup> <a name="target" id="@cdklabs/sbt-aws.EventManager.addTargetToEvent.parameter.target"></a>
 
 - *Type:* aws-cdk-lib.aws_events.IRuleTarget
+
+The target that will be added to the event.
 
 ---
 
@@ -1173,6 +1183,11 @@ public readonly supportedEvents: {[ key: string ]: string};
 
 - *Implements:* <a href="#@cdklabs/sbt-aws.IDataIngestorAggregator">IDataIngestorAggregator</a>
 
+Creates a Kinesis Firehose to accept high-volume data, which it then routes to an s3 bucket.
+
+The s3 bucket triggers a lambda which processes the data and stores it in a DynamoDB table
+containing the aggregated data.
+
 #### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.FirehoseAggregator.Initializer"></a>
 
 ```typescript
@@ -1254,10 +1269,10 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.dataAggregator">dataAggregator</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.dataIngestor">dataIngestor</a></code> | <code>@aws-cdk/aws-kinesisfirehose-alpha.DeliveryStream</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.dataIngestorName">dataIngestorName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.dataRepository">dataRepository</a></code> | <code>aws-cdk-lib.aws_dynamodb.Table</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.dataAggregator">dataAggregator</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Python Lambda function responsible for aggregating the raw data coming in via the dataIngestor. |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.dataIngestor">dataIngestor</a></code> | <code>@aws-cdk/aws-kinesisfirehose-alpha.DeliveryStream</code> | The Firehose DeliveryStream ingestor responsible for accepting the incoming data. |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.dataIngestorName">dataIngestorName</a></code> | <code>string</code> | The name of the dataIngestor. |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.dataRepository">dataRepository</a></code> | <code>aws-cdk-lib.aws_dynamodb.ITable</code> | The DynamoDB table containing the aggregated data. |
 
 ---
 
@@ -1281,6 +1296,8 @@ public readonly dataAggregator: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
+The Python Lambda function responsible for aggregating the raw data coming in via the dataIngestor.
+
 ---
 
 ##### `dataIngestor`<sup>Required</sup> <a name="dataIngestor" id="@cdklabs/sbt-aws.FirehoseAggregator.property.dataIngestor"></a>
@@ -1290,6 +1307,8 @@ public readonly dataIngestor: DeliveryStream;
 ```
 
 - *Type:* @aws-cdk/aws-kinesisfirehose-alpha.DeliveryStream
+
+The Firehose DeliveryStream ingestor responsible for accepting the incoming data.
 
 ---
 
@@ -1301,15 +1320,21 @@ public readonly dataIngestorName: string;
 
 - *Type:* string
 
+The name of the dataIngestor.
+
+This is used for visibility.
+
 ---
 
 ##### `dataRepository`<sup>Required</sup> <a name="dataRepository" id="@cdklabs/sbt-aws.FirehoseAggregator.property.dataRepository"></a>
 
 ```typescript
-public readonly dataRepository: Table;
+public readonly dataRepository: ITable;
 ```
 
-- *Type:* aws-cdk-lib.aws_dynamodb.Table
+- *Type:* aws-cdk-lib.aws_dynamodb.ITable
+
+The DynamoDB table containing the aggregated data.
 
 ---
 
@@ -2329,29 +2354,29 @@ The variables to pass into the codebuild BashJobRunner.
 
 ---
 
-### BillingProps <a name="BillingProps" id="@cdklabs/sbt-aws.BillingProps"></a>
+### BillingProviderProps <a name="BillingProviderProps" id="@cdklabs/sbt-aws.BillingProviderProps"></a>
 
-#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.BillingProps.Initializer"></a>
+Encapsulates the list of properties for a BillingProvider.
+
+#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.BillingProviderProps.Initializer"></a>
 
 ```typescript
-import { BillingProps } from '@cdklabs/sbt-aws'
+import { BillingProviderProps } from '@cdklabs/sbt-aws'
 
-const billingProps: BillingProps = { ... }
+const billingProviderProps: BillingProviderProps = { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BillingProps.property.billing">billing</a></code> | <code><a href="#@cdklabs/sbt-aws.IBilling">IBilling</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.BillingProps.property.controlPlaneAPIBillingResource">controlPlaneAPIBillingResource</a></code> | <code>aws-cdk-lib.aws_apigateway.Resource</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.BillingProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.BillingProps.property.tenantDetailsTable">tenantDetailsTable</a></code> | <code>aws-cdk-lib.aws_dynamodb.Table</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.BillingProps.property.tenantIdColumn">tenantIdColumn</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.billing">billing</a></code> | <code><a href="#@cdklabs/sbt-aws.IBilling">IBilling</a></code> | An implementation of the IBilling interface. |
+| <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.controlPlaneAPIBillingResource">controlPlaneAPIBillingResource</a></code> | <code>aws-cdk-lib.aws_apigateway.Resource</code> | An API Gateway Resource for the BillingProvider to use when setting up API endpoints. |
+| <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | An EventManager object to help coordinate events. |
 
 ---
 
-##### `billing`<sup>Required</sup> <a name="billing" id="@cdklabs/sbt-aws.BillingProps.property.billing"></a>
+##### `billing`<sup>Required</sup> <a name="billing" id="@cdklabs/sbt-aws.BillingProviderProps.property.billing"></a>
 
 ```typescript
 public readonly billing: IBilling;
@@ -2359,9 +2384,11 @@ public readonly billing: IBilling;
 
 - *Type:* <a href="#@cdklabs/sbt-aws.IBilling">IBilling</a>
 
+An implementation of the IBilling interface.
+
 ---
 
-##### `controlPlaneAPIBillingResource`<sup>Required</sup> <a name="controlPlaneAPIBillingResource" id="@cdklabs/sbt-aws.BillingProps.property.controlPlaneAPIBillingResource"></a>
+##### `controlPlaneAPIBillingResource`<sup>Required</sup> <a name="controlPlaneAPIBillingResource" id="@cdklabs/sbt-aws.BillingProviderProps.property.controlPlaneAPIBillingResource"></a>
 
 ```typescript
 public readonly controlPlaneAPIBillingResource: Resource;
@@ -2369,9 +2396,11 @@ public readonly controlPlaneAPIBillingResource: Resource;
 
 - *Type:* aws-cdk-lib.aws_apigateway.Resource
 
+An API Gateway Resource for the BillingProvider to use when setting up API endpoints.
+
 ---
 
-##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.BillingProps.property.eventManager"></a>
+##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.BillingProviderProps.property.eventManager"></a>
 
 ```typescript
 public readonly eventManager: EventManager;
@@ -2379,25 +2408,7 @@ public readonly eventManager: EventManager;
 
 - *Type:* <a href="#@cdklabs/sbt-aws.EventManager">EventManager</a>
 
----
-
-##### `tenantDetailsTable`<sup>Required</sup> <a name="tenantDetailsTable" id="@cdklabs/sbt-aws.BillingProps.property.tenantDetailsTable"></a>
-
-```typescript
-public readonly tenantDetailsTable: Table;
-```
-
-- *Type:* aws-cdk-lib.aws_dynamodb.Table
-
----
-
-##### `tenantIdColumn`<sup>Required</sup> <a name="tenantIdColumn" id="@cdklabs/sbt-aws.BillingProps.property.tenantIdColumn"></a>
-
-```typescript
-public readonly tenantIdColumn: string;
-```
-
-- *Type:* string
+An EventManager object to help coordinate events.
 
 ---
 
@@ -2608,12 +2619,12 @@ const coreApplicationPlaneJobRunnerProps: CoreApplicationPlaneJobRunnerProps = {
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The incoming event DetailType that triggers this job. |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.name">name</a></code> | <code>string</code> | The name of the CoreApplicationPlaneJobRunner. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.outgoingEvent">outgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.outgoingEvent">outgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The outgoing event DetailType that is emitted upon job completion. |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.permissions">permissions</a></code> | <code>aws-cdk-lib.aws_iam.PolicyDocument</code> | The IAM permission document for the CoreApplicationPlaneJobRunner. |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.script">script</a></code> | <code>string</code> | The bash script to run as part of the CoreApplicationPlaneJobRunner. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.environmentJSONVariablesFromIncomingEvent">environmentJSONVariablesFromIncomingEvent</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.environmentJSONVariablesFromIncomingEvent">environmentJSONVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the CoreApplicationPlaneJobRunner from event details field. |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.environmentStringVariablesFromIncomingEvent">environmentStringVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the CoreApplicationPlaneJobRunner from event details field. |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | The environment variables to export into the outgoing event once the CoreApplicationPlaneJobRunner has finished. |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.postScript">postScript</a></code> | <code>string</code> | The bash script to run after the main script has completed. |
@@ -2628,6 +2639,8 @@ public readonly incomingEvent: DetailType;
 ```
 
 - *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+
+The incoming event DetailType that triggers this job.
 
 ---
 
@@ -2652,6 +2665,8 @@ public readonly outgoingEvent: DetailType;
 ```
 
 - *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+
+The outgoing event DetailType that is emitted upon job completion.
 
 ---
 
@@ -2687,6 +2702,11 @@ public readonly environmentJSONVariablesFromIncomingEvent: string[];
 
 - *Type:* string[]
 
+The environment variables to import into the CoreApplicationPlaneJobRunner from event details field.
+
+This argument consists of the names of only JSON-formatted string type variables.
+Ex. '{"test": 2}'
+
 ---
 
 ##### `environmentStringVariablesFromIncomingEvent`<sup>Optional</sup> <a name="environmentStringVariablesFromIncomingEvent" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.environmentStringVariablesFromIncomingEvent"></a>
@@ -2698,6 +2718,8 @@ public readonly environmentStringVariablesFromIncomingEvent: string[];
 - *Type:* string[]
 
 The environment variables to import into the CoreApplicationPlaneJobRunner from event details field.
+
+This argument consists of the names of only string type variables. Ex. 'test'
 
 ---
 
@@ -2842,9 +2864,9 @@ const eventManagerProps: EventManagerProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.eventBus">eventBus</a></code> | <code>aws-cdk-lib.aws_events.IEventBus</code> | The event bus to register new rules with. |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.eventMetadata">eventMetadata</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | The source to use for outgoing events that will be placed on the EventBus. |
+| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The source to use when listening for events coming from the SBT control plane. |
+| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.eventMetadata">eventMetadata</a></code> | <code>{[ key: string ]: string}</code> | The EventMetadata to use to update the event defaults. |
 
 ---
 
@@ -2868,6 +2890,8 @@ public readonly applicationPlaneEventSource: string;
 
 - *Type:* string
 
+The source to use for outgoing events that will be placed on the EventBus.
+
 ---
 
 ##### `controlPlaneEventSource`<sup>Optional</sup> <a name="controlPlaneEventSource" id="@cdklabs/sbt-aws.EventManagerProps.property.controlPlaneEventSource"></a>
@@ -2877,6 +2901,8 @@ public readonly controlPlaneEventSource: string;
 ```
 
 - *Type:* string
+
+The source to use when listening for events coming from the SBT control plane.
 
 ---
 
@@ -2888,9 +2914,13 @@ public readonly eventMetadata: {[ key: string ]: string};
 
 - *Type:* {[ key: string ]: string}
 
+The EventMetadata to use to update the event defaults.
+
 ---
 
 ### FirehoseAggregatorProps <a name="FirehoseAggregatorProps" id="@cdklabs/sbt-aws.FirehoseAggregatorProps"></a>
+
+Encapsulates the list of properties for a FirehoseAggregator construct.
 
 #### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.FirehoseAggregatorProps.Initializer"></a>
 
@@ -3528,17 +3558,19 @@ public readonly wellKnownEndpointUrl: string;
 
 - *Implemented By:* <a href="#@cdklabs/sbt-aws.IBilling">IBilling</a>
 
+Encapsulates the list of properties for an IBilling construct.
+
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.IBilling.property.createUserFunction">createUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.IBilling.property.deleteUserFunction">deleteUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.IBilling.property.ingestor">ingestor</a></code> | <code><a href="#@cdklabs/sbt-aws.IDataIngestorAggregator">IDataIngestorAggregator</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.IBilling.property.putUsageFunction">putUsageFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.IBilling.property.webhookPath">webhookPath</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.IBilling.property.webhookFunction">webhookFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.createUserFunction">createUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger when creating a new billing user. |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.deleteUserFunction">deleteUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger when deleting a billing user. |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.ingestor">ingestor</a></code> | <code><a href="#@cdklabs/sbt-aws.IDataIngestorAggregator">IDataIngestorAggregator</a></code> | The IDataIngestorAggregator responsible for accepting and aggregating the raw billing data. |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.putUsageFunction">putUsageFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function responsible for taking the aggregated data and pushing that to the billing provider. |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.webhookFunction">webhookFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger when a webhook request is received. |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.webhookPath">webhookPath</a></code> | <code>string</code> | The path to the webhook resource. |
 
 ---
 
@@ -3550,6 +3582,8 @@ public readonly createUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
+The function to trigger when creating a new billing user.
+
 ---
 
 ##### `deleteUserFunction`<sup>Required</sup> <a name="deleteUserFunction" id="@cdklabs/sbt-aws.IBilling.property.deleteUserFunction"></a>
@@ -3559,6 +3593,8 @@ public readonly deleteUserFunction: IFunction;
 ```
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
+
+The function to trigger when deleting a billing user.
 
 ---
 
@@ -3570,6 +3606,8 @@ public readonly ingestor: IDataIngestorAggregator;
 
 - *Type:* <a href="#@cdklabs/sbt-aws.IDataIngestorAggregator">IDataIngestorAggregator</a>
 
+The IDataIngestorAggregator responsible for accepting and aggregating the raw billing data.
+
 ---
 
 ##### `putUsageFunction`<sup>Required</sup> <a name="putUsageFunction" id="@cdklabs/sbt-aws.IBilling.property.putUsageFunction"></a>
@@ -3580,15 +3618,7 @@ public readonly putUsageFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
----
-
-##### `webhookPath`<sup>Required</sup> <a name="webhookPath" id="@cdklabs/sbt-aws.IBilling.property.webhookPath"></a>
-
-```typescript
-public readonly webhookPath: string;
-```
-
-- *Type:* string
+The function responsible for taking the aggregated data and pushing that to the billing provider.
 
 ---
 
@@ -3600,20 +3630,36 @@ public readonly webhookFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
+The function to trigger when a webhook request is received.
+
+---
+
+##### `webhookPath`<sup>Optional</sup> <a name="webhookPath" id="@cdklabs/sbt-aws.IBilling.property.webhookPath"></a>
+
+```typescript
+public readonly webhookPath: string;
+```
+
+- *Type:* string
+
+The path to the webhook resource.
+
 ---
 
 ### IDataIngestorAggregator <a name="IDataIngestorAggregator" id="@cdklabs/sbt-aws.IDataIngestorAggregator"></a>
 
 - *Implemented By:* <a href="#@cdklabs/sbt-aws.FirehoseAggregator">FirehoseAggregator</a>, <a href="#@cdklabs/sbt-aws.IDataIngestorAggregator">IDataIngestorAggregator</a>
 
+Encapsulates the list of properties for a IDataIngestorAggregator.
+
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.IDataIngestorAggregator.property.dataAggregator">dataAggregator</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.IDataIngestorAggregator.property.dataIngestorName">dataIngestorName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.IDataIngestorAggregator.property.dataRepository">dataRepository</a></code> | <code>aws-cdk-lib.aws_dynamodb.Table</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.IDataIngestorAggregator.property.dataAggregator">dataAggregator</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function responsible for aggregating the raw data coming in via the dataIngestor. |
+| <code><a href="#@cdklabs/sbt-aws.IDataIngestorAggregator.property.dataIngestorName">dataIngestorName</a></code> | <code>string</code> | The ingestor responsible for accepting and storing the incoming data. |
+| <code><a href="#@cdklabs/sbt-aws.IDataIngestorAggregator.property.dataRepository">dataRepository</a></code> | <code>aws-cdk-lib.aws_dynamodb.ITable</code> | The table containing the aggregated data. |
 
 ---
 
@@ -3625,6 +3671,8 @@ public readonly dataAggregator: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
+The function responsible for aggregating the raw data coming in via the dataIngestor.
+
 ---
 
 ##### `dataIngestorName`<sup>Required</sup> <a name="dataIngestorName" id="@cdklabs/sbt-aws.IDataIngestorAggregator.property.dataIngestorName"></a>
@@ -3635,21 +3683,30 @@ public readonly dataIngestorName: string;
 
 - *Type:* string
 
+The ingestor responsible for accepting and storing the incoming data.
+
 ---
 
 ##### `dataRepository`<sup>Required</sup> <a name="dataRepository" id="@cdklabs/sbt-aws.IDataIngestorAggregator.property.dataRepository"></a>
 
 ```typescript
-public readonly dataRepository: Table;
+public readonly dataRepository: ITable;
 ```
 
-- *Type:* aws-cdk-lib.aws_dynamodb.Table
+- *Type:* aws-cdk-lib.aws_dynamodb.ITable
+
+The table containing the aggregated data.
 
 ---
 
 ## Enums <a name="Enums" id="Enums"></a>
 
 ### DetailType <a name="DetailType" id="@cdklabs/sbt-aws.DetailType"></a>
+
+Provides an easy way of accessing event DetailTypes.
+
+Note that the string represents the detailTypes used in
+events sent across the EventBus.
 
 #### Members <a name="Members" id="Members"></a>
 
