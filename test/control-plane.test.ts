@@ -1,7 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { assert } from 'console';
 import * as cdk from 'aws-cdk-lib';
 import { Annotations, Match, Template, Capture } from 'aws-cdk-lib/assertions';
 import { AwsSolutionsChecks } from 'cdk-nag';
@@ -118,7 +117,7 @@ describe('ControlPlane without Description', () => {
   it('should have a fixed template description, when the containing stack does not have description', () => {
     const actual = controlPlaneTestStack.templateOptions.description;
     const expected = 'SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)';
-    assert(actual == expected);
+    expect(actual == expected);
   });
 
   it('should have a concatenated template description, when the containing stack has an existing desc', () => {
@@ -128,6 +127,6 @@ describe('ControlPlane without Description', () => {
     });
     const actual = stackWithDescription.templateOptions.description;
     const expected = 'ABC - SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)';
-    assert(expected === actual);
+    expect(expected === actual);
   });
 });
