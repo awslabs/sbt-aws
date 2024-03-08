@@ -4,6 +4,11 @@
 import { IEventBus, Rule, IRuleTarget } from 'aws-cdk-lib/aws-events';
 import { Construct } from 'constructs';
 
+/**
+ * Provides an easy way of accessing event DetailTypes.
+ * Note that the string represents the detailTypes used in
+ * events sent across the EventBus.
+ */
 export enum DetailType {
   ONBOARDING_REQUEST = 'onboardingRequest',
   ONBOARDING_SUCCESS = 'onboardingSuccess',
@@ -25,6 +30,10 @@ export enum DetailType {
   DEACTIVATE_FAILURE = 'deactivateFailure',
 }
 
+/**
+ * Represents mapping between 'detailType' as key,
+ * and 'source' as value.
+ */
 export type EventMetadata = {
   // key: Event 'detailType' -> val: Event 'source'
   [key: string]: string;
@@ -40,9 +49,20 @@ export interface EventManagerProps {
    */
   readonly eventBus: IEventBus;
 
+  /**
+   * The EventMetadata to use to update the event defaults.
+   */
   readonly eventMetadata?: EventMetadata;
-  readonly applicationPlaneEventSource?: string;
+
+  /**
+   * The source to use when listening for events coming from the SBT control plane.
+   */
   readonly controlPlaneEventSource?: string;
+
+  /**
+   * The source to use for outgoing events that will be placed on the EventBus.
+   */
+  readonly applicationPlaneEventSource?: string;
 }
 
 /**
@@ -98,6 +118,12 @@ export class EventManager extends Construct {
     }
   }
 
+  /**
+   * Adds an IRuleTarget to an event.
+   *
+   * @param eventType The name of the event to add a target to.
+   * @param target The target that will be added to the event.
+   */
   public addTargetToEvent(eventType: DetailType, target: IRuleTarget): void {
     this.getOrCreateRule(eventType).addTarget(target);
   }

@@ -63,8 +63,14 @@ export interface CoreApplicationPlaneJobRunnerProps {
    */
   readonly script: string;
 
+  /**
+   * The incoming event DetailType that triggers this job.
+   */
   readonly incomingEvent: DetailType;
 
+  /**
+   * The outgoing event DetailType that is emitted upon job completion.
+   */
   readonly outgoingEvent: DetailType;
 
   /**
@@ -74,8 +80,15 @@ export interface CoreApplicationPlaneJobRunnerProps {
 
   /**
    * The environment variables to import into the CoreApplicationPlaneJobRunner from event details field.
+   * This argument consists of the names of only string type variables. Ex. 'test'
    */
   readonly environmentStringVariablesFromIncomingEvent?: string[];
+
+  /**
+   * The environment variables to import into the CoreApplicationPlaneJobRunner from event details field.
+   * This argument consists of the names of only JSON-formatted string type variables.
+   * Ex. '{"test": 2}'
+   */
   readonly environmentJSONVariablesFromIncomingEvent?: string[];
 
   /**

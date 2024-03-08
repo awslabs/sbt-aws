@@ -7,7 +7,7 @@ import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IAuth } from './auth';
 import { IBilling } from './billing/billing-interface';
-import { BillingProvider } from './billing/billing-template';
+import { BillingProvider } from './billing/billing-provider';
 import { ControlPlaneAPI } from './control-plane-api';
 import { LambdaLayers } from './lambda-layers';
 import { Messaging } from './messaging';
@@ -106,15 +106,16 @@ export class ControlPlane extends Construct {
         billing: props.billing,
         eventManager: this.eventManager,
         controlPlaneAPIBillingResource: controlPlaneAPI.billingResource,
-        tenantDetailsTable: this.tables.tenantDetails,
-        tenantIdColumn: this.tables.tenantIdColumn,
       });
-      new cdk.CfnOutput(this, 'billingWebhookURL', {
-        value: `${
-          controlPlaneAPI.apiUrl
-        }${billingTemplate.controlPlaneAPIBillingWebhookResource.path.substring(1)}`,
-        key: 'billingWebhookURL',
-      });
+
+      if (billingTemplate.controlPlaneAPIBillingWebhookResource) {
+        new cdk.CfnOutput(this, 'billingWebhookURL', {
+          value: `${
+            controlPlaneAPI.apiUrl
+          }${billingTemplate.controlPlaneAPIBillingWebhookResource.path.substring(1)}`,
+          key: 'billingWebhookURL',
+        });
+      }
     }
 
     // defined suppression here to suppress EventsRole Default policy

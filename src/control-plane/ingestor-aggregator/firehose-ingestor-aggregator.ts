@@ -14,12 +14,9 @@ import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IDataIngestorAggregator } from './ingestor-aggregator-interface';
 
-/*
- * Creates a Kinesis Firehose to accept high-volume data, which it then routes to an s3 bucket.
- * The s3 bucket triggers a lambda which processes the data and stores it in a DynamoDB table
- * containing the aggregated data.
+/**
+ * Encapsulates the list of properties for a FirehoseAggregator construct.
  */
-
 export interface FirehoseAggregatorProps {
   /**
    * The name to use for the primary key column for the dynamoDB database.
@@ -42,10 +39,31 @@ export interface FirehoseAggregatorProps {
   readonly aggregateValuePath: string;
 }
 
+/**
+ * Creates a Kinesis Firehose to accept high-volume data, which it then routes to an s3 bucket.
+ * The s3 bucket triggers a lambda which processes the data and stores it in a DynamoDB table
+ * containing the aggregated data.
+ */
 export class FirehoseAggregator extends Construct implements IDataIngestorAggregator {
-  public readonly dataRepository: dynamodb.Table;
+  /**
+   * The DynamoDB table containing the aggregated data.
+   */
+  public readonly dataRepository: dynamodb.ITable;
+
+  /**
+   * The Python Lambda function responsible for aggregating the raw data coming in
+   * via the dataIngestor.
+   */
   public readonly dataAggregator: lambda.IFunction;
+
+  /**
+   * The Firehose DeliveryStream ingestor responsible for accepting the incoming data.
+   */
   public readonly dataIngestor: firehose.DeliveryStream;
+
+  /**
+   * The name of the dataIngestor. This is used for visibility.
+   */
   public readonly dataIngestorName: string;
 
   constructor(scope: Construct, id: string, props: FirehoseAggregatorProps) {
