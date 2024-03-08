@@ -13,7 +13,7 @@ import { Services } from './services';
 import { Tables } from './tables';
 import { TenantConfigService } from './tenant-config/tenant-config-service';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
-import { EventManager } from '../utils';
+import { EventManager, setTemplateDesc } from '../utils';
 
 export interface ControlPlaneProps {
   readonly applicationPlaneEventSource: string;
@@ -33,6 +33,8 @@ export class ControlPlane extends Construct {
 
   constructor(scope: Construct, id: string, props: ControlPlaneProps) {
     super(scope, id);
+    setTemplateDesc(this, 'SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)');
+
     cdk.Aspects.of(this).add(new DestroyPolicySetter());
 
     const messaging = new Messaging(this, 'messaging-stack');

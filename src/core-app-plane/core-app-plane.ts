@@ -8,7 +8,7 @@ import { Construct } from 'constructs';
 import { BashJobOrchestrator } from './bash-job-orchestrator';
 import { BashJobRunner } from './bash-job-runner';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
-import { EventManager } from '../utils';
+import { EventManager, setTemplateDesc } from '../utils';
 
 /**
  * Provides metadata for outgoing events.
@@ -133,6 +133,8 @@ export interface CoreApplicationPlaneProps {
 export class CoreApplicationPlane extends Construct {
   constructor(scope: Construct, id: string, props: CoreApplicationPlaneProps) {
     super(scope, id);
+    setTemplateDesc(this, 'SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)');
+
     cdk.Aspects.of(this).add(new DestroyPolicySetter());
 
     const eventBus = EventBus.fromEventBusArn(this, 'eventBus', props.eventBusArn);
