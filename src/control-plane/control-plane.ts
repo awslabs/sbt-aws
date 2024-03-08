@@ -7,21 +7,31 @@ import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IAuth } from './auth';
 import { IBilling } from './billing/billing-interface';
-import { BillingTemplate } from './billing/billing-template';
+import { BillingProvider } from './billing/billing-template';
 import { ControlPlaneAPI } from './control-plane-api';
-import { FirehoseIngestorAggregator } from './ingestor-aggregator/firehose-ingestor-aggregator';
 import { LambdaLayers } from './lambda-layers';
 import { Messaging } from './messaging';
 import { Services } from './services';
 import { Tables } from './tables';
 import { TenantConfigService } from './tenant-config/tenant-config-service';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
-import { EventManager, setTemplateDesc, EventMetadata, EventManagerEvent } from '../utils';
+import { EventManager, setTemplateDesc, EventMetadata, DetailType } from '../utils';
 
 export interface ControlPlaneProps {
   readonly auth: IAuth;
   readonly billing?: IBilling;
   readonly eventMetadata?: EventMetadata;
+  /**
+   * The source to use when listening for events coming from the SBT control plane.
+   * This is used as the default if the IncomingEventMetadata source field is not set.
+   */
+  readonly controlPlaneEventSource?: string;
+
+  /**
+   * The source to use for outgoing events that will be placed on the EventBus.
+   * This is used as the default if the OutgoingEventMetadata source field is not set.
+   */
+  readonly applicationPlaneEventSource?: string;
 }
 
 export class ControlPlane extends Construct {
@@ -44,6 +54,9 @@ export class ControlPlane extends Construct {
     const eventBus = EventBus.fromEventBusArn(this, 'eventBus', messaging.eventBus.eventBusArn);
     this.eventManager = new EventManager(this, 'EventManager', {
       eventBus: eventBus,
+      eventMetadata: props.eventMetadata,
+      applicationPlaneEventSource: props.applicationPlaneEventSource,
+      controlPlaneEventSource: props.controlPlaneEventSource,
     });
 
     const services = new Services(this, 'services-stack', {
@@ -69,12 +82,12 @@ export class ControlPlane extends Construct {
     this.controlPlaneAPIGatewayUrl = controlPlaneAPI.apiUrl;
 
     this.eventManager.addTargetToEvent(
-      EventManagerEvent.PROVISION_SUCCESS,
+      DetailType.PROVISION_SUCCESS,
       controlPlaneAPI.tenantUpdateServiceTarget
     );
 
     this.eventManager.addTargetToEvent(
-      EventManagerEvent.DEPROVISION_SUCCESS,
+      DetailType.DEPROVISION_SUCCESS,
       controlPlaneAPI.tenantUpdateServiceTarget
     );
 
@@ -88,24 +101,8 @@ export class ControlPlane extends Construct {
       key: 'eventBridgeArn',
     });
 
-    const firehoseIngestorAggregator = new FirehoseIngestorAggregator(
-      this,
-      'firehoseIngestorAggregator',
-      {
-        primaryKeyColumn: this.tables.tenantIdColumn,
-        primaryKeyPath: 'tenantId',
-        aggregateKeyPath: 'metric.name',
-        aggregateValuePath: 'metric.value',
-      }
-    );
-
-    new cdk.CfnOutput(this, 'dataIngestorName', {
-      value: firehoseIngestorAggregator.dataIngestorName,
-      key: 'dataIngestorName',
-    });
-
     if (props.billing) {
-      const billingTemplate = new BillingTemplate(this, 'Billing', {
+      const billingTemplate = new BillingProvider(this, 'Billing', {
         billing: props.billing,
         eventManager: this.eventManager,
         controlPlaneAPIBillingResource: controlPlaneAPI.billingResource,

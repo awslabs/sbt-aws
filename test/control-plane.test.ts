@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as cdk from 'aws-cdk-lib';
-import { Annotations, Match } from 'aws-cdk-lib/assertions';
+import { Annotations, Capture, Match, Template } from 'aws-cdk-lib/assertions';
 import { AwsSolutionsChecks } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { CognitoAuth, ControlPlane } from '../src/control-plane';

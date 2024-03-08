@@ -10,5 +10,5 @@ export interface IBilling {
   deleteUserFunction: IFunction;
   ingestor: IDataIngestorAggregator;
   putUsageFunction: IFunction;
-  webhookFunction: IFunction;
+  webhookFunction?: IFunction;
 }

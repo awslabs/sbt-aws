@@ -269,37 +269,37 @@ The environment variables to export into the outgoing event once the BashJobRunn
 ---
 
 
-### BillingTemplate <a name="BillingTemplate" id="@cdklabs/sbt-aws.BillingTemplate"></a>
+### BillingProvider <a name="BillingProvider" id="@cdklabs/sbt-aws.BillingProvider"></a>
 
-#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.BillingTemplate.Initializer"></a>
+#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.BillingProvider.Initializer"></a>
 
 ```typescript
-import { BillingTemplate } from '@cdklabs/sbt-aws'
+import { BillingProvider } from '@cdklabs/sbt-aws'
 
-new BillingTemplate(scope: Construct, id: string, props: BillingProps)
+new BillingProvider(scope: Construct, id: string, props: BillingProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BillingTemplate.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.BillingTemplate.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.BillingTemplate.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.BillingProps">BillingProps</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.BillingProps">BillingProps</a></code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.BillingTemplate.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.BillingTemplate.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.BillingTemplate.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.props"></a>
 
 - *Type:* <a href="#@cdklabs/sbt-aws.BillingProps">BillingProps</a>
 
@@ -309,11 +309,11 @@ new BillingTemplate(scope: Construct, id: string, props: BillingProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BillingTemplate.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@cdklabs/sbt-aws.BillingProvider.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
 
-##### `toString` <a name="toString" id="@cdklabs/sbt-aws.BillingTemplate.toString"></a>
+##### `toString` <a name="toString" id="@cdklabs/sbt-aws.BillingProvider.toString"></a>
 
 ```typescript
 public toString(): string
@@ -325,21 +325,21 @@ Returns a string representation of this construct.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BillingTemplate.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@cdklabs/sbt-aws.BillingProvider.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.BillingTemplate.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.BillingProvider.isConstruct"></a>
 
 ```typescript
-import { BillingTemplate } from '@cdklabs/sbt-aws'
+import { BillingProvider } from '@cdklabs/sbt-aws'
 
-BillingTemplate.isConstruct(x: any)
+BillingProvider.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.BillingTemplate.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.BillingProvider.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -351,12 +351,12 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BillingTemplate.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.BillingTemplate.property.controlPlaneAPIBillingWebhookResource">controlPlaneAPIBillingWebhookResource</a></code> | <code>aws-cdk-lib.aws_apigateway.IResource</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.BillingProvider.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@cdklabs/sbt-aws.BillingProvider.property.controlPlaneAPIBillingWebhookResource">controlPlaneAPIBillingWebhookResource</a></code> | <code>aws-cdk-lib.aws_apigateway.IResource</code> | *No description.* |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.BillingTemplate.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.BillingProvider.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -368,7 +368,7 @@ The tree node.
 
 ---
 
-##### `controlPlaneAPIBillingWebhookResource`<sup>Required</sup> <a name="controlPlaneAPIBillingWebhookResource" id="@cdklabs/sbt-aws.BillingTemplate.property.controlPlaneAPIBillingWebhookResource"></a>
+##### `controlPlaneAPIBillingWebhookResource`<sup>Required</sup> <a name="controlPlaneAPIBillingWebhookResource" id="@cdklabs/sbt-aws.BillingProvider.property.controlPlaneAPIBillingWebhookResource"></a>
 
 ```typescript
 public readonly controlPlaneAPIBillingWebhookResource: IResource;
@@ -976,6 +976,7 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlane.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlane.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | *No description.* |
 
 ---
 
@@ -988,6 +989,16 @@ public readonly node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.CoreApplicationPlane.property.eventManager"></a>
+
+```typescript
+public readonly eventManager: EventManager;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.EventManager">EventManager</a>
 
 ---
 
@@ -1050,12 +1061,12 @@ Returns a string representation of this construct.
 ##### `addTargetToEvent` <a name="addTargetToEvent" id="@cdklabs/sbt-aws.EventManager.addTargetToEvent"></a>
 
 ```typescript
-public addTargetToEvent(eventManagerEvent: EventManagerEvent, target: IRuleTarget): void
+public addTargetToEvent(eventType: DetailType, target: IRuleTarget): void
 ```
 
-###### `eventManagerEvent`<sup>Required</sup> <a name="eventManagerEvent" id="@cdklabs/sbt-aws.EventManager.addTargetToEvent.parameter.eventManagerEvent"></a>
+###### `eventType`<sup>Required</sup> <a name="eventType" id="@cdklabs/sbt-aws.EventManager.addTargetToEvent.parameter.eventType"></a>
 
-- *Type:* <a href="#@cdklabs/sbt-aws.EventManagerEvent">EventManagerEvent</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
 
 ---
 
@@ -1099,7 +1110,7 @@ Any object.
 | <code><a href="#@cdklabs/sbt-aws.EventManager.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.EventManager.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.EventManager.property.eventBus">eventBus</a></code> | <code>aws-cdk-lib.aws_events.IEventBus</code> | The event bus to register new rules with. |
-| <code><a href="#@cdklabs/sbt-aws.EventManager.property.eventMetadata">eventMetadata</a></code> | <code><a href="#@cdklabs/sbt-aws.EventMetadata">EventMetadata</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.property.supportedEvents">supportedEvents</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
 
 ---
 
@@ -1147,52 +1158,52 @@ The event bus to register new rules with.
 
 ---
 
-##### `eventMetadata`<sup>Required</sup> <a name="eventMetadata" id="@cdklabs/sbt-aws.EventManager.property.eventMetadata"></a>
+##### `supportedEvents`<sup>Required</sup> <a name="supportedEvents" id="@cdklabs/sbt-aws.EventManager.property.supportedEvents"></a>
 
 ```typescript
-public readonly eventMetadata: EventMetadata;
+public readonly supportedEvents: {[ key: string ]: string};
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.EventMetadata">EventMetadata</a>
+- *Type:* {[ key: string ]: string}
 
 ---
 
 
-### FirehoseIngestorAggregator <a name="FirehoseIngestorAggregator" id="@cdklabs/sbt-aws.FirehoseIngestorAggregator"></a>
+### FirehoseAggregator <a name="FirehoseAggregator" id="@cdklabs/sbt-aws.FirehoseAggregator"></a>
 
 - *Implements:* <a href="#@cdklabs/sbt-aws.IDataIngestorAggregator">IDataIngestorAggregator</a>
 
-#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.FirehoseIngestorAggregator.Initializer"></a>
+#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.FirehoseAggregator.Initializer"></a>
 
 ```typescript
-import { FirehoseIngestorAggregator } from '@cdklabs/sbt-aws'
+import { FirehoseAggregator } from '@cdklabs/sbt-aws'
 
-new FirehoseIngestorAggregator(scope: Construct, id: string, props: FirehoseIngestorAggregatorProps)
+new FirehoseAggregator(scope: Construct, id: string, props: FirehoseAggregatorProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseIngestorAggregator.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseIngestorAggregator.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseIngestorAggregator.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.FirehoseIngestorAggregatorProps">FirehoseIngestorAggregatorProps</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.FirehoseAggregatorProps">FirehoseAggregatorProps</a></code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.FirehoseIngestorAggregator.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.FirehoseAggregator.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.FirehoseIngestorAggregator.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.FirehoseAggregator.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.FirehoseIngestorAggregator.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.FirehoseAggregator.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#@cdklabs/sbt-aws.FirehoseIngestorAggregatorProps">FirehoseIngestorAggregatorProps</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.FirehoseAggregatorProps">FirehoseAggregatorProps</a>
 
 ---
 
@@ -1200,11 +1211,11 @@ new FirehoseIngestorAggregator(scope: Construct, id: string, props: FirehoseInge
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseIngestorAggregator.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
 
-##### `toString` <a name="toString" id="@cdklabs/sbt-aws.FirehoseIngestorAggregator.toString"></a>
+##### `toString` <a name="toString" id="@cdklabs/sbt-aws.FirehoseAggregator.toString"></a>
 
 ```typescript
 public toString(): string
@@ -1216,21 +1227,21 @@ Returns a string representation of this construct.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseIngestorAggregator.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.FirehoseIngestorAggregator.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.FirehoseAggregator.isConstruct"></a>
 
 ```typescript
-import { FirehoseIngestorAggregator } from '@cdklabs/sbt-aws'
+import { FirehoseAggregator } from '@cdklabs/sbt-aws'
 
-FirehoseIngestorAggregator.isConstruct(x: any)
+FirehoseAggregator.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.FirehoseIngestorAggregator.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.FirehoseAggregator.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -1242,15 +1253,15 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseIngestorAggregator.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseIngestorAggregator.property.dataAggregator">dataAggregator</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseIngestorAggregator.property.dataIngestor">dataIngestor</a></code> | <code>@aws-cdk/aws-kinesisfirehose-alpha.DeliveryStream</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseIngestorAggregator.property.dataIngestorName">dataIngestorName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseIngestorAggregator.property.dataRepository">dataRepository</a></code> | <code>aws-cdk-lib.aws_dynamodb.Table</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.dataAggregator">dataAggregator</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.dataIngestor">dataIngestor</a></code> | <code>@aws-cdk/aws-kinesisfirehose-alpha.DeliveryStream</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.dataIngestorName">dataIngestorName</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.dataRepository">dataRepository</a></code> | <code>aws-cdk-lib.aws_dynamodb.Table</code> | *No description.* |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.FirehoseIngestorAggregator.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.FirehoseAggregator.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -1262,7 +1273,7 @@ The tree node.
 
 ---
 
-##### `dataAggregator`<sup>Required</sup> <a name="dataAggregator" id="@cdklabs/sbt-aws.FirehoseIngestorAggregator.property.dataAggregator"></a>
+##### `dataAggregator`<sup>Required</sup> <a name="dataAggregator" id="@cdklabs/sbt-aws.FirehoseAggregator.property.dataAggregator"></a>
 
 ```typescript
 public readonly dataAggregator: IFunction;
@@ -1272,7 +1283,7 @@ public readonly dataAggregator: IFunction;
 
 ---
 
-##### `dataIngestor`<sup>Required</sup> <a name="dataIngestor" id="@cdklabs/sbt-aws.FirehoseIngestorAggregator.property.dataIngestor"></a>
+##### `dataIngestor`<sup>Required</sup> <a name="dataIngestor" id="@cdklabs/sbt-aws.FirehoseAggregator.property.dataIngestor"></a>
 
 ```typescript
 public readonly dataIngestor: DeliveryStream;
@@ -1282,7 +1293,7 @@ public readonly dataIngestor: DeliveryStream;
 
 ---
 
-##### `dataIngestorName`<sup>Required</sup> <a name="dataIngestorName" id="@cdklabs/sbt-aws.FirehoseIngestorAggregator.property.dataIngestorName"></a>
+##### `dataIngestorName`<sup>Required</sup> <a name="dataIngestorName" id="@cdklabs/sbt-aws.FirehoseAggregator.property.dataIngestorName"></a>
 
 ```typescript
 public readonly dataIngestorName: string;
@@ -1292,7 +1303,7 @@ public readonly dataIngestorName: string;
 
 ---
 
-##### `dataRepository`<sup>Required</sup> <a name="dataRepository" id="@cdklabs/sbt-aws.FirehoseIngestorAggregator.property.dataRepository"></a>
+##### `dataRepository`<sup>Required</sup> <a name="dataRepository" id="@cdklabs/sbt-aws.FirehoseAggregator.property.dataRepository"></a>
 
 ```typescript
 public readonly dataRepository: Table;
@@ -2516,8 +2527,10 @@ const controlPlaneProps: ControlPlaneProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.auth">auth</a></code> | <code><a href="#@cdklabs/sbt-aws.IAuth">IAuth</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | The source to use for outgoing events that will be placed on the EventBus. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.billing">billing</a></code> | <code><a href="#@cdklabs/sbt-aws.IBilling">IBilling</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.eventMetadata">eventMetadata</a></code> | <code><a href="#@cdklabs/sbt-aws.EventMetadata">EventMetadata</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The source to use when listening for events coming from the SBT control plane. |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.eventMetadata">eventMetadata</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
 
 ---
 
@@ -2531,6 +2544,20 @@ public readonly auth: IAuth;
 
 ---
 
+##### `applicationPlaneEventSource`<sup>Optional</sup> <a name="applicationPlaneEventSource" id="@cdklabs/sbt-aws.ControlPlaneProps.property.applicationPlaneEventSource"></a>
+
+```typescript
+public readonly applicationPlaneEventSource: string;
+```
+
+- *Type:* string
+
+The source to use for outgoing events that will be placed on the EventBus.
+
+This is used as the default if the OutgoingEventMetadata source field is not set.
+
+---
+
 ##### `billing`<sup>Optional</sup> <a name="billing" id="@cdklabs/sbt-aws.ControlPlaneProps.property.billing"></a>
 
 ```typescript
@@ -2541,13 +2568,27 @@ public readonly billing: IBilling;
 
 ---
 
+##### `controlPlaneEventSource`<sup>Optional</sup> <a name="controlPlaneEventSource" id="@cdklabs/sbt-aws.ControlPlaneProps.property.controlPlaneEventSource"></a>
+
+```typescript
+public readonly controlPlaneEventSource: string;
+```
+
+- *Type:* string
+
+The source to use when listening for events coming from the SBT control plane.
+
+This is used as the default if the IncomingEventMetadata source field is not set.
+
+---
+
 ##### `eventMetadata`<sup>Optional</sup> <a name="eventMetadata" id="@cdklabs/sbt-aws.ControlPlaneProps.property.eventMetadata"></a>
 
 ```typescript
-public readonly eventMetadata: EventMetadata;
+public readonly eventMetadata: {[ key: string ]: string};
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.EventMetadata">EventMetadata</a>
+- *Type:* {[ key: string ]: string}
 
 ---
 
@@ -2567,9 +2608,9 @@ const coreApplicationPlaneJobRunnerProps: CoreApplicationPlaneJobRunnerProps = {
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManagerEvent">EventManagerEvent</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.name">name</a></code> | <code>string</code> | The name of the CoreApplicationPlaneJobRunner. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.outgoingEvent">outgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManagerEvent">EventManagerEvent</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.outgoingEvent">outgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.permissions">permissions</a></code> | <code>aws-cdk-lib.aws_iam.PolicyDocument</code> | The IAM permission document for the CoreApplicationPlaneJobRunner. |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.script">script</a></code> | <code>string</code> | The bash script to run as part of the CoreApplicationPlaneJobRunner. |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.environmentJSONVariablesFromIncomingEvent">environmentJSONVariablesFromIncomingEvent</a></code> | <code>string[]</code> | *No description.* |
@@ -2583,10 +2624,10 @@ const coreApplicationPlaneJobRunnerProps: CoreApplicationPlaneJobRunnerProps = {
 ##### `incomingEvent`<sup>Required</sup> <a name="incomingEvent" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.incomingEvent"></a>
 
 ```typescript
-public readonly incomingEvent: EventManagerEvent;
+public readonly incomingEvent: DetailType;
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.EventManagerEvent">EventManagerEvent</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
 
 ---
 
@@ -2607,10 +2648,10 @@ Note that this value must be unique.
 ##### `outgoingEvent`<sup>Required</sup> <a name="outgoingEvent" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.outgoingEvent"></a>
 
 ```typescript
-public readonly outgoingEvent: EventManagerEvent;
+public readonly outgoingEvent: DetailType;
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.EventManagerEvent">EventManagerEvent</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
 
 ---
 
@@ -2712,38 +2753,11 @@ const coreApplicationPlaneProps: CoreApplicationPlaneProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventBusArn">eventBusArn</a></code> | <code>string</code> | The arn belonging to the EventBus to listen for incoming messages. |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | The source to use for outgoing events that will be placed on the EventBus. |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The source to use when listening for events coming from the SBT control plane. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventBusArn">eventBusArn</a></code> | <code>string</code> | The arn belonging to the EventBus to listen for incoming messages. |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventMetadata">eventMetadata</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.jobRunnerPropsList">jobRunnerPropsList</a></code> | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps">CoreApplicationPlaneJobRunnerProps</a>[]</code> | The list of JobRunner definitions to create. |
-
----
-
-##### `applicationPlaneEventSource`<sup>Required</sup> <a name="applicationPlaneEventSource" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.applicationPlaneEventSource"></a>
-
-```typescript
-public readonly applicationPlaneEventSource: string;
-```
-
-- *Type:* string
-
-The source to use for outgoing events that will be placed on the EventBus.
-
-This is used as the default if the OutgoingEventMetadata source field is not set.
-
----
-
-##### `controlPlaneEventSource`<sup>Required</sup> <a name="controlPlaneEventSource" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.controlPlaneEventSource"></a>
-
-```typescript
-public readonly controlPlaneEventSource: string;
-```
-
-- *Type:* string
-
-The source to use when listening for events coming from the SBT control plane.
-
-This is used as the default if the IncomingEventMetadata source field is not set.
 
 ---
 
@@ -2758,6 +2772,44 @@ public readonly eventBusArn: string;
 The arn belonging to the EventBus to listen for incoming messages.
 
 This is also the EventBus on which the CoreApplicationPlane places outgoing messages on.
+
+---
+
+##### `applicationPlaneEventSource`<sup>Optional</sup> <a name="applicationPlaneEventSource" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.applicationPlaneEventSource"></a>
+
+```typescript
+public readonly applicationPlaneEventSource: string;
+```
+
+- *Type:* string
+
+The source to use for outgoing events that will be placed on the EventBus.
+
+This is used as the default if the OutgoingEventMetadata source field is not set.
+
+---
+
+##### `controlPlaneEventSource`<sup>Optional</sup> <a name="controlPlaneEventSource" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.controlPlaneEventSource"></a>
+
+```typescript
+public readonly controlPlaneEventSource: string;
+```
+
+- *Type:* string
+
+The source to use when listening for events coming from the SBT control plane.
+
+This is used as the default if the IncomingEventMetadata source field is not set.
+
+---
+
+##### `eventMetadata`<sup>Optional</sup> <a name="eventMetadata" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventMetadata"></a>
+
+```typescript
+public readonly eventMetadata: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
 
 ---
 
@@ -2790,7 +2842,9 @@ const eventManagerProps: EventManagerProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.eventBus">eventBus</a></code> | <code>aws-cdk-lib.aws_events.IEventBus</code> | The event bus to register new rules with. |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.eventMetadata">eventMetadata</a></code> | <code><a href="#@cdklabs/sbt-aws.EventMetadata">EventMetadata</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.eventMetadata">eventMetadata</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
 
 ---
 
@@ -2806,253 +2860,58 @@ The event bus to register new rules with.
 
 ---
 
+##### `applicationPlaneEventSource`<sup>Optional</sup> <a name="applicationPlaneEventSource" id="@cdklabs/sbt-aws.EventManagerProps.property.applicationPlaneEventSource"></a>
+
+```typescript
+public readonly applicationPlaneEventSource: string;
+```
+
+- *Type:* string
+
+---
+
+##### `controlPlaneEventSource`<sup>Optional</sup> <a name="controlPlaneEventSource" id="@cdklabs/sbt-aws.EventManagerProps.property.controlPlaneEventSource"></a>
+
+```typescript
+public readonly controlPlaneEventSource: string;
+```
+
+- *Type:* string
+
+---
+
 ##### `eventMetadata`<sup>Optional</sup> <a name="eventMetadata" id="@cdklabs/sbt-aws.EventManagerProps.property.eventMetadata"></a>
 
 ```typescript
-public readonly eventMetadata: EventMetadata;
+public readonly eventMetadata: {[ key: string ]: string};
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.EventMetadata">EventMetadata</a>
+- *Type:* {[ key: string ]: string}
 
 ---
 
-### EventMetadata <a name="EventMetadata" id="@cdklabs/sbt-aws.EventMetadata"></a>
+### FirehoseAggregatorProps <a name="FirehoseAggregatorProps" id="@cdklabs/sbt-aws.FirehoseAggregatorProps"></a>
 
-#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.EventMetadata.Initializer"></a>
+#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.FirehoseAggregatorProps.Initializer"></a>
 
 ```typescript
-import { EventMetadata } from '@cdklabs/sbt-aws'
+import { FirehoseAggregatorProps } from '@cdklabs/sbt-aws'
 
-const eventMetadata: EventMetadata = { ... }
+const firehoseAggregatorProps: FirehoseAggregatorProps = { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.EventMetadata.property.activateFailure">activateFailure</a></code> | <code>aws-cdk-lib.aws_events.EventPattern</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventMetadata.property.activateRequest">activateRequest</a></code> | <code>aws-cdk-lib.aws_events.EventPattern</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventMetadata.property.activateSuccess">activateSuccess</a></code> | <code>aws-cdk-lib.aws_events.EventPattern</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventMetadata.property.billingFailure">billingFailure</a></code> | <code>aws-cdk-lib.aws_events.EventPattern</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventMetadata.property.billingSuccess">billingSuccess</a></code> | <code>aws-cdk-lib.aws_events.EventPattern</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventMetadata.property.deactivateFailure">deactivateFailure</a></code> | <code>aws-cdk-lib.aws_events.EventPattern</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventMetadata.property.deactivateRequest">deactivateRequest</a></code> | <code>aws-cdk-lib.aws_events.EventPattern</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventMetadata.property.deactivateSuccess">deactivateSuccess</a></code> | <code>aws-cdk-lib.aws_events.EventPattern</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventMetadata.property.deprovisionFailure">deprovisionFailure</a></code> | <code>aws-cdk-lib.aws_events.EventPattern</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventMetadata.property.deprovisionSuccess">deprovisionSuccess</a></code> | <code>aws-cdk-lib.aws_events.EventPattern</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventMetadata.property.offboardingFailure">offboardingFailure</a></code> | <code>aws-cdk-lib.aws_events.EventPattern</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventMetadata.property.offboardingRequest">offboardingRequest</a></code> | <code>aws-cdk-lib.aws_events.EventPattern</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventMetadata.property.offboardingSuccess">offboardingSuccess</a></code> | <code>aws-cdk-lib.aws_events.EventPattern</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventMetadata.property.onboardingFailure">onboardingFailure</a></code> | <code>aws-cdk-lib.aws_events.EventPattern</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventMetadata.property.onboardingRequest">onboardingRequest</a></code> | <code>aws-cdk-lib.aws_events.EventPattern</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventMetadata.property.onboardingSuccess">onboardingSuccess</a></code> | <code>aws-cdk-lib.aws_events.EventPattern</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventMetadata.property.provisionFailure">provisionFailure</a></code> | <code>aws-cdk-lib.aws_events.EventPattern</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventMetadata.property.provisionSuccess">provisionSuccess</a></code> | <code>aws-cdk-lib.aws_events.EventPattern</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregatorProps.property.aggregateKeyPath">aggregateKeyPath</a></code> | <code>string</code> | The JMESPath to find the key value in the incoming data stream that will be aggregated. |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregatorProps.property.aggregateValuePath">aggregateValuePath</a></code> | <code>string</code> | The JMESPath to find the numeric value of key in the incoming data stream that will be aggregated. |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregatorProps.property.primaryKeyColumn">primaryKeyColumn</a></code> | <code>string</code> | The name to use for the primary key column for the dynamoDB database. |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregatorProps.property.primaryKeyPath">primaryKeyPath</a></code> | <code>string</code> | The JMESPath to find the primary key value in the incoming data stream. |
 
 ---
 
-##### `activateFailure`<sup>Required</sup> <a name="activateFailure" id="@cdklabs/sbt-aws.EventMetadata.property.activateFailure"></a>
-
-```typescript
-public readonly activateFailure: EventPattern;
-```
-
-- *Type:* aws-cdk-lib.aws_events.EventPattern
-
----
-
-##### `activateRequest`<sup>Required</sup> <a name="activateRequest" id="@cdklabs/sbt-aws.EventMetadata.property.activateRequest"></a>
-
-```typescript
-public readonly activateRequest: EventPattern;
-```
-
-- *Type:* aws-cdk-lib.aws_events.EventPattern
-
----
-
-##### `activateSuccess`<sup>Required</sup> <a name="activateSuccess" id="@cdklabs/sbt-aws.EventMetadata.property.activateSuccess"></a>
-
-```typescript
-public readonly activateSuccess: EventPattern;
-```
-
-- *Type:* aws-cdk-lib.aws_events.EventPattern
-
----
-
-##### `billingFailure`<sup>Required</sup> <a name="billingFailure" id="@cdklabs/sbt-aws.EventMetadata.property.billingFailure"></a>
-
-```typescript
-public readonly billingFailure: EventPattern;
-```
-
-- *Type:* aws-cdk-lib.aws_events.EventPattern
-
----
-
-##### `billingSuccess`<sup>Required</sup> <a name="billingSuccess" id="@cdklabs/sbt-aws.EventMetadata.property.billingSuccess"></a>
-
-```typescript
-public readonly billingSuccess: EventPattern;
-```
-
-- *Type:* aws-cdk-lib.aws_events.EventPattern
-
----
-
-##### `deactivateFailure`<sup>Required</sup> <a name="deactivateFailure" id="@cdklabs/sbt-aws.EventMetadata.property.deactivateFailure"></a>
-
-```typescript
-public readonly deactivateFailure: EventPattern;
-```
-
-- *Type:* aws-cdk-lib.aws_events.EventPattern
-
----
-
-##### `deactivateRequest`<sup>Required</sup> <a name="deactivateRequest" id="@cdklabs/sbt-aws.EventMetadata.property.deactivateRequest"></a>
-
-```typescript
-public readonly deactivateRequest: EventPattern;
-```
-
-- *Type:* aws-cdk-lib.aws_events.EventPattern
-
----
-
-##### `deactivateSuccess`<sup>Required</sup> <a name="deactivateSuccess" id="@cdklabs/sbt-aws.EventMetadata.property.deactivateSuccess"></a>
-
-```typescript
-public readonly deactivateSuccess: EventPattern;
-```
-
-- *Type:* aws-cdk-lib.aws_events.EventPattern
-
----
-
-##### `deprovisionFailure`<sup>Required</sup> <a name="deprovisionFailure" id="@cdklabs/sbt-aws.EventMetadata.property.deprovisionFailure"></a>
-
-```typescript
-public readonly deprovisionFailure: EventPattern;
-```
-
-- *Type:* aws-cdk-lib.aws_events.EventPattern
-
----
-
-##### `deprovisionSuccess`<sup>Required</sup> <a name="deprovisionSuccess" id="@cdklabs/sbt-aws.EventMetadata.property.deprovisionSuccess"></a>
-
-```typescript
-public readonly deprovisionSuccess: EventPattern;
-```
-
-- *Type:* aws-cdk-lib.aws_events.EventPattern
-
----
-
-##### `offboardingFailure`<sup>Required</sup> <a name="offboardingFailure" id="@cdklabs/sbt-aws.EventMetadata.property.offboardingFailure"></a>
-
-```typescript
-public readonly offboardingFailure: EventPattern;
-```
-
-- *Type:* aws-cdk-lib.aws_events.EventPattern
-
----
-
-##### `offboardingRequest`<sup>Required</sup> <a name="offboardingRequest" id="@cdklabs/sbt-aws.EventMetadata.property.offboardingRequest"></a>
-
-```typescript
-public readonly offboardingRequest: EventPattern;
-```
-
-- *Type:* aws-cdk-lib.aws_events.EventPattern
-
----
-
-##### `offboardingSuccess`<sup>Required</sup> <a name="offboardingSuccess" id="@cdklabs/sbt-aws.EventMetadata.property.offboardingSuccess"></a>
-
-```typescript
-public readonly offboardingSuccess: EventPattern;
-```
-
-- *Type:* aws-cdk-lib.aws_events.EventPattern
-
----
-
-##### `onboardingFailure`<sup>Required</sup> <a name="onboardingFailure" id="@cdklabs/sbt-aws.EventMetadata.property.onboardingFailure"></a>
-
-```typescript
-public readonly onboardingFailure: EventPattern;
-```
-
-- *Type:* aws-cdk-lib.aws_events.EventPattern
-
----
-
-##### `onboardingRequest`<sup>Required</sup> <a name="onboardingRequest" id="@cdklabs/sbt-aws.EventMetadata.property.onboardingRequest"></a>
-
-```typescript
-public readonly onboardingRequest: EventPattern;
-```
-
-- *Type:* aws-cdk-lib.aws_events.EventPattern
-
----
-
-##### `onboardingSuccess`<sup>Required</sup> <a name="onboardingSuccess" id="@cdklabs/sbt-aws.EventMetadata.property.onboardingSuccess"></a>
-
-```typescript
-public readonly onboardingSuccess: EventPattern;
-```
-
-- *Type:* aws-cdk-lib.aws_events.EventPattern
-
----
-
-##### `provisionFailure`<sup>Required</sup> <a name="provisionFailure" id="@cdklabs/sbt-aws.EventMetadata.property.provisionFailure"></a>
-
-```typescript
-public readonly provisionFailure: EventPattern;
-```
-
-- *Type:* aws-cdk-lib.aws_events.EventPattern
-
----
-
-##### `provisionSuccess`<sup>Required</sup> <a name="provisionSuccess" id="@cdklabs/sbt-aws.EventMetadata.property.provisionSuccess"></a>
-
-```typescript
-public readonly provisionSuccess: EventPattern;
-```
-
-- *Type:* aws-cdk-lib.aws_events.EventPattern
-
----
-
-### FirehoseIngestorAggregatorProps <a name="FirehoseIngestorAggregatorProps" id="@cdklabs/sbt-aws.FirehoseIngestorAggregatorProps"></a>
-
-#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.FirehoseIngestorAggregatorProps.Initializer"></a>
-
-```typescript
-import { FirehoseIngestorAggregatorProps } from '@cdklabs/sbt-aws'
-
-const firehoseIngestorAggregatorProps: FirehoseIngestorAggregatorProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseIngestorAggregatorProps.property.aggregateKeyPath">aggregateKeyPath</a></code> | <code>string</code> | The JMESPath to find the key value in the incoming data stream that will be aggregated. |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseIngestorAggregatorProps.property.aggregateValuePath">aggregateValuePath</a></code> | <code>string</code> | The JMESPath to find the numeric value of key in the incoming data stream that will be aggregated. |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseIngestorAggregatorProps.property.primaryKeyColumn">primaryKeyColumn</a></code> | <code>string</code> | The name to use for the primary key column for the dynamoDB database. |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseIngestorAggregatorProps.property.primaryKeyPath">primaryKeyPath</a></code> | <code>string</code> | The JMESPath to find the primary key value in the incoming data stream. |
-
----
-
-##### `aggregateKeyPath`<sup>Required</sup> <a name="aggregateKeyPath" id="@cdklabs/sbt-aws.FirehoseIngestorAggregatorProps.property.aggregateKeyPath"></a>
+##### `aggregateKeyPath`<sup>Required</sup> <a name="aggregateKeyPath" id="@cdklabs/sbt-aws.FirehoseAggregatorProps.property.aggregateKeyPath"></a>
 
 ```typescript
 public readonly aggregateKeyPath: string;
@@ -3064,7 +2923,7 @@ The JMESPath to find the key value in the incoming data stream that will be aggr
 
 ---
 
-##### `aggregateValuePath`<sup>Required</sup> <a name="aggregateValuePath" id="@cdklabs/sbt-aws.FirehoseIngestorAggregatorProps.property.aggregateValuePath"></a>
+##### `aggregateValuePath`<sup>Required</sup> <a name="aggregateValuePath" id="@cdklabs/sbt-aws.FirehoseAggregatorProps.property.aggregateValuePath"></a>
 
 ```typescript
 public readonly aggregateValuePath: string;
@@ -3076,7 +2935,7 @@ The JMESPath to find the numeric value of key in the incoming data stream that w
 
 ---
 
-##### `primaryKeyColumn`<sup>Required</sup> <a name="primaryKeyColumn" id="@cdklabs/sbt-aws.FirehoseIngestorAggregatorProps.property.primaryKeyColumn"></a>
+##### `primaryKeyColumn`<sup>Required</sup> <a name="primaryKeyColumn" id="@cdklabs/sbt-aws.FirehoseAggregatorProps.property.primaryKeyColumn"></a>
 
 ```typescript
 public readonly primaryKeyColumn: string;
@@ -3088,7 +2947,7 @@ The name to use for the primary key column for the dynamoDB database.
 
 ---
 
-##### `primaryKeyPath`<sup>Required</sup> <a name="primaryKeyPath" id="@cdklabs/sbt-aws.FirehoseIngestorAggregatorProps.property.primaryKeyPath"></a>
+##### `primaryKeyPath`<sup>Required</sup> <a name="primaryKeyPath" id="@cdklabs/sbt-aws.FirehoseAggregatorProps.property.primaryKeyPath"></a>
 
 ```typescript
 public readonly primaryKeyPath: string;
@@ -3678,8 +3537,8 @@ public readonly wellKnownEndpointUrl: string;
 | <code><a href="#@cdklabs/sbt-aws.IBilling.property.deleteUserFunction">deleteUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.IBilling.property.ingestor">ingestor</a></code> | <code><a href="#@cdklabs/sbt-aws.IDataIngestorAggregator">IDataIngestorAggregator</a></code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.IBilling.property.putUsageFunction">putUsageFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.IBilling.property.webhookFunction">webhookFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.IBilling.property.webhookPath">webhookPath</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.webhookFunction">webhookFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
 
 ---
 
@@ -3723,16 +3582,6 @@ public readonly putUsageFunction: IFunction;
 
 ---
 
-##### `webhookFunction`<sup>Required</sup> <a name="webhookFunction" id="@cdklabs/sbt-aws.IBilling.property.webhookFunction"></a>
-
-```typescript
-public readonly webhookFunction: IFunction;
-```
-
-- *Type:* aws-cdk-lib.aws_lambda.IFunction
-
----
-
 ##### `webhookPath`<sup>Required</sup> <a name="webhookPath" id="@cdklabs/sbt-aws.IBilling.property.webhookPath"></a>
 
 ```typescript
@@ -3743,9 +3592,19 @@ public readonly webhookPath: string;
 
 ---
 
+##### `webhookFunction`<sup>Optional</sup> <a name="webhookFunction" id="@cdklabs/sbt-aws.IBilling.property.webhookFunction"></a>
+
+```typescript
+public readonly webhookFunction: IFunction;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.IFunction
+
+---
+
 ### IDataIngestorAggregator <a name="IDataIngestorAggregator" id="@cdklabs/sbt-aws.IDataIngestorAggregator"></a>
 
-- *Implemented By:* <a href="#@cdklabs/sbt-aws.FirehoseIngestorAggregator">FirehoseIngestorAggregator</a>, <a href="#@cdklabs/sbt-aws.IDataIngestorAggregator">IDataIngestorAggregator</a>
+- *Implemented By:* <a href="#@cdklabs/sbt-aws.FirehoseAggregator">FirehoseAggregator</a>, <a href="#@cdklabs/sbt-aws.IDataIngestorAggregator">IDataIngestorAggregator</a>
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -3790,119 +3649,119 @@ public readonly dataRepository: Table;
 
 ## Enums <a name="Enums" id="Enums"></a>
 
-### EventManagerEvent <a name="EventManagerEvent" id="@cdklabs/sbt-aws.EventManagerEvent"></a>
+### DetailType <a name="DetailType" id="@cdklabs/sbt-aws.DetailType"></a>
 
 #### Members <a name="Members" id="Members"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerEvent.ONBOARDING_REQUEST">ONBOARDING_REQUEST</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerEvent.ONBOARDING_SUCCESS">ONBOARDING_SUCCESS</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerEvent.ONBOARDING_FAILURE">ONBOARDING_FAILURE</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerEvent.OFFBOARDING_REQUEST">OFFBOARDING_REQUEST</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerEvent.OFFBOARDING_SUCCESS">OFFBOARDING_SUCCESS</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerEvent.OFFBOARDING_FAILURE">OFFBOARDING_FAILURE</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerEvent.PROVISION_SUCCESS">PROVISION_SUCCESS</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerEvent.PROVISION_FAILURE">PROVISION_FAILURE</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerEvent.DEPROVISION_SUCCESS">DEPROVISION_SUCCESS</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerEvent.DEPROVISION_FAILURE">DEPROVISION_FAILURE</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerEvent.BILLING_SUCCESS">BILLING_SUCCESS</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerEvent.BILLING_FAILURE">BILLING_FAILURE</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerEvent.ACTIVATE_REQUEST">ACTIVATE_REQUEST</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerEvent.ACTIVATE_SUCCESS">ACTIVATE_SUCCESS</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerEvent.ACTIVATE_FAILURE">ACTIVATE_FAILURE</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerEvent.DEACTIVATE_REQUEST">DEACTIVATE_REQUEST</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerEvent.DEACTIVATE_SUCCESS">DEACTIVATE_SUCCESS</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerEvent.DEACTIVATE_FAILURE">DEACTIVATE_FAILURE</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.ONBOARDING_REQUEST">ONBOARDING_REQUEST</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.ONBOARDING_SUCCESS">ONBOARDING_SUCCESS</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.ONBOARDING_FAILURE">ONBOARDING_FAILURE</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.OFFBOARDING_REQUEST">OFFBOARDING_REQUEST</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.OFFBOARDING_SUCCESS">OFFBOARDING_SUCCESS</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.OFFBOARDING_FAILURE">OFFBOARDING_FAILURE</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.PROVISION_SUCCESS">PROVISION_SUCCESS</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.PROVISION_FAILURE">PROVISION_FAILURE</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.DEPROVISION_SUCCESS">DEPROVISION_SUCCESS</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.DEPROVISION_FAILURE">DEPROVISION_FAILURE</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.BILLING_SUCCESS">BILLING_SUCCESS</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.BILLING_FAILURE">BILLING_FAILURE</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.ACTIVATE_REQUEST">ACTIVATE_REQUEST</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.ACTIVATE_SUCCESS">ACTIVATE_SUCCESS</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.ACTIVATE_FAILURE">ACTIVATE_FAILURE</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.DEACTIVATE_REQUEST">DEACTIVATE_REQUEST</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.DEACTIVATE_SUCCESS">DEACTIVATE_SUCCESS</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.DEACTIVATE_FAILURE">DEACTIVATE_FAILURE</a></code> | *No description.* |
 
 ---
 
-##### `ONBOARDING_REQUEST` <a name="ONBOARDING_REQUEST" id="@cdklabs/sbt-aws.EventManagerEvent.ONBOARDING_REQUEST"></a>
-
----
-
-
-##### `ONBOARDING_SUCCESS` <a name="ONBOARDING_SUCCESS" id="@cdklabs/sbt-aws.EventManagerEvent.ONBOARDING_SUCCESS"></a>
+##### `ONBOARDING_REQUEST` <a name="ONBOARDING_REQUEST" id="@cdklabs/sbt-aws.DetailType.ONBOARDING_REQUEST"></a>
 
 ---
 
 
-##### `ONBOARDING_FAILURE` <a name="ONBOARDING_FAILURE" id="@cdklabs/sbt-aws.EventManagerEvent.ONBOARDING_FAILURE"></a>
+##### `ONBOARDING_SUCCESS` <a name="ONBOARDING_SUCCESS" id="@cdklabs/sbt-aws.DetailType.ONBOARDING_SUCCESS"></a>
 
 ---
 
 
-##### `OFFBOARDING_REQUEST` <a name="OFFBOARDING_REQUEST" id="@cdklabs/sbt-aws.EventManagerEvent.OFFBOARDING_REQUEST"></a>
+##### `ONBOARDING_FAILURE` <a name="ONBOARDING_FAILURE" id="@cdklabs/sbt-aws.DetailType.ONBOARDING_FAILURE"></a>
 
 ---
 
 
-##### `OFFBOARDING_SUCCESS` <a name="OFFBOARDING_SUCCESS" id="@cdklabs/sbt-aws.EventManagerEvent.OFFBOARDING_SUCCESS"></a>
+##### `OFFBOARDING_REQUEST` <a name="OFFBOARDING_REQUEST" id="@cdklabs/sbt-aws.DetailType.OFFBOARDING_REQUEST"></a>
 
 ---
 
 
-##### `OFFBOARDING_FAILURE` <a name="OFFBOARDING_FAILURE" id="@cdklabs/sbt-aws.EventManagerEvent.OFFBOARDING_FAILURE"></a>
+##### `OFFBOARDING_SUCCESS` <a name="OFFBOARDING_SUCCESS" id="@cdklabs/sbt-aws.DetailType.OFFBOARDING_SUCCESS"></a>
 
 ---
 
 
-##### `PROVISION_SUCCESS` <a name="PROVISION_SUCCESS" id="@cdklabs/sbt-aws.EventManagerEvent.PROVISION_SUCCESS"></a>
+##### `OFFBOARDING_FAILURE` <a name="OFFBOARDING_FAILURE" id="@cdklabs/sbt-aws.DetailType.OFFBOARDING_FAILURE"></a>
 
 ---
 
 
-##### `PROVISION_FAILURE` <a name="PROVISION_FAILURE" id="@cdklabs/sbt-aws.EventManagerEvent.PROVISION_FAILURE"></a>
+##### `PROVISION_SUCCESS` <a name="PROVISION_SUCCESS" id="@cdklabs/sbt-aws.DetailType.PROVISION_SUCCESS"></a>
 
 ---
 
 
-##### `DEPROVISION_SUCCESS` <a name="DEPROVISION_SUCCESS" id="@cdklabs/sbt-aws.EventManagerEvent.DEPROVISION_SUCCESS"></a>
+##### `PROVISION_FAILURE` <a name="PROVISION_FAILURE" id="@cdklabs/sbt-aws.DetailType.PROVISION_FAILURE"></a>
 
 ---
 
 
-##### `DEPROVISION_FAILURE` <a name="DEPROVISION_FAILURE" id="@cdklabs/sbt-aws.EventManagerEvent.DEPROVISION_FAILURE"></a>
+##### `DEPROVISION_SUCCESS` <a name="DEPROVISION_SUCCESS" id="@cdklabs/sbt-aws.DetailType.DEPROVISION_SUCCESS"></a>
 
 ---
 
 
-##### `BILLING_SUCCESS` <a name="BILLING_SUCCESS" id="@cdklabs/sbt-aws.EventManagerEvent.BILLING_SUCCESS"></a>
+##### `DEPROVISION_FAILURE` <a name="DEPROVISION_FAILURE" id="@cdklabs/sbt-aws.DetailType.DEPROVISION_FAILURE"></a>
 
 ---
 
 
-##### `BILLING_FAILURE` <a name="BILLING_FAILURE" id="@cdklabs/sbt-aws.EventManagerEvent.BILLING_FAILURE"></a>
+##### `BILLING_SUCCESS` <a name="BILLING_SUCCESS" id="@cdklabs/sbt-aws.DetailType.BILLING_SUCCESS"></a>
 
 ---
 
 
-##### `ACTIVATE_REQUEST` <a name="ACTIVATE_REQUEST" id="@cdklabs/sbt-aws.EventManagerEvent.ACTIVATE_REQUEST"></a>
+##### `BILLING_FAILURE` <a name="BILLING_FAILURE" id="@cdklabs/sbt-aws.DetailType.BILLING_FAILURE"></a>
 
 ---
 
 
-##### `ACTIVATE_SUCCESS` <a name="ACTIVATE_SUCCESS" id="@cdklabs/sbt-aws.EventManagerEvent.ACTIVATE_SUCCESS"></a>
+##### `ACTIVATE_REQUEST` <a name="ACTIVATE_REQUEST" id="@cdklabs/sbt-aws.DetailType.ACTIVATE_REQUEST"></a>
 
 ---
 
 
-##### `ACTIVATE_FAILURE` <a name="ACTIVATE_FAILURE" id="@cdklabs/sbt-aws.EventManagerEvent.ACTIVATE_FAILURE"></a>
+##### `ACTIVATE_SUCCESS` <a name="ACTIVATE_SUCCESS" id="@cdklabs/sbt-aws.DetailType.ACTIVATE_SUCCESS"></a>
 
 ---
 
 
-##### `DEACTIVATE_REQUEST` <a name="DEACTIVATE_REQUEST" id="@cdklabs/sbt-aws.EventManagerEvent.DEACTIVATE_REQUEST"></a>
+##### `ACTIVATE_FAILURE` <a name="ACTIVATE_FAILURE" id="@cdklabs/sbt-aws.DetailType.ACTIVATE_FAILURE"></a>
 
 ---
 
 
-##### `DEACTIVATE_SUCCESS` <a name="DEACTIVATE_SUCCESS" id="@cdklabs/sbt-aws.EventManagerEvent.DEACTIVATE_SUCCESS"></a>
+##### `DEACTIVATE_REQUEST` <a name="DEACTIVATE_REQUEST" id="@cdklabs/sbt-aws.DetailType.DEACTIVATE_REQUEST"></a>
 
 ---
 
 
-##### `DEACTIVATE_FAILURE` <a name="DEACTIVATE_FAILURE" id="@cdklabs/sbt-aws.EventManagerEvent.DEACTIVATE_FAILURE"></a>
+##### `DEACTIVATE_SUCCESS` <a name="DEACTIVATE_SUCCESS" id="@cdklabs/sbt-aws.DetailType.DEACTIVATE_SUCCESS"></a>
+
+---
+
+
+##### `DEACTIVATE_FAILURE` <a name="DEACTIVATE_FAILURE" id="@cdklabs/sbt-aws.DetailType.DEACTIVATE_FAILURE"></a>
 
 ---
 

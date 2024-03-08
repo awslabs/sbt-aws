@@ -20,7 +20,7 @@ import { IDataIngestorAggregator } from './ingestor-aggregator-interface';
  * containing the aggregated data.
  */
 
-export interface FirehoseIngestorAggregatorProps {
+export interface FirehoseAggregatorProps {
   /**
    * The name to use for the primary key column for the dynamoDB database.
    */
@@ -42,16 +42,16 @@ export interface FirehoseIngestorAggregatorProps {
   readonly aggregateValuePath: string;
 }
 
-export class FirehoseIngestorAggregator extends Construct implements IDataIngestorAggregator {
+export class FirehoseAggregator extends Construct implements IDataIngestorAggregator {
   public readonly dataRepository: dynamodb.Table;
   public readonly dataAggregator: lambda.IFunction;
   public readonly dataIngestor: firehose.DeliveryStream;
   public readonly dataIngestorName: string;
 
-  constructor(scope: Construct, id: string, props: FirehoseIngestorAggregatorProps) {
+  constructor(scope: Construct, id: string, props: FirehoseAggregatorProps) {
     super(scope, id);
 
-    const serviceName = 'FirehoseIngestorAggregator';
+    const serviceName = 'FirehoseAggregator';
 
     const firehoseDestinationBucket = new s3.Bucket(this, 'FirehoseDestinationBucket', {
       enforceSSL: true,

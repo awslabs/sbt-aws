@@ -9,7 +9,7 @@ import * as event_targets from 'aws-cdk-lib/aws-events-targets';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IBilling } from './billing-interface';
-import { EventManager, EventManagerEvent } from '../../utils';
+import { EventManager, DetailType } from '../../utils';
 
 export interface BillingProps {
   readonly billing: IBilling;
@@ -19,7 +19,7 @@ export interface BillingProps {
   readonly tenantIdColumn: string;
 }
 
-export class BillingTemplate extends Construct {
+export class BillingProvider extends Construct {
   public readonly controlPlaneAPIBillingWebhookResource: IResource;
   constructor(scope: Construct, id: string, props: BillingProps) {
     super(scope, id);
@@ -28,25 +28,26 @@ export class BillingTemplate extends Construct {
     );
 
     props.eventManager.addTargetToEvent(
-      EventManagerEvent.PROVISION_SUCCESS,
+      DetailType.PROVISION_SUCCESS,
       new event_targets.LambdaFunction(props.billing.createUserFunction)
     );
 
     props.eventManager.addTargetToEvent(
-      EventManagerEvent.DEPROVISION_SUCCESS,
+      DetailType.DEPROVISION_SUCCESS,
       new event_targets.LambdaFunction(props.billing.deleteUserFunction)
     );
 
-    // trigger this.billingPutUsage every 24 hours
     new aws_events.Rule(this, 'BillingPutUsageRule', {
       schedule: aws_events.Schedule.rate(cdk.Duration.hours(24)),
       targets: [new event_targets.LambdaFunction(props.billing.putUsageFunction)],
     });
 
-    this.controlPlaneAPIBillingWebhookResource.addMethod(
-      'POST',
-      new cdk.aws_apigateway.LambdaIntegration(props.billing.webhookFunction)
-    );
+    if (props.billing.webhookFunction) {
+      this.controlPlaneAPIBillingWebhookResource.addMethod(
+        'POST',
+        new cdk.aws_apigateway.LambdaIntegration(props.billing.webhookFunction)
+      );
+    }
 
     NagSuppressions.addResourceSuppressionsByPath(
       cdk.Stack.of(this),

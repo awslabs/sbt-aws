@@ -5,9 +5,9 @@ import { awscdk, javascript } from 'projen';
 import { GithubCredentials } from 'projen/lib/github';
 import { NpmAccess } from 'projen/lib/javascript';
 
-const GITHUB_USER = 'awslabs';
-const PUBLICATION_NAMESPACE = 'cdklabs';
-const PROJECT_NAME = 'sbt-aws';
+const GITHUB_USER: string = 'awslabs';
+const PUBLICATION_NAMESPACE: string = 'cdklabs';
+const PROJECT_NAME: string = 'sbt-aws';
 const PROJEN_VERSION: string = '0.80.2';
 const CDK_VERSION: string = '2.123.0';
 
@@ -31,7 +31,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   devDeps: [
     `aws-cdk@${CDK_VERSION}`,
     'eslint-plugin-header',
-    '@aws-cdk/aws-kinesisfirehose-alpha@2.123.0-alpha.0',
+    `@aws-cdk/aws-kinesisfirehose-alpha@${CDK_VERSION}-alpha.0`,
   ],
   github: true,
   jsiiVersion: '~5.2.0',

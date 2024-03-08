@@ -9,7 +9,7 @@ import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { AwsSolutionsChecks, NagSuppressions } from 'cdk-nag';
 import { CoreApplicationPlane, CoreApplicationPlaneJobRunnerProps } from '.';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
-import { EventManagerEvent } from '../utils';
+import { DetailType } from '../utils';
 
 export interface IntegStackProps extends cdk.StackProps {
   eventBusArn?: string;
@@ -19,51 +19,12 @@ export class IntegStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: IntegStackProps) {
     super(scope, id, props);
 
-    const controlPlaneEventSource = 'testControlPlaneEventSource';
-    const applicationPlaneEventSource = 'testApplicationPlaneEventSource';
-
     let eventBus;
     if (props?.eventBusArn) {
       eventBus = EventBus.fromEventBusArn(this, 'EventBus', props.eventBusArn);
     } else {
       eventBus = new EventBus(this, 'EventBus');
     }
-
-    const eventBusWatcherRule = new Rule(this, 'EventBusWatcherRule', {
-      eventBus: eventBus,
-      enabled: true,
-      eventPattern: {
-        source: [controlPlaneEventSource, applicationPlaneEventSource],
-      },
-    });
-
-    NagSuppressions.addResourceSuppressions(
-      eventBusWatcherRule,
-      [
-        {
-          id: 'AwsSolutions-IAM4',
-          reason: 'Suppress error from resource created for testing.',
-          appliesTo: [
-            'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
-          ],
-        },
-        {
-          id: 'AwsSolutions-IAM5',
-          reason: 'Suppress error from resource created for testing.',
-          appliesTo: ['Resource::*'],
-        },
-      ],
-      true // applyToChildren = true, so that it applies to resources created by the rule. Ex. lambda role.
-    );
-
-    eventBusWatcherRule.addTarget(
-      new targets.CloudWatchLogGroup(
-        new LogGroup(this, 'EventBusWatcherLogGroup', {
-          removalPolicy: cdk.RemovalPolicy.DESTROY,
-          retention: RetentionDays.ONE_WEEK,
-        })
-      )
-    );
 
     const provisioningJobRunnerProps: CoreApplicationPlaneJobRunnerProps = {
       name: 'provisioning',
@@ -137,8 +98,8 @@ echo "done!"
       scriptEnvironmentVariables: {
         TEST: 'test',
       },
-      outgoingEvent: EventManagerEvent.PROVISION_SUCCESS,
-      incomingEvent: EventManagerEvent.ONBOARDING_REQUEST,
+      outgoingEvent: DetailType.PROVISION_SUCCESS,
+      incomingEvent: DetailType.ONBOARDING_REQUEST,
     };
 
     const deprovisioningJobRunnerProps: CoreApplicationPlaneJobRunnerProps = {
@@ -169,16 +130,53 @@ echo "done!"
 `,
       environmentStringVariablesFromIncomingEvent: ['tenantId'],
       environmentVariablesToOutgoingEvent: ['tenantStatus'],
-      outgoingEvent: EventManagerEvent.DEPROVISION_SUCCESS,
-      incomingEvent: EventManagerEvent.OFFBOARDING_REQUEST,
+      outgoingEvent: DetailType.DEPROVISION_SUCCESS,
+      incomingEvent: DetailType.OFFBOARDING_REQUEST,
     };
 
-    new CoreApplicationPlane(this, 'CoreApplicationPlane', {
+    const coreApplicationPlane = new CoreApplicationPlane(this, 'CoreApplicationPlane', {
       eventBusArn: eventBus.eventBusArn,
-      controlPlaneEventSource: controlPlaneEventSource,
-      applicationPlaneEventSource: applicationPlaneEventSource,
       jobRunnerPropsList: [provisioningJobRunnerProps, deprovisioningJobRunnerProps],
     });
+
+    const eventBusWatcherRule = new Rule(this, 'EventBusWatcherRule', {
+      eventBus: eventBus,
+      enabled: true,
+      eventPattern: {
+        source: [
+          coreApplicationPlane.eventManager.controlPlaneEventSource,
+          coreApplicationPlane.eventManager.applicationPlaneEventSource,
+        ],
+      },
+    });
+
+    NagSuppressions.addResourceSuppressions(
+      eventBusWatcherRule,
+      [
+        {
+          id: 'AwsSolutions-IAM4',
+          reason: 'Suppress error from resource created for testing.',
+          appliesTo: [
+            'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
+          ],
+        },
+        {
+          id: 'AwsSolutions-IAM5',
+          reason: 'Suppress error from resource created for testing.',
+          appliesTo: ['Resource::*'],
+        },
+      ],
+      true // applyToChildren = true, so that it applies to resources created by the rule. Ex. lambda role.
+    );
+
+    eventBusWatcherRule.addTarget(
+      new targets.CloudWatchLogGroup(
+        new LogGroup(this, 'EventBusWatcherLogGroup', {
+          removalPolicy: cdk.RemovalPolicy.DESTROY,
+          retention: RetentionDays.ONE_WEEK,
+        })
+      )
+    );
   }
 }
 

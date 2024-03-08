@@ -8,7 +8,7 @@ import { PolicyDocument } from 'aws-cdk-lib/aws-iam';
 import { AwsSolutionsChecks, NagSuppressions } from 'cdk-nag';
 import { Construct, IConstruct } from 'constructs';
 import { CoreApplicationPlane } from '../src/core-app-plane';
-import { EventManagerEvent } from '../src/utils';
+import { DetailType } from '../src/utils';
 
 class DestroyPolicySetter implements cdk.IAspect {
   public visit(node: IConstruct): void {
@@ -31,8 +31,8 @@ describe('No unsuppressed cdk-nag Warnings or Errors', () => {
         jobRunnerPropsList: [
           {
             name: 'provisioning',
-            outgoingEvent: EventManagerEvent.PROVISION_SUCCESS,
-            incomingEvent: EventManagerEvent.ONBOARDING_REQUEST,
+            outgoingEvent: DetailType.PROVISION_SUCCESS,
+            incomingEvent: DetailType.ONBOARDING_REQUEST,
             permissions: PolicyDocument.fromJson(
               JSON.parse(`{
   "Version":"2012-10-17",
@@ -97,8 +97,8 @@ describe('CoreApplicationPlane', () => {
           jobRunnerPropsList: [
             {
               name: 'provisioning',
-              outgoingEvent: EventManagerEvent.PROVISION_SUCCESS,
-              incomingEvent: EventManagerEvent.ONBOARDING_REQUEST,
+              outgoingEvent: DetailType.PROVISION_SUCCESS,
+              incomingEvent: DetailType.ONBOARDING_REQUEST,
               permissions: PolicyDocument.fromJson(
                 JSON.parse(`{
   "Version":"2012-10-17",
@@ -148,8 +148,8 @@ describe('CoreApplicationPlane', () => {
           jobRunnerPropsList: [
             {
               name: 'provisioning',
-              outgoingEvent: EventManagerEvent.PROVISION_SUCCESS,
-              incomingEvent: EventManagerEvent.ONBOARDING_REQUEST,
+              outgoingEvent: DetailType.PROVISION_SUCCESS,
+              incomingEvent: DetailType.ONBOARDING_REQUEST,
               permissions: PolicyDocument.fromJson(
                 JSON.parse(`{
   "Version":"2012-10-17",

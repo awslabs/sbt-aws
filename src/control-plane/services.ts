@@ -9,7 +9,7 @@ import { Runtime, LayerVersion, Function } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { Tables } from './tables';
-import { EventManager } from '../utils';
+import { DetailType, EventManager } from '../utils';
 
 export interface ServicesProps {
   readonly lambdaLayer: LayerVersion;
@@ -81,10 +81,10 @@ export class Services extends Construct {
         EVENTBUS_NAME: props.eventManager.eventBus.eventBusName,
         EVENT_SOURCE: props.eventManager.controlPlaneEventSource,
         TENANT_DETAILS_TABLE: props.tables.tenantDetails.tableName,
-        ONBOARDING_DETAIL_TYPE: props.eventManager.eventMetadata.onboardingRequest.detailType![0],
-        OFFBOARDING_DETAIL_TYPE: props.eventManager.eventMetadata.offboardingRequest.detailType![0],
-        ACTIVATE_DETAIL_TYPE: props.eventManager.eventMetadata.activateRequest.detailType![0],
-        DEACTIVATE_DETAIL_TYPE: props.eventManager.eventMetadata.deactivateRequest.detailType![0],
+        ONBOARDING_DETAIL_TYPE: DetailType.ONBOARDING_REQUEST,
+        OFFBOARDING_DETAIL_TYPE: DetailType.OFFBOARDING_REQUEST,
+        ACTIVATE_DETAIL_TYPE: DetailType.ACTIVATE_REQUEST,
+        DEACTIVATE_DETAIL_TYPE: DetailType.DEACTIVATE_SUCCESS,
       },
     });
 
