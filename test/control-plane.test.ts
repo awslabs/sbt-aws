@@ -1,6 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
+import { assert } from 'console';
 import * as cdk from 'aws-cdk-lib';
 import { Annotations, Match, Template, Capture } from 'aws-cdk-lib/assertions';
 import { AwsSolutionsChecks } from 'cdk-nag';
@@ -59,7 +60,7 @@ describe('No unsuppressed cdk-nag Warnings or Errors', () => {
   });
 });
 
-describe('ControlPlane', () => {
+describe('ControlPlane without Description', () => {
   const app = new cdk.App();
   interface TestStackProps extends cdk.StackProps {
     systemAdminEmail: string;
@@ -112,5 +113,21 @@ describe('ControlPlane', () => {
     do {
       expect(targetsCapture.asArray()).toHaveLength(1);
     } while (targetsCapture.next());
+  });
+
+  it('should have a fixed template description, when the containing stack does not have description', () => {
+    const actual = controlPlaneTestStack.templateOptions.description;
+    const expected = 'SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)';
+    assert(actual == expected);
+  });
+
+  it('should have a concatenated template description, when the containing stack has an existing desc', () => {
+    const stackWithDescription = new TestStack(app, 'stackWithDescription', {
+      systemAdminEmail: 'test@example.com',
+      description: 'ABC',
+    });
+    const actual = stackWithDescription.templateOptions.description;
+    const expected = 'ABC - SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)';
+    assert(expected === actual);
   });
 });
