@@ -97,26 +97,26 @@ def get_tenant(tenantId):
 def update_tenant(tenantId):
     logger.info("Request received to update a tenant")
     input_details = app.current_event.json_body
-
+    updated_tenant = None
     try:
-        __update_tenant(tenantId, input_details)
+        response = __update_tenant(tenantId, input_details)
+        updated_tenant = response['Attributes']
     except botocore.exceptions.ClientError as error:
         logger.error(error)
         raise InternalServerError("Unknown error during processing!")
     else:
-        return {'data': input_details}, HTTPStatus.OK
+        return {'data': updated_tenant}, HTTPStatus.OK
 
 
 @app.delete("/tenants/<tenantId>")
 @tracer.capture_method
 def delete_tenant(tenantId):
     logger.info("Request received to delete a tenant")
-    input_details = {'tenantStatus': 'Deleting'}
 
     try:
-        __update_tenant(tenantId, input_details)
+        response = __update_tenant(tenantId, {'tenantStatus': 'Deleting'})
         __create_control_plane_event(
-            json.dumps(input_details), offboarding_detail_type)
+            json.dumps(response['Attributes']), offboarding_detail_type)
     except botocore.exceptions.ClientError as error:
         logger.error(error)
         raise InternalServerError("Unknown error during processing!")
@@ -139,13 +139,13 @@ def __update_tenant(tenantId, tenant):
     # remove the last comma
     update_expression.pop()
 
-    response_update = tenant_details_table.update_item(
+    return tenant_details_table.update_item(
         Key={
             'tenantId': tenantId,
         },
         UpdateExpression=''.join(update_expression),
         ExpressionAttributeValues=expression_attribute_values,
-        ReturnValues="UPDATED_NEW"
+        ReturnValues="ALL_NEW"
     )
 
 
