@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as codebuild from 'aws-cdk-lib/aws-codebuild';
-import { IEventBus, EventField, IRuleTarget, RuleTargetInput } from 'aws-cdk-lib/aws-events';
+import { EventField, IRuleTarget, RuleTargetInput } from 'aws-cdk-lib/aws-events';
 import * as targets from 'aws-cdk-lib/aws-events-targets';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as kms from 'aws-cdk-lib/aws-kms';
@@ -29,21 +29,6 @@ export interface BashJobRunnerProps {
   readonly script: string;
 
   /**
-   * The eventBus to submit the outgoing event to once the BashJobRunner has finished.
-   */
-  readonly eventBus: IEventBus;
-
-  /**
-   * The source of the event that will be emitted once the BashJobRunner has finished.
-   */
-  readonly outgoingEventSource: string;
-
-  /**
-   * The detail type of the event that will be emitted once the BashJobRunner has finished.
-   */
-  readonly outgoingEventDetailType: string;
-
-  /**
    * The bash script to run after the main script has completed.
    */
   readonly postScript?: string;
@@ -51,12 +36,12 @@ export interface BashJobRunnerProps {
   /**
    * The environment variables to import into the BashJobRunner from event details field.
    */
-  readonly importedVariables?: string[];
+  readonly environmentVariablesFromIncomingEvent?: string[];
 
   /**
    * The environment variables to export into the outgoing event once the BashJobRunner has finished.
    */
-  readonly exportedVariables?: string[];
+  readonly environmentVariablesToOutgoingEvent?: string[];
 
   /**
    * The variables to pass into the codebuild BashJobRunner.
@@ -86,7 +71,7 @@ export class BashJobRunner extends Construct {
    * The environment variables to export into the outgoing event once the BashJobRunner has finished.
    * @attribute
    */
-  public readonly exportedVariables?: string[];
+  public readonly environmentVariablesToOutgoingEvent?: string[];
 
   constructor(scope: Construct, id: string, props: BashJobRunnerProps) {
     super(scope, id);
@@ -96,7 +81,7 @@ export class BashJobRunner extends Construct {
       type: codebuild.BuildEnvironmentVariableType;
     }[] = [];
 
-    props.importedVariables?.forEach((importedVariable: string) => {
+    props.environmentVariablesFromIncomingEvent?.forEach((importedVariable: string) => {
       environmentVariablesOverride.push({
         name: importedVariable,
         value: EventField.fromPath(`$.detail.${importedVariable}`),
@@ -117,7 +102,7 @@ export class BashJobRunner extends Construct {
       }
     }
 
-    this.exportedVariables = props.exportedVariables;
+    this.environmentVariablesToOutgoingEvent = props.environmentVariablesToOutgoingEvent;
 
     const codeBuildProjectEncryptionKey = new kms.Key(
       scope,
@@ -138,8 +123,8 @@ export class BashJobRunner extends Construct {
         version: '0.2',
         env: {
           shell: 'bash',
-          ...(props.exportedVariables && {
-            'exported-variables': props.exportedVariables,
+          ...(props.environmentVariablesToOutgoingEvent && {
+            'exported-variables': props.environmentVariablesToOutgoingEvent,
           }),
         },
         phases: {
@@ -186,7 +171,6 @@ export class BashJobRunner extends Construct {
         document: props.permissions,
       })
     );
-    props.eventBus.grantPutEventsTo(this.codebuildProject);
 
     this.eventTarget = new targets.CodeBuildProject(this.codebuildProject, {
       event: RuleTargetInput.fromObject({

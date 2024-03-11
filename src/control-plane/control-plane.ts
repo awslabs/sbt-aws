@@ -6,6 +6,7 @@ import { EventBus } from 'aws-cdk-lib/aws-events';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IAuth } from './auth';
+import { IBilling, BillingProvider } from './billing';
 import { ControlPlaneAPI } from './control-plane-api';
 import { LambdaLayers } from './lambda-layers';
 import { Messaging } from './messaging';
@@ -13,23 +14,30 @@ import { Services } from './services';
 import { Tables } from './tables';
 import { TenantConfigService } from './tenant-config/tenant-config-service';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
-import { EventManager, setTemplateDesc } from '../utils';
+import { EventManager, setTemplateDesc, EventMetadata, DetailType } from '../utils';
 
 export interface ControlPlaneProps {
-  readonly applicationPlaneEventSource: string;
-  readonly provisioningDetailType: string;
-  readonly controlPlaneEventSource: string;
-  readonly onboardingDetailType: string;
-  readonly offboardingDetailType: string;
   readonly auth: IAuth;
+  readonly billing?: IBilling;
+  readonly eventMetadata?: EventMetadata;
+  /**
+   * The source to use when listening for events coming from the SBT control plane.
+   * This is used as the default if the IncomingEventMetadata source field is not set.
+   */
+  readonly controlPlaneEventSource?: string;
+
+  /**
+   * The source to use for outgoing events that will be placed on the EventBus.
+   * This is used as the default if the OutgoingEventMetadata source field is not set.
+   */
+  readonly applicationPlaneEventSource?: string;
 }
 
 export class ControlPlane extends Construct {
   readonly eventBusArn: string;
-  readonly controlPlaneSource: string;
-  readonly onboardingDetailType: string;
-  readonly offboardingDetailType: string;
+  readonly eventManager: EventManager;
   readonly controlPlaneAPIGatewayUrl: string;
+  readonly tables: Tables;
 
   constructor(scope: Construct, id: string, props: ControlPlaneProps) {
     super(scope, id);
@@ -40,22 +48,27 @@ export class ControlPlane extends Construct {
     const messaging = new Messaging(this, 'messaging-stack');
     const lambdaLayers = new LambdaLayers(this, 'controlplane-lambda-layers');
 
-    const tables = new Tables(this, 'tables-stack');
+    this.tables = new Tables(this, 'tables-stack');
 
-    const services = new Services(this, 'services-stack', {
-      eventBus: messaging.eventBus,
-      idpDetails: props.auth.controlPlaneIdpDetails,
-      lambdaLayer: lambdaLayers.controlPlaneLambdaLayer,
-      tables: tables,
-      onboardingDetailType: props.onboardingDetailType,
+    const eventBus = EventBus.fromEventBusArn(this, 'eventBus', messaging.eventBus.eventBusArn);
+    this.eventManager = new EventManager(this, 'EventManager', {
+      eventBus: eventBus,
+      eventMetadata: props.eventMetadata,
+      applicationPlaneEventSource: props.applicationPlaneEventSource,
       controlPlaneEventSource: props.controlPlaneEventSource,
     });
 
+    const services = new Services(this, 'services-stack', {
+      lambdaLayer: lambdaLayers.controlPlaneLambdaLayer,
+      tables: this.tables,
+      eventManager: this.eventManager,
+    });
+
     const tenantConfigService = new TenantConfigService(this, 'auth-info-service-stack', {
-      tenantDetails: tables.tenantDetails,
-      tenantDetailsTenantNameColumn: tables.tenantNameColumn,
-      tenantConfigIndexName: tables.tenantConfigIndexName,
-      tenantDetailsTenantConfigColumn: tables.tenantConfigColumn,
+      tenantDetails: this.tables.tenantDetails,
+      tenantDetailsTenantNameColumn: this.tables.tenantNameColumn,
+      tenantConfigIndexName: this.tables.tenantConfigIndexName,
+      tenantDetailsTenantConfigColumn: this.tables.tenantConfigColumn,
     });
 
     const controlPlaneAPI = new ControlPlaneAPI(this, 'controlplane-api-stack', {
@@ -65,26 +78,15 @@ export class ControlPlane extends Construct {
     });
 
     this.eventBusArn = messaging.eventBus.eventBusArn;
-    this.controlPlaneSource = props.controlPlaneEventSource;
-    this.onboardingDetailType = props.onboardingDetailType;
-    this.offboardingDetailType = props.offboardingDetailType;
     this.controlPlaneAPIGatewayUrl = controlPlaneAPI.apiUrl;
 
-    const eventBus = EventBus.fromEventBusArn(this, 'eventBus', messaging.eventBus.eventBusArn);
-    const eventManager = new EventManager(this, 'EventManager', {
-      eventBus: eventBus,
-    });
-
-    eventManager.addRuleWithTarget(
-      'ProvisioningServiceRule',
-      [props.onboardingDetailType],
-      [props.applicationPlaneEventSource],
+    this.eventManager.addTargetToEvent(
+      DetailType.PROVISION_SUCCESS,
       controlPlaneAPI.tenantUpdateServiceTarget
     );
-    eventManager.addRuleWithTarget(
-      'DeprovisioningServiceRule',
-      [props.offboardingDetailType],
-      [props.applicationPlaneEventSource],
+
+    this.eventManager.addTargetToEvent(
+      DetailType.DEPROVISION_SUCCESS,
       controlPlaneAPI.tenantUpdateServiceTarget
     );
 
@@ -92,6 +94,28 @@ export class ControlPlane extends Construct {
       value: controlPlaneAPI.apiUrl,
       key: 'controlPlaneAPIGatewayUrl',
     });
+
+    new cdk.CfnOutput(this, 'eventBridgeArn', {
+      value: this.eventManager.eventBus.eventBusArn,
+      key: 'eventBridgeArn',
+    });
+
+    if (props.billing) {
+      const billingTemplate = new BillingProvider(this, 'Billing', {
+        billing: props.billing,
+        eventManager: this.eventManager,
+        controlPlaneAPIBillingResource: controlPlaneAPI.billingResource,
+      });
+
+      if (billingTemplate.controlPlaneAPIBillingWebhookResource) {
+        new cdk.CfnOutput(this, 'billingWebhookURL', {
+          value: `${
+            controlPlaneAPI.apiUrl
+          }${billingTemplate.controlPlaneAPIBillingWebhookResource.path.substring(1)}`,
+          key: 'billingWebhookURL',
+        });
+      }
+    }
 
     // defined suppression here to suppress EventsRole Default policy
     // which gets updated in EventManager construct, but is part of ControlPlane API
@@ -107,34 +131,6 @@ export class ControlPlane extends Construct {
         },
       ],
       true // applyToChildren = true, so that it applies to the APIGW role created by cdk in the controlPlaneAPI construct
-    );
-
-    // defined here as these log retention resources are not
-    // created as part of a lower-level construct
-    NagSuppressions.addResourceSuppressionsByPath(
-      cdk.Stack.of(this),
-      [
-        `${
-          cdk.Stack.of(this).stackName
-        }/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource`,
-        `${
-          cdk.Stack.of(this).stackName
-        }/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource`,
-      ],
-      [
-        {
-          id: 'AwsSolutions-IAM4',
-          reason: 'Suppress error from resource created for setting log retention.',
-          appliesTo: [
-            'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
-          ],
-        },
-        {
-          id: 'AwsSolutions-IAM5',
-          reason: 'Suppress error from resource created for setting log retention.',
-          appliesTo: ['Resource::*'],
-        },
-      ]
     );
   }
 }

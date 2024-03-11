@@ -35,12 +35,13 @@ export interface BashJobOrchestratorProps extends cdk.StackProps {
   /**
    * Environment variables to import into the bash job from event details field.
    */
-  readonly importedVariables?: string[];
+  readonly environmentStringVariablesFromIncomingEvent?: string[];
+  readonly environmentJSONVariablesFromIncomingEvent?: string[];
 
   /**
    * Environment variables to export into the outgoing event once the bash job has finished.
    */
-  readonly exportedVariables?: string[];
+  readonly environmentVariablesToOutgoingEvent?: string[];
 
   /**
    * The BashJobRunner to execute as part of this BashJobOrchestrator.
@@ -73,10 +74,17 @@ export class BashJobOrchestrator extends Construct {
       [name: string]: codebuild.BuildEnvironmentVariable;
     } = {};
 
-    props.importedVariables?.forEach((importedVar: string) => {
+    props.environmentStringVariablesFromIncomingEvent?.forEach((importedVar: string) => {
       environmentVariablesOverride[importedVar] = {
         type: codebuild.BuildEnvironmentVariableType.PLAINTEXT,
         value: sfn.JsonPath.stringAt(`$.detail.${importedVar}`),
+      };
+    });
+
+    props.environmentJSONVariablesFromIncomingEvent?.forEach((importedVar: string) => {
+      environmentVariablesOverride[importedVar] = {
+        type: codebuild.BuildEnvironmentVariableType.PLAINTEXT,
+        value: sfn.JsonPath.jsonToString(sfn.JsonPath.objectAt(`$.detail.${importedVar}`)),
       };
     });
 
@@ -101,7 +109,7 @@ export class BashJobOrchestrator extends Construct {
       tenantId: sfn.JsonPath.stringAt(`$.detail.tenantId`),
       tenantOutput: {},
     };
-    props.exportedVariables?.forEach((exportedVar: string) => {
+    props.environmentVariablesToOutgoingEvent?.forEach((exportedVar: string) => {
       exportedVarObj.tenantOutput[exportedVar] = sfn.JsonPath.arrayGetItem(
         sfn.JsonPath.listAt(
           `$.startProvisioningCodeBuild.Build.ExportedEnvironmentVariables[?(@.Name==${exportedVar})].Value`

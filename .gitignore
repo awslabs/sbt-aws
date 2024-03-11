@@ -37,6 +37,7 @@ __pycache__/
 !.ort.yml
 .idea
 .vscode
+cdk.out
 /test-reports/
 junit.xml
 /coverage/

@@ -8,6 +8,7 @@ import { PolicyDocument } from 'aws-cdk-lib/aws-iam';
 import { AwsSolutionsChecks, NagSuppressions } from 'cdk-nag';
 import { Construct, IConstruct } from 'constructs';
 import { CoreApplicationPlane } from '../src/core-app-plane';
+import { DetailType } from '../src/utils';
 
 class DestroyPolicySetter implements cdk.IAspect {
   public visit(node: IConstruct): void {
@@ -25,17 +26,13 @@ describe('No unsuppressed cdk-nag Warnings or Errors', () => {
       const eventBus = new EventBus(this, 'EventBus');
       new CoreApplicationPlane(this, 'CoreApplicationPlane', {
         eventBusArn: eventBus.eventBusArn,
-        controlPlaneSource: 'sbt-control-plane-api',
-        applicationNamePlaneSource: 'sbt-application-plane-api',
+        controlPlaneEventSource: 'sbt-control-plane-api',
+        applicationPlaneEventSource: 'sbt-application-plane-api',
         jobRunnerPropsList: [
           {
             name: 'provisioning',
-            outgoingEvent: {
-              detailType: 'Onboarding',
-            },
-            incomingEvent: {
-              detailType: ['Onboarding'],
-            },
+            outgoingEvent: DetailType.PROVISION_SUCCESS,
+            incomingEvent: DetailType.ONBOARDING_REQUEST,
             permissions: PolicyDocument.fromJson(
               JSON.parse(`{
   "Version":"2012-10-17",
@@ -95,17 +92,13 @@ describe('CoreApplicationPlane', () => {
         const eventBus = new EventBus(this, 'EventBus');
         new CoreApplicationPlane(this, 'CoreApplicationPlane', {
           eventBusArn: eventBus.eventBusArn,
-          controlPlaneSource: 'sbt-control-plane-api',
-          applicationNamePlaneSource: 'sbt-application-plane-api',
+          controlPlaneEventSource: 'sbt-control-plane-api',
+          applicationPlaneEventSource: 'sbt-application-plane-api',
           jobRunnerPropsList: [
             {
               name: 'provisioning',
-              outgoingEvent: {
-                detailType: 'Onboarding',
-              },
-              incomingEvent: {
-                detailType: ['Onboarding'],
-              },
+              outgoingEvent: DetailType.PROVISION_SUCCESS,
+              incomingEvent: DetailType.ONBOARDING_REQUEST,
               permissions: PolicyDocument.fromJson(
                 JSON.parse(`{
   "Version":"2012-10-17",
@@ -150,17 +143,13 @@ describe('CoreApplicationPlane', () => {
         const eventBus = new EventBus(this, 'EventBus');
         const coreApplicationPlane = new CoreApplicationPlane(this, 'CoreApplicationPlane', {
           eventBusArn: eventBus.eventBusArn,
-          controlPlaneSource: 'sbt-control-plane-api',
-          applicationNamePlaneSource: 'sbt-application-plane-api',
+          controlPlaneEventSource: 'sbt-control-plane-api',
+          applicationPlaneEventSource: 'sbt-application-plane-api',
           jobRunnerPropsList: [
             {
               name: 'provisioning',
-              outgoingEvent: {
-                detailType: 'Onboarding',
-              },
-              incomingEvent: {
-                detailType: ['Onboarding'],
-              },
+              outgoingEvent: DetailType.PROVISION_SUCCESS,
+              incomingEvent: DetailType.ONBOARDING_REQUEST,
               permissions: PolicyDocument.fromJson(
                 JSON.parse(`{
   "Version":"2012-10-17",

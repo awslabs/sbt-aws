@@ -41,7 +41,9 @@ export class TenantConfigService extends Construct {
           TENANT_NAME_COLUMN: props.tenantDetailsTenantNameColumn,
           TENANT_CONFIG_COLUMN: props.tenantDetailsTenantConfigColumn,
         },
-        logRetention: cdk.aws_logs.RetentionDays.FIVE_DAYS,
+        logGroup: new cdk.aws_logs.LogGroup(this, 'BillingIngestorLogGroup', {
+          retention: cdk.aws_logs.RetentionDays.FIVE_DAYS,
+        }),
         layers: [
           lambda.LayerVersion.fromLayerVersionArn(
             this,

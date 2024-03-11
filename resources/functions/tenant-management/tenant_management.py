@@ -7,11 +7,16 @@ from http import HTTPStatus
 import uuid
 
 import boto3
+import botocore
 from aws_lambda_powertools import Logger, Tracer
 from aws_lambda_powertools.event_handler import (APIGatewayRestResolver,
                                                  CORSConfig)
 from aws_lambda_powertools.logging import correlation_paths
-from models.control_plane_event_types import ControlPlaneEventTypes
+from aws_lambda_powertools.event_handler.exceptions import (
+    BadRequestError,
+    InternalServerError,
+    NotFoundError,
+)
 
 tracer = Tracer()
 logger = Logger()
@@ -22,6 +27,10 @@ app = APIGatewayRestResolver(cors=cors_config)
 event_bus = boto3.client('events')
 eventbus_name = os.environ['EVENTBUS_NAME']
 event_source = os.environ['EVENT_SOURCE']
+onboarding_detail_type = os.environ['ONBOARDING_DETAIL_TYPE']
+offboarding_detail_type = os.environ['OFFBOARDING_DETAIL_TYPE']
+activate_detail_type = os.environ['ACTIVATE_DETAIL_TYPE']
+deactivate_detail_type = os.environ['DEACTIVATE_DETAIL_TYPE']
 dynamodb = boto3.resource('dynamodb')
 tenant_details_table = dynamodb.Table(os.environ['TENANT_DETAILS_TABLE'])
 
@@ -43,36 +52,44 @@ def create_tenant():
 
         response = tenant_details_table.put_item(Item=input_item)
         __create_control_plane_event(
-            json.dumps(input_details), ControlPlaneEventTypes.ONBOARDING.value)
+            json.dumps(input_details), onboarding_detail_type)
 
     except Exception as e:
         raise Exception("Error creating a new tenant", e)
     else:
-        return "New tenant created", HTTPStatus.OK
+        return {'data': input_item}, HTTPStatus.CREATED
 
 
 @app.get("/tenants")
 @tracer.capture_method
 def get_tenants():
     logger.info("Request received to get all tenants")
+    tenants = None
     try:
         response = tenant_details_table.scan()
-    except Exception as e:
-        raise Exception('Error getting all tenants', e)
+        tenants = response['Items']
+    except botocore.exceptions.ClientError as error:
+        logger.error(error)
+        raise InternalServerError("Unknown error during processing!")
     else:
-        return response['Items'], HTTPStatus.OK
+        return {'data': tenants}, HTTPStatus.OK
 
 
 @app.get("/tenants/<tenantId>")
 @tracer.capture_method
 def get_tenant(tenantId):
-    logger.info("Request received to get a tenant")
+    logger.info(f"Request received to get a tenant: {tenantId}")
+    tenant = None
     try:
         response = tenant_details_table.get_item(Key={'tenantId': tenantId})
-    except Exception as e:
-        raise Exception('Error getting tenant', e)
+        tenant = response.get('Item')
+        if not tenant:
+            raise NotFoundError(f"Tenant not found for id {tenantId}")
+    except botocore.exceptions.ClientError as error:
+        logger.error(error)
+        raise InternalServerError("Unknown error during processing!")
     else:
-        return response['Item'], HTTPStatus.OK
+        return {'data': tenant}, HTTPStatus.OK
 
 
 @app.put("/tenants/<tenantId>")
@@ -80,29 +97,31 @@ def get_tenant(tenantId):
 def update_tenant(tenantId):
     logger.info("Request received to update a tenant")
     input_details = app.current_event.json_body
-
+    updated_tenant = None
     try:
-        __update_tenant(tenantId, input_details)
-    except Exception as e:
-        raise Exception("Error updating a tenant", e)
+        response = __update_tenant(tenantId, input_details)
+        updated_tenant = response['Attributes']
+    except botocore.exceptions.ClientError as error:
+        logger.error(error)
+        raise InternalServerError("Unknown error during processing!")
     else:
-        return "Tenant updated", HTTPStatus.OK
+        return {'data': updated_tenant}, HTTPStatus.OK
 
 
 @app.delete("/tenants/<tenantId>")
 @tracer.capture_method
 def delete_tenant(tenantId):
     logger.info("Request received to delete a tenant")
-    input_details = {**app.current_event.json_body, 'tenantStatus': 'Deleting'}
 
     try:
-        __update_tenant(tenantId, input_details)
+        response = __update_tenant(tenantId, {'tenantStatus': 'Deleting'})
         __create_control_plane_event(
-            json.dumps(input_details), ControlPlaneEventTypes.OFFBOARDING.value)
-    except Exception as e:
-        raise Exception("Error deleting a tenant", e)
+            json.dumps(response['Attributes']), offboarding_detail_type)
+    except botocore.exceptions.ClientError as error:
+        logger.error(error)
+        raise InternalServerError("Unknown error during processing!")
     else:
-        return 'Successsfuly sent offboarding message to application plane', HTTPStatus.OK
+        return {"message": "Successfully sent offboarding message to application plane"}, HTTPStatus.OK
 
 
 def __update_tenant(tenantId, tenant):
@@ -120,13 +139,13 @@ def __update_tenant(tenantId, tenant):
     # remove the last comma
     update_expression.pop()
 
-    response_update = tenant_details_table.update_item(
+    return tenant_details_table.update_item(
         Key={
             'tenantId': tenantId,
         },
         UpdateExpression=''.join(update_expression),
         ExpressionAttributeValues=expression_attribute_values,
-        ReturnValues="UPDATED_NEW"
+        ReturnValues="ALL_NEW"
     )
 
 
@@ -148,12 +167,13 @@ def deactivate_tenant(tenantId):
         )
 
         __create_control_plane_event(
-            json.dumps({"tenantId": tenantId}), ControlPlaneEventTypes.DEACTIVATE.value)
-    except Exception as e:
-        raise Exception("Error while deactivating a tenant", e)
+            json.dumps({"tenantId": tenantId}), deactivate_detail_type)
+    except botocore.exceptions.ClientError as error:
+        logger.error(error)
+        raise InternalServerError("Unknown error during processing!")
 
     else:
-        return "Tenant deactivated", HTTPStatus.OK
+        return {"message": "Tenant deactivated"}, HTTPStatus.OK
 
 
 @app.put("/tenants/<tenantId>/activate")
@@ -174,22 +194,23 @@ def activate_tenant(tenantId):
         )
 
         __create_control_plane_event(json.dumps(
-            response['Attributes']), ControlPlaneEventTypes.ACTIVATE.value)
-    except Exception as e:
-        raise Exception("Error while activating a tenant", e)
+            response['Attributes']), activate_detail_type)
+    except botocore.exceptions.ClientError as error:
+        logger.error(error)
+        raise InternalServerError("Unknown error during processing!")
 
     else:
-        return "Tenant activated", HTTPStatus.OK
+        return {"message": "Tenant activated"}, HTTPStatus.OK
 
 
-def __create_control_plane_event(eventDetails, eventType):
+def __create_control_plane_event(event_details, detail_type):
     response = event_bus.put_events(
         Entries=[
             {
                 'EventBusName': eventbus_name,
                 'Source': event_source,
-                'DetailType': eventType,
-                'Detail': eventDetails,
+                'DetailType': detail_type,
+                'Detail': event_details,
             }
         ]
     )
