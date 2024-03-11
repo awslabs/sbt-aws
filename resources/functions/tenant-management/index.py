@@ -7,6 +7,7 @@ from http import HTTPStatus
 import uuid
 
 import boto3
+from boto3.dynamodb.conditions import Attr
 import botocore
 from aws_lambda_powertools import Logger, Tracer
 from aws_lambda_powertools.event_handler import (APIGatewayRestResolver,
@@ -100,6 +101,9 @@ def update_tenant(tenantId):
     try:
         response = __update_tenant(tenantId, input_details)
         updated_tenant = response['Attributes']
+    except dynamodb.meta.client.exceptions.ConditionalCheckFailedException:
+        logger.info(f'received request to update non-existing tenant {tenantId}')
+        raise NotFoundError(f"Tenant {tenantId} not found.")
     except botocore.exceptions.ClientError as error:
         logger.error(error)
         raise InternalServerError("Unknown error during processing!")
@@ -116,6 +120,9 @@ def delete_tenant(tenantId):
         response = __update_tenant(tenantId, {'tenantStatus': 'Deleting'})
         __create_control_plane_event(
             json.dumps(response['Attributes']), offboarding_detail_type)
+    except dynamodb.meta.client.exceptions.ConditionalCheckFailedException:
+        logger.info(f'received request to update non-existing tenant {tenantId}')
+        raise NotFoundError(f"Tenant {tenantId} not found.")
     except botocore.exceptions.ClientError as error:
         logger.error(error)
         raise InternalServerError("Unknown error during processing!")
@@ -142,6 +149,7 @@ def __update_tenant(tenantId, tenant):
         Key={
             'tenantId': tenantId,
         },
+        ConditionExpression=Attr('tenantId').eq(tenantId),
         UpdateExpression=''.join(update_expression),
         ExpressionAttributeValues=expression_attribute_values,
         ReturnValues="ALL_NEW"
