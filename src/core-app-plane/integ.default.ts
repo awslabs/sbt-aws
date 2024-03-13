@@ -4,11 +4,12 @@
 import * as cdk from 'aws-cdk-lib';
 import { EventBus, Rule } from 'aws-cdk-lib/aws-events';
 import * as targets from 'aws-cdk-lib/aws-events-targets';
-import { PolicyDocument } from 'aws-cdk-lib/aws-iam';
+import { Effect, PolicyDocument, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { AwsSolutionsChecks, NagSuppressions } from 'cdk-nag';
-import { CoreApplicationPlane } from '.';
+import { CoreApplicationPlane, CoreApplicationPlaneJobRunnerProps } from '.';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
+import { DetailType } from '../utils';
 
 export interface IntegStackProps extends cdk.StackProps {
   eventBusArn?: string;
@@ -18,13 +19,6 @@ export class IntegStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: IntegStackProps) {
     super(scope, id, props);
 
-    const controlPlaneSource = 'testControlPlaneEventSource';
-    const applicationPlaneSource = 'testApplicationPlaneEventSource';
-    const provisioningDetailType = 'testProvisioningDetailType';
-    const onboardingDetailType = 'Onboarding';
-    const offboardingDetailType = 'Offboarding';
-    const deprovisioningDetailType = 'testDeprovisioningDetailType';
-
     let eventBus;
     if (props?.eventBusArn) {
       eventBus = EventBus.fromEventBusArn(this, 'EventBus', props.eventBusArn);
@@ -32,62 +26,21 @@ export class IntegStack extends cdk.Stack {
       eventBus = new EventBus(this, 'EventBus');
     }
 
-    const eventBusWatcherRule = new Rule(this, 'EventBusWatcherRule', {
-      eventBus: eventBus,
-      enabled: true,
-      eventPattern: {
-        source: [controlPlaneSource, applicationPlaneSource],
-      },
-    });
-
-    NagSuppressions.addResourceSuppressions(
-      eventBusWatcherRule,
-      [
-        {
-          id: 'AwsSolutions-IAM4',
-          reason: 'Suppress error from resource created for testing.',
-          appliesTo: [
-            'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
-          ],
-        },
-        {
-          id: 'AwsSolutions-IAM5',
-          reason: 'Suppress error from resource created for testing.',
-          appliesTo: ['Resource::*'],
-        },
-      ],
-      true // applyToChildren = true, so that it applies to resources created by the rule. Ex. lambda role.
-    );
-
-    eventBusWatcherRule.addTarget(
-      new targets.CloudWatchLogGroup(
-        new LogGroup(this, 'EventBusWatcherLogGroup', {
-          removalPolicy: cdk.RemovalPolicy.DESTROY,
-          retention: RetentionDays.ONE_WEEK,
-        })
-      )
-    );
-
-    const provisioningJobRunnerProps = {
+    const provisioningJobRunnerProps: CoreApplicationPlaneJobRunnerProps = {
       name: 'provisioning',
-      permissions: PolicyDocument.fromJson(
-        JSON.parse(`
-{
-  "Version":"2012-10-17",
-  "Statement":[
-      {
-        "Action":[
-            "cloudformation:CreateStack",
-            "cloudformation:DescribeStacks",
-            "s3:CreateBucket"
+      permissions: new PolicyDocument({
+        statements: [
+          new PolicyStatement({
+            actions: [
+              'cloudformation:CreateStack',
+              'cloudformation:DescribeStacks',
+              's3:CreateBucket',
+            ],
+            resources: ['*'],
+            effect: Effect.ALLOW,
+          }),
         ],
-        "Resource":"*",
-        "Effect":"Allow"
-      }
-  ]
-}
-`)
-      ),
+      }),
       script: `
 echo "starting..."
 
@@ -126,45 +79,44 @@ export tenantConfig=$(jq --arg SAAS_APP_USERPOOL_ID "MY_SAAS_APP_USERPOOL_ID" \
 -n '{"userPoolId":$SAAS_APP_USERPOOL_ID,"appClientId":$SAAS_APP_CLIENT_ID,"apiGatewayUrl":$API_GATEWAY_URL}')
 
 echo $tenantConfig
+export tenantStatus="created"
 
 echo "done!"
 `,
       postScript: '',
-      importedVariables: ['tenantId', 'tier'],
-      exportedVariables: ['tenantS3Bucket', 'someOtherVariable', 'tenantConfig'],
+      environmentStringVariablesFromIncomingEvent: ['tenantId', 'tier', 'tenantName', 'email'],
+      environmentJSONVariablesFromIncomingEvent: ['prices'],
+      environmentVariablesToOutgoingEvent: [
+        'tenantS3Bucket',
+        'someOtherVariable',
+        'tenantConfig',
+        'tenantStatus',
+        'prices', // added so we don't lose it for targets beyond provisioning (ex. billing)
+        'tenantName', // added so we don't lose it for targets beyond provisioning (ex. billing)
+        'email', // added so we don't lose it for targets beyond provisioning (ex. billing)
+      ],
       scriptEnvironmentVariables: {
         TEST: 'test',
       },
-      outgoingEvent: {
-        source: applicationPlaneSource,
-        detailType: provisioningDetailType,
-      },
-      incomingEvent: {
-        source: [controlPlaneSource],
-        detailType: [onboardingDetailType],
-      },
+      outgoingEvent: DetailType.PROVISION_SUCCESS,
+      incomingEvent: DetailType.ONBOARDING_REQUEST,
     };
 
-    const deprovisioningJobRunnerProps = {
+    const deprovisioningJobRunnerProps: CoreApplicationPlaneJobRunnerProps = {
       name: 'deprovisioning',
-      permissions: PolicyDocument.fromJson(
-        JSON.parse(`
-{
-  "Version":"2012-10-17",
-  "Statement":[
-      {
-        "Action":[
-            "cloudformation:DeleteStack",
-            "cloudformation:DescribeStacks",
-            "s3:DeleteBucket"
+      permissions: new PolicyDocument({
+        statements: [
+          new PolicyStatement({
+            actions: [
+              'cloudformation:DeleteStack',
+              'cloudformation:DescribeStacks',
+              's3:DeleteBucket',
+            ],
+            resources: ['*'],
+            effect: Effect.ALLOW,
+          }),
         ],
-        "Resource":"*",
-        "Effect":"Allow"
-      }
-  ]
-}
-`)
-      ),
+      }),
       script: `
 echo "starting..."
 
@@ -173,26 +125,58 @@ echo "tenantId: $tenantId"
 aws cloudformation delete-stack --stack-name "tenantTemplateStack-\${tenantId}"
 aws cloudformation wait stack-delete-complete --stack-name "tenantTemplateStack-\${tenantId}"
 export status="deleted stack: tenantTemplateStack-\${tenantId}"
+export tenantStatus="deleted"
 echo "done!"
 `,
-      importedVariables: ['tenantId'],
-      exportedVariables: ['status'],
-      outgoingEvent: {
-        source: applicationPlaneSource,
-        detailType: deprovisioningDetailType,
-      },
-      incomingEvent: {
-        source: [controlPlaneSource],
-        detailType: [offboardingDetailType],
-      },
+      environmentStringVariablesFromIncomingEvent: ['tenantId'],
+      environmentVariablesToOutgoingEvent: ['tenantStatus'],
+      outgoingEvent: DetailType.DEPROVISION_SUCCESS,
+      incomingEvent: DetailType.OFFBOARDING_REQUEST,
     };
 
-    new CoreApplicationPlane(this, 'CoreApplicationPlane', {
+    const coreApplicationPlane = new CoreApplicationPlane(this, 'CoreApplicationPlane', {
       eventBusArn: eventBus.eventBusArn,
-      controlPlaneSource: controlPlaneSource,
-      applicationNamePlaneSource: applicationPlaneSource,
       jobRunnerPropsList: [provisioningJobRunnerProps, deprovisioningJobRunnerProps],
     });
+
+    const eventBusWatcherRule = new Rule(this, 'EventBusWatcherRule', {
+      eventBus: eventBus,
+      enabled: true,
+      eventPattern: {
+        source: [
+          coreApplicationPlane.eventManager.controlPlaneEventSource,
+          coreApplicationPlane.eventManager.applicationPlaneEventSource,
+        ],
+      },
+    });
+
+    NagSuppressions.addResourceSuppressions(
+      eventBusWatcherRule,
+      [
+        {
+          id: 'AwsSolutions-IAM4',
+          reason: 'Suppress error from resource created for testing.',
+          appliesTo: [
+            'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
+          ],
+        },
+        {
+          id: 'AwsSolutions-IAM5',
+          reason: 'Suppress error from resource created for testing.',
+          appliesTo: ['Resource::*'],
+        },
+      ],
+      true // applyToChildren = true, so that it applies to resources created by the rule. Ex. lambda role.
+    );
+
+    eventBusWatcherRule.addTarget(
+      new targets.CloudWatchLogGroup(
+        new LogGroup(this, 'EventBusWatcherLogGroup', {
+          removalPolicy: cdk.RemovalPolicy.DESTROY,
+          retention: RetentionDays.ONE_WEEK,
+        })
+      )
+    );
   }
 }
 
@@ -262,7 +246,7 @@ NagSuppressions.addResourceSuppressionsByPath(
   [
     {
       id: 'AwsSolutions-IAM4',
-      reason: 'Suppress errors generated by updates to cdk-managed CodeBuild Project role.',
+      reason: 'Suppress error from resource created for testing.',
       appliesTo: [
         'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
       ],

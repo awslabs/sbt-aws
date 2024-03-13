@@ -20,11 +20,6 @@ export class IntegStack extends cdk.Stack {
     // for event bridge communication
     const idpName = 'COGNITO';
     const systemAdminRoleName = 'SystemAdmin';
-    const applicationPlaneEventSource = 'testApplicationPlaneEventSource';
-    const provisioningDetailType = 'testProvisioningDetailType';
-    const controlPlaneEventSource = 'testControlPlaneEventSource';
-    const onboardingDetailType = 'Onboarding';
-    const offboardingDetailType = 'Offboarding';
 
     const cognitoAuth = new CognitoAuth(this, 'CognitoAuth', {
       idpName: idpName,
@@ -36,11 +31,6 @@ export class IntegStack extends cdk.Stack {
 
     const controlPlane = new ControlPlane(this, 'ControlPlane', {
       auth: cognitoAuth,
-      applicationPlaneEventSource: applicationPlaneEventSource,
-      provisioningDetailType: provisioningDetailType,
-      controlPlaneEventSource: controlPlaneEventSource,
-      onboardingDetailType: onboardingDetailType,
-      offboardingDetailType: offboardingDetailType,
     });
 
     const eventBus = EventBus.fromEventBusArn(
@@ -54,7 +44,10 @@ export class IntegStack extends cdk.Stack {
       eventBus: eventBus,
       enabled: true,
       eventPattern: {
-        source: [controlPlaneEventSource, applicationPlaneEventSource],
+        source: [
+          controlPlane.eventManager.controlPlaneEventSource,
+          controlPlane.eventManager.applicationPlaneEventSource,
+        ],
       },
     });
 

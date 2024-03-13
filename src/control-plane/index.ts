@@ -9,4 +9,6 @@ export * from './messaging';
 export * from './models/tenant';
 export * from './services';
 export * from './tables';
+export * from './billing/index';
+export * from './ingestor-aggregator/index';
 export * from './tenant-config/tenant-config-service';

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as cdk from 'aws-cdk-lib';
-import { Annotations, Match, Template, Capture } from 'aws-cdk-lib/assertions';
+import { Annotations, Capture, Match, Template } from 'aws-cdk-lib/assertions';
 import { AwsSolutionsChecks } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { CognitoAuth, ControlPlane } from '../src/control-plane';
@@ -15,12 +15,6 @@ describe('No unsuppressed cdk-nag Warnings or Errors', () => {
       const systemAdminEmail = 'test@example.com';
       const idpName = 'COGNITO';
       const systemAdminRoleName = 'SystemAdmin';
-      const applicationPlaneEventSource = 'testApplicationPlaneEventSource';
-      const provisioningDetailType = 'testProvisioningDetailType';
-      const controlPlaneEventSource = 'testControlPlaneEventSource';
-      const onboardingDetailType = 'testOnboarding';
-      const offboardingDetailType = 'testOffboarding';
-
       const cognitoAuth = new CognitoAuth(this, 'CognitoAuth', {
         idpName: idpName,
         systemAdminRoleName: systemAdminRoleName,
@@ -29,11 +23,6 @@ describe('No unsuppressed cdk-nag Warnings or Errors', () => {
 
       new ControlPlane(this, 'ControlPlane', {
         auth: cognitoAuth,
-        applicationPlaneEventSource: applicationPlaneEventSource,
-        provisioningDetailType: provisioningDetailType,
-        controlPlaneEventSource: controlPlaneEventSource,
-        onboardingDetailType: onboardingDetailType,
-        offboardingDetailType: offboardingDetailType,
       });
     }
   }
@@ -71,11 +60,6 @@ describe('ControlPlane', () => {
       // for event bridge communication
       const idpName = 'COGNITO';
       const systemAdminRoleName = 'SystemAdmin';
-      const applicationPlaneEventSource = 'testApplicationPlaneEventSource';
-      const provisioningDetailType = 'testProvisioningDetailType';
-      const controlPlaneEventSource = 'testControlPlaneEventSource';
-      const onboardingDetailType = 'testOnboarding';
-      const offboardingDetailType = 'testOffboarding';
 
       const cognitoAuth = new CognitoAuth(this, 'CognitoAuth', {
         idpName: idpName,
@@ -87,11 +71,6 @@ describe('ControlPlane', () => {
 
       new ControlPlane(this, 'ControlPlane', {
         auth: cognitoAuth,
-        applicationPlaneEventSource: applicationPlaneEventSource,
-        provisioningDetailType: provisioningDetailType,
-        controlPlaneEventSource: controlPlaneEventSource,
-        onboardingDetailType: onboardingDetailType,
-        offboardingDetailType: offboardingDetailType,
       });
     }
   }
@@ -101,7 +80,7 @@ describe('ControlPlane', () => {
   });
   const template = Template.fromStack(controlPlaneTestStack);
 
-  it('should have exactly 1 target for every Event Rule', () => {
+  it('should have at least 1 target for every Event Rule', () => {
     const targetsCapture = new Capture();
     template.allResourcesProperties('AWS::Events::Rule', {
       Targets: targetsCapture,
@@ -112,5 +91,21 @@ describe('ControlPlane', () => {
     do {
       expect(targetsCapture.asArray()).toHaveLength(1);
     } while (targetsCapture.next());
+  });
+
+  it('should have a fixed template description, when the containing stack does not have description', () => {
+    const actual = controlPlaneTestStack.templateOptions.description;
+    const expected = 'SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)';
+    expect(actual).toStrictEqual(expected);
+  });
+
+  it('should have a concatenated template description, when the containing stack has an existing desc', () => {
+    const stackWithDescription = new TestStack(app, 'stackWithDescription', {
+      systemAdminEmail: 'test@example.com',
+      description: 'ABC',
+    });
+    const actual = stackWithDescription.templateOptions.description;
+    const expected = 'ABC - SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)';
+    expect(expected).toStrictEqual(actual);
   });
 });
