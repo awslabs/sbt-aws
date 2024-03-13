@@ -64,7 +64,7 @@ export class HelloCdkStack extends cdk.Stack {
 Install or update SBT from npm (requires [Node.js ≥ 14.15.0](https://nodejs.org/download/release/latest-v14.x/)). We recommend using a version in [Active LTS](https://nodejs.org/en/about/previous-releases)
 
 ```sh
-npm install @cdklabs/sbt-aws
+npm install @cdklabs/sbt-aws@0.0.16
 ```
 
 Add a sample control plane to your application. In the `HelloCdkStack` add the following:
