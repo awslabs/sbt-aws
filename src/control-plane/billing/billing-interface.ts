@@ -19,6 +19,16 @@ export interface IBilling {
   deleteUserFunction: IFunction;
 
   /**
+   * The function to trigger when updating a billing user.
+   */
+  updateUserFunction: IFunction;
+
+  /**
+   * The function to trigger when getting a billing user. 
+   */
+  getUserFunction: IFunction;
+
+  /**
    * The IDataIngestorAggregator responsible for accepting and aggregating
    * the raw billing data.
    */
