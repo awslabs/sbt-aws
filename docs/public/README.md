@@ -107,11 +107,6 @@ export class ControlPlaneStack extends Stack {
 
     const controlPlane = new ControlPlane(this, 'ControlPlane', {
       auth: cognitoAuth,
-      applicationPlaneEventSource: 'testApplicationPlaneEventSource',
-      provisioningDetailType: 'testProvisioningDetailType',
-      controlPlaneEventSource: 'testControlPlaneEventSource',
-      onboardingDetailType: 'Onboarding',
-      offboardingDetailType: 'Offboarding',
     });
     this.eventBusArn = controlPlane.eventBusArn;
     this.regApiGatewayUrl = controlPlane.controlPlaneAPIGatewayUrl;
@@ -121,7 +116,7 @@ export class ControlPlaneStack extends Stack {
 
 Notice here we're creating a new [CDK Stack](https://docs.aws.amazon.com/cdk/v2/guide/stacks.html) called "ControlPlaneStack". In that stack, we're creating a single `ControlPlane` construct which we imported from the `@cdklabs/sbt-aws` package. The `ControlPlane` construct is created with a number of different properties, most of which are used to configure Amazon EventBridge communication.
 
-Another important concept worth pointing out here is the pluggability of this approach. Notice we're creating an "auth" component, called "CognitoAuth". This component implements the [`IAuth`](/API.md#iauth) interface defined in the SBT core package. We currently have a Cognito implementation of `IAuth`, but we could technically implement that interface with any identity provider.
+Another important concept worth pointing out here is the pluggability of this approach. Notice we're creating an "auth" component, called "CognitoAuth". This component implements the [`IAuth`](/API.md#iauth-) interface defined in the SBT core package. We currently have a Cognito implementation of `IAuth`, but we could technically implement that interface with any identity provider.
 
 ##### Build it
 
@@ -142,6 +137,10 @@ const cp = new ControlPlaneStack(app, 'ControlPlaneStack', {});
 ```
 
 Notice we're leaving a few lines commented out here, we'll come back to those later when we discuss the application plane. Ensure everything is saved, then from the root of your `hello-cdk` project, run the following:
+
+> [!WARNING]  
+> Because our ControlPlane deploys a Lambda function, you'll need Docker installed to build and deploy this CDK stack
+>
 
 ```sh
 npm run build
@@ -191,7 +190,7 @@ Although entirely optional, SBT includes a utility that lets you define, and run
 
 ![sbt-provisioning.png](../../images/sbt-provisioning.png)
 
-Notice the use of the `provisioning.sh` and `deprovisioning.sh` scripts at the top. These scripts are fed to the `JobRunner` as parameters. Internally the `JobRunner` launches an AWS CodeBuild project, wrapped inside an AWS Step Function, to execute the bash scripts. The `JobRunner` also lets you specify what input variables to feed to the scripts, along with what output variables you expect them to return. Note that in this version of SBT, `JobRunner`s are created by the `CoreAppPlane` based on its `jobRunnerPropsList` input (the empty array in the code above). The type of object here is the [`jobRunnerProps`](/API.md#bashjobrunnerprops). Let's take a simple example: imagine our SaaS application deployed only a single S3 bucket per tenant. Let's create a job runner for that provisioning now.
+Notice the use of the `provisioning.sh` and `deprovisioning.sh` scripts at the top. These scripts are fed to the `JobRunner` as parameters. Internally the `JobRunner` launches an AWS CodeBuild project, wrapped inside an AWS Step Function, to execute the bash scripts. The `JobRunner` also lets you specify what input variables to feed to the scripts, along with what output variables you expect them to return. Note that in this version of SBT, `JobRunner`s are created by the `CoreAppPlane` based on its `jobRunnerPropsList` input (the empty array in the code above). The type of object here is the [`jobRunnerProps`](/API.md#coreapplicationplanejobrunnerprops-). Let's take a simple example: imagine our SaaS application deployed only a single S3 bucket per tenant. Let's create a job runner for that provisioning now.
 
 ```typescript
     const provisioningJobRunnerProps = {
@@ -359,9 +358,8 @@ Similar to how it mapped incoming EventBridge message detail variables to enviro
 Now that we've seen the various parts of the application plane in isolation, let's put it all together. Please create the following file in the `/lib` directory of your CDK app and name it `app-plane.ts`. Now open that file and paste the following contents into it:
 
 ```typescript
+import { CoreApplicationPlane, DetailType, EventManager } from '@cdklabs/sbt-aws';
 import * as cdk from 'aws-cdk-lib';
-import { EventBus, Rule } from 'aws-cdk-lib/aws-events';
-import * as targets from 'aws-cdk-lib/aws-events-targets';
 import { PolicyDocument } from 'aws-cdk-lib/aws-iam';
 
 export interface AppPlaneProps extends cdk.StackProps {
@@ -370,12 +368,6 @@ export interface AppPlaneProps extends cdk.StackProps {
 export class AppPlaneStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props: AppPlaneProps) {
     super(scope, id, props);
-
-    const applicationPlaneEventSource = 'testApplicationPlaneEventSource';
-    const provisioningDetailType = 'Onboarding';
-    const controlPlaneEventSource = 'testControlPlaneEventSource';
-    const onboardingDetailType = 'Onboarding';
-
     const provisioningJobRunnerProps = {
       name: 'provisioning',
       permissions: PolicyDocument.fromJson(
@@ -433,24 +425,17 @@ echo "done!"
       scriptEnvironmentVariables: {
         TEST: 'test',
       },
-      outgoingEvent: {
-        source: applicationPlaneEventSource,
-        detailType: provisioningDetailType,
-      },
-      incomingEvent: {
-        source: [controlPlaneEventSource],
-        detailType: [onboardingDetailType],
-      },
+      outgoingEvent: DetailType.PROVISION_SUCCESS,
+      incomingEvent: DetailType.ONBOARDING_REQUEST,
     };
 
     new CoreApplicationPlane(this, 'CoreApplicationPlane', {
       eventBusArn: props.eventBusArn,
-      controlPlaneSource: controlPlaneEventSource,
-      applicationNamePlaneSource: applicationPlaneEventSource,
       jobRunnerPropsList: [provisioningJobRunnerProps],
     });
   }
 }
+
 ```
 
 Although this looks like a lot of code, it's still a single construct, with a lot of configuration sent to it. Now that we've defined our app plane, let's again open up the `hello-cdk.ts` file in the `bin` directory of your CDK app. Once open, uncomment each commented line. The final file should look like this:
