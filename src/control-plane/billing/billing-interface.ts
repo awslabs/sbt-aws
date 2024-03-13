@@ -26,7 +26,7 @@ export interface IBilling {
   /**
    * The function to trigger when getting a billing user. 
    */
-  getUserFunction: IFunction;
+  readUserFunction: IFunction;
 
   /**
    * The IDataIngestorAggregator responsible for accepting and aggregating
