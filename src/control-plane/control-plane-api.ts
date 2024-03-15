@@ -10,7 +10,7 @@ import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import * as wafv2 from 'aws-cdk-lib/aws-wafv2';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
-import { IAuth } from './auth';
+import { IAuth } from './auth/auth';
 import { Services } from './services';
 
 export interface ControlPlaneAPIProps {

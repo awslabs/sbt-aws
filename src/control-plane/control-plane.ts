@@ -5,7 +5,7 @@ import * as cdk from 'aws-cdk-lib';
 import { EventBus } from 'aws-cdk-lib/aws-events';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
-import { IAuth } from './auth';
+import { IAuth } from './auth/auth';
 import { IBilling, BillingProvider } from './billing';
 import { ControlPlaneAPI } from './control-plane-api';
 import { LambdaLayers } from './lambda-layers';

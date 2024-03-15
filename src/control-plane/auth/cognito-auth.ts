@@ -15,22 +15,8 @@ import {
 import { Runtime, IFunction } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
-import { LambdaLayers } from './lambda-layers';
-
-export interface IAuth {
-  authorizer: IAuthorizer;
-  controlPlaneIdpDetails: string;
-  authorizationServer: string;
-  clientId: string;
-  wellKnownEndpointUrl: string;
-  createUserFunction: IFunction;
-  fetchAllUsersFunction: IFunction; // use 'fetch*' instead of 'get*' to avoid error JSII5000
-  fetchUserFunction: IFunction; // use 'fetch*' instead of 'get*' to avoid error JSII5000
-  updateUserFunction: IFunction;
-  deleteUserFunction: IFunction;
-  disableUserFunction: IFunction;
-  enableUserFunction: IFunction;
-}
+import { IAuth } from './auth';
+import { LambdaLayers } from '../lambda-layers';
 
 export interface CognitoAuthProps {
   readonly idpName: string;
@@ -41,7 +27,7 @@ export interface CognitoAuthProps {
 
 export class CognitoAuth extends Construct implements IAuth {
   authorizer: IAuthorizer;
-  controlPlaneIdpDetails: string;
+  controlPlaneIdpDetails: any;
   authorizationServer: string;
   clientId: string;
   wellKnownEndpointUrl: string;
@@ -113,7 +99,7 @@ export class CognitoAuth extends Construct implements IAuth {
       this,
       'createControlPlaneIdpFunction',
       {
-        entry: path.join(__dirname, '../../resources/custom-resources/'),
+        entry: path.join(__dirname, '../../../resources/custom-resources'),
         runtime: Runtime.PYTHON_3_12,
         index: 'create_control_plane_idp.py',
         handler: 'handler',
@@ -151,7 +137,7 @@ export class CognitoAuth extends Construct implements IAuth {
       exportName: 'ControlPlaneIdpDetails',
     });
     const customAuthorizerFunction = new PythonFunction(this, 'CustomAuthorizerFunction', {
-      entry: path.join(__dirname, '../../resources/functions/'),
+      entry: path.join(__dirname, '../../../resources/functions'),
       runtime: Runtime.PYTHON_3_12,
       index: 'custom_authorizer.py',
       handler: 'lambda_handler',
@@ -222,7 +208,7 @@ export class CognitoAuth extends Construct implements IAuth {
     );
 
     const userManagementServices = new PythonFunction(this, 'UserManagementServices', {
-      entry: path.join(__dirname, '../../resources/functions/'),
+      entry: path.join(__dirname, '../../../resources/functions/'),
       runtime: Runtime.PYTHON_3_12,
       index: 'user_management.py',
       handler: 'lambda_handler',
