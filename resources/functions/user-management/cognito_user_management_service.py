@@ -2,13 +2,11 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import boto3
-import cognito.user_management_util as user_management_util
-from abstract_classes.idp_user_management_abstract_class import IdpUserManagementAbstractClass
-
+import user_management_util as user_management_util
 
 client = boto3.client('cognito-idp')
 
-class CognitoUserManagementService(IdpUserManagementAbstractClass):
+class CognitoUserManagementService():
     def create_user(self, event):
         user_details = event
         user_pool_id = user_details['idpDetails']['idp']['userPoolId']
@@ -30,7 +28,7 @@ class CognitoUserManagementService(IdpUserManagementAbstractClass):
         response = client.list_users(
                 UserPoolId=user_pool_id
             )
-          
+        
         num_of_users = len(response['Users'])
     
         if (num_of_users > 0):
@@ -60,7 +58,7 @@ class CognitoUserManagementService(IdpUserManagementAbstractClass):
                 UserPoolId=user_pool_id,
                 Username=user_name
         )
-       
+    
         user_info =  UserInfo()
         user_info.user_name = response["Username"]
         for attr in response["UserAttributes"]:
@@ -122,7 +120,7 @@ class CognitoUserManagementService(IdpUserManagementAbstractClass):
         user_name = user_details['userName']
         
         response = client.admin_delete_user(
-                     UserPoolId=user_pool_id,
+                    UserPoolId=user_pool_id,
                     Username=user_name
                 )
         

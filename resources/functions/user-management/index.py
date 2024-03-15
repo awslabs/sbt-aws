@@ -8,7 +8,7 @@ from aws_lambda_powertools import Tracer
 from aws_lambda_powertools import Logger
 from aws_lambda_powertools.logging import correlation_paths
 from aws_lambda_powertools.event_handler import APIGatewayRestResolver
-import idp_object_factory
+from cognito_user_management_service import CognitoUserManagementService
 
 tracer = Tracer()
 logger = Logger()
@@ -16,8 +16,7 @@ app = APIGatewayRestResolver()
 
 idp_name = os.environ['IDP_NAME']
 idp_details=json.loads(os.environ['IDP_DETAILS'])
-
-idp_user_mgmt_service = idp_object_factory.get_idp_user_mgmt_object(idp_name)
+idp_user_mgmt_service = CognitoUserManagementService()
 
 @app.post("/users")
 @tracer.capture_method

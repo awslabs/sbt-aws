@@ -3,16 +3,10 @@
 
 import json
 import os
-import idp_object_factory
-
+from cognito_identity_provider_management import CognitoIdentityProviderManagement
 from crhelper import CfnResource
 helper = CfnResource()
-
-try:
-    idp_name = os.environ['IDP_NAME']
-    idp_mgmt_service = idp_object_factory.get_idp_mgmt_object(idp_name)
-except Exception as e:
-    helper.init_failure(e)
+idp_mgmt_service = CognitoIdentityProviderManagement()
 
 
 @helper.create

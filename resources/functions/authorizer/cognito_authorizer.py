@@ -1,7 +1,6 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-from abstract_classes.idp_authorizer_abstract_class import IdpAuthorizerAbstractClass
 import json
 import boto3
 import time
@@ -15,7 +14,7 @@ logger = Logger()
 region = boto3.session.Session().region_name
 
 
-class CognitoAuthorizer(IdpAuthorizerAbstractClass):
+class CognitoAuthorizer():
     def validateJWT(self, event):
 
         input_details = event

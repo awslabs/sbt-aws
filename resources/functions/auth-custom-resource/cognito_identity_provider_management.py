@@ -4,15 +4,14 @@
 import boto3
 import os
 import uuid
-import cognito.user_management_util as user_management_util
+import user_management_util as user_management_util
 from aws_lambda_powertools import Logger
-from abstract_classes.identity_provider_abstract_class import IdentityProviderAbstractClass
 
 logger = Logger()
 cognito = boto3.client('cognito-idp')
 
 
-class CognitoIdentityProviderManagement(IdentityProviderAbstractClass):
+class CognitoIdentityProviderManagement():
     def create_control_plane_idp(self, event):
         idp_response = {}
         idp_response['idp'] = {}
@@ -56,8 +55,8 @@ class CognitoIdentityProviderManagement(IdentityProviderAbstractClass):
 
     def __create_user_pool(self, user_pool_name, control_plane_site_url):
         email_message = ''.join(["Login into control plane UI at ",
-                                 control_plane_site_url,
-                                 " with username {username} and temporary password {####}"])
+                                control_plane_site_url,
+                                " with username {username} and temporary password {####}"])
         email_subject = ''.join(
             ["Your temporary password for control plane UI"])
         response = cognito.create_user_pool(

@@ -3,7 +3,7 @@
 
 import * as path from 'path';
 import { PythonFunction } from '@aws-cdk/aws-lambda-python-alpha';
-import { CfnOutput, CustomResource, Duration } from 'aws-cdk-lib';
+import { CfnOutput, CustomResource, Duration, Stack } from 'aws-cdk-lib';
 import { IAuthorizer, TokenAuthorizer } from 'aws-cdk-lib/aws-apigateway';
 import {
   ManagedPolicy,
@@ -12,11 +12,10 @@ import {
   ServicePrincipal,
   Effect,
 } from 'aws-cdk-lib/aws-iam';
-import { Runtime, IFunction } from 'aws-cdk-lib/aws-lambda';
+import { Runtime, IFunction, LayerVersion } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IAuth } from './auth';
-import { LambdaLayers } from '../lambda-layers';
 
 export interface CognitoAuthProps {
   readonly idpName: string;
@@ -43,7 +42,11 @@ export class CognitoAuth extends Construct implements IAuth {
     super(scope, id);
     const defaultControlPlaneCallbackURL = 'http://localhost';
 
-    const lambdaLayers = new LambdaLayers(this, 'controlplane-lambda-layers');
+    // https://docs.powertools.aws.dev/lambda/python/2.31.0/#lambda-layer
+    const lambdaPowerToolsLayerARN = `arn:aws:lambda:${
+      Stack.of(this).region
+    }:017000801446:layer:AWSLambdaPowertoolsPythonV2:59`;
+
     const lambdaIdpExecRole = new Role(this, 'lambdaIdpExecRole', {
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
     });
@@ -99,13 +102,15 @@ export class CognitoAuth extends Construct implements IAuth {
       this,
       'createControlPlaneIdpFunction',
       {
-        entry: path.join(__dirname, '../../../resources/custom-resources'),
+        entry: path.join(__dirname, '../../../resources/functions/auth-custom-resource'),
         runtime: Runtime.PYTHON_3_12,
-        index: 'create_control_plane_idp.py',
+        index: 'index.py',
         handler: 'handler',
         timeout: Duration.seconds(60),
         role: lambdaIdpExecRole,
-        layers: [lambdaLayers.controlPlaneLambdaLayer],
+        layers: [
+          LayerVersion.fromLayerVersionArn(this, 'LambdaPowerTools', lambdaPowerToolsLayerARN),
+        ],
         environment: {
           IDP_NAME: props.idpName,
         },
@@ -137,13 +142,15 @@ export class CognitoAuth extends Construct implements IAuth {
       exportName: 'ControlPlaneIdpDetails',
     });
     const customAuthorizerFunction = new PythonFunction(this, 'CustomAuthorizerFunction', {
-      entry: path.join(__dirname, '../../../resources/functions'),
+      entry: path.join(__dirname, '../../../resources/functions/authorizer'),
       runtime: Runtime.PYTHON_3_12,
-      index: 'custom_authorizer.py',
+      index: 'index.py',
       handler: 'lambda_handler',
       timeout: Duration.seconds(60),
       role: lambdaIdpExecRole,
-      layers: [lambdaLayers.controlPlaneLambdaLayer],
+      layers: [
+        LayerVersion.fromLayerVersionArn(this, 'LambdaPowerTools', lambdaPowerToolsLayerARN),
+      ],
       environment: {
         IDP_NAME: props.idpName,
         IDP_DETAILS: this.controlPlaneIdpDetails,
@@ -208,13 +215,15 @@ export class CognitoAuth extends Construct implements IAuth {
     );
 
     const userManagementServices = new PythonFunction(this, 'UserManagementServices', {
-      entry: path.join(__dirname, '../../../resources/functions/'),
+      entry: path.join(__dirname, '../../../resources/functions/user-management'),
       runtime: Runtime.PYTHON_3_12,
-      index: 'user_management.py',
+      index: 'index.py',
       handler: 'lambda_handler',
       timeout: Duration.seconds(60),
       role: userManagementExecRole,
-      layers: [lambdaLayers.controlPlaneLambdaLayer],
+      layers: [
+        LayerVersion.fromLayerVersionArn(this, 'LambdaPowerTools', lambdaPowerToolsLayerARN),
+      ],
       environment: {
         IDP_NAME: props.idpName,
         IDP_DETAILS: this.controlPlaneIdpDetails,

@@ -8,7 +8,6 @@ import { Construct } from 'constructs';
 import { IAuth } from './auth/auth';
 import { IBilling, BillingProvider } from './billing';
 import { ControlPlaneAPI } from './control-plane-api';
-import { LambdaLayers } from './lambda-layers';
 import { Messaging } from './messaging';
 import { Services } from './services';
 import { Tables } from './tables';
@@ -46,8 +45,6 @@ export class ControlPlane extends Construct {
     cdk.Aspects.of(this).add(new DestroyPolicySetter());
 
     const messaging = new Messaging(this, 'messaging-stack');
-    const lambdaLayers = new LambdaLayers(this, 'controlplane-lambda-layers');
-
     this.tables = new Tables(this, 'tables-stack');
 
     const eventBus = EventBus.fromEventBusArn(this, 'eventBus', messaging.eventBus.eventBusArn);
@@ -59,7 +56,6 @@ export class ControlPlane extends Construct {
     });
 
     const services = new Services(this, 'services-stack', {
-      lambdaLayer: lambdaLayers.controlPlaneLambdaLayer,
       tables: this.tables,
       eventManager: this.eventManager,
     });
