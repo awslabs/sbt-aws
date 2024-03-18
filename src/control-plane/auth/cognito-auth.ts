@@ -71,6 +71,7 @@ export class CognitoAuth extends Construct implements IAuth {
           'cognito-idp:CreateUserPool',
           'cognito-idp:AdminAddUserToGroup',
           'cognito-idp:GetGroup',
+          'cognito-idp:DeleteUserPool',
         ],
         effect: Effect.ALLOW,
         resources: ['*'],
@@ -109,7 +110,11 @@ export class CognitoAuth extends Construct implements IAuth {
         timeout: Duration.seconds(60),
         role: lambdaIdpExecRole,
         layers: [
-          LayerVersion.fromLayerVersionArn(this, 'LambdaPowerTools', lambdaPowerToolsLayerARN),
+          LayerVersion.fromLayerVersionArn(
+            this,
+            'AuthCustomResourceLambdaPowerTools',
+            lambdaPowerToolsLayerARN
+          ),
         ],
         environment: {
           IDP_NAME: props.idpName,
@@ -149,7 +154,11 @@ export class CognitoAuth extends Construct implements IAuth {
       timeout: Duration.seconds(60),
       role: lambdaIdpExecRole,
       layers: [
-        LayerVersion.fromLayerVersionArn(this, 'LambdaPowerTools', lambdaPowerToolsLayerARN),
+        LayerVersion.fromLayerVersionArn(
+          this,
+          'AuthorizerLambdaPowerTools',
+          lambdaPowerToolsLayerARN
+        ),
       ],
       environment: {
         IDP_NAME: props.idpName,
@@ -222,7 +231,11 @@ export class CognitoAuth extends Construct implements IAuth {
       timeout: Duration.seconds(60),
       role: userManagementExecRole,
       layers: [
-        LayerVersion.fromLayerVersionArn(this, 'LambdaPowerTools', lambdaPowerToolsLayerARN),
+        LayerVersion.fromLayerVersionArn(
+          this,
+          'UserManagementLambdaPowerTools',
+          lambdaPowerToolsLayerARN
+        ),
       ],
       environment: {
         IDP_NAME: props.idpName,

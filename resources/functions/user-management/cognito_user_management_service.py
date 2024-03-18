@@ -51,22 +51,29 @@ class CognitoUserManagementService():
     
 
     def get_user(self, event):
-        user_details = event
-        user_pool_id = user_details['idpDetails']['idp']['userPoolId']
-        user_name = user_details['userName']          
-        response = client.admin_get_user(
-                UserPoolId=user_pool_id,
-                Username=user_name
-        )
+        try: 
+            user_details = event
+            user_pool_id = user_details['idpDetails']['idp']['userPoolId']
+            user_name = user_details['userName']          
+            response = client.admin_get_user(
+                    UserPoolId=user_pool_id,
+                    Username=user_name
+            )
     
-        user_info =  UserInfo()
-        user_info.user_name = response["Username"]
-        for attr in response["UserAttributes"]:
-            if(attr["Name"] == "custom:userRole"):
-                user_info.user_role = attr["Value"]    
-            if(attr["Name"] == "email"):
-                user_info.email = attr["Value"] 
-        return user_info    
+            user_info =  UserInfo()
+            user_info.user_name = response["Username"]
+            user_info.enabled = response["Enabled"]
+            user_info.created = response["UserCreateDate"]
+            user_info.modified = response["UserLastModifiedDate"]
+            user_info.status = response["UserStatus"]             
+            for attr in response["UserAttributes"]:
+                if(attr["Name"] == "custom:userRole"):
+                    user_info.user_role = attr["Value"]    
+                if(attr["Name"] == "email"):
+                    user_info.email = attr["Value"] 
+            return user_info    
+        except client.exceptions.UserNotFoundException as e:
+            return
 
     def update_user(self, event):
         user_details = event

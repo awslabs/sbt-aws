@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import json
-import os
 from cognito_identity_provider_management import CognitoIdentityProviderManagement
 from crhelper import CfnResource
 helper = CfnResource()
@@ -37,14 +36,17 @@ def do_action(event, _):
         helper.Data['ClientId'] = client_id
         helper.Data['WellKnownEndpointUrl'] = well_known_endpoint
 
+        return idpDetails['idp']['userPoolId']
     except Exception as e:
         raise e
 
-
 @helper.delete
-def do_nothing(_, __):
-    pass
-
+def do_delete(event, _):
+    try:        
+        userPoolId = event['PhysicalResourceId']
+        idp_mgmt_service.delete_control_plane_idp(userPoolId)
+    except Exception as e:
+        raise e
 
 def handler(event, context):
     helper(event, context)
