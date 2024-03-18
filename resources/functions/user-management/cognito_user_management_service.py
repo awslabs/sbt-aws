@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import boto3
+import jsonpickle
 import user_management_util as user_management_util
 
 client = boto3.client('cognito-idp')
@@ -148,3 +149,5 @@ class UserInfo:
         self.enabled = enabled
         self.created = created
         self.modified = modified
+    def __str__(self):
+        return jsonpickle.encode(self, unpicklable=False, use_decimal=True)

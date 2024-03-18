@@ -72,6 +72,8 @@ export class CognitoAuth extends Construct implements IAuth {
           'cognito-idp:AdminAddUserToGroup',
           'cognito-idp:GetGroup',
           'cognito-idp:DeleteUserPool',
+          'cognito-idp:DescribeUserPool',
+          'cognito-idp:DeleteUserPoolDomain',
         ],
         effect: Effect.ALLOW,
         resources: ['*'],
