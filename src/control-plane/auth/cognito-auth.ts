@@ -43,9 +43,11 @@ export class CognitoAuth extends Construct implements IAuth {
     const defaultControlPlaneCallbackURL = 'http://localhost';
 
     // https://docs.powertools.aws.dev/lambda/python/2.31.0/#lambda-layer
-    const lambdaPowerToolsLayerARN = `arn:aws:lambda:${
-      Stack.of(this).region
-    }:017000801446:layer:AWSLambdaPowertoolsPythonV2:59`;
+    const lambdaPowertoolsLayer = LayerVersion.fromLayerVersionArn(
+      this,
+      'LambdaPowerTools',
+      `arn:aws:lambda:${Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV2:59`
+    );
 
     const lambdaIdpExecRole = new Role(this, 'lambdaIdpExecRole', {
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
@@ -111,13 +113,7 @@ export class CognitoAuth extends Construct implements IAuth {
         handler: 'handler',
         timeout: Duration.seconds(60),
         role: lambdaIdpExecRole,
-        layers: [
-          LayerVersion.fromLayerVersionArn(
-            this,
-            'AuthCustomResourceLambdaPowerTools',
-            lambdaPowerToolsLayerARN
-          ),
-        ],
+        layers: [lambdaPowertoolsLayer],
         environment: {
           IDP_NAME: props.idpName,
         },
@@ -155,13 +151,7 @@ export class CognitoAuth extends Construct implements IAuth {
       handler: 'lambda_handler',
       timeout: Duration.seconds(60),
       role: lambdaIdpExecRole,
-      layers: [
-        LayerVersion.fromLayerVersionArn(
-          this,
-          'AuthorizerLambdaPowerTools',
-          lambdaPowerToolsLayerARN
-        ),
-      ],
+      layers: [lambdaPowertoolsLayer],
       environment: {
         IDP_NAME: props.idpName,
         IDP_DETAILS: this.controlPlaneIdpDetails,
@@ -232,13 +222,7 @@ export class CognitoAuth extends Construct implements IAuth {
       handler: 'lambda_handler',
       timeout: Duration.seconds(60),
       role: userManagementExecRole,
-      layers: [
-        LayerVersion.fromLayerVersionArn(
-          this,
-          'UserManagementLambdaPowerTools',
-          lambdaPowerToolsLayerARN
-        ),
-      ],
+      layers: [lambdaPowertoolsLayer],
       environment: {
         IDP_NAME: props.idpName,
         IDP_DETAILS: this.controlPlaneIdpDetails,
