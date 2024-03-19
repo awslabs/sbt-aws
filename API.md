@@ -468,7 +468,7 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.authorizationServerUrl">authorizationServerUrl</a></code> | <code>string</code> | Authorization server Url. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.authorizationServer">authorizationServer</a></code> | <code>string</code> | Authorization server Url. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.authorizer">authorizer</a></code> | <code>aws-cdk-lib.aws_apigateway.IAuthorizer</code> | Authorizer referenced by the ControlPlaneAPI. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.clientId">clientId</a></code> | <code>string</code> | The OAuth clientId for the identity provider. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.controlPlaneIdpDetails">controlPlaneIdpDetails</a></code> | <code>any</code> | Contains any information relevant to the IDP implementation required by the Authorizer and User Function implementations. |
@@ -495,10 +495,10 @@ The tree node.
 
 ---
 
-##### `authorizationServerUrl`<sup>Required</sup> <a name="authorizationServerUrl" id="@cdklabs/sbt-aws.CognitoAuth.property.authorizationServerUrl"></a>
+##### `authorizationServer`<sup>Required</sup> <a name="authorizationServer" id="@cdklabs/sbt-aws.CognitoAuth.property.authorizationServer"></a>
 
 ```typescript
-public readonly authorizationServerUrl: string;
+public readonly authorizationServer: string;
 ```
 
 - *Type:* string
@@ -1359,109 +1359,6 @@ public readonly dataRepository: ITable;
 - *Type:* aws-cdk-lib.aws_dynamodb.ITable
 
 The DynamoDB table containing the aggregated data.
-
----
-
-
-### LambdaLayers <a name="LambdaLayers" id="@cdklabs/sbt-aws.LambdaLayers"></a>
-
-#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.LambdaLayers.Initializer"></a>
-
-```typescript
-import { LambdaLayers } from '@cdklabs/sbt-aws'
-
-new LambdaLayers(scope: Construct, id: string)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.LambdaLayers.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.LambdaLayers.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-
----
-
-##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.LambdaLayers.Initializer.parameter.scope"></a>
-
-- *Type:* constructs.Construct
-
----
-
-##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.LambdaLayers.Initializer.parameter.id"></a>
-
-- *Type:* string
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.LambdaLayers.toString">toString</a></code> | Returns a string representation of this construct. |
-
----
-
-##### `toString` <a name="toString" id="@cdklabs/sbt-aws.LambdaLayers.toString"></a>
-
-```typescript
-public toString(): string
-```
-
-Returns a string representation of this construct.
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.LambdaLayers.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
-
----
-
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.LambdaLayers.isConstruct"></a>
-
-```typescript
-import { LambdaLayers } from '@cdklabs/sbt-aws'
-
-LambdaLayers.isConstruct(x: any)
-```
-
-Checks if `x` is a construct.
-
-###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.LambdaLayers.isConstruct.parameter.x"></a>
-
-- *Type:* any
-
-Any object.
-
----
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.LambdaLayers.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.LambdaLayers.property.controlPlaneLambdaLayer">controlPlaneLambdaLayer</a></code> | <code>aws-cdk-lib.aws_lambda.LayerVersion</code> | *No description.* |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.LambdaLayers.property.node"></a>
-
-```typescript
-public readonly node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `controlPlaneLambdaLayer`<sup>Required</sup> <a name="controlPlaneLambdaLayer" id="@cdklabs/sbt-aws.LambdaLayers.property.controlPlaneLambdaLayer"></a>
-
-```typescript
-public readonly controlPlaneLambdaLayer: LayerVersion;
-```
-
-- *Type:* aws-cdk-lib.aws_lambda.LayerVersion
 
 ---
 
@@ -3120,7 +3017,6 @@ const servicesProps: ServicesProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.ServicesProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ServicesProps.property.lambdaLayer">lambdaLayer</a></code> | <code>aws-cdk-lib.aws_lambda.LayerVersion</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.ServicesProps.property.tables">tables</a></code> | <code><a href="#@cdklabs/sbt-aws.Tables">Tables</a></code> | *No description.* |
 
 ---
@@ -3132,16 +3028,6 @@ public readonly eventManager: EventManager;
 ```
 
 - *Type:* <a href="#@cdklabs/sbt-aws.EventManager">EventManager</a>
-
----
-
-##### `lambdaLayer`<sup>Required</sup> <a name="lambdaLayer" id="@cdklabs/sbt-aws.ServicesProps.property.lambdaLayer"></a>
-
-```typescript
-public readonly lambdaLayer: LayerVersion;
-```
-
-- *Type:* aws-cdk-lib.aws_lambda.LayerVersion
 
 ---
 
@@ -3445,7 +3331,7 @@ Encapsulates the list of properties expected as outputs of Auth plugins.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.authorizationServerUrl">authorizationServerUrl</a></code> | <code>string</code> | Authorization server Url. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.authorizationServer">authorizationServer</a></code> | <code>string</code> | Authorization server Url. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.authorizer">authorizer</a></code> | <code>aws-cdk-lib.aws_apigateway.IAuthorizer</code> | Authorizer referenced by the ControlPlaneAPI. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.clientId">clientId</a></code> | <code>string</code> | The OAuth clientId for the identity provider. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.controlPlaneIdpDetails">controlPlaneIdpDetails</a></code> | <code>any</code> | Contains any information relevant to the IDP implementation required by the Authorizer and User Function implementations. |
@@ -3460,10 +3346,10 @@ Encapsulates the list of properties expected as outputs of Auth plugins.
 
 ---
 
-##### `authorizationServerUrl`<sup>Required</sup> <a name="authorizationServerUrl" id="@cdklabs/sbt-aws.IAuth.property.authorizationServerUrl"></a>
+##### `authorizationServer`<sup>Required</sup> <a name="authorizationServer" id="@cdklabs/sbt-aws.IAuth.property.authorizationServer"></a>
 
 ```typescript
-public readonly authorizationServerUrl: string;
+public readonly authorizationServer: string;
 ```
 
 - *Type:* string
