@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import boto3
-import jsonpickle
+import json
 import user_management_util as user_management_util
 
 client = boto3.client('cognito-idp')
@@ -24,7 +24,7 @@ class CognitoUserManagementService():
     def get_users(self, event):
         user_details = event
         user_pool_id = user_details['idpDetails']['idp']['userPoolId']
-        users = []
+        users = UserInfoList()
     
         response = client.list_users(
                 UserPoolId=user_pool_id
@@ -46,7 +46,7 @@ class CognitoUserManagementService():
                     user_info.modified = user["UserLastModifiedDate"]
                     user_info.status = user["UserStatus"] 
                     user_info.user_name = user["Username"]
-                    users.append(user_info)                    
+                    users.add_user(user_info)                    
             
         return users
     
@@ -134,11 +134,6 @@ class CognitoUserManagementService():
         
         return response     
     
-
-    
-
-
-
 class UserInfo:
     def __init__(self, user_name=None, user_role=None, 
     email=None, status=None, enabled=None, created=None, modified=None):
@@ -149,5 +144,16 @@ class UserInfo:
         self.enabled = enabled
         self.created = created
         self.modified = modified
-    def __str__(self):
-        return jsonpickle.encode(self, unpicklable=False, use_decimal=True)
+    def serialize(self):
+        return json.dumps(self.__dict__, default=str)
+
+class UserInfoList:
+    def __init__(self):
+        self.users = []
+
+    def add_user(self, user):
+        self.users.append(user)
+
+    def serialize(self):
+        user_dicts = [user.__dict__ for user in self.users]
+        return json.dumps(user_dicts, default=str)
