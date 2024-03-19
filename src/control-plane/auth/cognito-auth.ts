@@ -15,7 +15,7 @@ import {
 import { Runtime, IFunction, LayerVersion } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
-import { IAuth } from './auth';
+import { IAuth } from './auth-interface';
 
 export interface CognitoAuthProps {
   readonly idpName: string;

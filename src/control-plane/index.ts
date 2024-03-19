@@ -1,7 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-export * from './auth/auth';
+export * from './auth/auth-interface';
 export * from './auth/cognito-auth';
 export * from './control-plane-api';
 export * from './control-plane';
