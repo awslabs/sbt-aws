@@ -4,6 +4,7 @@
 import { awscdk, javascript } from 'projen';
 import { GithubCredentials } from 'projen/lib/github';
 import { NpmAccess } from 'projen/lib/javascript';
+import { runTestsWorkflow } from './projenrc/run-tests-workflow';
 
 const GITHUB_USER: string = 'awslabs';
 const PUBLICATION_NAMESPACE: string = 'cdklabs';
@@ -142,4 +143,5 @@ project.eslint?.addRules({
   ],
 });
 
+runTestsWorkflow(project);
 project.synth();

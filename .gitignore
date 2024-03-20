@@ -59,4 +59,5 @@ junit.xml
 .jsii
 tsconfig.json
 !/API.md
+!/.github/workflows/run-tests.yml
 !/.projenrc.ts
