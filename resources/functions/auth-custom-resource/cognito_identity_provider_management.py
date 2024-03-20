@@ -4,15 +4,26 @@
 import boto3
 import os
 import uuid
-import cognito.user_management_util as user_management_util
+import user_management_util as user_management_util
 from aws_lambda_powertools import Logger
-from abstract_classes.identity_provider_abstract_class import IdentityProviderAbstractClass
 
 logger = Logger()
 cognito = boto3.client('cognito-idp')
+region = os.environ['AWS_REGION']
 
+class CognitoIdentityProviderManagement():
+    def delete_control_plane_idp(self, userPoolId):        
+        response = cognito.describe_user_pool(
+            UserPoolId=userPoolId
+        )
+        domain = response['UserPool']['Domain']
+        
+        cognito.delete_user_pool_domain(
+            UserPoolId=userPoolId,
+            Domain=domain
+        )
+        cognito.delete_user_pool(UserPoolId=userPoolId)
 
-class CognitoIdentityProviderManagement(IdentityProviderAbstractClass):
     def create_control_plane_idp(self, event):
         idp_response = {}
         idp_response['idp'] = {}
@@ -24,27 +35,17 @@ class CognitoIdentityProviderManagement(IdentityProviderAbstractClass):
 
         user_pool_response = self.__create_user_pool(
             'SaaSControlPlaneUserPool', control_plane_callback_url)
+        logger.info(user_pool_response)
         user_pool_id = user_pool_response['UserPool']['Id']
-        logger.info(user_pool_id)
 
-        app_client_response = self.__create_user_pool_client(
-            user_pool_id, control_plane_callback_url)
+        app_client_response = self.__create_user_pool_client(user_pool_id, control_plane_callback_url)
         logger.info(app_client_response)
         app_client_id = app_client_response['UserPoolClient']['ClientId']
         user_pool_domain = 'saascontrolplane'+uuid.uuid1().hex
-        user_pool_domain_response = self.__create_user_pool_domain(
-            user_pool_id, user_pool_domain)
-
-        tenant_user_group_response = user_management_util.create_user_group(
-            user_pool_id, user_details['userRole'])
-
-        create_tenant_admin_response = user_management_util.create_user(
-            user_pool_id, user_details)
-
-        add_tenant_admin_to_group_response = user_management_util.add_user_to_group(
-            user_pool_id, user_details['userName'], tenant_user_group_response['Group']['GroupName'])
-
-        region = os.environ['AWS_REGION']
+        self.__create_user_pool_domain(user_pool_id, user_pool_domain)
+        tenant_user_group_response = user_management_util.create_user_group(user_pool_id, user_details['userRole'])
+        user_management_util.create_user(user_pool_id, user_details)
+        user_management_util.add_user_to_group(user_pool_id, user_details['userName'], tenant_user_group_response['Group']['GroupName'])        
 
         idp_response['idp']['name'] = 'Cognito'
         idp_response['idp']['userPoolId'] = user_pool_id
@@ -56,8 +57,8 @@ class CognitoIdentityProviderManagement(IdentityProviderAbstractClass):
 
     def __create_user_pool(self, user_pool_name, control_plane_site_url):
         email_message = ''.join(["Login into control plane UI at ",
-                                 control_plane_site_url,
-                                 " with username {username} and temporary password {####}"])
+                                control_plane_site_url,
+                                " with username {username} and temporary password {####}"])
         email_subject = ''.join(
             ["Your temporary password for control plane UI"])
         response = cognito.create_user_pool(

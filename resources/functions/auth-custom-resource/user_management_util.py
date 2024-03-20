@@ -48,8 +48,8 @@ def add_user_to_group(user_pool_id, user_name, group_name):
 def user_group_exists(user_pool_id, group_name):        
         try:
             response=cognito.get_group(
-                   UserPoolId=user_pool_id, 
-                   GroupName=group_name)
+                UserPoolId=user_pool_id, 
+                GroupName=group_name)
             return True
         except Exception as e:
             return False
