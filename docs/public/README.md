@@ -507,12 +507,10 @@ CONTROL_PLANE_API_ENDPOINT=$(aws cloudformation describe-stacks \
 DATA=$(jq --null-input \
     --arg tenantName "$TENANT_NAME" \
     --arg tenantEmail "$TENANT_EMAIL" \
-    --arg tenantId "$TENANT_ID" \
     '{
   "tenantName": $tenantName,
   "email": $tenantEmail,
   "tier": "basic",
-  "tenantId": $tenantId,
   "tenantStatus": "In progress"
 }')
 
@@ -524,9 +522,9 @@ curl --request POST \
     --data "$DATA"
 echo "" # add newline
 
-echo "retrieving tenant..."
+echo "retrieving tenants..."
 curl --request GET \
-    --url "${CONTROL_PLANE_API_ENDPOINT}tenants/${TENANT_ID}" \
+    --url "${CONTROL_PLANE_API_ENDPOINT}tenants" \
     --header "Authorization: Bearer ${ID_TOKEN}" \
     --silent | jq
 
