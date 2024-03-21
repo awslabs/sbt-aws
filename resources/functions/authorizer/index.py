@@ -4,8 +4,7 @@
 import os
 import re
 import json
-from jose import jwt
-import idp_object_factory
+from cognito_authorizer import CognitoAuthorizer
 from aws_lambda_powertools import Logger
 
 logger = Logger()
@@ -13,47 +12,47 @@ logger = Logger()
 sys_admin_role_name = os.environ['SYS_ADMIN_ROLE_NAME']
 idp_name = os.environ['IDP_NAME']
 idp_details=json.loads(os.environ['IDP_DETAILS'])
-idp_authorizer_service = idp_object_factory.get_idp_authorizer_object(idp_name)
+idp_authorizer_service = CognitoAuthorizer()
 
 def lambda_handler(event, context):
-     input_details={}
-     input_details['idpDetails'] = idp_details
-     #get JWT token after Bearer from authorization
-     token = event['authorizationToken'].split(" ")
-     if (token[0] != 'Bearer'):
-         raise Exception('Authorization header should have a format Bearer <JWT> Token')
-     jwt_bearer_token = token[1]
-     logger.info("Method ARN: " + event['methodArn'])
-     
-     input_details['jwtToken']=jwt_bearer_token
+    input_details={}
+    input_details['idpDetails'] = idp_details
+    #get JWT token after Bearer from authorization
+    token = event['authorizationToken'].split(" ")
+    if (token[0] != 'Bearer'):
+        raise Exception('Authorization header should have a format Bearer <JWT> Token')
+    jwt_bearer_token = token[1]
+    logger.info("Method ARN: " + event['methodArn'])
+    
+    input_details['jwtToken']=jwt_bearer_token
 
-     response = idp_authorizer_service.validateJWT(input_details)
+    response = idp_authorizer_service.validateJWT(input_details)
 
-     if (response == False):
+    if (response == False):
         logger.error('Unauthorized')
         raise Exception('Unauthorized')
-     else:
+    else:
         logger.info(response)
         principal_id = response["sub"]
         user_name = response["cognito:username"]
         user_role = response["custom:userRole"]
     
-     tmp = event['methodArn'].split(':')
-     api_gateway_arn_tmp = tmp[5].split('/')
-     aws_account_id = tmp[4]    
+    tmp = event['methodArn'].split(':')
+    api_gateway_arn_tmp = tmp[5].split('/')
+    aws_account_id = tmp[4]    
     
-     policy = AuthPolicy(principal_id, aws_account_id)
-     policy.restApiId = api_gateway_arn_tmp[0]
-     policy.region = tmp[3]
-     policy.stage = api_gateway_arn_tmp[1]
+    policy = AuthPolicy(principal_id, aws_account_id)
+    policy.restApiId = api_gateway_arn_tmp[0]
+    policy.region = tmp[3]
+    policy.stage = api_gateway_arn_tmp[1]
 
-     if (user_role != sys_admin_role_name):
-         logger.error('Unauthorized')
-         return Exception('Unauthorized')
-
-     policy.allowAllMethods()
-     
-     return policy.build()
+    if (user_role != sys_admin_role_name):
+        logger.error('Unauthorized')
+        return Exception('Unauthorized')
+    
+    policy.allowAllMethods()
+    
+    return policy.build()
 
 class HttpVerb:
     GET     = "GET"

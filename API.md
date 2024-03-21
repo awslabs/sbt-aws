@@ -468,18 +468,18 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.authorizationServer">authorizationServer</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.authorizer">authorizer</a></code> | <code>aws-cdk-lib.aws_apigateway.IAuthorizer</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.clientId">clientId</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.controlPlaneIdpDetails">controlPlaneIdpDetails</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.createUserFunction">createUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.deleteUserFunction">deleteUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.disableUserFunction">disableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.enableUserFunction">enableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchAllUsersFunction">fetchAllUsersFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchUserFunction">fetchUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.updateUserFunction">updateUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.wellKnownEndpointUrl">wellKnownEndpointUrl</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.authorizationServer">authorizationServer</a></code> | <code>string</code> | Authorization server Url. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.authorizer">authorizer</a></code> | <code>aws-cdk-lib.aws_apigateway.IAuthorizer</code> | Authorizer referenced by the ControlPlaneAPI. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.clientId">clientId</a></code> | <code>string</code> | The OAuth clientId for the identity provider. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.controlPlaneIdpDetails">controlPlaneIdpDetails</a></code> | <code>any</code> | Contains any information relevant to the IDP implementation required by the Authorizer and User Function implementations. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.createUserFunction">createUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- POST /users. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.deleteUserFunction">deleteUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- DELETE /user/{username}. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.disableUserFunction">disableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- PUT /user/{username}/disable. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.enableUserFunction">enableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- PUT /user/{username}/enable. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchAllUsersFunction">fetchAllUsersFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- GET /users. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchUserFunction">fetchUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- GET /user/{username}. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.updateUserFunction">updateUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- PUT /user/{username}. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.wellKnownEndpointUrl">wellKnownEndpointUrl</a></code> | <code>string</code> | OpenID configuration Url. |
 
 ---
 
@@ -503,6 +503,8 @@ public readonly authorizationServer: string;
 
 - *Type:* string
 
+Authorization server Url.
+
 ---
 
 ##### `authorizer`<sup>Required</sup> <a name="authorizer" id="@cdklabs/sbt-aws.CognitoAuth.property.authorizer"></a>
@@ -512,6 +514,8 @@ public readonly authorizer: IAuthorizer;
 ```
 
 - *Type:* aws-cdk-lib.aws_apigateway.IAuthorizer
+
+Authorizer referenced by the ControlPlaneAPI.
 
 ---
 
@@ -523,15 +527,19 @@ public readonly clientId: string;
 
 - *Type:* string
 
+The OAuth clientId for the identity provider.
+
 ---
 
 ##### `controlPlaneIdpDetails`<sup>Required</sup> <a name="controlPlaneIdpDetails" id="@cdklabs/sbt-aws.CognitoAuth.property.controlPlaneIdpDetails"></a>
 
 ```typescript
-public readonly controlPlaneIdpDetails: string;
+public readonly controlPlaneIdpDetails: any;
 ```
 
-- *Type:* string
+- *Type:* any
+
+Contains any information relevant to the IDP implementation required by the Authorizer and User Function implementations.
 
 ---
 
@@ -543,6 +551,8 @@ public readonly createUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
+Function referenced by the ControlPlaneAPI -- POST /users.
+
 ---
 
 ##### `deleteUserFunction`<sup>Required</sup> <a name="deleteUserFunction" id="@cdklabs/sbt-aws.CognitoAuth.property.deleteUserFunction"></a>
@@ -552,6 +562,8 @@ public readonly deleteUserFunction: IFunction;
 ```
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
+
+Function referenced by the ControlPlaneAPI -- DELETE /user/{username}.
 
 ---
 
@@ -563,6 +575,8 @@ public readonly disableUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
+Function referenced by the ControlPlaneAPI -- PUT /user/{username}/disable.
+
 ---
 
 ##### `enableUserFunction`<sup>Required</sup> <a name="enableUserFunction" id="@cdklabs/sbt-aws.CognitoAuth.property.enableUserFunction"></a>
@@ -572,6 +586,8 @@ public readonly enableUserFunction: IFunction;
 ```
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
+
+Function referenced by the ControlPlaneAPI -- PUT /user/{username}/enable.
 
 ---
 
@@ -583,6 +599,8 @@ public readonly fetchAllUsersFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
+Function referenced by the ControlPlaneAPI -- GET /users.
+
 ---
 
 ##### `fetchUserFunction`<sup>Required</sup> <a name="fetchUserFunction" id="@cdklabs/sbt-aws.CognitoAuth.property.fetchUserFunction"></a>
@@ -592,6 +610,8 @@ public readonly fetchUserFunction: IFunction;
 ```
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
+
+Function referenced by the ControlPlaneAPI -- GET /user/{username}.
 
 ---
 
@@ -603,6 +623,8 @@ public readonly updateUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
+Function referenced by the ControlPlaneAPI -- PUT /user/{username}.
+
 ---
 
 ##### `wellKnownEndpointUrl`<sup>Required</sup> <a name="wellKnownEndpointUrl" id="@cdklabs/sbt-aws.CognitoAuth.property.wellKnownEndpointUrl"></a>
@@ -612,6 +634,8 @@ public readonly wellKnownEndpointUrl: string;
 ```
 
 - *Type:* string
+
+OpenID configuration Url.
 
 ---
 
@@ -1335,109 +1359,6 @@ public readonly dataRepository: ITable;
 - *Type:* aws-cdk-lib.aws_dynamodb.ITable
 
 The DynamoDB table containing the aggregated data.
-
----
-
-
-### LambdaLayers <a name="LambdaLayers" id="@cdklabs/sbt-aws.LambdaLayers"></a>
-
-#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.LambdaLayers.Initializer"></a>
-
-```typescript
-import { LambdaLayers } from '@cdklabs/sbt-aws'
-
-new LambdaLayers(scope: Construct, id: string)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.LambdaLayers.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.LambdaLayers.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-
----
-
-##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.LambdaLayers.Initializer.parameter.scope"></a>
-
-- *Type:* constructs.Construct
-
----
-
-##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.LambdaLayers.Initializer.parameter.id"></a>
-
-- *Type:* string
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.LambdaLayers.toString">toString</a></code> | Returns a string representation of this construct. |
-
----
-
-##### `toString` <a name="toString" id="@cdklabs/sbt-aws.LambdaLayers.toString"></a>
-
-```typescript
-public toString(): string
-```
-
-Returns a string representation of this construct.
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.LambdaLayers.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
-
----
-
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.LambdaLayers.isConstruct"></a>
-
-```typescript
-import { LambdaLayers } from '@cdklabs/sbt-aws'
-
-LambdaLayers.isConstruct(x: any)
-```
-
-Checks if `x` is a construct.
-
-###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.LambdaLayers.isConstruct.parameter.x"></a>
-
-- *Type:* any
-
-Any object.
-
----
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.LambdaLayers.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.LambdaLayers.property.controlPlaneLambdaLayer">controlPlaneLambdaLayer</a></code> | <code>aws-cdk-lib.aws_lambda.LayerVersion</code> | *No description.* |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.LambdaLayers.property.node"></a>
-
-```typescript
-public readonly node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `controlPlaneLambdaLayer`<sup>Required</sup> <a name="controlPlaneLambdaLayer" id="@cdklabs/sbt-aws.LambdaLayers.property.controlPlaneLambdaLayer"></a>
-
-```typescript
-public readonly controlPlaneLambdaLayer: LayerVersion;
-```
-
-- *Type:* aws-cdk-lib.aws_lambda.LayerVersion
 
 ---
 
@@ -3096,7 +3017,6 @@ const servicesProps: ServicesProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.ServicesProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ServicesProps.property.lambdaLayer">lambdaLayer</a></code> | <code>aws-cdk-lib.aws_lambda.LayerVersion</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.ServicesProps.property.tables">tables</a></code> | <code><a href="#@cdklabs/sbt-aws.Tables">Tables</a></code> | *No description.* |
 
 ---
@@ -3108,16 +3028,6 @@ public readonly eventManager: EventManager;
 ```
 
 - *Type:* <a href="#@cdklabs/sbt-aws.EventManager">EventManager</a>
-
----
-
-##### `lambdaLayer`<sup>Required</sup> <a name="lambdaLayer" id="@cdklabs/sbt-aws.ServicesProps.property.lambdaLayer"></a>
-
-```typescript
-public readonly lambdaLayer: LayerVersion;
-```
-
-- *Type:* aws-cdk-lib.aws_lambda.LayerVersion
 
 ---
 
@@ -3414,23 +3324,25 @@ public readonly tenantDetailsTenantNameColumn: string;
 
 - *Implemented By:* <a href="#@cdklabs/sbt-aws.CognitoAuth">CognitoAuth</a>, <a href="#@cdklabs/sbt-aws.IAuth">IAuth</a>
 
+Encapsulates the list of properties expected as outputs of Auth plugins.
+
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.authorizationServer">authorizationServer</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.authorizer">authorizer</a></code> | <code>aws-cdk-lib.aws_apigateway.IAuthorizer</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.clientId">clientId</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.controlPlaneIdpDetails">controlPlaneIdpDetails</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.createUserFunction">createUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.deleteUserFunction">deleteUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.disableUserFunction">disableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.enableUserFunction">enableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchAllUsersFunction">fetchAllUsersFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchUserFunction">fetchUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.updateUserFunction">updateUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.wellKnownEndpointUrl">wellKnownEndpointUrl</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.authorizationServer">authorizationServer</a></code> | <code>string</code> | Authorization server Url. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.authorizer">authorizer</a></code> | <code>aws-cdk-lib.aws_apigateway.IAuthorizer</code> | Authorizer referenced by the ControlPlaneAPI. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.clientId">clientId</a></code> | <code>string</code> | The OAuth clientId for the identity provider. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.controlPlaneIdpDetails">controlPlaneIdpDetails</a></code> | <code>any</code> | Contains any information relevant to the IDP implementation required by the Authorizer and User Function implementations. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.createUserFunction">createUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- POST /users. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.deleteUserFunction">deleteUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- DELETE /user/{username}. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.disableUserFunction">disableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- PUT /user/{username}/disable. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.enableUserFunction">enableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- PUT /user/{username}/enable. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchAllUsersFunction">fetchAllUsersFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- GET /users. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchUserFunction">fetchUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- GET /user/{username}. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.updateUserFunction">updateUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- PUT /user/{username}. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.wellKnownEndpointUrl">wellKnownEndpointUrl</a></code> | <code>string</code> | OpenID configuration Url. |
 
 ---
 
@@ -3442,6 +3354,8 @@ public readonly authorizationServer: string;
 
 - *Type:* string
 
+Authorization server Url.
+
 ---
 
 ##### `authorizer`<sup>Required</sup> <a name="authorizer" id="@cdklabs/sbt-aws.IAuth.property.authorizer"></a>
@@ -3451,6 +3365,8 @@ public readonly authorizer: IAuthorizer;
 ```
 
 - *Type:* aws-cdk-lib.aws_apigateway.IAuthorizer
+
+Authorizer referenced by the ControlPlaneAPI.
 
 ---
 
@@ -3462,15 +3378,19 @@ public readonly clientId: string;
 
 - *Type:* string
 
+The OAuth clientId for the identity provider.
+
 ---
 
 ##### `controlPlaneIdpDetails`<sup>Required</sup> <a name="controlPlaneIdpDetails" id="@cdklabs/sbt-aws.IAuth.property.controlPlaneIdpDetails"></a>
 
 ```typescript
-public readonly controlPlaneIdpDetails: string;
+public readonly controlPlaneIdpDetails: any;
 ```
 
-- *Type:* string
+- *Type:* any
+
+Contains any information relevant to the IDP implementation required by the Authorizer and User Function implementations.
 
 ---
 
@@ -3482,6 +3402,8 @@ public readonly createUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
+Function referenced by the ControlPlaneAPI -- POST /users.
+
 ---
 
 ##### `deleteUserFunction`<sup>Required</sup> <a name="deleteUserFunction" id="@cdklabs/sbt-aws.IAuth.property.deleteUserFunction"></a>
@@ -3491,6 +3413,8 @@ public readonly deleteUserFunction: IFunction;
 ```
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
+
+Function referenced by the ControlPlaneAPI -- DELETE /user/{username}.
 
 ---
 
@@ -3502,6 +3426,8 @@ public readonly disableUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
+Function referenced by the ControlPlaneAPI -- PUT /user/{username}/disable.
+
 ---
 
 ##### `enableUserFunction`<sup>Required</sup> <a name="enableUserFunction" id="@cdklabs/sbt-aws.IAuth.property.enableUserFunction"></a>
@@ -3511,6 +3437,8 @@ public readonly enableUserFunction: IFunction;
 ```
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
+
+Function referenced by the ControlPlaneAPI -- PUT /user/{username}/enable.
 
 ---
 
@@ -3522,6 +3450,8 @@ public readonly fetchAllUsersFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
+Function referenced by the ControlPlaneAPI -- GET /users.
+
 ---
 
 ##### `fetchUserFunction`<sup>Required</sup> <a name="fetchUserFunction" id="@cdklabs/sbt-aws.IAuth.property.fetchUserFunction"></a>
@@ -3531,6 +3461,8 @@ public readonly fetchUserFunction: IFunction;
 ```
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
+
+Function referenced by the ControlPlaneAPI -- GET /user/{username}.
 
 ---
 
@@ -3542,6 +3474,8 @@ public readonly updateUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
+Function referenced by the ControlPlaneAPI -- PUT /user/{username}.
+
 ---
 
 ##### `wellKnownEndpointUrl`<sup>Required</sup> <a name="wellKnownEndpointUrl" id="@cdklabs/sbt-aws.IAuth.property.wellKnownEndpointUrl"></a>
@@ -3551,6 +3485,8 @@ public readonly wellKnownEndpointUrl: string;
 ```
 
 - *Type:* string
+
+OpenID configuration Url.
 
 ---
 

@@ -12,7 +12,6 @@ import { Tables } from './tables';
 import { DetailType, EventManager } from '../utils';
 
 export interface ServicesProps {
-  readonly lambdaLayer: LayerVersion;
   readonly tables: Tables;
   readonly eventManager: EventManager;
 }
@@ -70,7 +69,7 @@ export class Services extends Construct {
     const tenantManagementServices = new PythonFunction(this, 'TenantManagementServices', {
       entry: path.join(__dirname, '../../resources/functions/tenant-management'),
       runtime: Runtime.PYTHON_3_12,
-      index: 'tenant_management.py',
+      index: 'index.py',
       handler: 'lambda_handler',
       timeout: Duration.seconds(60),
       role: tenantManagementExecRole,

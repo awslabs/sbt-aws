@@ -470,7 +470,6 @@ PASSWORD="INSERT PASSWORD HERE"
 # Change this to a real email if you'd like to log into the tenant
 TENANT_EMAIL="tenant@example.com" 
 CONTROL_PLANE_STACK_NAME="ControlPlaneStack"
-TENANT_ID="$RANDOM"
 TENANT_NAME="tenant$RANDOM"
 
 CLIENT_ID=$(aws cloudformation list-exports --query "Exports[?Name=='ControlPlaneIdpDetails'].Value" | jq -r '.[0]' | jq -r '.idp.clientId')
@@ -507,12 +506,10 @@ CONTROL_PLANE_API_ENDPOINT=$(aws cloudformation describe-stacks \
 DATA=$(jq --null-input \
     --arg tenantName "$TENANT_NAME" \
     --arg tenantEmail "$TENANT_EMAIL" \
-    --arg tenantId "$TENANT_ID" \
     '{
   "tenantName": $tenantName,
   "email": $tenantEmail,
   "tier": "basic",
-  "tenantId": $tenantId,
   "tenantStatus": "In progress"
 }')
 
@@ -524,9 +521,9 @@ curl --request POST \
     --data "$DATA"
 echo "" # add newline
 
-echo "retrieving tenant..."
+echo "retrieving tenants..."
 curl --request GET \
-    --url "${CONTROL_PLANE_API_ENDPOINT}tenants/${TENANT_ID}" \
+    --url "${CONTROL_PLANE_API_ENDPOINT}tenants" \
     --header "Authorization: Bearer ${ID_TOKEN}" \
     --silent | jq
 

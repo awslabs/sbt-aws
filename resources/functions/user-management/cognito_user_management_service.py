@@ -2,13 +2,12 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import boto3
-import cognito.user_management_util as user_management_util
-from abstract_classes.idp_user_management_abstract_class import IdpUserManagementAbstractClass
-
+import json
+import user_management_util as user_management_util
 
 client = boto3.client('cognito-idp')
 
-class CognitoUserManagementService(IdpUserManagementAbstractClass):
+class CognitoUserManagementService():
     def create_user(self, event):
         user_details = event
         user_pool_id = user_details['idpDetails']['idp']['userPoolId']
@@ -25,12 +24,12 @@ class CognitoUserManagementService(IdpUserManagementAbstractClass):
     def get_users(self, event):
         user_details = event
         user_pool_id = user_details['idpDetails']['idp']['userPoolId']
-        users = []
+        users = UserInfoList()
     
         response = client.list_users(
                 UserPoolId=user_pool_id
             )
-          
+        
         num_of_users = len(response['Users'])
     
         if (num_of_users > 0):
@@ -47,28 +46,35 @@ class CognitoUserManagementService(IdpUserManagementAbstractClass):
                     user_info.modified = user["UserLastModifiedDate"]
                     user_info.status = user["UserStatus"] 
                     user_info.user_name = user["Username"]
-                    users.append(user_info)                    
+                    users.add_user(user_info)                    
             
         return users
     
 
     def get_user(self, event):
-        user_details = event
-        user_pool_id = user_details['idpDetails']['idp']['userPoolId']
-        user_name = user_details['userName']          
-        response = client.admin_get_user(
-                UserPoolId=user_pool_id,
-                Username=user_name
-        )
-       
-        user_info =  UserInfo()
-        user_info.user_name = response["Username"]
-        for attr in response["UserAttributes"]:
-            if(attr["Name"] == "custom:userRole"):
-                user_info.user_role = attr["Value"]    
-            if(attr["Name"] == "email"):
-                user_info.email = attr["Value"] 
-        return user_info    
+        try: 
+            user_details = event
+            user_pool_id = user_details['idpDetails']['idp']['userPoolId']
+            user_name = user_details['userName']          
+            response = client.admin_get_user(
+                    UserPoolId=user_pool_id,
+                    Username=user_name
+            )
+    
+            user_info =  UserInfo()
+            user_info.user_name = response["Username"]
+            user_info.enabled = response["Enabled"]
+            user_info.created = response["UserCreateDate"]
+            user_info.modified = response["UserLastModifiedDate"]
+            user_info.status = response["UserStatus"]             
+            for attr in response["UserAttributes"]:
+                if(attr["Name"] == "custom:userRole"):
+                    user_info.user_role = attr["Value"]    
+                if(attr["Name"] == "email"):
+                    user_info.email = attr["Value"] 
+            return user_info    
+        except client.exceptions.UserNotFoundException as e:
+            return
 
     def update_user(self, event):
         user_details = event
@@ -122,17 +128,12 @@ class CognitoUserManagementService(IdpUserManagementAbstractClass):
         user_name = user_details['userName']
         
         response = client.admin_delete_user(
-                     UserPoolId=user_pool_id,
+                    UserPoolId=user_pool_id,
                     Username=user_name
                 )
         
         return response     
     
-
-    
-
-
-
 class UserInfo:
     def __init__(self, user_name=None, user_role=None, 
     email=None, status=None, enabled=None, created=None, modified=None):
@@ -143,3 +144,16 @@ class UserInfo:
         self.enabled = enabled
         self.created = created
         self.modified = modified
+    def serialize(self):
+        return json.dumps(self.__dict__, default=str)
+
+class UserInfoList:
+    def __init__(self):
+        self.users = []
+
+    def add_user(self, user):
+        self.users.append(user)
+
+    def serialize(self):
+        user_dicts = [user.__dict__ for user in self.users]
+        return json.dumps(user_dicts, default=str)
