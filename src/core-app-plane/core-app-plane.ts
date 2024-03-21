@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as cdk from 'aws-cdk-lib';
-import { EventBus } from 'aws-cdk-lib/aws-events';
+import { EventBus, IEventBus } from 'aws-cdk-lib/aws-events';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 import { BashJobOrchestrator } from './bash-job-orchestrator';
@@ -47,7 +47,7 @@ export interface IncomingEventMetadata {
 /**
  * Encapsulates the list of properties for a CoreApplicationPlaneJobRunner.
  */
-export interface CoreApplicationPlaneJobRunnerProps {
+export interface IJobRunner {
   /**
    * The name of the CoreApplicationPlaneJobRunner. Note that this value must be unique.
    */
@@ -112,7 +112,9 @@ export interface CoreApplicationPlaneProps {
    * The arn belonging to the EventBus to listen for incoming messages.
    * This is also the EventBus on which the CoreApplicationPlane places outgoing messages on.
    */
-  readonly eventBusArn: string;
+  // readonly eventBusArn: string;
+
+  readonly eventBus: IEventBus;
 
   /**
    * The source to use when listening for events coming from the SBT control plane.
@@ -129,9 +131,11 @@ export interface CoreApplicationPlaneProps {
   /**
    * The list of JobRunner definitions to create.
    */
-  readonly jobRunnerPropsList?: CoreApplicationPlaneJobRunnerProps[];
+  readonly jobRunners?: IJobRunner[];
 
   readonly eventMetadata?: EventMetadata;
+
+  readonly eventManger?: IEventManager;
 }
 
 /**
@@ -149,50 +153,44 @@ export class CoreApplicationPlane extends Construct {
 
     cdk.Aspects.of(this).add(new DestroyPolicySetter());
 
-    const eventBus = EventBus.fromEventBusArn(this, 'eventBus', props.eventBusArn);
-
     this.eventManager = new EventManager(this, 'EventManager', {
-      eventBus: eventBus,
+      eventBus: props.eventBus,
       eventMetadata: props.eventMetadata,
       applicationPlaneEventSource: props.applicationPlaneEventSource,
       controlPlaneEventSource: props.controlPlaneEventSource,
     });
 
-    props.jobRunnerPropsList?.forEach((jobRunnerProps) => {
-      // Only BashJobOrchestrator requires differentiating between
-      // strings and JSON variables pulled from the incoming event.
+    props.jobRunners?.forEach((runner) => {
       let envVarsFromIncomingEvent: string[] = [];
-      if (jobRunnerProps.environmentStringVariablesFromIncomingEvent) {
-        envVarsFromIncomingEvent.concat(jobRunnerProps.environmentStringVariablesFromIncomingEvent);
+      if (runner.environmentStringVariablesFromIncomingEvent) {
+        envVarsFromIncomingEvent.concat(runner.environmentStringVariablesFromIncomingEvent);
+      }
+      if (runner.environmentJSONVariablesFromIncomingEvent) {
+        envVarsFromIncomingEvent.concat(runner.environmentJSONVariablesFromIncomingEvent);
       }
 
-      if (jobRunnerProps.environmentJSONVariablesFromIncomingEvent) {
-        envVarsFromIncomingEvent.concat(jobRunnerProps.environmentJSONVariablesFromIncomingEvent);
-      }
-
-      let job = new BashJobRunner(this, jobRunnerProps.name, {
-        name: jobRunnerProps.name,
-        permissions: jobRunnerProps.permissions,
-        script: jobRunnerProps.script,
-        postScript: jobRunnerProps.postScript,
+      let job = new BashJobRunner(this, runner.name, {
+        name: runner.name,
+        permissions: runner.permissions,
+        script: runner.script,
+        postScript: runner.postScript,
         environmentVariablesFromIncomingEvent: envVarsFromIncomingEvent,
-        environmentVariablesToOutgoingEvent: jobRunnerProps.environmentVariablesToOutgoingEvent,
-        scriptEnvironmentVariables: jobRunnerProps.scriptEnvironmentVariables,
+        environmentVariablesToOutgoingEvent: runner.environmentVariablesToOutgoingEvent,
+        scriptEnvironmentVariables: runner.scriptEnvironmentVariables,
       });
 
-      let jobOrchestrator = new BashJobOrchestrator(this, `${jobRunnerProps.name}-orchestrator`, {
-        targetEventBus: eventBus,
-        detailType: jobRunnerProps.outgoingEvent,
-        eventSource: this.eventManager.supportedEvents[jobRunnerProps.outgoingEvent],
-        environmentVariablesToOutgoingEvent: jobRunnerProps.environmentVariablesToOutgoingEvent,
+      let jobOrchestrator = new BashJobOrchestrator(this, `${runner.name}-orchestrator`, {
+        targetEventBus: props.eventBus,
+        detailType: runner.outgoingEvent,
+        eventSource: this.eventManager.supportedEvents[runner.outgoingEvent],
+        environmentVariablesToOutgoingEvent: runner.environmentVariablesToOutgoingEvent,
         environmentStringVariablesFromIncomingEvent:
-          jobRunnerProps.environmentStringVariablesFromIncomingEvent,
-        environmentJSONVariablesFromIncomingEvent:
-          jobRunnerProps.environmentJSONVariablesFromIncomingEvent,
+          runner.environmentStringVariablesFromIncomingEvent,
+        environmentJSONVariablesFromIncomingEvent: runner.environmentJSONVariablesFromIncomingEvent,
         bashJobRunner: job,
       });
 
-      this.eventManager.addTargetToEvent(jobRunnerProps.incomingEvent, jobOrchestrator.eventTarget);
+      this.eventManager.registerRule(runner.incomingEvent, jobOrchestrator.eventTarget);
     });
   }
 }

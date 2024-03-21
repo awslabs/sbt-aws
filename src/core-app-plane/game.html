@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Word Typing Game</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      #game-canvas {
+        border: 1px solid #ccc;
+        background-color: #f0f0f0;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-900 text-white">
+    <div class="flex justify-center items-center h-screen">
+      <div class="bg-gray-800 p-8 rounded-lg shadow-lg">
+        <h1 class="text-4xl font-bold mb-4">Word Typing Game</h1>
+        <div class="relative">
+          <canvas id="game-canvas" width="800" height="400"></canvas>
+          <div class="absolute top-0 right-0 bg-gray-700 text-white px-4 py-2 rounded-bl-lg">
+            Score: <span id="score">0</span>
+          </div>
+        </div>
+        <div class="mt-4">
+          <input
+            type="text"
+            id="word-input"
+            class="bg-gray-700 text-white px-4 py-2 rounded-lg w-full"
+            placeholder="Type the word"
+          />
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const canvas = document.getElementById('game-canvas');
+      const ctx = canvas.getContext('2d');
+      const wordInput = document.getElementById('word-input');
+      const scoreDisplay = document.getElementById('score');
+
+      let playerX = 50;
+      let playerY = canvas.height / 2;
+      let words = [];
+      let currentWord = '';
+      let score = 0;
+
+      // Draw the player
+      function drawPlayer() {
+        ctx.fillStyle = 'white';
+        ctx.fillRect(playerX, playerY, 20, 20);
+      }
+
+      // Draw words
+      function drawWords() {
+        ctx.font = '20px Arial';
+        ctx.fillStyle = 'white';
+        for (let i = 0; i < words.length; i++) {
+          const word = words[i];
+          ctx.fillText(word.text, word.x, word.y);
+        }
+      }
+
+      // Move the player
+      function movePlayer() {
+        const dx = 0;
+        const dy = 0;
+
+        if (keys.a) {
+          playerX -= 5;
+        }
+        if (keys.d) {
+          playerX += 5;
+        }
+        if (keys.w) {
+          playerY -= 5;
+        }
+        if (keys.s) {
+          playerY += 5;
+        }
+      }
+
+      // Add a new word
+      function addWord() {
+        const word = {
+          text: getRandomWord(),
+          x: canvas.width,
+          y: Math.random() * (canvas.height - 30),
+        };
+        words.push(word);
+      }
+
+      // Get a random word
+      function getRandomWord() {
+        const wordList = [
+          'apple',
+          'banana',
+          'cherry',
+          'date',
+          'elderberry',
+          'fig',
+          'grape',
+          'honeydew',
+          'kiwi',
+          'lemon',
+          'mango',
+          'nectarine',
+          'orange',
+          'peach',
+          'quince',
+          'raspberry',
+          'strawberry',
+          'tangerine',
+          'watermelon',
+          'zucchini',
+        ];
+        return wordList[Math.floor(Math.random() * wordList.length)];
+      }
+
+      // Check if the word is typed correctly
+      function checkWord() {
+        const typedWord = wordInput.value.trim().toLowerCase();
+        if (typedWord === currentWord) {
+          score += Math.max(10, 100 - (Date.now() - currentWordStartTime));
+          scoreDisplay.textContent = score;
+          wordInput.value = '';
+          currentWord = '';
+        }
+      }
+
+      // Game loop
+      function gameLoop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        movePlayer();
+        drawPlayer();
+        drawWords();
+
+        // Move words
+        for (let i = 0; i < words.length; i++) {
+          const word = words[i];
+          word.x -= 2;
+
+          // Check if the player collides with the word
+          if (
+            playerX + 20 >= word.x &&
+            playerX <= word.x + ctx.measureText(word.text).width &&
+            playerY + 20 >= word.y &&
+            playerY <= word.y + 20
+          ) {
+            currentWord = word.text;
+            currentWordStartTime = Date.now();
+            words.splice(i, 1);
+            i--;
+          }
+        }
+
+        // Add new words
+        if (Math.random() < 0.01) {
+          addWord();
+        }
+
+        requestAnimationFrame(gameLoop);
+      }
+
+      // Key press events
+      const keys = {};
+      document.addEventListener('keydown', (event) => {
+        keys[event.key.toLowerCase()] = true;
+      });
+      document.addEventListener('keyup', (event) => {
+        keys[event.key.toLowerCase()] = false;
+      });
+
+      // Word input event
+      wordInput.addEventListener('input', checkWord);
+
+      // Start the game
+      gameLoop();
+    </script>
+  </body>
+</html>

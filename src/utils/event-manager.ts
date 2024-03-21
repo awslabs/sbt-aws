@@ -65,33 +65,42 @@ export interface EventManagerProps {
   readonly applicationPlaneEventSource?: string;
 }
 
+export interface IEventManager {
+  /**
+   * Registers a new rule that will be triggered when the given event is received.
+   * @param detailType The event to listen for.
+   * @param target The target to invoke when the event is received.
+   */
+  registerRule(detailType: DetailType, target: IRuleTarget): void;
+}
+
 /**
  * Provides an EventManager to help interact with the EventBus shared with the SBT control plane.
  */
-export class EventManager extends Construct {
-  public readonly applicationPlaneEventSource: string = 'applicationPlaneEventSource';
-  public readonly controlPlaneEventSource: string = 'controlPlaneEventSource';
-  // sensible defaults so they are not required when instantiating control plane
+export class EventManager extends Construct implements IEventManager {
+  public static readonly APP_PLANE_SOURCE: string = 'applicationPlaneEventSource';
+  public static readonly CONTROL_PLANE_SOURCE: string = 'controlPlaneEventSource';
 
+  // sensible defaults so they are not required when instantiating control plane
   public readonly supportedEvents: EventMetadata = {
-    onboardingRequest: this.controlPlaneEventSource,
-    onboardingSuccess: this.applicationPlaneEventSource,
-    onboardingFailure: this.applicationPlaneEventSource,
-    offboardingRequest: this.controlPlaneEventSource,
-    offboardingSuccess: this.applicationPlaneEventSource,
-    offboardingFailure: this.applicationPlaneEventSource,
-    provisionSuccess: this.applicationPlaneEventSource,
-    provisionFailure: this.applicationPlaneEventSource,
-    deprovisionSuccess: this.applicationPlaneEventSource,
-    deprovisionFailure: this.applicationPlaneEventSource,
-    billingSuccess: this.controlPlaneEventSource,
-    billingFailure: this.controlPlaneEventSource,
-    activateRequest: this.controlPlaneEventSource,
-    activateSuccess: this.applicationPlaneEventSource,
-    activateFailure: this.applicationPlaneEventSource,
-    deactivateRequest: this.controlPlaneEventSource,
-    deactivateSuccess: this.applicationPlaneEventSource,
-    deactivateFailure: this.applicationPlaneEventSource,
+    onboardingRequest: EventManager.CONTROL_PLANE_SOURCE,
+    onboardingSuccess: EventManager.APP_PLANE_SOURCE,
+    onboardingFailure: EventManager.APP_PLANE_SOURCE,
+    offboardingRequest: EventManager.CONTROL_PLANE_SOURCE,
+    offboardingSuccess: EventManager.APP_PLANE_SOURCE,
+    offboardingFailure: EventManager.APP_PLANE_SOURCE,
+    provisionSuccess: EventManager.APP_PLANE_SOURCE,
+    provisionFailure: EventManager.APP_PLANE_SOURCE,
+    deprovisionSuccess: EventManager.APP_PLANE_SOURCE,
+    deprovisionFailure: EventManager.APP_PLANE_SOURCE,
+    billingSuccess: EventManager.CONTROL_PLANE_SOURCE,
+    billingFailure: EventManager.CONTROL_PLANE_SOURCE,
+    activateRequest: EventManager.CONTROL_PLANE_SOURCE,
+    activateSuccess: EventManager.APP_PLANE_SOURCE,
+    activateFailure: EventManager.APP_PLANE_SOURCE,
+    deactivateRequest: EventManager.CONTROL_PLANE_SOURCE,
+    deactivateSuccess: EventManager.APP_PLANE_SOURCE,
+    deactivateFailure: EventManager.APP_PLANE_SOURCE,
   };
 
   /**
@@ -106,9 +115,8 @@ export class EventManager extends Construct {
     super(scope, id);
     this.eventBus = props.eventBus;
 
-    this.applicationPlaneEventSource =
-      props.applicationPlaneEventSource || this.applicationPlaneEventSource;
-    this.controlPlaneEventSource = props.controlPlaneEventSource || this.controlPlaneEventSource;
+    // this.applicationPlaneEventSource = props.applicationPlaneEventSource || this.applicationPlaneEventSource;
+    // this.controlPlaneEventSource = props.controlPlaneEventSource || this.controlPlaneEventSource;
 
     for (const key in this.supportedEvents) {
       // update this.eventMetadata with any values passed in via props
@@ -124,7 +132,7 @@ export class EventManager extends Construct {
    * @param eventType The name of the event to add a target to.
    * @param target The target that will be added to the event.
    */
-  public addTargetToEvent(eventType: DetailType, target: IRuleTarget): void {
+  public registerRule(eventType: DetailType, target: IRuleTarget): void {
     this.getOrCreateRule(eventType).addTarget(target);
   }
 

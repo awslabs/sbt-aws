@@ -7,7 +7,7 @@ import * as targets from 'aws-cdk-lib/aws-events-targets';
 import { Effect, PolicyDocument, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { AwsSolutionsChecks, NagSuppressions } from 'cdk-nag';
-import { CoreApplicationPlane, CoreApplicationPlaneJobRunnerProps } from '.';
+import { CoreApplicationPlane, IJobRunner } from '.';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
 import { DetailType } from '../utils';
 
@@ -26,7 +26,7 @@ export class IntegStack extends cdk.Stack {
       eventBus = new EventBus(this, 'EventBus');
     }
 
-    const provisioningJobRunnerProps: CoreApplicationPlaneJobRunnerProps = {
+    const provisioningJobRunnerProps: IJobRunner = {
       name: 'provisioning',
       permissions: new PolicyDocument({
         statements: [
@@ -102,7 +102,7 @@ echo "done!"
       incomingEvent: DetailType.ONBOARDING_REQUEST,
     };
 
-    const deprovisioningJobRunnerProps: CoreApplicationPlaneJobRunnerProps = {
+    const deprovisioningJobRunnerProps: IJobRunner = {
       name: 'deprovisioning',
       permissions: new PolicyDocument({
         statements: [
