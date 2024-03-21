@@ -470,7 +470,6 @@ PASSWORD="INSERT PASSWORD HERE"
 # Change this to a real email if you'd like to log into the tenant
 TENANT_EMAIL="tenant@example.com" 
 CONTROL_PLANE_STACK_NAME="ControlPlaneStack"
-TENANT_ID="$RANDOM"
 TENANT_NAME="tenant$RANDOM"
 
 CLIENT_ID=$(aws cloudformation list-exports --query "Exports[?Name=='ControlPlaneIdpDetails'].Value" | jq -r '.[0]' | jq -r '.idp.clientId')
