@@ -69,6 +69,7 @@ if (!process.env.CDK_PARAM_SYSTEM_ADMIN_EMAIL) {
 const app = new cdk.App();
 const integStack = new IntegStack(app, 'ControlPlane-integ', {
   systemAdminEmail: process.env.CDK_PARAM_SYSTEM_ADMIN_EMAIL,
+  stackName: process.env.CDK_PARAM_STACK_NAME,
 });
 
 NagSuppressions.addResourceSuppressionsByPath(

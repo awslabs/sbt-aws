@@ -191,6 +191,7 @@ if (!process.env.CDK_PARAM_EVENT_BUS_ARN) {
 const app = new cdk.App();
 const integStack = new IntegStack(app, 'CoreAppPlane-integ', {
   eventBusArn: process.env.CDK_PARAM_EVENT_BUS_ARN,
+  stackName: process.env.CDK_PARAM_STACK_NAME,
 });
 
 NagSuppressions.addResourceSuppressionsByPath(
