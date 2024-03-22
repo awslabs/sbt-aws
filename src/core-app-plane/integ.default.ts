@@ -196,7 +196,7 @@ const integStack = new IntegStack(app, 'CoreAppPlane-integ', {
 
 NagSuppressions.addResourceSuppressionsByPath(
   integStack,
-  `/${integStack.stackName}/AWS679f53fac002430cb0da5b7982bd2287/Resource`,
+  `/${integStack.artifactId}/AWS679f53fac002430cb0da5b7982bd2287/Resource`,
   [
     {
       id: 'AwsSolutions-L1',
@@ -207,7 +207,7 @@ NagSuppressions.addResourceSuppressionsByPath(
 
 NagSuppressions.addResourceSuppressionsByPath(
   integStack,
-  `/${integStack.stackName}/EventsLogGroupPolicyCoreAppPlaneintegEventBusWatcherRule0F03BA2B/CustomResourcePolicy/Resource`,
+  `/${integStack.artifactId}/EventsLogGroupPolicyCoreAppPlaneintegEventBusWatcherRule0F03BA2B/CustomResourcePolicy/Resource`,
   [
     {
       id: 'AwsSolutions-IAM5',
@@ -219,7 +219,7 @@ NagSuppressions.addResourceSuppressionsByPath(
 
 NagSuppressions.addResourceSuppressionsByPath(
   integStack,
-  `/${integStack.stackName}/CoreApplicationPlane/deprovisioning-codeBuildProvisionProjectRole/Resource`,
+  `/${integStack.artifactId}/CoreApplicationPlane/deprovisioning-codeBuildProvisionProjectRole/Resource`,
   [
     {
       id: 'AwsSolutions-IAM5',
@@ -231,7 +231,7 @@ NagSuppressions.addResourceSuppressionsByPath(
 
 NagSuppressions.addResourceSuppressionsByPath(
   integStack,
-  `/${integStack.stackName}/CoreApplicationPlane/provisioning-codeBuildProvisionProjectRole/Resource`,
+  `/${integStack.artifactId}/CoreApplicationPlane/provisioning-codeBuildProvisionProjectRole/Resource`,
   [
     {
       id: 'AwsSolutions-IAM5',
@@ -243,7 +243,7 @@ NagSuppressions.addResourceSuppressionsByPath(
 
 NagSuppressions.addResourceSuppressionsByPath(
   integStack,
-  `/${integStack.stackName}/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/Resource`,
+  `/${integStack.artifactId}/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/Resource`,
   [
     {
       id: 'AwsSolutions-IAM4',

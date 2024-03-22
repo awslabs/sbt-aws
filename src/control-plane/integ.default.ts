@@ -75,9 +75,9 @@ const integStack = new IntegStack(app, 'ControlPlane-integ', {
 NagSuppressions.addResourceSuppressionsByPath(
   integStack,
   [
-    `/${integStack.stackName}/AWS679f53fac002430cb0da5b7982bd2287/Resource`,
-    `/${integStack.stackName}/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/Resource`,
-    `/${integStack.stackName}/EventsLogGroupPolicyControlPlaneintegEventBusWatcherRule79DEBEE7/CustomResourcePolicy/Resource`,
+    `/${integStack.artifactId}/AWS679f53fac002430cb0da5b7982bd2287/Resource`,
+    `/${integStack.artifactId}/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/Resource`,
+    `/${integStack.artifactId}/EventsLogGroupPolicyControlPlaneintegEventBusWatcherRule79DEBEE7/CustomResourcePolicy/Resource`,
   ],
   [
     {
