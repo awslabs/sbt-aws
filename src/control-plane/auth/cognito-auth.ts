@@ -129,6 +129,7 @@ export class CognitoAuth extends Construct implements IAuth {
           ControlPlaneCallbackURL: props.controlPlaneCallbackURL || defaultControlPlaneCallbackURL,
           SystemAdminRoleName: props.systemAdminRoleName,
           SystemAdminEmail: props.systemAdminEmail,
+          UserPoolName: `SaaSControlPlaneUserPool-${this.node.addr}`,
         },
       }
     );
@@ -142,7 +143,7 @@ export class CognitoAuth extends Construct implements IAuth {
 
     new CfnOutput(this, 'ControlPlaneIdpDetails', {
       value: this.controlPlaneIdpDetails,
-      exportName: 'ControlPlaneIdpDetails',
+      key: 'ControlPlaneIdpDetails',
     });
     const customAuthorizerFunction = new PythonFunction(this, 'CustomAuthorizerFunction', {
       entry: path.join(__dirname, '../../../resources/functions/authorizer'),

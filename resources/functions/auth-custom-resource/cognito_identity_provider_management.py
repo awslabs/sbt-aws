@@ -11,13 +11,14 @@ logger = Logger()
 cognito = boto3.client('cognito-idp')
 region = os.environ['AWS_REGION']
 
+
 class CognitoIdentityProviderManagement():
-    def delete_control_plane_idp(self, userPoolId):        
+    def delete_control_plane_idp(self, userPoolId):
         response = cognito.describe_user_pool(
             UserPoolId=userPoolId
         )
         domain = response['UserPool']['Domain']
-        
+
         cognito.delete_user_pool_domain(
             UserPoolId=userPoolId,
             Domain=domain
@@ -29,12 +30,13 @@ class CognitoIdentityProviderManagement():
         idp_response['idp'] = {}
         user_details = {}
         control_plane_callback_url = event['ControlPlaneCallbackURL']
+        user_pool_name = event['UserPoolName']
         user_details['email'] = event['SystemAdminEmail']
         user_details['userRole'] = event['SystemAdminRoleName']
         user_details['userName'] = 'admin'
 
         user_pool_response = self.__create_user_pool(
-            'SaaSControlPlaneUserPool', control_plane_callback_url)
+            user_pool_name, control_plane_callback_url)
         logger.info(user_pool_response)
         user_pool_id = user_pool_response['UserPool']['Id']
 
@@ -45,7 +47,8 @@ class CognitoIdentityProviderManagement():
         self.__create_user_pool_domain(user_pool_id, user_pool_domain)
         tenant_user_group_response = user_management_util.create_user_group(user_pool_id, user_details['userRole'])
         user_management_util.create_user(user_pool_id, user_details)
-        user_management_util.add_user_to_group(user_pool_id, user_details['userName'], tenant_user_group_response['Group']['GroupName'])        
+        user_management_util.add_user_to_group(
+            user_pool_id, user_details['userName'], tenant_user_group_response['Group']['GroupName'])
 
         idp_response['idp']['name'] = 'Cognito'
         idp_response['idp']['userPoolId'] = user_pool_id

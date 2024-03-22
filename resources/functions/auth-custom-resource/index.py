@@ -25,6 +25,7 @@ def do_action(event, _):
         idp_input['ControlPlaneCallbackURL'] = event['ResourceProperties']['ControlPlaneCallbackURL']
         idp_input['SystemAdminRoleName'] = event['ResourceProperties']['SystemAdminRoleName']
         idp_input['SystemAdminEmail'] = event['ResourceProperties']['SystemAdminEmail']
+        idp_input['UserPoolName'] = event['ResourceProperties']['UserPoolName']
 
         idpDetails = idp_mgmt_service.create_control_plane_idp(idp_input)
         response = json.dumps(idpDetails)
@@ -40,13 +41,15 @@ def do_action(event, _):
     except Exception as e:
         raise e
 
+
 @helper.delete
 def do_delete(event, _):
-    try:        
+    try:
         userPoolId = event['PhysicalResourceId']
         idp_mgmt_service.delete_control_plane_idp(userPoolId)
     except Exception as e:
         raise e
+
 
 def handler(event, context):
     helper(event, context)

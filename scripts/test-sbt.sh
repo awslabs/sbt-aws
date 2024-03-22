@@ -2,6 +2,8 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+CONTROL_PLANE_STACK_NAME="$1"
+
 # Colors for logging
 GREEN='\033[0;32m'
 RED='\033[0;31m'
@@ -65,7 +67,7 @@ if [ -n "$tenant_id" ] && [ "$tenant_id" != "null" ]; then
     log_test "pass" "Tenant created successfully with ID: $tenant_id"
 
     # Check DynamoDB table entry
-    table_name=$(aws dynamodb list-tables --query "TableNames[?contains(@, 'TenantDetails')]" | jq -r '.[0]')
+    table_name=$(aws dynamodb list-tables --query "TableNames[?contains(@, 'TenantDetails') && contains(@, '$CONTROL_PLANE_STACK_NAME')]" | jq -r '.[0]')
     check_dynamodb_table_entry "$table_name" "$tenant_id" "In progress"
     if [ $? -eq 0 ]; then
         log_test "pass" "Tenant status set to 'In progress' in DynamoDB table"

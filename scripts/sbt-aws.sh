@@ -29,10 +29,16 @@ generate_credentials() {
     echo "Generating credentials..."
   fi
 
-  CLIENT_ID=$(aws cloudformation list-exports --query "Exports[?Name=='ControlPlaneIdpDetails'].Value" | jq -r '.[0]' | jq -r '.idp.clientId')
-  USER_POOL_ID=$(aws cloudformation list-exports --query "Exports[?Name=='ControlPlaneIdpDetails'].Value" | jq -r '.[0]' | jq -r '.idp.userPoolId')
   USER="admin"
   PASSWORD="$1"
+  CONTROL_PLANE_STACK_NAME="$2"
+
+  CONTROL_PLANE_IDP_DETAILS=$(aws cloudformation describe-stacks \
+    --stack-name "$CONTROL_PLANE_STACK_NAME" \
+    --query "Stacks[0].Outputs[?OutputKey=='ControlPlaneIdpDetails'].OutputValue" \
+    --output text)
+  CLIENT_ID=$(echo "$CONTROL_PLANE_IDP_DETAILS" | jq -r '.idp.clientId')
+  USER_POOL_ID=$(echo "$CONTROL_PLANE_IDP_DETAILS" | jq -r '.idp.userPoolId')
 
   if $DEBUG; then
     echo "CLIENT_ID: $CLIENT_ID"
@@ -97,7 +103,7 @@ configure() {
   read -r -s -p "Enter admin password: " ADMIN_USER_PASSWORD
   echo
 
-  generate_credentials "$ADMIN_USER_PASSWORD"
+  generate_credentials "$ADMIN_USER_PASSWORD" "$CONTROL_PLANE_STACK_NAME"
   CONTROL_PLANE_API_ENDPOINT=$(aws cloudformation describe-stacks \
     --stack-name "$CONTROL_PLANE_STACK_NAME" \
     --query "Stacks[0].Outputs[?contains(OutputKey,'controlPlaneAPIEndpoint')].OutputValue" \
