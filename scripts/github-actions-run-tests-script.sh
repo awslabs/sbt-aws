@@ -75,7 +75,7 @@ FINAL_STATUS=$(aws stepfunctions describe-execution \
 
 TEST_RESULT=$(aws stepfunctions describe-execution \
     --execution-arn "$EXECUTION_ARN" \
-    --query 'output' | jq -r 'fromjson | .testResult')
+    --query 'output' | jq -rc '. as $my_json | try (fromjson) catch $my_json | .testResult')
 
 # Exit with a success (0) or failure (1) code based on the final status and test result
 if [ "$FINAL_STATUS" == "SUCCEEDED" ] && [ "$TEST_RESULT" == "0" ]; then

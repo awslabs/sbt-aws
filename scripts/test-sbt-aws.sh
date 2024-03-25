@@ -160,18 +160,6 @@ else
     log_test "fail" "Failed to delete tenant"
 fi
 
-# # Test deleting a non-existent tenant
-# echo "Testing delete-tenant for non-existent tenant..."
-# fake_tenant_id=$(openssl rand -hex 10)
-# delete_output=$(./sbt-aws.sh delete-tenant "$fake_tenant_id" 2>&1)
-# delete_response=$(echo "$delete_output" | jq -r '.')
-
-# if [ "$(echo "$delete_response" | jq -r '.statusCode')" = "404" ] && [ "$(echo "$delete_response" | jq -r '.message')" = "Tenant '$fake_tenant_id' not found." ]; then
-#     log_test "pass" "Received expected error when deleting non-existent tenant"
-# else
-#     log_test "fail" "Unexpected output when deleting non-existent tenant"
-# fi
-
 # Set the exit code based on the overall test status
 if [ "$TEST_PASSED" = true ]; then
     exit 0
