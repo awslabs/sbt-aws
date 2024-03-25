@@ -7,6 +7,22 @@
 # - $LOG_GROUP_NAME - Name of the CloudWatch Log Group to tail logs from
 # - $GITHUB_HEAD_REF - Git branch name that will be passed as input to the Step Function
 
+# Check if required environment variables are set
+if [ -z "$STEP_FUNCTION_ARN" ]; then
+    echo "Error: STEP_FUNCTION_ARN is not set"
+    exit 1
+fi
+
+if [ -z "$LOG_GROUP_NAME" ]; then
+    echo "Error: LOG_GROUP_NAME is not set"
+    exit 1
+fi
+
+if [ -z "$GITHUB_HEAD_REF" ]; then
+    echo "Error: GITHUB_HEAD_REF is not set"
+    exit 1
+fi
+
 # Get the current timestamp in UTC format
 TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
