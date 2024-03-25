@@ -9,6 +9,9 @@ GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m'
 
+# Variable to track overall test status
+TEST_PASSED=true
+
 # Function to log test status
 log_test() {
     local status=$1
@@ -18,6 +21,7 @@ log_test() {
         echo -e "${GREEN}[PASS] $message${NC}"
     else
         echo -e "${RED}[FAIL] $message${NC}"
+        TEST_PASSED=false
     fi
 }
 
@@ -166,4 +170,11 @@ if [ "$(echo "$delete_response" | jq -r '.statusCode')" = "404" ] && [ "$(echo "
     log_test "pass" "Received expected error when deleting non-existent tenant"
 else
     log_test "fail" "Unexpected output when deleting non-existent tenant"
+fi
+
+# Set the exit code based on the overall test status
+if [ "$TEST_PASSED" = true ]; then
+    exit 0
+else
+    exit 1
 fi
