@@ -67,14 +67,19 @@ while true; do
     fi
 done
 
-# Get the final status of the Step Function execution
+# Get the final status and test result of the Step Function execution
 FINAL_STATUS=$(aws stepfunctions describe-execution \
     --execution-arn "$EXECUTION_ARN" \
     --query 'status' \
     --output text)
 
-# Exit with a success (0) or failure (1) code based on the final status
-if [ "$FINAL_STATUS" == "SUCCEEDED" ]; then
+TEST_RESULT=$(aws stepfunctions describe-execution \
+    --execution-arn "$EXECUTION_ARN" \
+    --query 'output.testResult' \
+    --output text)
+
+# Exit with a success (0) or failure (1) code based on the final status and test result
+if [ "$FINAL_STATUS" == "SUCCEEDED" ] && [ "$TEST_RESULT" == "0" ]; then
     exit 0
 else
     exit 1
