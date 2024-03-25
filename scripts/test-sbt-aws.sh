@@ -158,10 +158,11 @@ fi
 
 # Test deleting a non-existent tenant
 echo "Testing delete-tenant for non-existent tenant..."
-fake_tenant_id=$(openssl rand -hex 10)  # Generate a random 10-character hexadecimal string
+fake_tenant_id=$(openssl rand -hex 10)
 delete_output=$(./sbt-aws.sh delete-tenant "$fake_tenant_id" 2>&1)
-expected_error='{"statusCode":404,"message":"Tenant '"$fake_tenant_id"' not found."}'
-if echo "$delete_output" | grep -q "$expected_error"; then
+delete_response=$(echo "$delete_output" | jq -r '.')
+
+if [ "$(echo "$delete_response" | jq -r '.statusCode')" = "404" ] && [ "$(echo "$delete_response" | jq -r '.message')" = "Tenant '$fake_tenant_id' not found." ]; then
     log_test "pass" "Received expected error when deleting non-existent tenant"
 else
     log_test "fail" "Unexpected output when deleting non-existent tenant"
