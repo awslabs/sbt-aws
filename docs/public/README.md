@@ -551,16 +551,15 @@ The control plane emits this event any time it onboards a new tenant. This event
 
 ```json
 {
-    "Source": "sbt-control-plane-api",
-    "DetailType": "Onboarding",
-    "Detail": {
+    "source": "sbt-control-plane-api",
+    "detail-type": "Onboarding",
+    "detail": {
         "tenantId": "guid string",
         "tenantStatus": "see notes",
         "tenantName": "tenant name",
         "email": "admin@saas.com",
         "isActive": "boolean"
-    },
-    "EventBusName": "sbt-event-bus"
+    }
 }
 ```
 
@@ -576,13 +575,12 @@ Upon successful tenant provisioning, the Serverless SaaS reference architecture 
 
 ```json
 {
-    "Source": "sbt-application-plane-api",
-    "DetailType": "Onboarding",
-    "Detail": {
+    "source": "sbt-application-plane-api",
+    "detail-type": "Onboarding",
+    "detail": {
         "tenantConfig": "json string - see notes",
         "tenantStatus": "Complete",
-    },
-    "EventBusName": "sbt-event-bus"
+    }
 }
 ```
 
@@ -594,13 +592,12 @@ The control plane emits this event any time it offboards a tenant. At a minimum 
 
 ```json
 {
-    "Source": "sbt-control-plane-api",
-    "DetailType": "Offboarding",
-    "Detail": {
+    "source": "sbt-control-plane-api",
+    "detail-type": "Offboarding",
+    "detail": {
         "tenantId": "string",
         "tier": "string",
-    },
-    "EventBusName": "sbt-event-bus"
+    }
 }
 ```
 
@@ -612,12 +609,11 @@ The application plane emits this event upon completion of offboarding. Similar t
 
 ```json
 {
-    "Source": "sbt-application-plane-api",
-    "DetailType": "Offboarding",
-    "Detail": {
+    "source": "sbt-application-plane-api",
+    "detail-type": "Offboarding",
+    "detail": {
         "tenantStatus": "Deleted",
-    },
-    "EventBusName": "sbt-event-bus"
+    }
 }
 ```
 
