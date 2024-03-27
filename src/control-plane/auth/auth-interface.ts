@@ -11,60 +11,60 @@ export interface IAuth {
   /**
    * Authorizer referenced by the ControlPlaneAPI
    */
-  authorizer: IAuthorizer;
+  readonly authorizer: IAuthorizer;
 
   /**
    * Contains any information relevant to the IDP implementation required by the Authorizer and User Function implementations
    */
-  controlPlaneIdpDetails: any;
+  readonly controlPlaneIdpDetails: any;
 
   /**
    * Authorization server Url
    */
-  authorizationServer: string;
+  readonly authorizationServer: string;
 
   /**
    * The OAuth clientId for the identity provider
    */
-  clientId: string;
+  readonly clientId: string;
 
   /**
    * OpenID configuration Url
    */
-  wellKnownEndpointUrl: string;
+  readonly wellKnownEndpointUrl: string;
 
   /**
    * Function referenced by the ControlPlaneAPI -- POST /users
    */
-  createUserFunction: IFunction;
+  readonly createUserFunction: IFunction;
 
   /**
    * Function referenced by the ControlPlaneAPI -- GET /users
    */
-  fetchAllUsersFunction: IFunction; // use 'fetch*' instead of 'get*' to avoid error JSII5000
+  readonly fetchAllUsersFunction: IFunction; // use 'fetch*' instead of 'get*' to avoid error JSII5000
 
   /**
    * Function referenced by the ControlPlaneAPI -- GET /user/{username}
    */
-  fetchUserFunction: IFunction; // use 'fetch*' instead of 'get*' to avoid error JSII5000
+  readonly fetchUserFunction: IFunction; // use 'fetch*' instead of 'get*' to avoid error JSII5000
 
   /**
    * Function referenced by the ControlPlaneAPI -- PUT /user/{username}
    */
-  updateUserFunction: IFunction;
+  readonly updateUserFunction: IFunction;
 
   /**
    * Function referenced by the ControlPlaneAPI -- DELETE /user/{username}
    */
-  deleteUserFunction: IFunction;
+  readonly deleteUserFunction: IFunction;
 
   /**
    * Function referenced by the ControlPlaneAPI -- PUT /user/{username}/disable
    */
-  disableUserFunction: IFunction;
+  readonly disableUserFunction: IFunction;
 
   /**
    * Function referenced by the ControlPlaneAPI -- PUT /user/{username}/enable
    */
-  enableUserFunction: IFunction;
+  readonly enableUserFunction: IFunction;
 }

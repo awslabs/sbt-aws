@@ -5,9 +5,10 @@ import * as cdk from 'aws-cdk-lib';
 import { IResource, Resource } from 'aws-cdk-lib/aws-apigateway';
 import * as aws_events from 'aws-cdk-lib/aws-events';
 import * as event_targets from 'aws-cdk-lib/aws-events-targets';
+import { IFunction } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
-import { IBilling } from './billing-interface';
+import { IBilling, IFunctionTrigger } from './billing-interface';
 import { EventManager, DetailType } from '../../utils';
 
 /**
@@ -31,29 +32,76 @@ export interface BillingProviderProps {
   readonly controlPlaneAPIBillingResource: Resource;
 }
 
+/**
+ * Represents a Billing Provider that handles billing-related operations.
+ *
+ * This construct sets up event targets for various billing-related events
+ * and optionally creates an API Gateway resource for a webhook function.
+ */
 export class BillingProvider extends Construct {
   /**
    * The API Gateway resource containing the billing webhook resource.
    * Only set when the IBilling webhookFunction is defined.
    */
   public readonly controlPlaneAPIBillingWebhookResource?: IResource;
+
+  /**
+   * Creates a new instance of the BillingProvider construct.
+   *
+   * @param scope The scope in which to define this construct.
+   * @param id The unique ID of this construct.
+   * @param props The properties for the BillingProvider.
+   */
   constructor(scope: Construct, id: string, props: BillingProviderProps) {
     super(scope, id);
 
-    props.eventManager.addTargetToEvent(
-      DetailType.PROVISION_SUCCESS,
-      new event_targets.LambdaFunction(props.billing.createUserFunction)
+    this.createEventTarget(
+      props.eventManager,
+      DetailType.ONBOARDING_REQUEST,
+      props.billing.createCustomerFunction
     );
 
-    props.eventManager.addTargetToEvent(
-      DetailType.DEPROVISION_SUCCESS,
-      new event_targets.LambdaFunction(props.billing.deleteUserFunction)
+    this.createEventTarget(
+      props.eventManager,
+      DetailType.OFFBOARDING_REQUEST,
+      props.billing.deleteCustomerFunction
     );
 
-    new aws_events.Rule(this, 'BillingPutUsageRule', {
-      schedule: aws_events.Schedule.rate(cdk.Duration.hours(24)),
-      targets: [new event_targets.LambdaFunction(props.billing.putUsageFunction)],
-    });
+    this.createEventTarget(
+      props.eventManager,
+      DetailType.TENANT_USER_CREATED,
+      props.billing.createUserFunction
+    );
+
+    this.createEventTarget(
+      props.eventManager,
+      DetailType.TENANT_USER_DELETED,
+      props.billing.deleteUserFunction
+    );
+
+    if (props.billing.putUsageFunction) {
+      const schedule =
+        'handler' in props.billing.putUsageFunction
+          ? props.billing.putUsageFunction.schedule
+          : aws_events.Schedule.rate(cdk.Duration.hours(24));
+
+      const handler =
+        'handler' in props.billing.putUsageFunction
+          ? props.billing.putUsageFunction.handler
+          : props.billing.putUsageFunction;
+
+      new aws_events.Rule(this, 'BillingPutUsageRule', {
+        schedule: schedule,
+        targets: [new event_targets.LambdaFunction(handler)],
+      });
+    }
+
+    if (props.billing.ingestor) {
+      new cdk.CfnOutput(this, 'DataIngestorName', {
+        value: props.billing.ingestor.dataIngestorName,
+        key: 'dataIngestorName',
+      });
+    }
 
     if (props.billing.webhookFunction && props.billing.webhookPath) {
       this.controlPlaneAPIBillingWebhookResource = props.controlPlaneAPIBillingResource.addResource(
@@ -83,5 +131,27 @@ export class BillingProvider extends Construct {
         ]
       );
     }
+  }
+
+  private getFunctionProps(
+    fn: IFunction | IFunctionTrigger,
+    defaultTrigger: DetailType
+  ): IFunctionTrigger {
+    return 'handler' in fn
+      ? { handler: fn.handler, trigger: fn.trigger }
+      : { handler: fn, trigger: defaultTrigger };
+  }
+
+  private createEventTarget(
+    eventManager: EventManager,
+    defaultEvent: DetailType,
+    fn?: IFunction | IFunctionTrigger
+  ) {
+    if (!fn) {
+      return;
+    }
+
+    const { handler, trigger } = this.getFunctionProps(fn, defaultEvent);
+    eventManager.addTargetToEvent(trigger, new event_targets.LambdaFunction(handler));
   }
 }
