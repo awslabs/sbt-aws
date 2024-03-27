@@ -8,15 +8,14 @@ export function runTestsWorkflow(project: AwsCdkConstructLibrary) {
   const runTests = project.github?.addWorkflow('run-tests');
   if (runTests) {
     runTests.on({
-      pullRequest: {
-        branches: ['main'],
-      },
+      schedule: [
+        { cron: '0 6 * * *' }, // Runs at midnight Mountain Time (UTC-6) every day
+      ],
     });
 
     runTests.addJobs({
       'run-tests': {
         runsOn: ['ubuntu-22.04'],
-        if: "github.event.review.state == 'APPROVED'",
         permissions: {
           idToken: JobPermission.WRITE,
           contents: JobPermission.READ,

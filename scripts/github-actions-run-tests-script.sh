@@ -5,7 +5,6 @@
 # Required env variables
 # - $STEP_FUNCTION_ARN - ARN of the Step Function to trigger
 # - $LOG_GROUP_NAME - Name of the CloudWatch Log Group to tail logs from
-# - $GITHUB_HEAD_REF - Git branch name that will be passed as input to the Step Function
 
 # Check if required environment variables are set
 if [ -z "$STEP_FUNCTION_ARN" ]; then
@@ -18,20 +17,13 @@ if [ -z "$LOG_GROUP_NAME" ]; then
     exit 1
 fi
 
-if [ -z "$GITHUB_HEAD_REF" ]; then
-    echo "Error: GITHUB_HEAD_REF is not set"
-    exit 1
-fi
-
 # Get the current timestamp in UTC format
 TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 # Start the Step Functions execution
-# The input is a JSON object with the gitBranchName key and the value of $GITHUB_HEAD_REF
 # The --query option extracts the executionArn from the response and assigns it to EXECUTION_ARN
 EXECUTION_ARN=$(aws stepfunctions start-execution \
     --state-machine-arn "$STEP_FUNCTION_ARN" \
-    --input "{\"gitBranchName\": \"$GITHUB_HEAD_REF\"}" \
     --query 'executionArn' \
     --output text)
 
