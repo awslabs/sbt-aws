@@ -30,6 +30,12 @@ export interface ControlPlaneProps {
    * This is used as the default if the OutgoingEventMetadata source field is not set.
    */
   readonly applicationPlaneEventSource?: string;
+
+  /**
+   * (Optional) If true, the API Gateway will not log requests to the CloudWatch Logs.
+   * (Default: false)
+   */
+  readonly disableAPILogging?: boolean;
 }
 
 export class ControlPlane extends Construct {
@@ -68,8 +74,9 @@ export class ControlPlane extends Construct {
     });
 
     const controlPlaneAPI = new ControlPlaneAPI(this, 'controlplane-api-stack', {
-      services: services,
       auth: props.auth,
+      disableAPILogging: props.disableAPILogging,
+      services: services,
       tenantConfigServiceLambda: tenantConfigService.tenantConfigServiceLambda,
     });
 
