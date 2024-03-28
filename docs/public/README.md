@@ -76,6 +76,9 @@ The "objects" present in this example were written by the CDK team. Specifically
 
 ### Tutorial
 
+> [!WARNING]
+> Running this tutorial may incur charges in your AWS account.
+
 As mentioned before, SBT is built on top of CDK. To illustrate its use, please first follow the CDK getting started guide to initialize a new CDK application. You can find the guide [here](https://docs.aws.amazon.com/cdk/v2/guide/hello_world.html#hello_world_tutorial_create_app). Please complete step one of the **hello cdk** tutorial then come back here to continue with SBT. Again, you don't need to build or deploy the sample app; just create it for now.
 
 Now that you've initialized a new CDK app, let's install the SBT components. From within the `hello-cdk` directory, please run the following command:
@@ -105,8 +108,11 @@ export class ControlPlaneStack extends Stack {
       systemAdminEmail: 'ENTER YOUR EMAIL HERE',
     });
 
-    const controlPlane = new ControlPlane(this, 'ControlPlane', {
+  // NOTE: To explicitly disable cloudwatch logging (and potentially save costs on CloudWatch), 
+  // pass the disableAPILogging flag as true
+  const controlPlane = new ControlPlane(this, 'ControlPlane', {
       auth: cognitoAuth,
+      //disableAPILogging: true
     });
     this.eventBusArn = controlPlane.eventBusArn;
     this.regApiGatewayUrl = controlPlane.controlPlaneAPIGatewayUrl;

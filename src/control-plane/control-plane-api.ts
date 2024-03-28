@@ -17,6 +17,7 @@ export interface ControlPlaneAPIProps {
   readonly services: Services;
   readonly auth: IAuth;
   readonly tenantConfigServiceLambda: Function;
+  readonly disableAPILogging?: boolean;
 }
 
 export class ControlPlaneAPI extends Construct {
@@ -26,14 +27,25 @@ export class ControlPlaneAPI extends Construct {
   constructor(scope: Construct, id: string, props: ControlPlaneAPIProps) {
     super(scope, id);
 
-    const controlPlaneAPILogGroup = new LogGroup(this, 'controlPlaneAPILogGroup', {
-      retention: RetentionDays.ONE_WEEK,
-    });
-    const controlPlaneAPI = new apigateway.RestApi(this, 'controlPlaneAPI', {
+    let options: any = {
       defaultCorsPreflightOptions: {
         allowOrigins: apigateway.Cors.ALL_ORIGINS,
       },
-      deployOptions: {
+    };
+    if (props.disableAPILogging) {
+      options.cloudWatchRole = false;
+      NagSuppressions.addStackSuppressions(cdk.Stack.of(this), [
+        {
+          id: 'AwsSolutions-APIG1',
+          reason: 'Customer has explicitly opted out of logging',
+        },
+      ]);
+    } else {
+      const controlPlaneAPILogGroup = new LogGroup(this, 'controlPlaneAPILogGroup', {
+        retention: RetentionDays.ONE_WEEK,
+      });
+      options.cloudWatchRole = true;
+      options.deployOptions = {
         accessLogDestination: new apigateway.LogGroupLogDestination(controlPlaneAPILogGroup),
         methodOptions: {
           '/*/*': {
@@ -41,8 +53,10 @@ export class ControlPlaneAPI extends Construct {
             loggingLevel: apigateway.MethodLoggingLevel.ERROR,
           },
         },
-      },
-    });
+      };
+    }
+    const controlPlaneAPI = new apigateway.RestApi(this, 'controlPlaneAPI', options);
+
     controlPlaneAPI.addRequestValidator('request-validator', {
       requestValidatorName: 'control-plane-validator',
       validateRequestBody: true,

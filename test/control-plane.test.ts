@@ -48,33 +48,35 @@ describe('No unsuppressed cdk-nag Warnings or Errors', () => {
   });
 });
 
-describe('ControlPlane', () => {
-  const app = new cdk.App();
-  interface TestStackProps extends cdk.StackProps {
-    systemAdminEmail: string;
+const app = new cdk.App();
+interface TestStackProps extends cdk.StackProps {
+  systemAdminEmail: string;
+  disableAPILogging?: boolean;
+}
+class TestStack extends cdk.Stack {
+  constructor(scope: cdk.App, id: string, props: TestStackProps) {
+    super(scope, id, props);
+
+    // for event bridge communication
+    const idpName = 'COGNITO';
+    const systemAdminRoleName = 'SystemAdmin';
+
+    const cognitoAuth = new CognitoAuth(this, 'CognitoAuth', {
+      idpName: idpName,
+      systemAdminRoleName: systemAdminRoleName,
+      systemAdminEmail: props.systemAdminEmail,
+      // optional parameter possibly populated by another construct or an argument
+      // controlPlaneCallbackURL: 'https://example.com',
+    });
+
+    new ControlPlane(this, 'ControlPlane', {
+      auth: cognitoAuth,
+      disableAPILogging: props.disableAPILogging,
+    });
   }
-  class TestStack extends cdk.Stack {
-    constructor(scope: cdk.App, id: string, props: TestStackProps) {
-      super(scope, id, props);
+}
 
-      // for event bridge communication
-      const idpName = 'COGNITO';
-      const systemAdminRoleName = 'SystemAdmin';
-
-      const cognitoAuth = new CognitoAuth(this, 'CognitoAuth', {
-        idpName: idpName,
-        systemAdminRoleName: systemAdminRoleName,
-        systemAdminEmail: props.systemAdminEmail,
-        // optional parameter possibly populated by another construct or an argument
-        // controlPlaneCallbackURL: 'https://example.com',
-      });
-
-      new ControlPlane(this, 'ControlPlane', {
-        auth: cognitoAuth,
-      });
-    }
-  }
-
+describe('ControlPlane Targets', () => {
   const controlPlaneTestStack = new TestStack(app, 'appPlaneStack', {
     systemAdminEmail: 'test@example.com',
   });
@@ -92,9 +94,14 @@ describe('ControlPlane', () => {
       expect(targetsCapture.asArray()).toHaveLength(1);
     } while (targetsCapture.next());
   });
+});
 
+describe('ControlPlane description', () => {
   it('should have a fixed template description, when the containing stack does not have description', () => {
-    const actual = controlPlaneTestStack.templateOptions.description;
+    const stackWithoutDescription = new TestStack(app, 'stackWithoutDescription', {
+      systemAdminEmail: 'test@example.com',
+    });
+    const actual = stackWithoutDescription.templateOptions.description;
     const expected = 'SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)';
     expect(actual).toStrictEqual(expected);
   });
@@ -107,5 +114,71 @@ describe('ControlPlane', () => {
     const actual = stackWithDescription.templateOptions.description;
     const expected = 'ABC - SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)';
     expect(expected).toStrictEqual(actual);
+  });
+});
+
+describe('ControlPlane cloudwatch roles', () => {
+  it('should create the cloudwatch IAM apigw push to cw role by default', () => {
+    const stackWithLogging = new TestStack(new cdk.App(), 'stackWithLogging', {
+      systemAdminEmail: 'test@example.com',
+    });
+    const template = Template.fromStack(stackWithLogging);
+    template.hasResourceProperties(
+      'AWS::IAM::Role',
+      Match.objectLike({
+        AssumeRolePolicyDocument: {
+          Statement: [
+            {
+              Action: 'sts:AssumeRole',
+              Effect: 'Allow',
+              Principal: {
+                Service: 'apigateway.amazonaws.com',
+              },
+            },
+          ],
+          Version: '2012-10-17',
+        },
+        ManagedPolicyArns: [
+          {
+            'Fn::Join': [
+              '',
+              [
+                'arn:',
+                {
+                  Ref: 'AWS::Partition',
+                },
+                ':iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs',
+              ],
+            ],
+          },
+        ],
+      })
+    );
+  });
+
+  it('should not create the cloudwatch IAM publishing role if the disable logging flag is true', () => {
+    const stackWithoutLogging = new TestStack(new cdk.App(), 'stackWithoutLogging', {
+      systemAdminEmail: 'test@example.com',
+      disableAPILogging: true,
+    });
+    const templateWithoutLogging = Template.fromStack(stackWithoutLogging);
+    templateWithoutLogging.resourcePropertiesCountIs(
+      'AWS::IAM::Role',
+      {
+        AssumeRolePolicyDocument: {
+          Statement: [
+            {
+              Action: 'sts:AssumeRole',
+              Effect: 'Allow',
+              Principal: {
+                Service: 'apigateway.amazonaws.com',
+              },
+            },
+          ],
+          Version: '2012-10-17',
+        },
+      },
+      0
+    );
   });
 });
