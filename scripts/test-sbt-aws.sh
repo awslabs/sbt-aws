@@ -166,7 +166,7 @@ fake_tenant_id=$(openssl rand -hex 10)
 delete_output=$(./sbt-aws.sh delete-tenant "$fake_tenant_id" 2>&1)
 delete_response=$(echo "$delete_output" | jq -r '.')
 
-if [ "$(echo "$delete_response" | jq -r '.statusCode')" = "404" ] && [ "$(echo "$delete_response" | jq -r '.message')" = "Tenant '$fake_tenant_id' not found." ]; then
+if [ "$(echo "$delete_response" | jq -r '.statusCode')" = "404" ] && [ "$(echo "$delete_response" | jq -r '.message')" = "Tenant $fake_tenant_id not found." ]; then
     log_test "pass" "Received expected error when deleting non-existent tenant"
 else
     log_test "fail" "Unexpected output when deleting non-existent tenant"
