@@ -182,6 +182,9 @@
       "steps": [
         {
           "spawn": "docgen"
+        },
+        {
+          "exec": "cd src/point-solutions/libraries && jsii-docgen  -o API.md"
         }
       ]
     },
