@@ -471,8 +471,8 @@ TENANT_EMAIL="tenant@example.com"
 CONTROL_PLANE_STACK_NAME="ControlPlaneStack"
 TENANT_NAME="tenant$RANDOM"
 
-CLIENT_ID=$(aws cloudformation list-exports --query "Exports[?Name=='ControlPlaneIdpDetails'].Value" | jq -r '.[0]' | jq -r '.idp.clientId')
-USER_POOL_ID=$(aws cloudformation list-exports --query "Exports[?Name=='ControlPlaneIdpDetails'].Value" | jq -r '.[0]' | jq -r '.idp.userPoolId')
+CLIENT_ID=$(aws cloudformation describe-stacks --stack-name ControlPlaneStack --query "Stacks[0].Outputs[?OutputKey=='ControlPlaneIdpDetails'].OutputValue" | jq -r '.[0]' | jq -r '.idp.clientId')
+USER_POOL_ID=$(aws cloudformation describe-stacks --stack-name ControlPlaneStack --query "Stacks[0].Outputs[?OutputKey=='ControlPlaneIdpDetails'].OutputValue" | jq -r '.[0]' | jq -r '.idp.userPoolId')
 USER="admin"
 
 # required in order to initiate-auth
@@ -492,7 +492,7 @@ aws cognito-idp admin-set-user-password \
 AUTHENTICATION_RESULT=$(aws cognito-idp initiate-auth \
     --auth-flow USER_PASSWORD_AUTH \
     --client-id "${CLIENT_ID}" \
-    --auth-parameters "USERNAME=${USER},PASSWORD=${PASSWORD}" \
+    --auth-parameters "USERNAME=${USER},PASSWORD='${PASSWORD}'" \
     --query 'AuthenticationResult')
 
 ID_TOKEN=$(echo "$AUTHENTICATION_RESULT" | jq -r '.IdToken')
