@@ -12,6 +12,7 @@ const PROJECT_NAME: string = 'sbt-aws';
 const PROJEN_VERSION: string = '0.80.14';
 const CDK_VERSION: string = '2.123.0';
 const JSII_VERSION: string = '~5.2.0';
+const CONSTRUCTS_VERSION: string = '10.0.5';
 const POINT_SOLUTIONS_LIB_PROJECT_NAME: string = 'sbt-point-solutions-lib';
 const PULL_REQUEST_TEMPLATE: string[] = [
   '### Issue # (if applicable)',
@@ -100,7 +101,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   authorAddress: 'sbt-aws-maintainers@amazon.com',
   authorOrganization: true,
   cdkVersion: CDK_VERSION,
-  constructsVersion: '10.0.5',
+  constructsVersion: CONSTRUCTS_VERSION,
   copyrightOwner: 'Amazon.com, Inc. or its affiliates. All Rights Reserved.',
   copyrightPeriod: '2024-',
   defaultReleaseBranch: 'main',
@@ -185,7 +186,7 @@ const jsiiLibraryProjectOptions: cdk.JsiiProjectOptions = {
   name: `@${PUBLICATION_NAMESPACE}/${POINT_SOLUTIONS_LIB_PROJECT_NAME}`,
   npmignoreEnabled: true,
   packageManager: javascript.NodePackageManager.NPM,
-  peerDeps: ['constructs', `aws-cdk-lib@${CDK_VERSION}`],
+  peerDeps: [`constructs@${CONSTRUCTS_VERSION}`, `aws-cdk-lib@${CDK_VERSION}`],
   prettier: true,
   projenrcTs: true,
   projenVersion: PROJEN_VERSION,

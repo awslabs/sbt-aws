@@ -38,7 +38,7 @@
     "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^6",
     "@typescript-eslint/parser": "^6",
-    "constructs": "10.3.0",
+    "constructs": "10.0.5",
     "eslint": "^8",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.1",
@@ -59,7 +59,7 @@
   },
   "peerDependencies": {
     "aws-cdk-lib": "2.123.0",
-    "constructs": "^10.3.0"
+    "constructs": "10.0.5"
   },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.540.0",
