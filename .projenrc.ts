@@ -235,7 +235,5 @@ pointSolutionsLibraryProject.eslint?.addRules({
 });
 
 pointSolutionsLibraryProject.synth();
-//Run docgen for point solutions libraries sub project
-project.postCompileTask.exec('cd src/point-solutions/libraries && jsii-docgen  -o API.md');
 runTestsWorkflow(project);
 project.synth();
