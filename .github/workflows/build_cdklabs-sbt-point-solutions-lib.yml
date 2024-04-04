@@ -29,6 +29,8 @@ jobs:
       - name: Install dependencies
         run: npm install
         working-directory: ./
+      - name: Install Dependencies
+        run: npm install
       - name: build
         run: npx projen build
       - name: Find mutations

@@ -9,7 +9,7 @@ import { runTestsWorkflow } from './projenrc/run-tests-workflow';
 const GITHUB_USER: string = 'awslabs';
 const PUBLICATION_NAMESPACE: string = 'cdklabs';
 const PROJECT_NAME: string = 'sbt-aws';
-const PROJEN_VERSION: string = '0.80.14';
+const PROJEN_VERSION: string = '0.80.18';
 const CDK_VERSION: string = '2.123.0';
 const JSII_VERSION: string = '~5.2.0';
 const CONSTRUCTS_VERSION: string = '10.0.5';
@@ -203,6 +203,14 @@ const jsiiLibraryProjectOptions: cdk.JsiiProjectOptions = {
   githubOptions: GITHUB_OPTIONS,
   gitignore: GIT_IGNORE,
   buildWorkflow: true,
+  buildWorkflowOptions: {
+    preBuildSteps: [
+      {
+        name: 'Install Dependencies',
+        run: 'npm install',
+      },
+    ],
+  },
   release: true,
   bundledDeps: [
     '@aws-sdk/client-sts',
