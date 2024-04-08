@@ -17,16 +17,16 @@ tenant isolation is enforced when accessing tenant-specific resources.
 ```typescript
 import { TokenVendingMachine } from '@cdklabs/sbt-point-solutions-lib'
 
-new TokenVendingMachine(isValidateToken?: boolean)
+new TokenVendingMachine(shouldValidateToken?: boolean)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-point-solutions-lib.TokenVendingMachine.Initializer.parameter.isValidateToken">isValidateToken</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-point-solutions-lib.TokenVendingMachine.Initializer.parameter.shouldValidateToken">shouldValidateToken</a></code> | <code>boolean</code> | *No description.* |
 
 ---
 
-##### `isValidateToken`<sup>Optional</sup> <a name="isValidateToken" id="@cdklabs/sbt-point-solutions-lib.TokenVendingMachine.Initializer.parameter.isValidateToken"></a>
+##### `shouldValidateToken`<sup>Optional</sup> <a name="shouldValidateToken" id="@cdklabs/sbt-point-solutions-lib.TokenVendingMachine.Initializer.parameter.shouldValidateToken"></a>
 
 - *Type:* boolean
 
