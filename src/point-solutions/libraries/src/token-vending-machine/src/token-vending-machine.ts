@@ -13,7 +13,7 @@ import { JwksClient } from "jwks-rsa";
 export class TokenVendingMachine {
   private sts: STSClient;
 
-  constructor(private isValidateToken: boolean = false) {
+  constructor(private shouldValidateToken: boolean = false) {
     this.sts = new STSClient();
   }
 
@@ -96,10 +96,8 @@ export class TokenVendingMachine {
     const requestTagKeyValueArray: { Key: string; Value: string }[] = [];
 
     for (const key in requestTagKeysMappingAttributes) {
-      if (requestTagKeysMappingAttributes.hasOwnProperty(key)) {
-        const value = requestTagKeysMappingAttributes[key];
-        requestTagKeyValueArray.push({ Key: key, Value: decodedToken[value] });
-      }
+      const value = requestTagKeysMappingAttributes[key];
+      requestTagKeyValueArray.push({ Key: key, Value: decodedToken[value] });
     }
     return requestTagKeyValueArray;
   }
@@ -127,7 +125,7 @@ export class TokenVendingMachine {
    */
   public async assumeRole(jwtToken: string, ttl: number): Promise<string> {
     try {
-      if (this.isValidateToken === true) {
+      if (this.shouldValidateToken === true) {
         const idpDetails = process.env.IDP_DETAILS;
         if (!idpDetails) {
           throw new Error("IDP_DETAILS environment variable is not set");
