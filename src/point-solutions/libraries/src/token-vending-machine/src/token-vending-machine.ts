@@ -77,9 +77,7 @@ export class TokenVendingMachine {
       }
       const creds: string = JSON.stringify(response.Credentials);
 
-      return await new Promise<string>((resolve) => {
-        resolve(creds);
-      });
+      return creds;
     } catch (error: any) {
       console.error(
         `Error getting temporary credentials for role ${roleArn}:`,

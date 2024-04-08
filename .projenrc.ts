@@ -3,7 +3,6 @@
 
 import { awscdk, javascript, cdk } from 'projen';
 import { NpmAccess } from 'projen/lib/javascript';
-import { runTestsWorkflow } from './projenrc/run-tests-workflow';
 import {
   PULL_REQUEST_TEMPLATE,
   GITHUB_OPTIONS,
@@ -11,6 +10,7 @@ import {
   NPM_IGNORE_PATTERNS,
   ESLINT_RULE,
 } from './projenrc/constants';
+import { runTestsWorkflow } from './projenrc/run-tests-workflow';
 
 const GITHUB_USER: string = 'awslabs';
 const PUBLICATION_NAMESPACE: string = 'cdklabs';
