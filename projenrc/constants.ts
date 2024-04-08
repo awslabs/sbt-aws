@@ -1,4 +1,4 @@
-import { awscdk, javascript, cdk, github } from 'projen';
+import { github } from 'projen';
 import { GithubCredentials } from 'projen/lib/github';
 
 export const PULL_REQUEST_TEMPLATE: string[] = [

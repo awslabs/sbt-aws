@@ -1,8 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { awscdk, javascript, cdk, github } from 'projen';
-import { GithubCredentials } from 'projen/lib/github';
+import { awscdk, javascript, cdk } from 'projen';
 import { NpmAccess } from 'projen/lib/javascript';
 import { runTestsWorkflow } from './projenrc/run-tests-workflow';
 import {
