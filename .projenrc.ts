@@ -137,6 +137,12 @@ const jsiiLibraryProjectOptions: cdk.JsiiProjectOptions = {
     ],
   },
   release: true,
+  releaseWorkflowSetupSteps: [
+    {
+      name: 'Install Dependencies',
+      run: 'npm ci',
+    }
+  ],
   bundledDeps: [
     '@aws-sdk/client-sts',
     '@aws-sdk/client-ssm',
