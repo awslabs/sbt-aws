@@ -141,7 +141,7 @@ const jsiiLibraryProjectOptions: cdk.JsiiProjectOptions = {
     {
       name: 'Install Dependencies',
       run: 'npm ci',
-    }
+    },
   ],
   bundledDeps: [
     '@aws-sdk/client-sts',
