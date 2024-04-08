@@ -1,3 +1,6 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
+
 import { github } from 'projen';
 import { GithubCredentials } from 'projen/lib/github';
 
