@@ -2,11 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as cdk from 'aws-cdk-lib';
-import { CfnRule, EventBus, Rule } from 'aws-cdk-lib/aws-events';
+import { CfnRule, Rule } from 'aws-cdk-lib/aws-events';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { AwsSolutionsChecks } from 'cdk-nag';
 import { CognitoAuth, ControlPlane } from '.';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
+import { EventManager } from '../utils';
 
 export interface IntegStackProps extends cdk.StackProps {
   systemAdminEmail: string;
@@ -16,35 +17,23 @@ export class IntegStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props: IntegStackProps) {
     super(scope, id, props);
 
-    // for event bridge communication
-    const idpName = 'COGNITO';
-    const systemAdminRoleName = 'SystemAdmin';
-
     const cognitoAuth = new CognitoAuth(this, 'CognitoAuth', {
-      idpName: idpName,
-      systemAdminRoleName: systemAdminRoleName,
       systemAdminEmail: props.systemAdminEmail,
     });
 
-    const controlPlane = new ControlPlane(this, 'ControlPlane', {
-      auth: cognitoAuth,
-    });
+    const eventManager = new EventManager(this, 'EventManager');
 
-    const eventBus = EventBus.fromEventBusArn(
-      this,
-      'controlPlaneEventBus',
-      controlPlane.eventBusArn
-    );
+    new ControlPlane(this, 'ControlPlane', {
+      auth: cognitoAuth,
+      eventManager: eventManager,
+    });
 
     // for monitoring purposes
     const eventBusWatcherRule = new Rule(this, 'EventBusWatcherRule', {
-      eventBus: eventBus,
+      eventBus: eventManager.eventBus,
       enabled: true,
       eventPattern: {
-        source: [
-          controlPlane.eventManager.controlPlaneEventSource,
-          controlPlane.eventManager.applicationPlaneEventSource,
-        ],
+        source: [eventManager.controlPlaneEventSource, eventManager.applicationPlaneEventSource],
       },
     });
 

@@ -2,34 +2,21 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as cdk from 'aws-cdk-lib';
-import { EventBus } from 'aws-cdk-lib/aws-events';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IAuth } from './auth/auth-interface';
 import { IBilling, BillingProvider } from './billing';
 import { ControlPlaneAPI } from './control-plane-api';
-import { Messaging } from './messaging';
 import { Services } from './services';
 import { Tables } from './tables';
 import { TenantConfigService } from './tenant-config/tenant-config-service';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
-import { EventManager, setTemplateDesc, EventMetadata, DetailType } from '../utils';
+import { setTemplateDesc, DetailType, EventManager } from '../utils';
 
 export interface ControlPlaneProps {
   readonly auth: IAuth;
   readonly billing?: IBilling;
-  readonly eventMetadata?: EventMetadata;
-  /**
-   * The source to use when listening for events coming from the SBT control plane.
-   * This is used as the default if the IncomingEventMetadata source field is not set.
-   */
-  readonly controlPlaneEventSource?: string;
-
-  /**
-   * The source to use for outgoing events that will be placed on the EventBus.
-   * This is used as the default if the OutgoingEventMetadata source field is not set.
-   */
-  readonly applicationPlaneEventSource?: string;
+  readonly eventManager: EventManager;
 
   /**
    * (Optional) If true, the API Gateway will not log requests to the CloudWatch Logs.
@@ -39,8 +26,6 @@ export interface ControlPlaneProps {
 }
 
 export class ControlPlane extends Construct {
-  readonly eventBusArn: string;
-  readonly eventManager: EventManager;
   readonly controlPlaneAPIGatewayUrl: string;
   readonly tables: Tables;
 
@@ -50,20 +35,11 @@ export class ControlPlane extends Construct {
 
     cdk.Aspects.of(this).add(new DestroyPolicySetter());
 
-    const messaging = new Messaging(this, 'messaging-stack');
     this.tables = new Tables(this, 'tables-stack');
-
-    const eventBus = EventBus.fromEventBusArn(this, 'eventBus', messaging.eventBus.eventBusArn);
-    this.eventManager = new EventManager(this, 'EventManager', {
-      eventBus: eventBus,
-      eventMetadata: props.eventMetadata,
-      applicationPlaneEventSource: props.applicationPlaneEventSource,
-      controlPlaneEventSource: props.controlPlaneEventSource,
-    });
 
     const services = new Services(this, 'services-stack', {
       tables: this.tables,
-      eventManager: this.eventManager,
+      eventManager: props.eventManager,
     });
 
     const tenantConfigService = new TenantConfigService(this, 'auth-info-service-stack', {
@@ -80,15 +56,14 @@ export class ControlPlane extends Construct {
       tenantConfigServiceLambda: tenantConfigService.tenantConfigServiceLambda,
     });
 
-    this.eventBusArn = messaging.eventBus.eventBusArn;
     this.controlPlaneAPIGatewayUrl = controlPlaneAPI.apiUrl;
 
-    this.eventManager.addTargetToEvent(
+    props.eventManager.addTargetToEvent(
       DetailType.PROVISION_SUCCESS,
       controlPlaneAPI.tenantUpdateServiceTarget
     );
 
-    this.eventManager.addTargetToEvent(
+    props.eventManager.addTargetToEvent(
       DetailType.DEPROVISION_SUCCESS,
       controlPlaneAPI.tenantUpdateServiceTarget
     );
@@ -99,14 +74,14 @@ export class ControlPlane extends Construct {
     });
 
     new cdk.CfnOutput(this, 'eventBridgeArn', {
-      value: this.eventManager.eventBus.eventBusArn,
+      value: props.eventManager.eventBus.eventBusArn,
       key: 'eventBridgeArn',
     });
 
     if (props.billing) {
       const billingTemplate = new BillingProvider(this, 'Billing', {
         billing: props.billing,
-        eventManager: this.eventManager,
+        eventManager: props.eventManager,
         controlPlaneAPIBillingResource: controlPlaneAPI.billingResource,
       });
 

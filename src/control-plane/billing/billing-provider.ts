@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as cdk from 'aws-cdk-lib';
-import { IResource, Resource } from 'aws-cdk-lib/aws-apigateway';
+import { IResource } from 'aws-cdk-lib/aws-apigateway';
 import * as aws_events from 'aws-cdk-lib/aws-events';
 import * as event_targets from 'aws-cdk-lib/aws-events-targets';
 import { IFunction } from 'aws-cdk-lib/aws-lambda';
@@ -29,7 +29,7 @@ export interface BillingProviderProps {
    * An API Gateway Resource for the BillingProvider to use
    * when setting up API endpoints.
    */
-  readonly controlPlaneAPIBillingResource: Resource;
+  readonly controlPlaneAPIBillingResource: IResource;
 }
 
 /**

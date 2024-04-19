@@ -737,8 +737,6 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.controlPlaneAPIGatewayUrl">controlPlaneAPIGatewayUrl</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.eventBusArn">eventBusArn</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.tables">tables</a></code> | <code><a href="#@cdklabs/sbt-aws.Tables">Tables</a></code> | *No description.* |
 
 ---
@@ -762,26 +760,6 @@ public readonly controlPlaneAPIGatewayUrl: string;
 ```
 
 - *Type:* string
-
----
-
-##### `eventBusArn`<sup>Required</sup> <a name="eventBusArn" id="@cdklabs/sbt-aws.ControlPlane.property.eventBusArn"></a>
-
-```typescript
-public readonly eventBusArn: string;
-```
-
-- *Type:* string
-
----
-
-##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.ControlPlane.property.eventManager"></a>
-
-```typescript
-public readonly eventManager: EventManager;
-```
-
-- *Type:* <a href="#@cdklabs/sbt-aws.EventManager">EventManager</a>
 
 ---
 
@@ -1017,7 +995,6 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlane.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlane.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | *No description.* |
 
 ---
 
@@ -1033,16 +1010,6 @@ The tree node.
 
 ---
 
-##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.CoreApplicationPlane.property.eventManager"></a>
-
-```typescript
-public readonly eventManager: EventManager;
-```
-
-- *Type:* <a href="#@cdklabs/sbt-aws.EventManager">EventManager</a>
-
----
-
 
 ### EventManager <a name="EventManager" id="@cdklabs/sbt-aws.EventManager"></a>
 
@@ -1053,7 +1020,7 @@ Provides an EventManager to interact with the EventBus shared with the SBT contr
 ```typescript
 import { EventManager } from '@cdklabs/sbt-aws'
 
-new EventManager(scope: Construct, id: string, props: EventManagerProps)
+new EventManager(scope: Construct, id: string, props?: EventManagerProps)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -1076,7 +1043,7 @@ new EventManager(scope: Construct, id: string, props: EventManagerProps)
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.EventManager.Initializer.parameter.props"></a>
+##### `props`<sup>Optional</sup> <a name="props" id="@cdklabs/sbt-aws.EventManager.Initializer.parameter.props"></a>
 
 - *Type:* <a href="#@cdklabs/sbt-aws.EventManagerProps">EventManagerProps</a>
 
@@ -1156,7 +1123,7 @@ Any object.
 | <code><a href="#@cdklabs/sbt-aws.EventManager.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@cdklabs/sbt-aws.EventManager.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | The event source used for events emitted by the application plane. |
 | <code><a href="#@cdklabs/sbt-aws.EventManager.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The event source used for events emitted by the control plane. |
-| <code><a href="#@cdklabs/sbt-aws.EventManager.property.eventBus">eventBus</a></code> | <code>aws-cdk-lib.aws_events.IEventBus</code> | The event bus to register new rules with. |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.property.eventBus">eventBus</a></code> | <code>aws-cdk-lib.aws_events.IEventBus</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.EventManager.property.supportedEvents">supportedEvents</a></code> | <code>{[ key: string ]: string}</code> | List of recognized events that are available as triggers. |
 
 ---
@@ -1204,8 +1171,6 @@ public readonly eventBus: IEventBus;
 ```
 
 - *Type:* aws-cdk-lib.aws_events.IEventBus
-
-The event bus to register new rules with.
 
 ---
 
@@ -1378,109 +1343,6 @@ public readonly dataRepository: ITable;
 - *Type:* aws-cdk-lib.aws_dynamodb.ITable
 
 The DynamoDB table containing the aggregated data.
-
----
-
-
-### Messaging <a name="Messaging" id="@cdklabs/sbt-aws.Messaging"></a>
-
-#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.Messaging.Initializer"></a>
-
-```typescript
-import { Messaging } from '@cdklabs/sbt-aws'
-
-new Messaging(scope: Construct, id: string)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.Messaging.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Messaging.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-
----
-
-##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.Messaging.Initializer.parameter.scope"></a>
-
-- *Type:* constructs.Construct
-
----
-
-##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.Messaging.Initializer.parameter.id"></a>
-
-- *Type:* string
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.Messaging.toString">toString</a></code> | Returns a string representation of this construct. |
-
----
-
-##### `toString` <a name="toString" id="@cdklabs/sbt-aws.Messaging.toString"></a>
-
-```typescript
-public toString(): string
-```
-
-Returns a string representation of this construct.
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.Messaging.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
-
----
-
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.Messaging.isConstruct"></a>
-
-```typescript
-import { Messaging } from '@cdklabs/sbt-aws'
-
-Messaging.isConstruct(x: any)
-```
-
-Checks if `x` is a construct.
-
-###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.Messaging.isConstruct.parameter.x"></a>
-
-- *Type:* any
-
-Any object.
-
----
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.Messaging.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.Messaging.property.eventBus">eventBus</a></code> | <code>aws-cdk-lib.aws_events.EventBus</code> | *No description.* |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.Messaging.property.node"></a>
-
-```typescript
-public readonly node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `eventBus`<sup>Required</sup> <a name="eventBus" id="@cdklabs/sbt-aws.Messaging.property.eventBus"></a>
-
-```typescript
-public readonly eventBus: EventBus;
-```
-
-- *Type:* aws-cdk-lib.aws_events.EventBus
 
 ---
 
@@ -2311,7 +2173,7 @@ const billingProviderProps: BillingProviderProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.billing">billing</a></code> | <code><a href="#@cdklabs/sbt-aws.IBilling">IBilling</a></code> | An implementation of the IBilling interface. |
-| <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.controlPlaneAPIBillingResource">controlPlaneAPIBillingResource</a></code> | <code>aws-cdk-lib.aws_apigateway.Resource</code> | An API Gateway Resource for the BillingProvider to use when setting up API endpoints. |
+| <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.controlPlaneAPIBillingResource">controlPlaneAPIBillingResource</a></code> | <code>aws-cdk-lib.aws_apigateway.IResource</code> | An API Gateway Resource for the BillingProvider to use when setting up API endpoints. |
 | <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | An EventManager object to help coordinate events. |
 
 ---
@@ -2331,10 +2193,10 @@ An implementation of the IBilling interface.
 ##### `controlPlaneAPIBillingResource`<sup>Required</sup> <a name="controlPlaneAPIBillingResource" id="@cdklabs/sbt-aws.BillingProviderProps.property.controlPlaneAPIBillingResource"></a>
 
 ```typescript
-public readonly controlPlaneAPIBillingResource: Resource;
+public readonly controlPlaneAPIBillingResource: IResource;
 ```
 
-- *Type:* aws-cdk-lib.aws_apigateway.Resource
+- *Type:* aws-cdk-lib.aws_apigateway.IResource
 
 An API Gateway Resource for the BillingProvider to use when setting up API endpoints.
 
@@ -2368,22 +2230,9 @@ const cognitoAuthProps: CognitoAuthProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.idpName">idpName</a></code> | <code>string</code> | The name of the Identity Provider (IdP) for the control plane. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminEmail">systemAdminEmail</a></code> | <code>string</code> | The email address of the system admin. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminRoleName">systemAdminRoleName</a></code> | <code>string</code> | The name of the system admin role. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.controlPlaneCallbackURL">controlPlaneCallbackURL</a></code> | <code>string</code> | The callback URL for the control plane. |
-
----
-
-##### `idpName`<sup>Required</sup> <a name="idpName" id="@cdklabs/sbt-aws.CognitoAuthProps.property.idpName"></a>
-
-```typescript
-public readonly idpName: string;
-```
-
-- *Type:* string
-
-The name of the Identity Provider (IdP) for the control plane.
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminRoleName">systemAdminRoleName</a></code> | <code>string</code> | The name of the system admin role. |
 
 ---
 
@@ -2399,18 +2248,6 @@ The email address of the system admin.
 
 ---
 
-##### `systemAdminRoleName`<sup>Required</sup> <a name="systemAdminRoleName" id="@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminRoleName"></a>
-
-```typescript
-public readonly systemAdminRoleName: string;
-```
-
-- *Type:* string
-
-The name of the system admin role.
-
----
-
 ##### `controlPlaneCallbackURL`<sup>Optional</sup> <a name="controlPlaneCallbackURL" id="@cdklabs/sbt-aws.CognitoAuthProps.property.controlPlaneCallbackURL"></a>
 
 ```typescript
@@ -2423,6 +2260,18 @@ public readonly controlPlaneCallbackURL: string;
 The callback URL for the control plane.
 
 If not provided, defaults to 'http://localhost'.
+
+---
+
+##### `systemAdminRoleName`<sup>Optional</sup> <a name="systemAdminRoleName" id="@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminRoleName"></a>
+
+```typescript
+public readonly systemAdminRoleName: string;
+```
+
+- *Type:* string
+
+The name of the system admin role.
 
 ---
 
@@ -2502,11 +2351,9 @@ const controlPlaneProps: ControlPlaneProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.auth">auth</a></code> | <code><a href="#@cdklabs/sbt-aws.IAuth">IAuth</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | The source to use for outgoing events that will be placed on the EventBus. |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.billing">billing</a></code> | <code><a href="#@cdklabs/sbt-aws.IBilling">IBilling</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The source to use when listening for events coming from the SBT control plane. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.disableAPILogging">disableAPILogging</a></code> | <code>boolean</code> | (Optional) If true, the API Gateway will not log requests to the CloudWatch Logs. |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.eventMetadata">eventMetadata</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
 
 ---
 
@@ -2520,17 +2367,13 @@ public readonly auth: IAuth;
 
 ---
 
-##### `applicationPlaneEventSource`<sup>Optional</sup> <a name="applicationPlaneEventSource" id="@cdklabs/sbt-aws.ControlPlaneProps.property.applicationPlaneEventSource"></a>
+##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.ControlPlaneProps.property.eventManager"></a>
 
 ```typescript
-public readonly applicationPlaneEventSource: string;
+public readonly eventManager: EventManager;
 ```
 
-- *Type:* string
-
-The source to use for outgoing events that will be placed on the EventBus.
-
-This is used as the default if the OutgoingEventMetadata source field is not set.
+- *Type:* <a href="#@cdklabs/sbt-aws.EventManager">EventManager</a>
 
 ---
 
@@ -2541,20 +2384,6 @@ public readonly billing: IBilling;
 ```
 
 - *Type:* <a href="#@cdklabs/sbt-aws.IBilling">IBilling</a>
-
----
-
-##### `controlPlaneEventSource`<sup>Optional</sup> <a name="controlPlaneEventSource" id="@cdklabs/sbt-aws.ControlPlaneProps.property.controlPlaneEventSource"></a>
-
-```typescript
-public readonly controlPlaneEventSource: string;
-```
-
-- *Type:* string
-
-The source to use when listening for events coming from the SBT control plane.
-
-This is used as the default if the IncomingEventMetadata source field is not set.
 
 ---
 
@@ -2569,16 +2398,6 @@ public readonly disableAPILogging: boolean;
 (Optional) If true, the API Gateway will not log requests to the CloudWatch Logs.
 
 (Default: false)
-
----
-
-##### `eventMetadata`<sup>Optional</sup> <a name="eventMetadata" id="@cdklabs/sbt-aws.ControlPlaneProps.property.eventMetadata"></a>
-
-```typescript
-public readonly eventMetadata: {[ key: string ]: string};
-```
-
-- *Type:* {[ key: string ]: string}
 
 ---
 
@@ -2754,25 +2573,20 @@ const coreApplicationPlaneProps: CoreApplicationPlaneProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventBusArn">eventBusArn</a></code> | <code>string</code> | The arn belonging to the EventBus to listen for incoming messages. |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | The source to use for outgoing events that will be placed on the EventBus. |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The source to use when listening for events coming from the SBT control plane. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventMetadata">eventMetadata</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.jobRunnerPropsList">jobRunnerPropsList</a></code> | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps">CoreApplicationPlaneJobRunnerProps</a>[]</code> | The list of JobRunner definitions to create. |
 
 ---
 
-##### `eventBusArn`<sup>Required</sup> <a name="eventBusArn" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventBusArn"></a>
+##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventManager"></a>
 
 ```typescript
-public readonly eventBusArn: string;
+public readonly eventManager: EventManager;
 ```
 
-- *Type:* string
-
-The arn belonging to the EventBus to listen for incoming messages.
-
-This is also the EventBus on which the CoreApplicationPlane places outgoing messages on.
+- *Type:* <a href="#@cdklabs/sbt-aws.EventManager">EventManager</a>
 
 ---
 
@@ -2804,16 +2618,6 @@ This is used as the default if the IncomingEventMetadata source field is not set
 
 ---
 
-##### `eventMetadata`<sup>Optional</sup> <a name="eventMetadata" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventMetadata"></a>
-
-```typescript
-public readonly eventMetadata: {[ key: string ]: string};
-```
-
-- *Type:* {[ key: string ]: string}
-
----
-
 ##### `jobRunnerPropsList`<sup>Optional</sup> <a name="jobRunnerPropsList" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.jobRunnerPropsList"></a>
 
 ```typescript
@@ -2842,22 +2646,10 @@ const eventManagerProps: EventManagerProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | The name of the event source for events coming from the SBT application plane. |
+| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The name of the event source for events coming from the SBT control plane. |
 | <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.eventBus">eventBus</a></code> | <code>aws-cdk-lib.aws_events.IEventBus</code> | The event bus to register new rules with. |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | The source to use for outgoing events that will be placed on the EventBus. |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The source to use when listening for events coming from the SBT control plane. |
 | <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.eventMetadata">eventMetadata</a></code> | <code>{[ key: string ]: string}</code> | The EventMetadata to use to update the event defaults. |
-
----
-
-##### `eventBus`<sup>Required</sup> <a name="eventBus" id="@cdklabs/sbt-aws.EventManagerProps.property.eventBus"></a>
-
-```typescript
-public readonly eventBus: IEventBus;
-```
-
-- *Type:* aws-cdk-lib.aws_events.IEventBus
-
-The event bus to register new rules with.
 
 ---
 
@@ -2869,7 +2661,7 @@ public readonly applicationPlaneEventSource: string;
 
 - *Type:* string
 
-The source to use for outgoing events that will be placed on the EventBus.
+The name of the event source for events coming from the SBT application plane.
 
 ---
 
@@ -2881,7 +2673,21 @@ public readonly controlPlaneEventSource: string;
 
 - *Type:* string
 
-The source to use when listening for events coming from the SBT control plane.
+The name of the event source for events coming from the SBT control plane.
+
+---
+
+##### `eventBus`<sup>Optional</sup> <a name="eventBus" id="@cdklabs/sbt-aws.EventManagerProps.property.eventBus"></a>
+
+```typescript
+public readonly eventBus: IEventBus;
+```
+
+- *Type:* aws-cdk-lib.aws_events.IEventBus
+
+The event bus to register new rules with.
+
+One will be created if not provided.
 
 ---
 

@@ -1,14 +1,11 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import * as cdk from 'aws-cdk-lib';
-import { EventBus } from 'aws-cdk-lib/aws-events';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 import { BashJobOrchestrator } from './bash-job-orchestrator';
 import { BashJobRunner } from './bash-job-runner';
-import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
-import { EventManager, EventMetadata, DetailType, setTemplateDesc } from '../utils';
+import { EventManager, DetailType, setTemplateDesc } from '../utils';
 
 /**
  * Provides metadata for outgoing events.
@@ -108,11 +105,7 @@ export interface CoreApplicationPlaneJobRunnerProps {
  * Encapsulates the list of properties for a CoreApplicationPlane.
  */
 export interface CoreApplicationPlaneProps {
-  /**
-   * The arn belonging to the EventBus to listen for incoming messages.
-   * This is also the EventBus on which the CoreApplicationPlane places outgoing messages on.
-   */
-  readonly eventBusArn: string;
+  readonly eventManager: EventManager;
 
   /**
    * The source to use when listening for events coming from the SBT control plane.
@@ -130,8 +123,6 @@ export interface CoreApplicationPlaneProps {
    * The list of JobRunner definitions to create.
    */
   readonly jobRunnerPropsList?: CoreApplicationPlaneJobRunnerProps[];
-
-  readonly eventMetadata?: EventMetadata;
 }
 
 /**
@@ -141,22 +132,9 @@ export interface CoreApplicationPlaneProps {
  * and respond to events created by the control plane.
  */
 export class CoreApplicationPlane extends Construct {
-  readonly eventManager: EventManager;
-
   constructor(scope: Construct, id: string, props: CoreApplicationPlaneProps) {
     super(scope, id);
     setTemplateDesc(this, 'SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)');
-
-    cdk.Aspects.of(this).add(new DestroyPolicySetter());
-
-    const eventBus = EventBus.fromEventBusArn(this, 'eventBus', props.eventBusArn);
-
-    this.eventManager = new EventManager(this, 'EventManager', {
-      eventBus: eventBus,
-      eventMetadata: props.eventMetadata,
-      applicationPlaneEventSource: props.applicationPlaneEventSource,
-      controlPlaneEventSource: props.controlPlaneEventSource,
-    });
 
     props.jobRunnerPropsList?.forEach((jobRunnerProps) => {
       // Only BashJobOrchestrator requires differentiating between
@@ -181,9 +159,9 @@ export class CoreApplicationPlane extends Construct {
       });
 
       let jobOrchestrator = new BashJobOrchestrator(this, `${jobRunnerProps.name}-orchestrator`, {
-        targetEventBus: eventBus,
+        targetEventBus: props.eventManager.eventBus,
         detailType: jobRunnerProps.outgoingEvent,
-        eventSource: this.eventManager.supportedEvents[jobRunnerProps.outgoingEvent],
+        eventSource: props.eventManager.supportedEvents[jobRunnerProps.outgoingEvent],
         environmentVariablesToOutgoingEvent: jobRunnerProps.environmentVariablesToOutgoingEvent,
         environmentStringVariablesFromIncomingEvent:
           jobRunnerProps.environmentStringVariablesFromIncomingEvent,
@@ -192,7 +170,10 @@ export class CoreApplicationPlane extends Construct {
         bashJobRunner: job,
       });
 
-      this.eventManager.addTargetToEvent(jobRunnerProps.incomingEvent, jobOrchestrator.eventTarget);
+      props.eventManager.addTargetToEvent(
+        jobRunnerProps.incomingEvent,
+        jobOrchestrator.eventTarget
+      );
     });
   }
 }

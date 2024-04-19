@@ -22,9 +22,9 @@ import { IAuth } from './auth-interface';
  */
 export interface CognitoAuthProps {
   /**
-   * The name of the Identity Provider (IdP) for the control plane.
+   * The email address of the system admin.
    */
-  readonly idpName: string;
+  readonly systemAdminEmail: string;
 
   /**
    * The callback URL for the control plane. If not provided, defaults to 'http://localhost'.
@@ -34,13 +34,9 @@ export interface CognitoAuthProps {
 
   /**
    * The name of the system admin role.
+   * @default
    */
-  readonly systemAdminRoleName: string;
-
-  /**
-   * The email address of the system admin.
-   */
-  readonly systemAdminEmail: string;
+  readonly systemAdminRoleName?: string;
 }
 
 /**
@@ -110,6 +106,8 @@ export class CognitoAuth extends Construct implements IAuth {
   constructor(scope: Construct, id: string, props: CognitoAuthProps) {
     super(scope, id);
 
+    const idpName = 'COGNITO';
+    const systemAdminRoleName = props.systemAdminRoleName ?? 'SystemAdmin';
     const defaultControlPlaneCallbackURL = 'http://localhost';
 
     // https://docs.powertools.aws.dev/lambda/python/2.31.0/#lambda-layer
@@ -185,7 +183,7 @@ export class CognitoAuth extends Construct implements IAuth {
         role: lambdaIdpExecRole,
         layers: [lambdaPowertoolsLayer],
         environment: {
-          IDP_NAME: props.idpName,
+          IDP_NAME: idpName,
         },
       }
     );
@@ -197,7 +195,7 @@ export class CognitoAuth extends Construct implements IAuth {
         serviceToken: createControlPlaneIdpFunction.functionArn,
         properties: {
           ControlPlaneCallbackURL: props.controlPlaneCallbackURL || defaultControlPlaneCallbackURL,
-          SystemAdminRoleName: props.systemAdminRoleName,
+          SystemAdminRoleName: systemAdminRoleName,
           SystemAdminEmail: props.systemAdminEmail,
           UserPoolName: `SaaSControlPlaneUserPool-${this.node.addr}`,
         },
@@ -225,9 +223,9 @@ export class CognitoAuth extends Construct implements IAuth {
       role: lambdaIdpExecRole,
       layers: [lambdaPowertoolsLayer],
       environment: {
-        IDP_NAME: props.idpName,
+        IDP_NAME: idpName,
         IDP_DETAILS: this.controlPlaneIdpDetails,
-        SYS_ADMIN_ROLE_NAME: props.systemAdminRoleName,
+        SYS_ADMIN_ROLE_NAME: systemAdminRoleName,
       },
     });
     customAuthorizerFunction.node.addDependency(createControlPlaneIdpCustomResource);
@@ -296,7 +294,7 @@ export class CognitoAuth extends Construct implements IAuth {
       role: userManagementExecRole,
       layers: [lambdaPowertoolsLayer],
       environment: {
-        IDP_NAME: props.idpName,
+        IDP_NAME: idpName,
         IDP_DETAILS: this.controlPlaneIdpDetails,
       },
     });

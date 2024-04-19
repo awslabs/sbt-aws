@@ -5,7 +5,6 @@ export * from './auth/auth-interface';
 export * from './auth/cognito-auth';
 export * from './control-plane-api';
 export * from './control-plane';
-export * from './messaging';
 export * from './models/tenant';
 export * from './services';
 export * from './tables';

@@ -1,7 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { IEventBus, Rule, IRuleTarget } from 'aws-cdk-lib/aws-events';
+import { IEventBus, Rule, IRuleTarget, EventBus } from 'aws-cdk-lib/aws-events';
 import { Construct } from 'constructs';
 
 /**
@@ -117,9 +117,9 @@ export type EventMetadata = {
  */
 export interface EventManagerProps {
   /**
-   * The event bus to register new rules with.
+   * The event bus to register new rules with. One will be created if not provided.
    */
-  readonly eventBus: IEventBus;
+  readonly eventBus?: IEventBus;
 
   /**
    * The EventMetadata to use to update the event defaults.
@@ -127,12 +127,12 @@ export interface EventManagerProps {
   readonly eventMetadata?: EventMetadata;
 
   /**
-   * The source to use when listening for events coming from the SBT control plane.
+   * The name of the event source for events coming from the SBT control plane.
    */
   readonly controlPlaneEventSource?: string;
 
   /**
-   * The source to use for outgoing events that will be placed on the EventBus.
+   * The name of the event source for events coming from the SBT application plane.
    */
   readonly applicationPlaneEventSource?: string;
 }
@@ -158,20 +158,17 @@ export class EventManager extends Construct {
    */
   public readonly supportedEvents: EventMetadata;
 
-  /**
-   * The event bus to register new rules with.
-   */
   public readonly eventBus: IEventBus;
 
   private readonly connectedRules: Map<DetailType, Rule> = new Map<DetailType, Rule>();
 
-  constructor(scope: Construct, id: string, props: EventManagerProps) {
+  constructor(scope: Construct, id: string, props?: EventManagerProps) {
     super(scope, id);
-    this.eventBus = props.eventBus;
+    this.eventBus = props?.eventBus ?? new EventBus(this, 'SbtEventBus');
 
     this.applicationPlaneEventSource =
-      props.applicationPlaneEventSource || this.applicationPlaneEventSource;
-    this.controlPlaneEventSource = props.controlPlaneEventSource || this.controlPlaneEventSource;
+      props?.applicationPlaneEventSource || this.applicationPlaneEventSource;
+    this.controlPlaneEventSource = props?.controlPlaneEventSource || this.controlPlaneEventSource;
 
     this.supportedEvents = {
       onboardingRequest: this.controlPlaneEventSource,
@@ -196,7 +193,7 @@ export class EventManager extends Construct {
 
     for (const key in this.supportedEvents) {
       // update this.eventMetadata with any values passed in via props
-      if (props.eventMetadata && props.eventMetadata[key]) {
+      if (props?.eventMetadata && props?.eventMetadata[key]) {
         this.supportedEvents[key] = props.eventMetadata[key];
       }
     }
