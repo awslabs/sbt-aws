@@ -157,7 +157,7 @@ const jsiiLibraryProjectOptions: cdk.JsiiProjectOptions = {
     '@types/uuid',
     '@aws-sdk/types',
   ],
-  // TODO: Need to setup account in Pypi
+  // TODO: Need to setup account in  Pypi
   // publishToPypi: {
   //   distName: 'sbt_point_solutions_lib',
   //   module: 'sbt_point_solutions_lib',
