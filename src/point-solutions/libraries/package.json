@@ -1,5 +1,5 @@
 {
-  "name": "@cdklabs/sbt-point-solutions-lib",
+  "name": "@aws/sbt-point-solutions-lib",
   "description": "SaaS Builder Toolkit point solutions for AWS is a developer toolkit to implement SaaS best practices and increase developer velocity.",
   "repository": {
     "type": "git",
