@@ -14,6 +14,7 @@ import { runTestsWorkflow } from './projenrc/run-tests-workflow';
 
 const GITHUB_USER: string = 'awslabs';
 const PUBLICATION_NAMESPACE: string = 'cdklabs';
+const PS_PUBLICATION_NAMESPACE: string = 'aws';
 const PROJECT_NAME: string = 'sbt-aws';
 const PROJEN_VERSION: string = '0.80.18';
 const CDK_VERSION: string = '2.123.0';
@@ -108,7 +109,7 @@ const jsiiLibraryProjectOptions: cdk.JsiiProjectOptions = {
   licensed: true,
   maxNodeVersion: '20.x',
   minNodeVersion: '18.12.0',
-  name: `@${PUBLICATION_NAMESPACE}/${POINT_SOLUTIONS_LIB_PROJECT_NAME}`,
+  name: `@${PS_PUBLICATION_NAMESPACE}/${POINT_SOLUTIONS_LIB_PROJECT_NAME}`,
   npmignoreEnabled: true,
   packageManager: javascript.NodePackageManager.NPM,
   peerDeps: [`constructs@${CONSTRUCTS_VERSION}`, `aws-cdk-lib@${CDK_VERSION}`],
