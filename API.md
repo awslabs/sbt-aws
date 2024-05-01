@@ -2345,6 +2345,7 @@ public readonly systemAdminRoleName: string;
 ```
 
 - *Type:* string
+- *Default:* 'SystemAdmin'
 
 The name of the system admin role.
 
