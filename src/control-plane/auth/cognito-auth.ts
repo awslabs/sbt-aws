@@ -34,7 +34,7 @@ export interface CognitoAuthProps {
 
   /**
    * The name of the system admin role.
-   * @default
+   * @default 'SystemAdmin'
    */
   readonly systemAdminRoleName?: string;
 }
