@@ -200,7 +200,53 @@ describe('CoreApplicationPlane', () => {
         ),
       },
     });
+    cdk.Aspects.of(app).add(new AwsSolutionsChecks());
+  });
 
+  test('check that job runner role arn is set', () => {
+    const app = new cdk.App();
+    class CoreApplicationPlaneStack extends cdk.Stack {
+      readonly jobRunnerRoleArnMap: { [key: string]: string } = {};
+      constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+        super(scope, id, props);
+        const eventBus = new EventBus(this, 'EventBus');
+        const coreApplicationPlane = new CoreApplicationPlane(this, 'CoreApplicationPlane', {
+          eventBusArn: eventBus.eventBusArn,
+          controlPlaneEventSource: 'sbt-control-plane-api',
+          applicationPlaneEventSource: 'sbt-application-plane-api',
+          jobRunnerPropsList: [
+            {
+              name: 'provisioning',
+              outgoingEvent: DetailType.PROVISION_SUCCESS,
+              incomingEvent: DetailType.ONBOARDING_REQUEST,
+              permissions: PolicyDocument.fromJson(
+                JSON.parse(`{
+  "Version":"2012-10-17",
+  "Statement":[
+      {
+        "Action":[
+            "cloudformation:CreateStack"
+        ],
+        "Resource":"*",
+        "Effect":"Allow"
+      }
+  ]
+}
+`)
+              ),
+              script: '',
+              scriptEnvironmentVariables: {
+                MY_TEST_ENV_VAR: 'test env var',
+              },
+            },
+          ],
+        });
+        this.jobRunnerRoleArnMap = coreApplicationPlane.jobRunnerRoleArnMap;
+        cdk.Aspects.of(coreApplicationPlane).add(new DestroyPolicySetter());
+      }
+    }
+    const coreApplicationPlaneStack = new CoreApplicationPlaneStack(app, 'appPlaneStack');
+    expect(coreApplicationPlaneStack.jobRunnerRoleArnMap.provisioning).toBeTruthy();
     cdk.Aspects.of(app).add(new AwsSolutionsChecks());
   });
 });
