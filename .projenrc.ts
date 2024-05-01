@@ -6,7 +6,7 @@ import { NpmAccess } from 'projen/lib/javascript';
 import {
   PULL_REQUEST_TEMPLATE,
   GITHUB_OPTIONS,
-  GIT_IGNORE,
+  GIT_IGNORE_PATTERNS,
   NPM_IGNORE_PATTERNS,
   ESLINT_RULE,
 } from './projenrc/constants';
@@ -63,14 +63,14 @@ const project = new awscdk.AwsCdkConstructLibrary({
   sampleCode: false,
   stability: 'experimental',
   workflowNodeVersion: '20.x',
-
   npmTokenSecret: 'NPM_TOKEN',
   npmAccess: NpmAccess.PUBLIC,
   githubOptions: GITHUB_OPTIONS,
-  gitignore: GIT_IGNORE,
+  gitignore: GIT_IGNORE_PATTERNS,
+  npmIgnoreOptions: {
+    ignorePatterns: NPM_IGNORE_PATTERNS,
+  },
 });
-
-project.npmignore?.addPatterns(NPM_IGNORE_PATTERNS.join(','));
 
 // Add License header automatically
 project.eslint?.addPlugins('header');
@@ -127,7 +127,10 @@ const jsiiLibraryProjectOptions: cdk.JsiiProjectOptions = {
   npmTokenSecret: 'NPM_TOKEN',
   npmAccess: NpmAccess.PUBLIC,
   githubOptions: GITHUB_OPTIONS,
-  gitignore: GIT_IGNORE,
+  gitignore: GIT_IGNORE_PATTERNS,
+  npmIgnoreOptions: {
+    ignorePatterns: NPM_IGNORE_PATTERNS,
+  },
   buildWorkflow: true,
   buildWorkflowOptions: {
     preBuildSteps: [
@@ -165,8 +168,6 @@ const jsiiLibraryProjectOptions: cdk.JsiiProjectOptions = {
 };
 
 const pointSolutionsLibraryProject = new cdk.JsiiProject(jsiiLibraryProjectOptions);
-
-pointSolutionsLibraryProject.npmignore?.addPatterns(NPM_IGNORE_PATTERNS.join(','));
 
 // Add License header automatically
 pointSolutionsLibraryProject.eslint?.addPlugins('header');
