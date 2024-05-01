@@ -24,12 +24,6 @@ export class IntegStack extends cdk.Stack {
       eventBus = EventBus.fromEventBusArn(this, 'EventBus', props.eventBusArn);
       eventManager = new EventManager(this, 'EventManager', {
         eventBus: eventBus,
-        // an implicit assumption is being made here that for the following properties
-        // the default value defined in EventManager is being used:
-        // - eventMetadata
-        // - controlPlaneEventSource
-        // - applicationPlaneEventSource
-        // Given that this is simply for testing purposes, it should be fine.
       });
     } else {
       eventManager = new EventManager(this, 'EventManager');
@@ -150,7 +144,6 @@ echo "done!"
 
     const eventBusWatcherRule = new Rule(this, 'EventBusWatcherRule', {
       eventBus: eventBus,
-      enabled: true,
       eventPattern: {
         source: [eventManager.controlPlaneEventSource, eventManager.applicationPlaneEventSource],
       },
