@@ -1135,7 +1135,7 @@ Provides grantee the permissions to place events on the EventManager bus.
 
 - *Type:* aws-cdk-lib.aws_iam.IGrantable
 
-The detail type of the event to add a target to.
+The grantee resource that will be granted the permission(s).
 
 ---
 
@@ -3543,7 +3543,7 @@ Provides grantee the permissions to place events on the EventManager bus.
 
 - *Type:* aws-cdk-lib.aws_iam.IGrantable
 
-The detail type of the event to add a target to.
+The grantee resource that will be granted the permission(s).
 
 ---
 
