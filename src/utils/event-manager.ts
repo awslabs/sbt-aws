@@ -153,7 +153,9 @@ export class EventManager extends Construct implements IEventManager {
   public static readonly APP_PLANE_SOURCE: string = 'applicationPlaneEventSource';
   public static readonly CONTROL_PLANE_SOURCE: string = 'controlPlaneEventSource';
 
-  // sensible defaults so they are not required when instantiating control plane
+  /**
+   * List of recognized events that are available as triggers.
+   */
   public readonly supportedEvents: EventMetadata = {
     onboardingRequest: EventManager.CONTROL_PLANE_SOURCE,
     onboardingSuccess: EventManager.APP_PLANE_SOURCE,
@@ -174,7 +176,6 @@ export class EventManager extends Construct implements IEventManager {
     deactivateSuccess: EventManager.APP_PLANE_SOURCE,
     deactivateFailure: EventManager.APP_PLANE_SOURCE,
   };
-export class EventManager extends Construct {
   /**
    * The event source used for events emitted by the application plane.
    * @default
@@ -188,11 +189,6 @@ export class EventManager extends Construct {
   public readonly controlPlaneEventSource: string = 'controlPlaneEventSource';
 
   /**
-   * List of recognized events that are available as triggers.
-   */
-  public readonly supportedEvents: EventMetadata;
-
-  /**
    * The event bus to register new rules with.
    */
   public readonly eventBus: IEventBus;
@@ -202,30 +198,6 @@ export class EventManager extends Construct {
   constructor(scope: Construct, id: string, props: EventManagerProps) {
     super(scope, id);
     this.eventBus = props.eventBus;
-
-    // this.applicationPlaneEventSource = props.applicationPlaneEventSource || this.applicationPlaneEventSource;
-    // this.controlPlaneEventSource = props.controlPlaneEventSource || this.controlPlaneEventSource;
-
-    this.supportedEvents = {
-      onboardingRequest: this.controlPlaneEventSource,
-      onboardingSuccess: this.applicationPlaneEventSource,
-      onboardingFailure: this.applicationPlaneEventSource,
-      offboardingRequest: this.controlPlaneEventSource,
-      offboardingSuccess: this.applicationPlaneEventSource,
-      offboardingFailure: this.applicationPlaneEventSource,
-      provisionSuccess: this.applicationPlaneEventSource,
-      provisionFailure: this.applicationPlaneEventSource,
-      deprovisionSuccess: this.applicationPlaneEventSource,
-      deprovisionFailure: this.applicationPlaneEventSource,
-      billingSuccess: this.controlPlaneEventSource,
-      billingFailure: this.controlPlaneEventSource,
-      activateRequest: this.controlPlaneEventSource,
-      activateSuccess: this.applicationPlaneEventSource,
-      activateFailure: this.applicationPlaneEventSource,
-      deactivateRequest: this.controlPlaneEventSource,
-      deactivateSuccess: this.applicationPlaneEventSource,
-      deactivateFailure: this.applicationPlaneEventSource,
-    };
 
     for (const key in this.supportedEvents) {
       // update this.eventMetadata with any values passed in via props
