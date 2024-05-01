@@ -1018,6 +1018,7 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlane.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlane.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlane.property.jobRunnerRoleArnMap">jobRunnerRoleArnMap</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
 
 ---
 
@@ -1040,6 +1041,16 @@ public readonly eventManager: EventManager;
 ```
 
 - *Type:* <a href="#@cdklabs/sbt-aws.EventManager">EventManager</a>
+
+---
+
+##### `jobRunnerRoleArnMap`<sup>Required</sup> <a name="jobRunnerRoleArnMap" id="@cdklabs/sbt-aws.CoreApplicationPlane.property.jobRunnerRoleArnMap"></a>
+
+```typescript
+public readonly jobRunnerRoleArnMap: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
 
 ---
 

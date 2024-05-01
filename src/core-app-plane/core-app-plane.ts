@@ -142,9 +142,11 @@ export interface CoreApplicationPlaneProps {
  */
 export class CoreApplicationPlane extends Construct {
   readonly eventManager: EventManager;
+  readonly jobRunnerRoleArnMap: { [key: string]: string } = {};
 
   constructor(scope: Construct, id: string, props: CoreApplicationPlaneProps) {
     super(scope, id);
+
     setTemplateDesc(this, 'SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)');
 
     cdk.Aspects.of(this).add(new DestroyPolicySetter());
@@ -179,6 +181,8 @@ export class CoreApplicationPlane extends Construct {
         environmentVariablesToOutgoingEvent: jobRunnerProps.environmentVariablesToOutgoingEvent,
         scriptEnvironmentVariables: jobRunnerProps.scriptEnvironmentVariables,
       });
+
+      this.jobRunnerRoleArnMap[jobRunnerProps.name] = job.codebuildProject.role?.roleArn || '';
 
       let jobOrchestrator = new BashJobOrchestrator(this, `${jobRunnerProps.name}-orchestrator`, {
         targetEventBus: eventBus,
