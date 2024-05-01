@@ -271,6 +271,11 @@ The environment variables to export into the outgoing event once the BashJobRunn
 
 ### BillingProvider <a name="BillingProvider" id="@cdklabs/sbt-aws.BillingProvider"></a>
 
+Represents a Billing Provider that handles billing-related operations.
+
+This construct sets up event targets for various billing-related events
+and optionally creates an API Gateway resource for a webhook function.
+
 #### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.BillingProvider.Initializer"></a>
 
 ```typescript
@@ -281,9 +286,9 @@ new BillingProvider(scope: Construct, id: string, props: BillingProviderProps)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.BillingProviderProps">BillingProviderProps</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | The scope in which to define this construct. |
+| <code><a href="#@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.id">id</a></code> | <code>string</code> | The unique ID of this construct. |
+| <code><a href="#@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.BillingProviderProps">BillingProviderProps</a></code> | The properties for the BillingProvider. |
 
 ---
 
@@ -291,17 +296,23 @@ new BillingProvider(scope: Construct, id: string, props: BillingProviderProps)
 
 - *Type:* constructs.Construct
 
+The scope in which to define this construct.
+
 ---
 
 ##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.id"></a>
 
 - *Type:* string
 
+The unique ID of this construct.
+
 ---
 
 ##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.props"></a>
 
 - *Type:* <a href="#@cdklabs/sbt-aws.BillingProviderProps">BillingProviderProps</a>
+
+The properties for the BillingProvider.
 
 ---
 
@@ -387,6 +398,8 @@ Only set when the IBilling webhookFunction is defined.
 
 - *Implements:* <a href="#@cdklabs/sbt-aws.IAuth">IAuth</a>
 
+Constructs for setting up Cognito authentication and user management.
+
 #### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.CognitoAuth.Initializer"></a>
 
 ```typescript
@@ -468,18 +481,18 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.authorizationServer">authorizationServer</a></code> | <code>string</code> | Authorization server Url. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.authorizer">authorizer</a></code> | <code>aws-cdk-lib.aws_apigateway.IAuthorizer</code> | Authorizer referenced by the ControlPlaneAPI. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.clientId">clientId</a></code> | <code>string</code> | The OAuth clientId for the identity provider. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.controlPlaneIdpDetails">controlPlaneIdpDetails</a></code> | <code>any</code> | Contains any information relevant to the IDP implementation required by the Authorizer and User Function implementations. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.createUserFunction">createUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- POST /users. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.deleteUserFunction">deleteUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- DELETE /user/{username}. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.disableUserFunction">disableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- PUT /user/{username}/disable. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.enableUserFunction">enableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- PUT /user/{username}/enable. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchAllUsersFunction">fetchAllUsersFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- GET /users. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchUserFunction">fetchUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- GET /user/{username}. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.updateUserFunction">updateUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- PUT /user/{username}. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.wellKnownEndpointUrl">wellKnownEndpointUrl</a></code> | <code>string</code> | OpenID configuration Url. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.authorizationServer">authorizationServer</a></code> | <code>string</code> | The authorization server for the control plane IdP. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.authorizer">authorizer</a></code> | <code>aws-cdk-lib.aws_apigateway.IAuthorizer</code> | The API Gateway authorizer for authenticating requests. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.clientId">clientId</a></code> | <code>string</code> | The client ID for the control plane IdP. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.controlPlaneIdpDetails">controlPlaneIdpDetails</a></code> | <code>any</code> | The details of the control plane Identity Provider (IdP). |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.createUserFunction">createUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for creating a user. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.deleteUserFunction">deleteUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for deleting a user. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.disableUserFunction">disableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for disabling a user. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.enableUserFunction">enableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for enabling a user. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchAllUsersFunction">fetchAllUsersFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for fetching all users. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchUserFunction">fetchUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for fetching a user. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.updateUserFunction">updateUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for updating a user. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.wellKnownEndpointUrl">wellKnownEndpointUrl</a></code> | <code>string</code> | The well-known endpoint URL for the control plane IdP. |
 
 ---
 
@@ -503,7 +516,7 @@ public readonly authorizationServer: string;
 
 - *Type:* string
 
-Authorization server Url.
+The authorization server for the control plane IdP.
 
 ---
 
@@ -515,7 +528,7 @@ public readonly authorizer: IAuthorizer;
 
 - *Type:* aws-cdk-lib.aws_apigateway.IAuthorizer
 
-Authorizer referenced by the ControlPlaneAPI.
+The API Gateway authorizer for authenticating requests.
 
 ---
 
@@ -527,7 +540,7 @@ public readonly clientId: string;
 
 - *Type:* string
 
-The OAuth clientId for the identity provider.
+The client ID for the control plane IdP.
 
 ---
 
@@ -539,7 +552,7 @@ public readonly controlPlaneIdpDetails: any;
 
 - *Type:* any
 
-Contains any information relevant to the IDP implementation required by the Authorizer and User Function implementations.
+The details of the control plane Identity Provider (IdP).
 
 ---
 
@@ -551,7 +564,7 @@ public readonly createUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
-Function referenced by the ControlPlaneAPI -- POST /users.
+The Lambda function for creating a user.
 
 ---
 
@@ -563,7 +576,7 @@ public readonly deleteUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
-Function referenced by the ControlPlaneAPI -- DELETE /user/{username}.
+The Lambda function for deleting a user.
 
 ---
 
@@ -575,7 +588,7 @@ public readonly disableUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
-Function referenced by the ControlPlaneAPI -- PUT /user/{username}/disable.
+The Lambda function for disabling a user.
 
 ---
 
@@ -587,7 +600,7 @@ public readonly enableUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
-Function referenced by the ControlPlaneAPI -- PUT /user/{username}/enable.
+The Lambda function for enabling a user.
 
 ---
 
@@ -599,7 +612,7 @@ public readonly fetchAllUsersFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
-Function referenced by the ControlPlaneAPI -- GET /users.
+The Lambda function for fetching all users.
 
 ---
 
@@ -611,7 +624,7 @@ public readonly fetchUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
-Function referenced by the ControlPlaneAPI -- GET /user/{username}.
+The Lambda function for fetching a user.
 
 ---
 
@@ -623,7 +636,7 @@ public readonly updateUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
-Function referenced by the ControlPlaneAPI -- PUT /user/{username}.
+The Lambda function for updating a user.
 
 ---
 
@@ -635,7 +648,7 @@ public readonly wellKnownEndpointUrl: string;
 
 - *Type:* string
 
-OpenID configuration Url.
+The well-known endpoint URL for the control plane IdP.
 
 ---
 
@@ -1033,7 +1046,7 @@ public readonly eventManager: EventManager;
 
 ### EventManager <a name="EventManager" id="@cdklabs/sbt-aws.EventManager"></a>
 
-Provides an EventManager to help interact with the EventBus shared with the SBT control plane.
+Provides an EventManager to interact with the EventBus shared with the SBT control plane.
 
 #### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.EventManager.Initializer"></a>
 
@@ -1098,7 +1111,7 @@ Adds an IRuleTarget to an event.
 
 - *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
 
-The name of the event to add a target to.
+The detail type of the event to add a target to.
 
 ---
 
@@ -1141,10 +1154,10 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.EventManager.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.EventManager.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventManager.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | The event source used for events emitted by the application plane. |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The event source used for events emitted by the control plane. |
 | <code><a href="#@cdklabs/sbt-aws.EventManager.property.eventBus">eventBus</a></code> | <code>aws-cdk-lib.aws_events.IEventBus</code> | The event bus to register new rules with. |
-| <code><a href="#@cdklabs/sbt-aws.EventManager.property.supportedEvents">supportedEvents</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.property.supportedEvents">supportedEvents</a></code> | <code>{[ key: string ]: string}</code> | List of recognized events that are available as triggers. |
 
 ---
 
@@ -1168,6 +1181,8 @@ public readonly applicationPlaneEventSource: string;
 
 - *Type:* string
 
+The event source used for events emitted by the application plane.
+
 ---
 
 ##### `controlPlaneEventSource`<sup>Required</sup> <a name="controlPlaneEventSource" id="@cdklabs/sbt-aws.EventManager.property.controlPlaneEventSource"></a>
@@ -1177,6 +1192,8 @@ public readonly controlPlaneEventSource: string;
 ```
 
 - *Type:* string
+
+The event source used for events emitted by the control plane.
 
 ---
 
@@ -1199,6 +1216,8 @@ public readonly supportedEvents: {[ key: string ]: string};
 ```
 
 - *Type:* {[ key: string ]: string}
+
+List of recognized events that are available as triggers.
 
 ---
 
@@ -2335,6 +2354,8 @@ An EventManager object to help coordinate events.
 
 ### CognitoAuthProps <a name="CognitoAuthProps" id="@cdklabs/sbt-aws.CognitoAuthProps"></a>
 
+Properties for the CognitoAuth construct.
+
 #### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.CognitoAuthProps.Initializer"></a>
 
 ```typescript
@@ -2347,10 +2368,10 @@ const cognitoAuthProps: CognitoAuthProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.idpName">idpName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminEmail">systemAdminEmail</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminRoleName">systemAdminRoleName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.controlPlaneCallbackURL">controlPlaneCallbackURL</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.idpName">idpName</a></code> | <code>string</code> | The name of the Identity Provider (IdP) for the control plane. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminEmail">systemAdminEmail</a></code> | <code>string</code> | The email address of the system admin. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminRoleName">systemAdminRoleName</a></code> | <code>string</code> | The name of the system admin role. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.controlPlaneCallbackURL">controlPlaneCallbackURL</a></code> | <code>string</code> | The callback URL for the control plane. |
 
 ---
 
@@ -2362,6 +2383,8 @@ public readonly idpName: string;
 
 - *Type:* string
 
+The name of the Identity Provider (IdP) for the control plane.
+
 ---
 
 ##### `systemAdminEmail`<sup>Required</sup> <a name="systemAdminEmail" id="@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminEmail"></a>
@@ -2371,6 +2394,8 @@ public readonly systemAdminEmail: string;
 ```
 
 - *Type:* string
+
+The email address of the system admin.
 
 ---
 
@@ -2382,6 +2407,8 @@ public readonly systemAdminRoleName: string;
 
 - *Type:* string
 
+The name of the system admin role.
+
 ---
 
 ##### `controlPlaneCallbackURL`<sup>Optional</sup> <a name="controlPlaneCallbackURL" id="@cdklabs/sbt-aws.CognitoAuthProps.property.controlPlaneCallbackURL"></a>
@@ -2391,6 +2418,11 @@ public readonly controlPlaneCallbackURL: string;
 ```
 
 - *Type:* string
+- *Default:* 'http://localhost'
+
+The callback URL for the control plane.
+
+If not provided, defaults to 'http://localhost'.
 
 ---
 
@@ -2411,6 +2443,7 @@ const controlPlaneAPIProps: ControlPlaneAPIProps = { ... }
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.auth">auth</a></code> | <code><a href="#@cdklabs/sbt-aws.IAuth">IAuth</a></code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.services">services</a></code> | <code><a href="#@cdklabs/sbt-aws.Services">Services</a></code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.tenantConfigServiceLambda">tenantConfigServiceLambda</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.disableAPILogging">disableAPILogging</a></code> | <code>boolean</code> | *No description.* |
 
 ---
 
@@ -2444,6 +2477,16 @@ public readonly tenantConfigServiceLambda: Function;
 
 ---
 
+##### `disableAPILogging`<sup>Optional</sup> <a name="disableAPILogging" id="@cdklabs/sbt-aws.ControlPlaneAPIProps.property.disableAPILogging"></a>
+
+```typescript
+public readonly disableAPILogging: boolean;
+```
+
+- *Type:* boolean
+
+---
+
 ### ControlPlaneProps <a name="ControlPlaneProps" id="@cdklabs/sbt-aws.ControlPlaneProps"></a>
 
 #### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.ControlPlaneProps.Initializer"></a>
@@ -2462,6 +2505,7 @@ const controlPlaneProps: ControlPlaneProps = { ... }
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | The source to use for outgoing events that will be placed on the EventBus. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.billing">billing</a></code> | <code><a href="#@cdklabs/sbt-aws.IBilling">IBilling</a></code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The source to use when listening for events coming from the SBT control plane. |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.disableAPILogging">disableAPILogging</a></code> | <code>boolean</code> | (Optional) If true, the API Gateway will not log requests to the CloudWatch Logs. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.eventMetadata">eventMetadata</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
 
 ---
@@ -2511,6 +2555,20 @@ public readonly controlPlaneEventSource: string;
 The source to use when listening for events coming from the SBT control plane.
 
 This is used as the default if the IncomingEventMetadata source field is not set.
+
+---
+
+##### `disableAPILogging`<sup>Optional</sup> <a name="disableAPILogging" id="@cdklabs/sbt-aws.ControlPlaneProps.property.disableAPILogging"></a>
+
+```typescript
+public readonly disableAPILogging: boolean;
+```
+
+- *Type:* boolean
+
+(Optional) If true, the API Gateway will not log requests to the CloudWatch Logs.
+
+(Default: false)
 
 ---
 
@@ -2770,7 +2828,7 @@ The list of JobRunner definitions to create.
 
 ### EventManagerProps <a name="EventManagerProps" id="@cdklabs/sbt-aws.EventManagerProps"></a>
 
-Encapsulates the list of properties for an eventManager.
+Encapsulates the properties for an EventManager.
 
 #### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.EventManagerProps.Initializer"></a>
 
@@ -3501,40 +3559,74 @@ Encapsulates the list of properties for an IBilling construct.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.IBilling.property.createUserFunction">createUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger when creating a new billing user. |
-| <code><a href="#@cdklabs/sbt-aws.IBilling.property.deleteUserFunction">deleteUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger when deleting a billing user. |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.createCustomerFunction">createCustomerFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction \| <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a></code> | The function to trigger to create a new customer. |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.deleteCustomerFunction">deleteCustomerFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction \| <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a></code> | The function to trigger to delete a customer. |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.createUserFunction">createUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction \| <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a></code> | The function to trigger to create a new user. |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.deleteUserFunction">deleteUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction \| <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a></code> | The function to trigger to delete a user. |
 | <code><a href="#@cdklabs/sbt-aws.IBilling.property.ingestor">ingestor</a></code> | <code><a href="#@cdklabs/sbt-aws.IDataIngestorAggregator">IDataIngestorAggregator</a></code> | The IDataIngestorAggregator responsible for accepting and aggregating the raw billing data. |
-| <code><a href="#@cdklabs/sbt-aws.IBilling.property.putUsageFunction">putUsageFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function responsible for taking the aggregated data and pushing that to the billing provider. |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.putUsageFunction">putUsageFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction \| <a href="#@cdklabs/sbt-aws.IFunctionSchedule">IFunctionSchedule</a></code> | The function responsible for taking the aggregated data and pushing that to the billing provider. |
 | <code><a href="#@cdklabs/sbt-aws.IBilling.property.webhookFunction">webhookFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger when a webhook request is received. |
 | <code><a href="#@cdklabs/sbt-aws.IBilling.property.webhookPath">webhookPath</a></code> | <code>string</code> | The path to the webhook resource. |
 
 ---
 
-##### `createUserFunction`<sup>Required</sup> <a name="createUserFunction" id="@cdklabs/sbt-aws.IBilling.property.createUserFunction"></a>
+##### `createCustomerFunction`<sup>Required</sup> <a name="createCustomerFunction" id="@cdklabs/sbt-aws.IBilling.property.createCustomerFunction"></a>
 
 ```typescript
-public readonly createUserFunction: IFunction;
+public readonly createCustomerFunction: IFunction | IFunctionTrigger;
 ```
 
-- *Type:* aws-cdk-lib.aws_lambda.IFunction
+- *Type:* aws-cdk-lib.aws_lambda.IFunction | <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a>
 
-The function to trigger when creating a new billing user.
+The function to trigger to create a new customer.
+
+(Customer in this context is an entity that has zero or more Users.)
 
 ---
 
-##### `deleteUserFunction`<sup>Required</sup> <a name="deleteUserFunction" id="@cdklabs/sbt-aws.IBilling.property.deleteUserFunction"></a>
+##### `deleteCustomerFunction`<sup>Required</sup> <a name="deleteCustomerFunction" id="@cdklabs/sbt-aws.IBilling.property.deleteCustomerFunction"></a>
 
 ```typescript
-public readonly deleteUserFunction: IFunction;
+public readonly deleteCustomerFunction: IFunction | IFunctionTrigger;
 ```
 
-- *Type:* aws-cdk-lib.aws_lambda.IFunction
+- *Type:* aws-cdk-lib.aws_lambda.IFunction | <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a>
 
-The function to trigger when deleting a billing user.
+The function to trigger to delete a customer.
+
+(Customer in this context is an entity that has zero or more Users.)
 
 ---
 
-##### `ingestor`<sup>Required</sup> <a name="ingestor" id="@cdklabs/sbt-aws.IBilling.property.ingestor"></a>
+##### `createUserFunction`<sup>Optional</sup> <a name="createUserFunction" id="@cdklabs/sbt-aws.IBilling.property.createUserFunction"></a>
+
+```typescript
+public readonly createUserFunction: IFunction | IFunctionTrigger;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.IFunction | <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a>
+
+The function to trigger to create a new user.
+
+(User in this context is an entity that belongs to a Customer.)
+
+---
+
+##### `deleteUserFunction`<sup>Optional</sup> <a name="deleteUserFunction" id="@cdklabs/sbt-aws.IBilling.property.deleteUserFunction"></a>
+
+```typescript
+public readonly deleteUserFunction: IFunction | IFunctionTrigger;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.IFunction | <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a>
+
+The function to trigger to delete a user.
+
+(User in this context is an entity that belongs to a Customer.)
+
+---
+
+##### `ingestor`<sup>Optional</sup> <a name="ingestor" id="@cdklabs/sbt-aws.IBilling.property.ingestor"></a>
 
 ```typescript
 public readonly ingestor: IDataIngestorAggregator;
@@ -3546,13 +3638,13 @@ The IDataIngestorAggregator responsible for accepting and aggregating the raw bi
 
 ---
 
-##### `putUsageFunction`<sup>Required</sup> <a name="putUsageFunction" id="@cdklabs/sbt-aws.IBilling.property.putUsageFunction"></a>
+##### `putUsageFunction`<sup>Optional</sup> <a name="putUsageFunction" id="@cdklabs/sbt-aws.IBilling.property.putUsageFunction"></a>
 
 ```typescript
-public readonly putUsageFunction: IFunction;
+public readonly putUsageFunction: IFunction | IFunctionSchedule;
 ```
 
-- *Type:* aws-cdk-lib.aws_lambda.IFunction
+- *Type:* aws-cdk-lib.aws_lambda.IFunction | <a href="#@cdklabs/sbt-aws.IFunctionSchedule">IFunctionSchedule</a>
 
 The function responsible for taking the aggregated data and pushing that to the billing provider.
 
@@ -3635,126 +3727,264 @@ The table containing the aggregated data.
 
 ---
 
+### IFunctionSchedule <a name="IFunctionSchedule" id="@cdklabs/sbt-aws.IFunctionSchedule"></a>
+
+- *Implemented By:* <a href="#@cdklabs/sbt-aws.IFunctionSchedule">IFunctionSchedule</a>
+
+Optional interface that allows specifying both the function to trigger and the schedule by which to trigger it.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.IFunctionSchedule.property.handler">handler</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function definition. |
+| <code><a href="#@cdklabs/sbt-aws.IFunctionSchedule.property.schedule">schedule</a></code> | <code>aws-cdk-lib.aws_events.Schedule</code> | The schedule that will trigger the handler function. |
+
+---
+
+##### `handler`<sup>Required</sup> <a name="handler" id="@cdklabs/sbt-aws.IFunctionSchedule.property.handler"></a>
+
+```typescript
+public readonly handler: IFunction;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.IFunction
+
+The function definition.
+
+---
+
+##### `schedule`<sup>Required</sup> <a name="schedule" id="@cdklabs/sbt-aws.IFunctionSchedule.property.schedule"></a>
+
+```typescript
+public readonly schedule: Schedule;
+```
+
+- *Type:* aws-cdk-lib.aws_events.Schedule
+
+The schedule that will trigger the handler function.
+
+---
+
+### IFunctionTrigger <a name="IFunctionTrigger" id="@cdklabs/sbt-aws.IFunctionTrigger"></a>
+
+- *Implemented By:* <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a>
+
+Optional interface that allows specifying both the function to trigger and the event that will trigger it.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.IFunctionTrigger.property.handler">handler</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function definition. |
+| <code><a href="#@cdklabs/sbt-aws.IFunctionTrigger.property.trigger">trigger</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The detail-type that will trigger the handler function. |
+
+---
+
+##### `handler`<sup>Required</sup> <a name="handler" id="@cdklabs/sbt-aws.IFunctionTrigger.property.handler"></a>
+
+```typescript
+public readonly handler: IFunction;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.IFunction
+
+The function definition.
+
+---
+
+##### `trigger`<sup>Required</sup> <a name="trigger" id="@cdklabs/sbt-aws.IFunctionTrigger.property.trigger"></a>
+
+```typescript
+public readonly trigger: DetailType;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+
+The detail-type that will trigger the handler function.
+
+---
+
 ## Enums <a name="Enums" id="Enums"></a>
 
 ### DetailType <a name="DetailType" id="@cdklabs/sbt-aws.DetailType"></a>
 
-Provides an easy way of accessing event DetailTypes.
+Provides an easy way of accessing event detail types.
 
-Note that the string represents the detailTypes used in
+The string values represent the "detail-type" used in
 events sent across the EventBus.
 
 #### Members <a name="Members" id="Members"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.ONBOARDING_REQUEST">ONBOARDING_REQUEST</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.ONBOARDING_SUCCESS">ONBOARDING_SUCCESS</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.ONBOARDING_FAILURE">ONBOARDING_FAILURE</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.OFFBOARDING_REQUEST">OFFBOARDING_REQUEST</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.OFFBOARDING_SUCCESS">OFFBOARDING_SUCCESS</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.OFFBOARDING_FAILURE">OFFBOARDING_FAILURE</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.PROVISION_SUCCESS">PROVISION_SUCCESS</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.PROVISION_FAILURE">PROVISION_FAILURE</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.DEPROVISION_SUCCESS">DEPROVISION_SUCCESS</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.DEPROVISION_FAILURE">DEPROVISION_FAILURE</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.BILLING_SUCCESS">BILLING_SUCCESS</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.BILLING_FAILURE">BILLING_FAILURE</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.ACTIVATE_REQUEST">ACTIVATE_REQUEST</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.ACTIVATE_SUCCESS">ACTIVATE_SUCCESS</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.ACTIVATE_FAILURE">ACTIVATE_FAILURE</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.DEACTIVATE_REQUEST">DEACTIVATE_REQUEST</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.DEACTIVATE_SUCCESS">DEACTIVATE_SUCCESS</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.DEACTIVATE_FAILURE">DEACTIVATE_FAILURE</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.ONBOARDING_REQUEST">ONBOARDING_REQUEST</a></code> | Event detail type for onboarding request. |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.ONBOARDING_SUCCESS">ONBOARDING_SUCCESS</a></code> | Event detail type for successful onboarding. |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.ONBOARDING_FAILURE">ONBOARDING_FAILURE</a></code> | Event detail type for failed onboarding. |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.OFFBOARDING_REQUEST">OFFBOARDING_REQUEST</a></code> | Event detail type for offboarding request. |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.OFFBOARDING_SUCCESS">OFFBOARDING_SUCCESS</a></code> | Event detail type for successful offboarding. |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.OFFBOARDING_FAILURE">OFFBOARDING_FAILURE</a></code> | Event detail type for failed offboarding. |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.PROVISION_SUCCESS">PROVISION_SUCCESS</a></code> | Event detail type for successful provisioning. |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.PROVISION_FAILURE">PROVISION_FAILURE</a></code> | Event detail type for failed provisioning. |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.DEPROVISION_SUCCESS">DEPROVISION_SUCCESS</a></code> | Event detail type for successful deprovisioning. |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.DEPROVISION_FAILURE">DEPROVISION_FAILURE</a></code> | Event detail type for failed deprovisioning. |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.BILLING_SUCCESS">BILLING_SUCCESS</a></code> | Event detail type for successful billing configuration. |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.BILLING_FAILURE">BILLING_FAILURE</a></code> | Event detail type for failure to configure billing. |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.ACTIVATE_REQUEST">ACTIVATE_REQUEST</a></code> | Event detail type for activation request. |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.ACTIVATE_SUCCESS">ACTIVATE_SUCCESS</a></code> | Event detail type for successful activation. |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.ACTIVATE_FAILURE">ACTIVATE_FAILURE</a></code> | Event detail type for failed activation. |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.DEACTIVATE_REQUEST">DEACTIVATE_REQUEST</a></code> | Event detail type for deactivation request. |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.DEACTIVATE_SUCCESS">DEACTIVATE_SUCCESS</a></code> | Event detail type for successful deactivation. |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.DEACTIVATE_FAILURE">DEACTIVATE_FAILURE</a></code> | Event detail type for failed deactivation. |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.TENANT_USER_CREATED">TENANT_USER_CREATED</a></code> | Event detail type for user creation on the app-plane side. |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.TENANT_USER_DELETED">TENANT_USER_DELETED</a></code> | Event detail type for user deletion on the app-plane side. |
 
 ---
 
 ##### `ONBOARDING_REQUEST` <a name="ONBOARDING_REQUEST" id="@cdklabs/sbt-aws.DetailType.ONBOARDING_REQUEST"></a>
+
+Event detail type for onboarding request.
 
 ---
 
 
 ##### `ONBOARDING_SUCCESS` <a name="ONBOARDING_SUCCESS" id="@cdklabs/sbt-aws.DetailType.ONBOARDING_SUCCESS"></a>
 
+Event detail type for successful onboarding.
+
 ---
 
 
 ##### `ONBOARDING_FAILURE` <a name="ONBOARDING_FAILURE" id="@cdklabs/sbt-aws.DetailType.ONBOARDING_FAILURE"></a>
+
+Event detail type for failed onboarding.
 
 ---
 
 
 ##### `OFFBOARDING_REQUEST` <a name="OFFBOARDING_REQUEST" id="@cdklabs/sbt-aws.DetailType.OFFBOARDING_REQUEST"></a>
 
+Event detail type for offboarding request.
+
 ---
 
 
 ##### `OFFBOARDING_SUCCESS` <a name="OFFBOARDING_SUCCESS" id="@cdklabs/sbt-aws.DetailType.OFFBOARDING_SUCCESS"></a>
+
+Event detail type for successful offboarding.
 
 ---
 
 
 ##### `OFFBOARDING_FAILURE` <a name="OFFBOARDING_FAILURE" id="@cdklabs/sbt-aws.DetailType.OFFBOARDING_FAILURE"></a>
 
+Event detail type for failed offboarding.
+
 ---
 
 
 ##### `PROVISION_SUCCESS` <a name="PROVISION_SUCCESS" id="@cdklabs/sbt-aws.DetailType.PROVISION_SUCCESS"></a>
+
+Event detail type for successful provisioning.
 
 ---
 
 
 ##### `PROVISION_FAILURE` <a name="PROVISION_FAILURE" id="@cdklabs/sbt-aws.DetailType.PROVISION_FAILURE"></a>
 
+Event detail type for failed provisioning.
+
 ---
 
 
 ##### `DEPROVISION_SUCCESS` <a name="DEPROVISION_SUCCESS" id="@cdklabs/sbt-aws.DetailType.DEPROVISION_SUCCESS"></a>
+
+Event detail type for successful deprovisioning.
 
 ---
 
 
 ##### `DEPROVISION_FAILURE` <a name="DEPROVISION_FAILURE" id="@cdklabs/sbt-aws.DetailType.DEPROVISION_FAILURE"></a>
 
+Event detail type for failed deprovisioning.
+
 ---
 
 
 ##### `BILLING_SUCCESS` <a name="BILLING_SUCCESS" id="@cdklabs/sbt-aws.DetailType.BILLING_SUCCESS"></a>
+
+Event detail type for successful billing configuration.
 
 ---
 
 
 ##### `BILLING_FAILURE` <a name="BILLING_FAILURE" id="@cdklabs/sbt-aws.DetailType.BILLING_FAILURE"></a>
 
+Event detail type for failure to configure billing.
+
 ---
 
 
 ##### `ACTIVATE_REQUEST` <a name="ACTIVATE_REQUEST" id="@cdklabs/sbt-aws.DetailType.ACTIVATE_REQUEST"></a>
+
+Event detail type for activation request.
 
 ---
 
 
 ##### `ACTIVATE_SUCCESS` <a name="ACTIVATE_SUCCESS" id="@cdklabs/sbt-aws.DetailType.ACTIVATE_SUCCESS"></a>
 
+Event detail type for successful activation.
+
 ---
 
 
 ##### `ACTIVATE_FAILURE` <a name="ACTIVATE_FAILURE" id="@cdklabs/sbt-aws.DetailType.ACTIVATE_FAILURE"></a>
+
+Event detail type for failed activation.
 
 ---
 
 
 ##### `DEACTIVATE_REQUEST` <a name="DEACTIVATE_REQUEST" id="@cdklabs/sbt-aws.DetailType.DEACTIVATE_REQUEST"></a>
 
+Event detail type for deactivation request.
+
 ---
 
 
 ##### `DEACTIVATE_SUCCESS` <a name="DEACTIVATE_SUCCESS" id="@cdklabs/sbt-aws.DetailType.DEACTIVATE_SUCCESS"></a>
 
+Event detail type for successful deactivation.
+
 ---
 
 
 ##### `DEACTIVATE_FAILURE` <a name="DEACTIVATE_FAILURE" id="@cdklabs/sbt-aws.DetailType.DEACTIVATE_FAILURE"></a>
+
+Event detail type for failed deactivation.
+
+---
+
+
+##### `TENANT_USER_CREATED` <a name="TENANT_USER_CREATED" id="@cdklabs/sbt-aws.DetailType.TENANT_USER_CREATED"></a>
+
+Event detail type for user creation on the app-plane side.
+
+Note that sbt-aws components do not emit this event. This event
+should be emitted by the application plane.
+
+---
+
+
+##### `TENANT_USER_DELETED` <a name="TENANT_USER_DELETED" id="@cdklabs/sbt-aws.DetailType.TENANT_USER_DELETED"></a>
+
+Event detail type for user deletion on the app-plane side.
+
+Note that sbt-aws components do not emit this event. This event
+should be emitted by the application plane.
 
 ---
 

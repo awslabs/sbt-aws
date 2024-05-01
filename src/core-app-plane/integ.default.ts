@@ -2,8 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as cdk from 'aws-cdk-lib';
-import { EventBus, Rule } from 'aws-cdk-lib/aws-events';
-import * as targets from 'aws-cdk-lib/aws-events-targets';
+import { CfnRule, EventBus, Rule } from 'aws-cdk-lib/aws-events';
 import { Effect, PolicyDocument, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { AwsSolutionsChecks, NagSuppressions } from 'cdk-nag';
@@ -150,33 +149,22 @@ echo "done!"
       },
     });
 
-    NagSuppressions.addResourceSuppressions(
-      eventBusWatcherRule,
-      [
-        {
-          id: 'AwsSolutions-IAM4',
-          reason: 'Suppress error from resource created for testing.',
-          appliesTo: [
-            'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
-          ],
-        },
-        {
-          id: 'AwsSolutions-IAM5',
-          reason: 'Suppress error from resource created for testing.',
-          appliesTo: ['Resource::*'],
-        },
-      ],
-      true // applyToChildren = true, so that it applies to resources created by the rule. Ex. lambda role.
-    );
+    const eventBusWatcherLogGroup = new LogGroup(this, 'EventBusWatcherLogGroup', {
+      logGroupName: `/aws/events/EventBusWatcher-${this.node.addr}`,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      retention: RetentionDays.ONE_WEEK,
+    });
 
-    eventBusWatcherRule.addTarget(
-      new targets.CloudWatchLogGroup(
-        new LogGroup(this, 'EventBusWatcherLogGroup', {
-          removalPolicy: cdk.RemovalPolicy.DESTROY,
-          retention: RetentionDays.ONE_WEEK,
-        })
-      )
-    );
+    // use escape-hatch instead of native addTarget functionality to avoid
+    // unpredictable resource names that emit cdk-nag errors
+    // https://github.com/aws/aws-cdk/issues/17002#issuecomment-1144066244
+    const cfnRule = eventBusWatcherRule.node.defaultChild as CfnRule;
+    cfnRule.targets = [
+      {
+        arn: eventBusWatcherLogGroup.logGroupArn,
+        id: this.node.addr,
+      },
+    ];
   }
 }
 
@@ -189,36 +177,13 @@ if (!process.env.CDK_PARAM_EVENT_BUS_ARN) {
 }
 
 const app = new cdk.App();
-const integStack = new IntegStack(app, 'CoreAppPlane-integ', {
+const integStack = new IntegStack(app, process.env.CDK_PARAM_STACK_ID ?? 'CoreAppPlane-integ', {
   eventBusArn: process.env.CDK_PARAM_EVENT_BUS_ARN,
 });
 
 NagSuppressions.addResourceSuppressionsByPath(
   integStack,
-  `/${integStack.stackName}/AWS679f53fac002430cb0da5b7982bd2287/Resource`,
-  [
-    {
-      id: 'AwsSolutions-L1',
-      reason: 'Suppress error from resource created for testing.',
-    },
-  ]
-);
-
-NagSuppressions.addResourceSuppressionsByPath(
-  integStack,
-  `/${integStack.stackName}/EventsLogGroupPolicyCoreAppPlaneintegEventBusWatcherRule0F03BA2B/CustomResourcePolicy/Resource`,
-  [
-    {
-      id: 'AwsSolutions-IAM5',
-      reason: 'Suppress error from resource created for testing.',
-      appliesTo: ['Resource::*'],
-    },
-  ]
-);
-
-NagSuppressions.addResourceSuppressionsByPath(
-  integStack,
-  `/${integStack.stackName}/CoreApplicationPlane/deprovisioning-codeBuildProvisionProjectRole/Resource`,
+  `/${integStack.artifactId}/CoreApplicationPlane/deprovisioning-codeBuildProvisionProjectRole/Resource`,
   [
     {
       id: 'AwsSolutions-IAM5',
@@ -230,26 +195,12 @@ NagSuppressions.addResourceSuppressionsByPath(
 
 NagSuppressions.addResourceSuppressionsByPath(
   integStack,
-  `/${integStack.stackName}/CoreApplicationPlane/provisioning-codeBuildProvisionProjectRole/Resource`,
+  `/${integStack.artifactId}/CoreApplicationPlane/provisioning-codeBuildProvisionProjectRole/Resource`,
   [
     {
       id: 'AwsSolutions-IAM5',
       reason: 'Suppress Resource::* used for testing.',
       appliesTo: ['Resource::*'],
-    },
-  ]
-);
-
-NagSuppressions.addResourceSuppressionsByPath(
-  integStack,
-  `/${integStack.stackName}/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/Resource`,
-  [
-    {
-      id: 'AwsSolutions-IAM4',
-      reason: 'Suppress error from resource created for testing.',
-      appliesTo: [
-        'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
-      ],
     },
   ]
 );

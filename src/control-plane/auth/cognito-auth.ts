@@ -17,29 +17,99 @@ import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IAuth } from './auth-interface';
 
+/**
+ * Properties for the CognitoAuth construct.
+ */
 export interface CognitoAuthProps {
+  /**
+   * The name of the Identity Provider (IdP) for the control plane.
+   */
   readonly idpName: string;
+
+  /**
+   * The callback URL for the control plane. If not provided, defaults to 'http://localhost'.
+   * @default - 'http://localhost'
+   */
   readonly controlPlaneCallbackURL?: string;
+
+  /**
+   * The name of the system admin role.
+   */
   readonly systemAdminRoleName: string;
+
+  /**
+   * The email address of the system admin.
+   */
   readonly systemAdminEmail: string;
 }
 
+/**
+ * Constructs for setting up Cognito authentication and user management.
+ */
 export class CognitoAuth extends Construct implements IAuth {
-  authorizer: IAuthorizer;
-  controlPlaneIdpDetails: any;
-  authorizationServer: string;
-  clientId: string;
-  wellKnownEndpointUrl: string;
-  createUserFunction: IFunction;
-  fetchAllUsersFunction: IFunction;
-  fetchUserFunction: IFunction;
-  updateUserFunction: IFunction;
-  deleteUserFunction: IFunction;
-  disableUserFunction: IFunction;
-  enableUserFunction: IFunction;
+  /**
+   * The API Gateway authorizer for authenticating requests.
+   */
+  public readonly authorizer: IAuthorizer;
+
+  /**
+   * The details of the control plane Identity Provider (IdP).
+   */
+  public readonly controlPlaneIdpDetails: any;
+
+  /**
+   * The authorization server for the control plane IdP.
+   */
+  public readonly authorizationServer: string;
+
+  /**
+   * The client ID for the control plane IdP.
+   */
+  public readonly clientId: string;
+
+  /**
+   * The well-known endpoint URL for the control plane IdP.
+   */
+  public readonly wellKnownEndpointUrl: string;
+
+  /**
+   * The Lambda function for creating a user.
+   */
+  public readonly createUserFunction: IFunction;
+
+  /**
+   * The Lambda function for fetching all users.
+   */
+  public readonly fetchAllUsersFunction: IFunction;
+
+  /**
+   * The Lambda function for fetching a user.
+   */
+  public readonly fetchUserFunction: IFunction;
+
+  /**
+   * The Lambda function for updating a user.
+   */
+  public readonly updateUserFunction: IFunction;
+
+  /**
+   * The Lambda function for deleting a user.
+   */
+  public readonly deleteUserFunction: IFunction;
+
+  /**
+   * The Lambda function for disabling a user.
+   */
+  public readonly disableUserFunction: IFunction;
+
+  /**
+   * The Lambda function for enabling a user.
+   */
+  public readonly enableUserFunction: IFunction;
 
   constructor(scope: Construct, id: string, props: CognitoAuthProps) {
     super(scope, id);
+
     const defaultControlPlaneCallbackURL = 'http://localhost';
 
     // https://docs.powertools.aws.dev/lambda/python/2.31.0/#lambda-layer
@@ -129,6 +199,7 @@ export class CognitoAuth extends Construct implements IAuth {
           ControlPlaneCallbackURL: props.controlPlaneCallbackURL || defaultControlPlaneCallbackURL,
           SystemAdminRoleName: props.systemAdminRoleName,
           SystemAdminEmail: props.systemAdminEmail,
+          UserPoolName: `SaaSControlPlaneUserPool-${this.node.addr}`,
         },
       }
     );
@@ -142,8 +213,9 @@ export class CognitoAuth extends Construct implements IAuth {
 
     new CfnOutput(this, 'ControlPlaneIdpDetails', {
       value: this.controlPlaneIdpDetails,
-      exportName: 'ControlPlaneIdpDetails',
+      key: 'ControlPlaneIdpDetails',
     });
+
     const customAuthorizerFunction = new PythonFunction(this, 'CustomAuthorizerFunction', {
       entry: path.join(__dirname, '../../../resources/functions/authorizer'),
       runtime: Runtime.PYTHON_3_12,

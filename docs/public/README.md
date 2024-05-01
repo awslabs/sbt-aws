@@ -76,6 +76,9 @@ The "objects" present in this example were written by the CDK team. Specifically
 
 ### Tutorial
 
+> [!WARNING]
+> Running this tutorial may incur charges in your AWS account.
+
 As mentioned before, SBT is built on top of CDK. To illustrate its use, please first follow the CDK getting started guide to initialize a new CDK application. You can find the guide [here](https://docs.aws.amazon.com/cdk/v2/guide/hello_world.html#hello_world_tutorial_create_app). Please complete step one of the **hello cdk** tutorial then come back here to continue with SBT. Again, you don't need to build or deploy the sample app; just create it for now.
 
 Now that you've initialized a new CDK app, let's install the SBT components. From within the `hello-cdk` directory, please run the following command:
@@ -105,8 +108,11 @@ export class ControlPlaneStack extends Stack {
       systemAdminEmail: 'ENTER YOUR EMAIL HERE',
     });
 
-    const controlPlane = new ControlPlane(this, 'ControlPlane', {
+  // NOTE: To explicitly disable cloudwatch logging (and potentially save costs on CloudWatch), 
+  // pass the disableAPILogging flag as true
+  const controlPlane = new ControlPlane(this, 'ControlPlane', {
       auth: cognitoAuth,
+      //disableAPILogging: true
     });
     this.eventBusArn = controlPlane.eventBusArn;
     this.regApiGatewayUrl = controlPlane.controlPlaneAPIGatewayUrl;
@@ -472,8 +478,8 @@ TENANT_EMAIL="tenant@example.com"
 CONTROL_PLANE_STACK_NAME="ControlPlaneStack"
 TENANT_NAME="tenant$RANDOM"
 
-CLIENT_ID=$(aws cloudformation list-exports --query "Exports[?Name=='ControlPlaneIdpDetails'].Value" | jq -r '.[0]' | jq -r '.idp.clientId')
-USER_POOL_ID=$(aws cloudformation list-exports --query "Exports[?Name=='ControlPlaneIdpDetails'].Value" | jq -r '.[0]' | jq -r '.idp.userPoolId')
+CLIENT_ID=$(aws cloudformation describe-stacks --stack-name ControlPlaneStack --query "Stacks[0].Outputs[?OutputKey=='ControlPlaneIdpDetails'].OutputValue" | jq -r '.[0]' | jq -r '.idp.clientId')
+USER_POOL_ID=$(aws cloudformation describe-stacks --stack-name ControlPlaneStack --query "Stacks[0].Outputs[?OutputKey=='ControlPlaneIdpDetails'].OutputValue" | jq -r '.[0]' | jq -r '.idp.userPoolId')
 USER="admin"
 
 # required in order to initiate-auth
@@ -493,7 +499,7 @@ aws cognito-idp admin-set-user-password \
 AUTHENTICATION_RESULT=$(aws cognito-idp initiate-auth \
     --auth-flow USER_PASSWORD_AUTH \
     --client-id "${CLIENT_ID}" \
-    --auth-parameters "USERNAME=${USER},PASSWORD=${PASSWORD}" \
+    --auth-parameters "USERNAME=${USER},PASSWORD='${PASSWORD}'" \
     --query 'AuthenticationResult')
 
 ID_TOKEN=$(echo "$AUTHENTICATION_RESULT" | jq -r '.IdToken')
@@ -551,16 +557,15 @@ The control plane emits this event any time it onboards a new tenant. This event
 
 ```json
 {
-    "Source": "sbt-control-plane-api",
-    "DetailType": "Onboarding",
-    "Detail": {
+    "source": "sbt-control-plane-api",
+    "detail-type": "Onboarding",
+    "detail": {
         "tenantId": "guid string",
         "tenantStatus": "see notes",
         "tenantName": "tenant name",
         "email": "admin@saas.com",
         "isActive": "boolean"
-    },
-    "EventBusName": "sbt-event-bus"
+    }
 }
 ```
 
@@ -576,13 +581,12 @@ Upon successful tenant provisioning, the Serverless SaaS reference architecture 
 
 ```json
 {
-    "Source": "sbt-application-plane-api",
-    "DetailType": "Onboarding",
-    "Detail": {
+    "source": "sbt-application-plane-api",
+    "detail-type": "Onboarding",
+    "detail": {
         "tenantConfig": "json string - see notes",
         "tenantStatus": "Complete",
-    },
-    "EventBusName": "sbt-event-bus"
+    }
 }
 ```
 
@@ -594,13 +598,12 @@ The control plane emits this event any time it offboards a tenant. At a minimum 
 
 ```json
 {
-    "Source": "sbt-control-plane-api",
-    "DetailType": "Offboarding",
-    "Detail": {
+    "source": "sbt-control-plane-api",
+    "detail-type": "Offboarding",
+    "detail": {
         "tenantId": "string",
         "tier": "string",
-    },
-    "EventBusName": "sbt-event-bus"
+    }
 }
 ```
 
@@ -612,12 +615,11 @@ The application plane emits this event upon completion of offboarding. Similar t
 
 ```json
 {
-    "Source": "sbt-application-plane-api",
-    "DetailType": "Offboarding",
-    "Detail": {
+    "source": "sbt-application-plane-api",
+    "detail-type": "Offboarding",
+    "detail": {
         "tenantStatus": "Deleted",
-    },
-    "EventBusName": "sbt-event-bus"
+    }
 }
 ```
 

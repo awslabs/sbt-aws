@@ -59,4 +59,7 @@ junit.xml
 .jsii
 tsconfig.json
 !/API.md
+!/.github/workflows/build_aws-sbt-point-solutions-lib.yml
+!/.github/workflows/release_aws-sbt-point-solutions-lib.yml
+!/.github/workflows/run-tests.yml
 !/.projenrc.ts
