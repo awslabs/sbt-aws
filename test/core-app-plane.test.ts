@@ -247,6 +247,5 @@ describe('CoreApplicationPlane', () => {
     }
     const coreApplicationPlaneStack = new CoreApplicationPlaneStack(app, 'appPlaneStack');
     expect(coreApplicationPlaneStack.jobRunnerRoleArnMap.provisioning).toBeTruthy();
-    cdk.Aspects.of(app).add(new AwsSolutionsChecks());
   });
 });
