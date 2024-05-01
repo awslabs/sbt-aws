@@ -171,7 +171,7 @@ export interface IEventManager {
    * Provides grantee the permissions to place events
    * on the EventManager bus.
    *
-   * @param grantee The detail type of the event to add a target to.
+   * @param grantee The grantee resource that will be granted the permission(s).
    */
   grantPutEventsTo(grantee: IGrantable): void;
 }
@@ -259,7 +259,7 @@ export class EventManager extends Construct implements IEventManager {
    * Provides grantee the permissions to place events
    * on the EventManager bus.
    *
-   * @param grantee The detail type of the event to add a target to.
+   * @param grantee The grantee resource that will be granted the permission(s).
    */
   grantPutEventsTo(grantee: IGrantable) {
     this.eventBus.grantPutEventsTo(grantee);
