@@ -25,8 +25,6 @@ describe('No unsuppressed cdk-nag Warnings or Errors', () => {
       const eventManager = new EventManager(this, 'EventManager');
       new CoreApplicationPlane(this, 'CoreApplicationPlane', {
         eventManager: eventManager,
-        controlPlaneEventSource: 'sbt-control-plane-api',
-        applicationPlaneEventSource: 'sbt-application-plane-api',
         jobRunnerPropsList: [
           {
             name: 'provisioning',
@@ -91,8 +89,6 @@ describe('CoreApplicationPlane', () => {
         const eventManager = new EventManager(this, 'EventManager');
         new CoreApplicationPlane(this, 'CoreApplicationPlane', {
           eventManager: eventManager,
-          controlPlaneEventSource: 'sbt-control-plane-api',
-          applicationPlaneEventSource: 'sbt-application-plane-api',
           jobRunnerPropsList: [
             {
               name: 'provisioning',
@@ -142,8 +138,6 @@ describe('CoreApplicationPlane', () => {
         const eventManager = new EventManager(this, 'EventManager');
         const coreApplicationPlane = new CoreApplicationPlane(this, 'CoreApplicationPlane', {
           eventManager: eventManager,
-          controlPlaneEventSource: 'sbt-control-plane-api',
-          applicationPlaneEventSource: 'sbt-application-plane-api',
           jobRunnerPropsList: [
             {
               name: 'provisioning',

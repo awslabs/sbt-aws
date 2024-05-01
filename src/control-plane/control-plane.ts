@@ -11,23 +11,47 @@ import { Services } from './services';
 import { Tables } from './tables';
 import { TenantConfigService } from './tenant-config/tenant-config-service';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
-import { setTemplateDesc, DetailType, EventManager } from '../utils';
+import { setTemplateDesc, DetailType, EventManager, IEventManager } from '../utils';
 
 export interface ControlPlaneProps {
+  /**
+   * The authentication provider for the control plane.
+   */
   readonly auth: IAuth;
-  readonly billing?: IBilling;
-  readonly eventManager: EventManager;
 
   /**
-   * (Optional) If true, the API Gateway will not log requests to the CloudWatch Logs.
-   * (Default: false)
+   * The billing provider configuration.
+   */
+  readonly billing?: IBilling;
+
+  /**
+   * The event manager instance. If not provided, a new instance will be created.
+   */
+  readonly eventManager?: EventManager;
+
+  /**
+   * If true, the API Gateway will not log requests to the CloudWatch Logs.
+   * @default false
    */
   readonly disableAPILogging?: boolean;
 }
 
 export class ControlPlane extends Construct {
+  /**
+   * The URL of the control plane API Gateway.
+   */
   readonly controlPlaneAPIGatewayUrl: string;
+
+  /**
+   * The Tables instance containing the DynamoDB tables for tenant data and configurations.
+   */
   readonly tables: Tables;
+
+  /**
+   * The EventManager instance that allows connecting to events flowing between
+   * the Control Plane and other components.
+   */
+  readonly eventManager: IEventManager;
 
   constructor(scope: Construct, id: string, props: ControlPlaneProps) {
     super(scope, id);
@@ -35,11 +59,15 @@ export class ControlPlane extends Construct {
 
     cdk.Aspects.of(this).add(new DestroyPolicySetter());
 
+    // todo: decompose 'Tables' into purpose-specific constructs (ex. TenantManagement)
     this.tables = new Tables(this, 'tables-stack');
 
+    this.eventManager = props.eventManager ?? new EventManager(this, 'EventManager');
+
+    // todo: decompose 'Services' into purpose-specific constructs (ex. TenantManagement)
     const services = new Services(this, 'services-stack', {
       tables: this.tables,
-      eventManager: props.eventManager,
+      eventManager: this.eventManager,
     });
 
     const tenantConfigService = new TenantConfigService(this, 'auth-info-service-stack', {
@@ -49,6 +77,7 @@ export class ControlPlane extends Construct {
       tenantDetailsTenantConfigColumn: this.tables.tenantConfigColumn,
     });
 
+    // todo: decompose 'ControlPlaneAPI' into purpose-specific constructs (ex. TenantManagement)
     const controlPlaneAPI = new ControlPlaneAPI(this, 'controlplane-api-stack', {
       auth: props.auth,
       disableAPILogging: props.disableAPILogging,
@@ -58,12 +87,12 @@ export class ControlPlane extends Construct {
 
     this.controlPlaneAPIGatewayUrl = controlPlaneAPI.apiUrl;
 
-    props.eventManager.addTargetToEvent(
+    this.eventManager.addTargetToEvent(
       DetailType.PROVISION_SUCCESS,
       controlPlaneAPI.tenantUpdateServiceTarget
     );
 
-    props.eventManager.addTargetToEvent(
+    this.eventManager.addTargetToEvent(
       DetailType.DEPROVISION_SUCCESS,
       controlPlaneAPI.tenantUpdateServiceTarget
     );
@@ -74,14 +103,14 @@ export class ControlPlane extends Construct {
     });
 
     new cdk.CfnOutput(this, 'eventBridgeArn', {
-      value: props.eventManager.eventBus.eventBusArn,
+      value: this.eventManager.busArn,
       key: 'eventBridgeArn',
     });
 
     if (props.billing) {
       const billingTemplate = new BillingProvider(this, 'Billing', {
         billing: props.billing,
-        eventManager: props.eventManager,
+        eventManager: this.eventManager,
         controlPlaneAPIBillingResource: controlPlaneAPI.billingResource,
       });
 

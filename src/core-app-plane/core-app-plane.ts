@@ -8,40 +8,6 @@ import { BashJobRunner } from './bash-job-runner';
 import { EventManager, DetailType, setTemplateDesc } from '../utils';
 
 /**
- * Provides metadata for outgoing events.
- */
-export interface OutgoingEventMetadata {
-  /**
-   * The detailType to set in the outgoing event.
-   */
-  readonly detailType: string;
-
-  /**
-   * The source to set in the outgoing event.
-   *
-   * @default CoreApplicationPlaneProps.applicationPlaneEventSource
-   */
-  readonly source?: string;
-}
-
-/**
- * Provides metadata for incoming events.
- */
-export interface IncomingEventMetadata {
-  /**
-   * The list of detailTypes to listen for in the incoming event.
-   */
-  readonly detailType: string[];
-
-  /**
-   * The list of sources to listen for in the incoming event.
-   *
-   * @default CoreApplicationPlaneProps.controlPlaneEventSource
-   */
-  readonly source?: string[];
-}
-
-/**
  * Encapsulates the list of properties for a CoreApplicationPlaneJobRunner.
  */
 export interface CoreApplicationPlaneJobRunnerProps {
@@ -105,19 +71,7 @@ export interface CoreApplicationPlaneJobRunnerProps {
  * Encapsulates the list of properties for a CoreApplicationPlane.
  */
 export interface CoreApplicationPlaneProps {
-  readonly eventManager: EventManager;
-
-  /**
-   * The source to use when listening for events coming from the SBT control plane.
-   * This is used as the default if the IncomingEventMetadata source field is not set.
-   */
-  readonly controlPlaneEventSource?: string;
-
-  /**
-   * The source to use for outgoing events that will be placed on the EventBus.
-   * This is used as the default if the OutgoingEventMetadata source field is not set.
-   */
-  readonly applicationPlaneEventSource?: string;
+  readonly eventManager?: EventManager;
 
   /**
    * The list of JobRunner definitions to create.
@@ -132,9 +86,16 @@ export interface CoreApplicationPlaneProps {
  * and respond to events created by the control plane.
  */
 export class CoreApplicationPlane extends Construct {
+  /**
+   * The EventManager instance that allows connecting to events flowing between
+   * the Control Plane and other components.
+   */
+  readonly eventManager: EventManager;
+
   constructor(scope: Construct, id: string, props: CoreApplicationPlaneProps) {
     super(scope, id);
     setTemplateDesc(this, 'SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)');
+    this.eventManager = props.eventManager ?? new EventManager(this, 'EventManager');
 
     props.jobRunnerPropsList?.forEach((jobRunnerProps) => {
       // Only BashJobOrchestrator requires differentiating between
@@ -159,9 +120,9 @@ export class CoreApplicationPlane extends Construct {
       });
 
       let jobOrchestrator = new BashJobOrchestrator(this, `${jobRunnerProps.name}-orchestrator`, {
-        targetEventBus: props.eventManager.eventBus,
+        targetEventBus: this.eventManager.eventBus,
         detailType: jobRunnerProps.outgoingEvent,
-        eventSource: props.eventManager.supportedEvents[jobRunnerProps.outgoingEvent],
+        eventSource: this.eventManager.supportedEvents[jobRunnerProps.outgoingEvent],
         environmentVariablesToOutgoingEvent: jobRunnerProps.environmentVariablesToOutgoingEvent,
         environmentStringVariablesFromIncomingEvent:
           jobRunnerProps.environmentStringVariablesFromIncomingEvent,
@@ -170,10 +131,7 @@ export class CoreApplicationPlane extends Construct {
         bashJobRunner: job,
       });
 
-      props.eventManager.addTargetToEvent(
-        jobRunnerProps.incomingEvent,
-        jobOrchestrator.eventTarget
-      );
+      this.eventManager.addTargetToEvent(jobRunnerProps.incomingEvent, jobOrchestrator.eventTarget);
     });
   }
 }

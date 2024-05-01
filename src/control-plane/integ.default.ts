@@ -23,7 +23,7 @@ export class IntegStack extends cdk.Stack {
 
     const eventManager = new EventManager(this, 'EventManager');
 
-    new ControlPlane(this, 'ControlPlane', {
+    const controlPlane = new ControlPlane(this, 'ControlPlane', {
       auth: cognitoAuth,
       eventManager: eventManager,
     });
@@ -33,7 +33,10 @@ export class IntegStack extends cdk.Stack {
       eventBus: eventManager.eventBus,
       enabled: true,
       eventPattern: {
-        source: [eventManager.controlPlaneEventSource, eventManager.applicationPlaneEventSource],
+        source: [
+          controlPlane.eventManager.controlPlaneEventSource,
+          controlPlane.eventManager.applicationPlaneEventSource,
+        ],
       },
     });
 

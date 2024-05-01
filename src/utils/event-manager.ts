@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { IEventBus, Rule, IRuleTarget, EventBus } from 'aws-cdk-lib/aws-events';
+import { IGrantable } from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 
 /**
@@ -137,10 +138,48 @@ export interface EventManagerProps {
   readonly applicationPlaneEventSource?: string;
 }
 
+export interface IEventManager {
+  /**
+   * The event source used for events emitted by the application plane.
+   */
+  readonly applicationPlaneEventSource: string;
+
+  /**
+   * The event source used for events emitted by the control plane.
+   */
+  readonly controlPlaneEventSource: string;
+
+  /**
+   * The name of the bus that will be used to send and receive events.
+   */
+  readonly busName: string;
+
+  /**
+   * The ARN/ID of the bus that will be used to send and receive events.
+   */
+  readonly busArn: string;
+
+  /**
+   * Adds an IRuleTarget to an event.
+   *
+   * @param eventType The detail type of the event to add a target to.
+   * @param target The target that will be added to the event.
+   */
+  addTargetToEvent(eventType: DetailType, target: IRuleTarget): void;
+
+  /**
+   * Provides grantee the permissions to place events
+   * on the EventManager bus.
+   *
+   * @param grantee The detail type of the event to add a target to.
+   */
+  grantPutEventsTo(grantee: IGrantable): void;
+}
+
 /**
  * Provides an EventManager to interact with the EventBus shared with the SBT control plane.
  */
-export class EventManager extends Construct {
+export class EventManager extends Construct implements IEventManager {
   /**
    * The event source used for events emitted by the application plane.
    * @default
@@ -158,18 +197,35 @@ export class EventManager extends Construct {
    */
   public readonly supportedEvents: EventMetadata;
 
+  /**
+   * The eventBus resource that will be used to send and receive events.
+   */
   public readonly eventBus: IEventBus;
+
+  /**
+   * The name of the bus that will be used to send and receive events.
+   */
+  public readonly busName: string;
+
+  /**
+   * The ARN/ID of the bus that will be used to send and receive events.
+   */
+  public readonly busArn: string;
 
   private readonly connectedRules: Map<DetailType, Rule> = new Map<DetailType, Rule>();
 
   constructor(scope: Construct, id: string, props?: EventManagerProps) {
     super(scope, id);
     this.eventBus = props?.eventBus ?? new EventBus(this, 'SbtEventBus');
+    this.busName = this.eventBus.eventBusName;
+    this.busArn = this.eventBus.eventBusArn;
 
     this.applicationPlaneEventSource =
       props?.applicationPlaneEventSource || this.applicationPlaneEventSource;
     this.controlPlaneEventSource = props?.controlPlaneEventSource || this.controlPlaneEventSource;
 
+    // for every DetailType enum, there should be
+    // a corresponding key in the supportedEvents map
     this.supportedEvents = {
       onboardingRequest: this.controlPlaneEventSource,
       onboardingSuccess: this.applicationPlaneEventSource,
@@ -197,6 +253,16 @@ export class EventManager extends Construct {
         this.supportedEvents[key] = props.eventMetadata[key];
       }
     }
+  }
+
+  /**
+   * Provides grantee the permissions to place events
+   * on the EventManager bus.
+   *
+   * @param grantee The detail type of the event to add a target to.
+   */
+  grantPutEventsTo(grantee: IGrantable) {
+    this.eventBus.grantPutEventsTo(grantee);
   }
 
   /**

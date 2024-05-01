@@ -9,7 +9,7 @@ import { IFunction } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IBilling, IFunctionTrigger } from './billing-interface';
-import { EventManager, DetailType } from '../../utils';
+import { DetailType, IEventManager } from '../../utils';
 
 /**
  * Encapsulates the list of properties for a BillingProvider.
@@ -21,9 +21,9 @@ export interface BillingProviderProps {
   readonly billing: IBilling;
 
   /**
-   * An EventManager object to help coordinate events.
+   * An IEventManager object to help coordinate events.
    */
-  readonly eventManager: EventManager;
+  readonly eventManager: IEventManager;
 
   /**
    * An API Gateway Resource for the BillingProvider to use
@@ -143,7 +143,7 @@ export class BillingProvider extends Construct {
   }
 
   private createEventTarget(
-    eventManager: EventManager,
+    eventManager: IEventManager,
     defaultEvent: DetailType,
     fn?: IFunction | IFunctionTrigger
   ) {

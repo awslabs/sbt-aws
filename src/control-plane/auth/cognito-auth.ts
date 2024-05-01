@@ -27,8 +27,8 @@ export interface CognitoAuthProps {
   readonly systemAdminEmail: string;
 
   /**
-   * The callback URL for the control plane. If not provided, defaults to 'http://localhost'.
-   * @default - 'http://localhost'
+   * The callback URL for the control plane.
+   * @default 'http://localhost'
    */
   readonly controlPlaneCallbackURL?: string;
 
