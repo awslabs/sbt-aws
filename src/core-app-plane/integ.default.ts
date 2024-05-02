@@ -134,8 +134,9 @@ echo "done!"
     };
 
     const coreApplicationPlane = new CoreApplicationPlane(this, 'CoreApplicationPlane', {
-      eventBusArn: eventBus.eventBusArn,
-      jobRunnerPropsList: [provisioningJobRunnerProps, deprovisioningJobRunnerProps],
+      eventBus: eventBus,
+      jobRunners: [provisioningJobRunnerProps, deprovisioningJobRunnerProps],
+      // jobRunnerPropsList: [provisioningJobRunnerProps, deprovisioningJobRunnerProps],
     });
 
     const eventBusWatcherRule = new Rule(this, 'EventBusWatcherRule', {

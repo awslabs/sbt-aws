@@ -8,7 +8,7 @@ import { Construct } from 'constructs';
 import { BashJobOrchestrator } from './bash-job-orchestrator';
 import { BashJobRunner } from './bash-job-runner';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
-import { EventManager, EventMetadata, DetailType, setTemplateDesc } from '../utils';
+import { EventManager, EventMetadata, DetailType, setTemplateDesc, IEventManager } from '../utils';
 
 /**
  * Provides metadata for outgoing events.
