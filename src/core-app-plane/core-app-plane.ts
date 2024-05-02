@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as cdk from 'aws-cdk-lib';
-import { EventBus, IEventBus } from 'aws-cdk-lib/aws-events';
+import { IEventBus } from 'aws-cdk-lib/aws-events';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 import { BashJobOrchestrator } from './bash-job-orchestrator';
@@ -190,7 +190,7 @@ export class CoreApplicationPlane extends Construct {
         bashJobRunner: job,
       });
 
-      this.eventManager.registerRule(runner.incomingEvent, jobOrchestrator.eventTarget);
+      this.eventManager.addTargetToEvent(runner.incomingEvent, jobOrchestrator.eventTarget);
     });
   }
 }

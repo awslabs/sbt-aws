@@ -143,7 +143,7 @@ export interface IEventManager {
    * @param detailType The event to listen for.
    * @param target The target to invoke when the event is received.
    */
-  registerRule(detailType: DetailType, target: IRuleTarget): void;
+  addTargetToEvent(detailType: DetailType, target: IRuleTarget): void;
 }
 
 /**
@@ -213,7 +213,7 @@ export class EventManager extends Construct implements IEventManager {
    * @param eventType The detail type of the event to add a target to.
    * @param target The target that will be added to the event.
    */
-  public registerRule(eventType: DetailType, target: IRuleTarget): void {
+  public addTargetToEvent(eventType: DetailType, target: IRuleTarget): void {
     this.getOrCreateRule(eventType).addTarget(target);
   }
 
