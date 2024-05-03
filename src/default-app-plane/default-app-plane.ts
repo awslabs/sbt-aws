@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as cdk from 'aws-cdk-lib';
-import { IEventBus } from 'aws-cdk-lib/aws-events';
+import { EventBus } from 'aws-cdk-lib/aws-events';
 import { Construct } from 'constructs';
-import { JobRunnerProps, JobRunner, JobRunnerOptions } from './job-runner';
+import { JobRunner, JobRunnerOptions } from './job-runner';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
 import { EventManager, setTemplateDesc, IEventManager } from '../utils';
 
@@ -40,13 +40,9 @@ export interface IDefaultApplicationPlane {
  */
 export interface DefaultApplicationPlaneProps extends cdk.StackProps {
   /**
-   * The EventBus to listen for incoming messages. Note that this property is only used when
-   * an IEventManager is not provided.
-   *
-   * This is also the EventBus on which the DefaultApplicaitonPlane places outgoing messages on.
+   * The ARN of the EventBus to use.
    */
-  readonly eventBus?: IEventBus;
-
+  readonly eventBusArn: string;
   /**
    * The source to use when listening for events coming from the SBT control plane.
    * This is used as the default if the IncomingEventMetadata source field is not set.
@@ -62,7 +58,7 @@ export interface DefaultApplicationPlaneProps extends cdk.StackProps {
   /**
    * The list of JobRunner definitions to create.
    */
-  readonly jobRunners?: JobRunnerProps[];
+  readonly jobRunners?: JobRunnerOptions[];
 
   /**
    * The EventManager to use.
@@ -89,12 +85,13 @@ export class DefaultApplicationPlane extends Construct implements IDefaultApplic
     super(scope, id);
     setTemplateDesc(this, 'SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)');
     cdk.Aspects.of(this).add(new DestroyPolicySetter());
+    const eventBus = EventBus.fromEventBusArn(this, 'appPlaneEventBus', props.eventBusArn);
     this.eventManager = !!props.eventManger
       ? props.eventManger!
       : new EventManager(this, 'event-manager', {
           controlPlaneEventSource: props.controlPlaneEventSource,
           applicationPlaneEventSource: props.applicationPlaneEventSource,
-          eventBus: props.eventBus!,
+          eventBus: eventBus,
         });
     props.jobRunners?.forEach((runner) => this.addRunner(runner));
   }

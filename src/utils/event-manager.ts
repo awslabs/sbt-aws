@@ -1,7 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { IEventBus, Rule } from 'aws-cdk-lib/aws-events';
+import { IEventBus, IRuleTarget, Rule } from 'aws-cdk-lib/aws-events';
 import { Construct } from 'constructs';
 
 /**
@@ -138,32 +138,29 @@ export interface EventManagerProps {
 }
 
 export interface IEventManager {
+  get eventBus(): IEventBus;
   /**
    * Registers a new rule that will be triggered when the given event is received.
    * @param detailType The event to listen for.
    * @param target The target to invoke when the event is received.
    */
-  addTargetToEvent(detailType: DetailType, target: any): void;
+  addTargetToEvent(detailType: DetailType, target: IRuleTarget): void;
 }
 
 /**
  * Provides an EventManager to interact with the EventBus shared with the SBT control plane.
  */
 export class EventManager extends Construct implements IEventManager {
-  public static readonly APP_PLANE_SOURCE: string = 'applicationPlaneEventSource';
-  public static readonly CONTROL_PLANE_SOURCE: string = 'controlPlaneEventSource';
-
   /**
    * The event source used for events emitted by the application plane.
    * @default
    */
-  public readonly applicationPlaneEventSource: string = 'applicationPlaneEventSource';
-
+  public static readonly APP_PLANE_SOURCE: string = 'applicationPlaneEventSource';
   /**
    * The event source used for events emitted by the control plane.
    * @default
    */
-  public readonly controlPlaneEventSource: string = 'controlPlaneEventSource';
+  public static readonly CONTROL_PLANE_SOURCE: string = 'controlPlaneEventSource';
 
   /**
    * The event bus to register new rules with.
@@ -190,7 +187,7 @@ export class EventManager extends Construct implements IEventManager {
    * @param eventType The detail type of the event to add a target to.
    * @param target The target that will be added to the event.
    */
-  public addTargetToEvent(eventType: DetailType, target: any): void {
+  public addTargetToEvent(eventType: DetailType, target: IRuleTarget): void {
     this.getOrCreateRule(eventType).addTarget(target);
   }
 

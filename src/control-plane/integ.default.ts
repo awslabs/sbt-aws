@@ -7,6 +7,7 @@ import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { AwsSolutionsChecks } from 'cdk-nag';
 import { CognitoAuth, ControlPlane } from '.';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
+import { EventManager } from '../utils';
 
 export interface IntegStackProps extends cdk.StackProps {
   systemAdminEmail: string;
@@ -41,10 +42,7 @@ export class IntegStack extends cdk.Stack {
       eventBus: eventBus,
       enabled: true,
       eventPattern: {
-        source: [
-          controlPlane.eventManager.controlPlaneEventSource,
-          controlPlane.eventManager.applicationPlaneEventSource,
-        ],
+        source: [EventManager.CONTROL_PLANE_SOURCE, EventManager.APP_PLANE_SOURCE],
       },
     });
 

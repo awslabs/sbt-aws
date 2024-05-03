@@ -1,7 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { IEventBus } from 'aws-cdk-lib/aws-events';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 import { CodebuildRunner } from './codebuild-runner';
@@ -11,11 +10,7 @@ import { DetailType, IEventManager, SUPPORTED_EVENTS } from '../utils';
 /**
  * Encapsulates the list of properties for a CoreApplicationPlaneJobRunner.
  */
-export interface JobRunnerProps {
-  /**
-   *
-   */
-  readonly eventBus: IEventBus;
+export interface JobRunnerOptions {
   /**
    * The name of the CoreApplicationPlaneJobRunner. Note that this value must be unique.
    */
@@ -70,11 +65,11 @@ export interface JobRunnerProps {
   readonly scriptEnvironmentVariables?: {
     [key: string]: string;
   };
-
-  readonly eventManager: IEventManager;
 }
 
-export interface JobRunnerOptions extends JobRunnerProps {}
+export interface JobRunnerProps extends JobRunnerOptions {
+  readonly eventManager: IEventManager;
+}
 
 export class JobRunner extends Construct {
   constructor(scope: Construct, id: string, props: JobRunnerProps) {
@@ -97,7 +92,7 @@ export class JobRunner extends Construct {
     });
 
     const orchestrator = new JobOrchestrator(this, `${props.name}-orchestrator`, {
-      targetEventBus: props.eventBus!,
+      targetEventBus: props.eventManager.eventBus,
       detailType: props.outgoingEvent,
       eventSource: SUPPORTED_EVENTS[props.outgoingEvent],
       environmentVariablesToOutgoingEvent: props.environmentVariablesToOutgoingEvent,
