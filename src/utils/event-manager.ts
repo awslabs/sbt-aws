@@ -1,7 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { IEventBus, Rule, IRuleTarget } from 'aws-cdk-lib/aws-events';
+import { IEventBus, Rule } from 'aws-cdk-lib/aws-events';
 import { Construct } from 'constructs';
 
 /**
@@ -190,7 +190,7 @@ export class EventManager extends Construct implements IEventManager {
    * @param eventType The detail type of the event to add a target to.
    * @param target The target that will be added to the event.
    */
-  public addTargetToEvent(eventType: DetailType, target: IRuleTarget): void {
+  public addTargetToEvent(eventType: DetailType, target: any): void {
     this.getOrCreateRule(eventType).addTarget(target);
   }
 

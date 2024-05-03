@@ -2,8 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as codebuild from 'aws-cdk-lib/aws-codebuild';
-import { EventField, IRuleTarget, RuleTargetInput } from 'aws-cdk-lib/aws-events';
-import * as targets from 'aws-cdk-lib/aws-events-targets';
+import { EventField } from 'aws-cdk-lib/aws-events';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as kms from 'aws-cdk-lib/aws-kms';
 import { NagSuppressions } from 'cdk-nag';
@@ -60,12 +59,6 @@ export class CodebuildRunner extends Construct {
    * @attribute
    */
   public readonly codebuildProject: codebuild.Project;
-
-  /**
-   * The eventTarget to use when triggering this CodeBuildRunner.
-   * @attribute
-   */
-  public readonly eventTarget: IRuleTarget;
 
   /**
    * The environment variables to export into the outgoing event once the CodeBuildRunner has finished.
@@ -171,13 +164,5 @@ export class CodebuildRunner extends Construct {
         document: props.permissions,
       })
     );
-
-    this.eventTarget = new targets.CodeBuildProject(this.codebuildProject, {
-      event: RuleTargetInput.fromObject({
-        ...(environmentVariablesOverride.length > 0 && {
-          environmentVariablesOverride: environmentVariablesOverride,
-        }),
-      }),
-    });
   }
 }

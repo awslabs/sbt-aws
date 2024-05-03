@@ -4,11 +4,9 @@
 import * as cdk from 'aws-cdk-lib';
 import { IEventBus } from 'aws-cdk-lib/aws-events';
 import { Construct } from 'constructs';
-import { BashJobOrchestrator } from './bash-job-orchestrator';
-import { CodebuildRunner } from './codebuild-runner';
-import { JobRunnerProps, JobRunner } from './job-runner';
+import { JobRunnerProps, JobRunner, JobRunnerOptions } from './job-runner';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
-import { EventManager, setTemplateDesc, IEventManager, SUPPORTED_EVENTS } from '../utils';
+import { EventManager, setTemplateDesc, IEventManager } from '../utils';
 
 /**
  * Provides metadata for outgoing events.
@@ -27,27 +25,20 @@ export interface OutgoingEventMetadata {
   readonly source?: string;
 }
 
-/**
- * Provides metadata for incoming events.
- */
-export interface IncomingEventMetadata {
+export interface IDefaultApplicationPlane {
   /**
-   * The list of detailTypes to listen for in the incoming event.
-   */
-  readonly detailType: string[];
-
-  /**
-   * The list of sources to listen for in the incoming event.
+   * Adds another job runner to this application plane. Can be use in lieu of, or in addition to,
+   * the @see jobRunners property.
    *
-   * @default CoreApplicationPlaneProps.controlPlaneEventSource
+   * @param runner The job runner to add
    */
-  readonly source?: string[];
+  addRunner(runner: JobRunnerOptions): void;
 }
 
 /**
  * Encapsulates the list of properties for a CoreApplicationPlane.
  */
-export interface DefaultApplicationPlaneProps {
+export interface DefaultApplicationPlaneProps extends cdk.StackProps {
   /**
    * The EventBus to listen for incoming messages. Note that this property is only used when
    * an IEventManager is not provided.
@@ -81,14 +72,6 @@ export interface DefaultApplicationPlaneProps {
    * @default - a new EventManager will be created
    */
   readonly eventManger?: IEventManager;
-
-  /**
-   * Adds another job runner to this application plane. Can be use in lieu of, or in addition to,
-   * the @see jobRunners property.
-   *
-   * @param runner The job runner to add
-   */
-  addRunner(runner: JobRunnerProps): void;
 }
 
 /**
@@ -98,7 +81,7 @@ export interface DefaultApplicationPlaneProps {
  * It can be configured to attach itself to the EventBus created by the SBT Control Plane and listen to
  * and respond to events created by the control plane.
  */
-export class DefaultApplicationPlane extends Construct {
+export class DefaultApplicationPlane extends Construct implements IDefaultApplicationPlane {
   readonly eventManager: IEventManager;
   jobRunners: JobRunner[] = [];
 
@@ -113,5 +96,15 @@ export class DefaultApplicationPlane extends Construct {
           applicationPlaneEventSource: props.applicationPlaneEventSource,
           eventBus: props.eventBus!,
         });
+    props.jobRunners?.forEach((runner) => this.addRunner(runner));
+  }
+
+  addRunner(runner: JobRunnerOptions): void {
+    this.jobRunners.push(
+      new JobRunner(this, runner.name, {
+        ...runner,
+        eventManager: this.eventManager,
+      })
+    );
   }
 }

@@ -4,9 +4,9 @@
 import { IEventBus } from 'aws-cdk-lib/aws-events';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
-import { BashJobOrchestrator } from './bash-job-orchestrator';
 import { CodebuildRunner } from './codebuild-runner';
-import { DetailType, SUPPORTED_EVENTS } from '../utils';
+import { JobOrchestrator as JobOrchestrator } from './job-orchestrator';
+import { DetailType, IEventManager, SUPPORTED_EVENTS } from '../utils';
 
 /**
  * Encapsulates the list of properties for a CoreApplicationPlaneJobRunner.
@@ -70,7 +70,11 @@ export interface JobRunnerProps {
   readonly scriptEnvironmentVariables?: {
     [key: string]: string;
   };
+
+  readonly eventManager: IEventManager;
 }
+
+export interface JobRunnerOptions extends JobRunnerProps {}
 
 export class JobRunner extends Construct {
   constructor(scope: Construct, id: string, props: JobRunnerProps) {
@@ -92,7 +96,7 @@ export class JobRunner extends Construct {
       scriptEnvironmentVariables: props.scriptEnvironmentVariables,
     });
 
-    new BashJobOrchestrator(this, `${props.name}-orchestrator`, {
+    const orchestrator = new JobOrchestrator(this, `${props.name}-orchestrator`, {
       targetEventBus: props.eventBus!,
       detailType: props.outgoingEvent,
       eventSource: SUPPORTED_EVENTS[props.outgoingEvent],
@@ -100,9 +104,9 @@ export class JobRunner extends Construct {
       environmentStringVariablesFromIncomingEvent:
         props.environmentStringVariablesFromIncomingEvent,
       environmentJSONVariablesFromIncomingEvent: props.environmentJSONVariablesFromIncomingEvent,
-      CodeBuildRunner: job,
+      codeBuildRunner: job,
     });
 
-    // this.eventManager.addTargetToEvent(runner.incomingEvent, jobOrchestrator.eventTarget);
+    props.eventManager.addTargetToEvent(props.incomingEvent, orchestrator.eventTarget);
   }
 }

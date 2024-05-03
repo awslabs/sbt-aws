@@ -16,7 +16,7 @@ import { CodebuildRunner } from './codebuild-runner';
 /**
  * Encapsulates the list of properties for a BashJobOrchestrator.
  */
-export interface BashJobOrchestratorProps extends cdk.StackProps {
+export interface JobOrchestratorProps extends cdk.StackProps {
   /**
    * The event bus to publish the outgoing event to.
    */
@@ -46,13 +46,13 @@ export interface BashJobOrchestratorProps extends cdk.StackProps {
   /**
    * The CodeBuildRunner to execute as part of this BashJobOrchestrator.
    */
-  readonly CodeBuildRunner: CodebuildRunner;
+  readonly codeBuildRunner: CodebuildRunner;
 }
 
 /**
  * Provides a BashJobOrchestrator to execute a CodeBuildRunner.
  */
-export class BashJobOrchestrator extends Construct {
+export class JobOrchestrator extends Construct {
   /**
    * The eventTarget to use when triggering this BashJobOrchestrator.
    * @attribute
@@ -65,7 +65,7 @@ export class BashJobOrchestrator extends Construct {
    */
   public readonly provisioningStateMachine: sfn.StateMachine;
 
-  constructor(scope: Construct, id: string, props: BashJobOrchestratorProps) {
+  constructor(scope: Construct, id: string, props: JobOrchestratorProps) {
     super(scope, id);
 
     const eventSource = props.eventSource;
@@ -98,7 +98,7 @@ export class BashJobOrchestrator extends Construct {
       this,
       'startProvisioningCodeBuild',
       {
-        project: props.CodeBuildRunner.codebuildProject,
+        project: props.codeBuildRunner.codebuildProject,
         integrationPattern: sfn.IntegrationPattern.RUN_JOB,
         environmentVariablesOverride: environmentVariablesOverride,
         resultPath: '$.startProvisioningCodeBuild',
