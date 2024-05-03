@@ -11,7 +11,7 @@ import * as sfn from 'aws-cdk-lib/aws-stepfunctions';
 import * as tasks from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
-import { BashJobRunner } from './bash-job-runner';
+import { CodebuildRunner } from './codebuild-runner';
 
 /**
  * Encapsulates the list of properties for a BashJobOrchestrator.
@@ -44,13 +44,13 @@ export interface BashJobOrchestratorProps extends cdk.StackProps {
   readonly environmentVariablesToOutgoingEvent?: string[];
 
   /**
-   * The BashJobRunner to execute as part of this BashJobOrchestrator.
+   * The CodeBuildRunner to execute as part of this BashJobOrchestrator.
    */
-  readonly bashJobRunner: BashJobRunner;
+  readonly CodeBuildRunner: CodebuildRunner;
 }
 
 /**
- * Provides a BashJobOrchestrator to execute a BashJobRunner.
+ * Provides a BashJobOrchestrator to execute a CodeBuildRunner.
  */
 export class BashJobOrchestrator extends Construct {
   /**
@@ -98,7 +98,7 @@ export class BashJobOrchestrator extends Construct {
       this,
       'startProvisioningCodeBuild',
       {
-        project: props.bashJobRunner.codebuildProject,
+        project: props.CodeBuildRunner.codebuildProject,
         integrationPattern: sfn.IntegrationPattern.RUN_JOB,
         environmentVariablesOverride: environmentVariablesOverride,
         resultPath: '$.startProvisioningCodeBuild',

@@ -143,7 +143,7 @@ export interface IEventManager {
    * @param detailType The event to listen for.
    * @param target The target to invoke when the event is received.
    */
-  addTargetToEvent(detailType: DetailType, target: IRuleTarget): void;
+  addTargetToEvent(detailType: DetailType, target: any): void;
 }
 
 /**
@@ -153,29 +153,6 @@ export class EventManager extends Construct implements IEventManager {
   public static readonly APP_PLANE_SOURCE: string = 'applicationPlaneEventSource';
   public static readonly CONTROL_PLANE_SOURCE: string = 'controlPlaneEventSource';
 
-  /**
-   * List of recognized events that are available as triggers.
-   */
-  public readonly supportedEvents: EventMetadata = {
-    onboardingRequest: EventManager.CONTROL_PLANE_SOURCE,
-    onboardingSuccess: EventManager.APP_PLANE_SOURCE,
-    onboardingFailure: EventManager.APP_PLANE_SOURCE,
-    offboardingRequest: EventManager.CONTROL_PLANE_SOURCE,
-    offboardingSuccess: EventManager.APP_PLANE_SOURCE,
-    offboardingFailure: EventManager.APP_PLANE_SOURCE,
-    provisionSuccess: EventManager.APP_PLANE_SOURCE,
-    provisionFailure: EventManager.APP_PLANE_SOURCE,
-    deprovisionSuccess: EventManager.APP_PLANE_SOURCE,
-    deprovisionFailure: EventManager.APP_PLANE_SOURCE,
-    billingSuccess: EventManager.CONTROL_PLANE_SOURCE,
-    billingFailure: EventManager.CONTROL_PLANE_SOURCE,
-    activateRequest: EventManager.CONTROL_PLANE_SOURCE,
-    activateSuccess: EventManager.APP_PLANE_SOURCE,
-    activateFailure: EventManager.APP_PLANE_SOURCE,
-    deactivateRequest: EventManager.CONTROL_PLANE_SOURCE,
-    deactivateSuccess: EventManager.APP_PLANE_SOURCE,
-    deactivateFailure: EventManager.APP_PLANE_SOURCE,
-  };
   /**
    * The event source used for events emitted by the application plane.
    * @default
@@ -199,10 +176,10 @@ export class EventManager extends Construct implements IEventManager {
     super(scope, id);
     this.eventBus = props.eventBus;
 
-    for (const key in this.supportedEvents) {
+    for (const key in SUPPORTED_EVENTS) {
       // update this.eventMetadata with any values passed in via props
       if (props.eventMetadata && props.eventMetadata[key]) {
-        this.supportedEvents[key] = props.eventMetadata[key];
+        SUPPORTED_EVENTS[key] = props.eventMetadata[key];
       }
     }
   }
@@ -224,7 +201,7 @@ export class EventManager extends Construct implements IEventManager {
       rule = new Rule(this, `${eventType}Rule`, {
         eventBus: this.eventBus,
         eventPattern: {
-          source: [this.supportedEvents[eventType]],
+          source: [SUPPORTED_EVENTS[eventType]],
           detailType: [eventType],
         },
       });
@@ -234,3 +211,27 @@ export class EventManager extends Construct implements IEventManager {
     return rule;
   }
 }
+
+/**
+ * List of recognized events that are available as triggers.
+ */
+export const SUPPORTED_EVENTS: EventMetadata = {
+  onboardingRequest: EventManager.CONTROL_PLANE_SOURCE,
+  onboardingSuccess: EventManager.APP_PLANE_SOURCE,
+  onboardingFailure: EventManager.APP_PLANE_SOURCE,
+  offboardingRequest: EventManager.CONTROL_PLANE_SOURCE,
+  offboardingSuccess: EventManager.APP_PLANE_SOURCE,
+  offboardingFailure: EventManager.APP_PLANE_SOURCE,
+  provisionSuccess: EventManager.APP_PLANE_SOURCE,
+  provisionFailure: EventManager.APP_PLANE_SOURCE,
+  deprovisionSuccess: EventManager.APP_PLANE_SOURCE,
+  deprovisionFailure: EventManager.APP_PLANE_SOURCE,
+  billingSuccess: EventManager.CONTROL_PLANE_SOURCE,
+  billingFailure: EventManager.CONTROL_PLANE_SOURCE,
+  activateRequest: EventManager.CONTROL_PLANE_SOURCE,
+  activateSuccess: EventManager.APP_PLANE_SOURCE,
+  activateFailure: EventManager.APP_PLANE_SOURCE,
+  deactivateRequest: EventManager.CONTROL_PLANE_SOURCE,
+  deactivateSuccess: EventManager.APP_PLANE_SOURCE,
+  deactivateFailure: EventManager.APP_PLANE_SOURCE,
+};
