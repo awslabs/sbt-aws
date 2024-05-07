@@ -2,29 +2,28 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as codebuild from 'aws-cdk-lib/aws-codebuild';
-import { EventField, IRuleTarget, RuleTargetInput } from 'aws-cdk-lib/aws-events';
-import * as targets from 'aws-cdk-lib/aws-events-targets';
+import { EventField } from 'aws-cdk-lib/aws-events';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as kms from 'aws-cdk-lib/aws-kms';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 
 /**
- * Encapsulates the list of properties for a BashJobRunner.
+ * Encapsulates the list of properties for a CodeBuildRunner.
  */
-export interface BashJobRunnerProps {
+export interface CodebuildRunnerProps {
   /**
-   * The name of the BashJobRunner. Note that this value must be unique.
+   * The name of the CodeBuildRunner. Note that this value must be unique.
    */
   readonly name: string;
 
   /**
-   * The IAM permission document for the BashJobRunner.
+   * The IAM permission document for the CodeBuildRunner.
    */
   readonly permissions: iam.PolicyDocument;
 
   /**
-   * The bash script to run as part of the BashJobRunner.
+   * The bash script to run as part of the CodeBuildRunner.
    */
   readonly script: string;
 
@@ -34,17 +33,17 @@ export interface BashJobRunnerProps {
   readonly postScript?: string;
 
   /**
-   * The environment variables to import into the BashJobRunner from event details field.
+   * The environment variables to import into the CodeBuildRunner from event details field.
    */
   readonly environmentVariablesFromIncomingEvent?: string[];
 
   /**
-   * The environment variables to export into the outgoing event once the BashJobRunner has finished.
+   * The environment variables to export into the outgoing event once the CodeBuildRunner has finished.
    */
   readonly environmentVariablesToOutgoingEvent?: string[];
 
   /**
-   * The variables to pass into the codebuild BashJobRunner.
+   * The variables to pass into the codebuild CodeBuildRunner.
    */
   readonly scriptEnvironmentVariables?: {
     [key: string]: string;
@@ -52,28 +51,22 @@ export interface BashJobRunnerProps {
 }
 
 /**
- * Provides a BashJobRunner to execute arbitrary bash code.
+ * Provides a job runner to execute arbitrary bash code.
  */
-export class BashJobRunner extends Construct {
+export class CodebuildRunner extends Construct {
   /**
-   * The codebuildProject used to implement this BashJobRunner.
+   * The codebuildProject used to implement this CodeBuildRunner.
    * @attribute
    */
   public readonly codebuildProject: codebuild.Project;
 
   /**
-   * The eventTarget to use when triggering this BashJobRunner.
-   * @attribute
-   */
-  public readonly eventTarget: IRuleTarget;
-
-  /**
-   * The environment variables to export into the outgoing event once the BashJobRunner has finished.
+   * The environment variables to export into the outgoing event once the CodeBuildRunner has finished.
    * @attribute
    */
   public readonly environmentVariablesToOutgoingEvent?: string[];
 
-  constructor(scope: Construct, id: string, props: BashJobRunnerProps) {
+  constructor(scope: Construct, id: string, props: CodebuildRunnerProps) {
     super(scope, id);
     const environmentVariablesOverride: {
       name: string;
@@ -171,13 +164,5 @@ export class BashJobRunner extends Construct {
         document: props.permissions,
       })
     );
-
-    this.eventTarget = new targets.CodeBuildProject(this.codebuildProject, {
-      event: RuleTargetInput.fromObject({
-        ...(environmentVariablesOverride.length > 0 && {
-          environmentVariablesOverride: environmentVariablesOverride,
-        }),
-      }),
-    });
   }
 }

@@ -1,7 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { IEventBus, Rule, IRuleTarget } from 'aws-cdk-lib/aws-events';
+import { IEventBus, IRuleTarget, Rule } from 'aws-cdk-lib/aws-events';
 import { Construct } from 'constructs';
 
 /**
@@ -137,26 +137,30 @@ export interface EventManagerProps {
   readonly applicationPlaneEventSource?: string;
 }
 
+export interface IEventManager {
+  get eventBus(): IEventBus;
+  /**
+   * Registers a new rule that will be triggered when the given event is received.
+   * @param detailType The event to listen for.
+   * @param target The target to invoke when the event is received.
+   */
+  addTargetToEvent(detailType: DetailType, target: IRuleTarget): void;
+}
+
 /**
  * Provides an EventManager to interact with the EventBus shared with the SBT control plane.
  */
-export class EventManager extends Construct {
+export class EventManager extends Construct implements IEventManager {
   /**
    * The event source used for events emitted by the application plane.
    * @default
    */
-  public readonly applicationPlaneEventSource: string = 'applicationPlaneEventSource';
-
+  public static readonly APP_PLANE_SOURCE: string = 'applicationPlaneEventSource';
   /**
    * The event source used for events emitted by the control plane.
    * @default
    */
-  public readonly controlPlaneEventSource: string = 'controlPlaneEventSource';
-
-  /**
-   * List of recognized events that are available as triggers.
-   */
-  public readonly supportedEvents: EventMetadata;
+  public static readonly CONTROL_PLANE_SOURCE: string = 'controlPlaneEventSource';
 
   /**
    * The event bus to register new rules with.
@@ -169,35 +173,10 @@ export class EventManager extends Construct {
     super(scope, id);
     this.eventBus = props.eventBus;
 
-    this.applicationPlaneEventSource =
-      props.applicationPlaneEventSource || this.applicationPlaneEventSource;
-    this.controlPlaneEventSource = props.controlPlaneEventSource || this.controlPlaneEventSource;
-
-    this.supportedEvents = {
-      onboardingRequest: this.controlPlaneEventSource,
-      onboardingSuccess: this.applicationPlaneEventSource,
-      onboardingFailure: this.applicationPlaneEventSource,
-      offboardingRequest: this.controlPlaneEventSource,
-      offboardingSuccess: this.applicationPlaneEventSource,
-      offboardingFailure: this.applicationPlaneEventSource,
-      provisionSuccess: this.applicationPlaneEventSource,
-      provisionFailure: this.applicationPlaneEventSource,
-      deprovisionSuccess: this.applicationPlaneEventSource,
-      deprovisionFailure: this.applicationPlaneEventSource,
-      billingSuccess: this.controlPlaneEventSource,
-      billingFailure: this.controlPlaneEventSource,
-      activateRequest: this.controlPlaneEventSource,
-      activateSuccess: this.applicationPlaneEventSource,
-      activateFailure: this.applicationPlaneEventSource,
-      deactivateRequest: this.controlPlaneEventSource,
-      deactivateSuccess: this.applicationPlaneEventSource,
-      deactivateFailure: this.applicationPlaneEventSource,
-    };
-
-    for (const key in this.supportedEvents) {
+    for (const key in SUPPORTED_EVENTS) {
       // update this.eventMetadata with any values passed in via props
       if (props.eventMetadata && props.eventMetadata[key]) {
-        this.supportedEvents[key] = props.eventMetadata[key];
+        SUPPORTED_EVENTS[key] = props.eventMetadata[key];
       }
     }
   }
@@ -219,7 +198,7 @@ export class EventManager extends Construct {
       rule = new Rule(this, `${eventType}Rule`, {
         eventBus: this.eventBus,
         eventPattern: {
-          source: [this.supportedEvents[eventType]],
+          source: [SUPPORTED_EVENTS[eventType]],
           detailType: [eventType],
         },
       });
@@ -229,3 +208,27 @@ export class EventManager extends Construct {
     return rule;
   }
 }
+
+/**
+ * List of recognized events that are available as triggers.
+ */
+export const SUPPORTED_EVENTS: EventMetadata = {
+  onboardingRequest: EventManager.CONTROL_PLANE_SOURCE,
+  onboardingSuccess: EventManager.APP_PLANE_SOURCE,
+  onboardingFailure: EventManager.APP_PLANE_SOURCE,
+  offboardingRequest: EventManager.CONTROL_PLANE_SOURCE,
+  offboardingSuccess: EventManager.APP_PLANE_SOURCE,
+  offboardingFailure: EventManager.APP_PLANE_SOURCE,
+  provisionSuccess: EventManager.APP_PLANE_SOURCE,
+  provisionFailure: EventManager.APP_PLANE_SOURCE,
+  deprovisionSuccess: EventManager.APP_PLANE_SOURCE,
+  deprovisionFailure: EventManager.APP_PLANE_SOURCE,
+  billingSuccess: EventManager.CONTROL_PLANE_SOURCE,
+  billingFailure: EventManager.CONTROL_PLANE_SOURCE,
+  activateRequest: EventManager.CONTROL_PLANE_SOURCE,
+  activateSuccess: EventManager.APP_PLANE_SOURCE,
+  activateFailure: EventManager.APP_PLANE_SOURCE,
+  deactivateRequest: EventManager.CONTROL_PLANE_SOURCE,
+  deactivateSuccess: EventManager.APP_PLANE_SOURCE,
+  deactivateFailure: EventManager.APP_PLANE_SOURCE,
+};

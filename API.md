@@ -4,7 +4,7 @@
 
 ### BashJobOrchestrator <a name="BashJobOrchestrator" id="@cdklabs/sbt-aws.BashJobOrchestrator"></a>
 
-Provides a BashJobOrchestrator to execute a BashJobRunner.
+Provides a BashJobOrchestrator to execute a CodeBuildRunner.
 
 #### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.BashJobOrchestrator.Initializer"></a>
 
@@ -14,10 +14,10 @@ import { BashJobOrchestrator } from '@cdklabs/sbt-aws'
 new BashJobOrchestrator(scope: Construct, id: string, props: BashJobOrchestratorProps)
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestrator.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestrator.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| **Name**                                                                                           | **Type**                                                                                       | **Description**   |
+| -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ----------------- |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestrator.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code>                                                              | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestrator.Initializer.parameter.id">id</a></code>       | <code>string</code>                                                                            | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.BashJobOrchestrator.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps">BashJobOrchestratorProps</a></code> | *No description.* |
 
 ---
@@ -42,8 +42,8 @@ new BashJobOrchestrator(scope: Construct, id: string, props: BashJobOrchestrator
 
 #### Methods <a name="Methods" id="Methods"></a>
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                                           | **Description**                                    |
+| ---------------------------------------------------------------------------------- | -------------------------------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.BashJobOrchestrator.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
@@ -58,8 +58,8 @@ Returns a string representation of this construct.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                                                 | **Description**               |
+| ---------------------------------------------------------------------------------------- | ----------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.BashJobOrchestrator.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
@@ -84,11 +84,11 @@ Any object.
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestrator.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestrator.property.eventTarget">eventTarget</a></code> | <code>aws-cdk-lib.aws_events.IRuleTarget</code> | The eventTarget to use when triggering this BashJobOrchestrator. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestrator.property.provisioningStateMachine">provisioningStateMachine</a></code> | <code>aws-cdk-lib.aws_stepfunctions.StateMachine</code> | The StateMachine used to implement this BashJobOrchestrator. |
+| **Name**                                                                                                                    | **Type**                                                | **Description**                                                  |
+| --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- | ---------------------------------------------------------------- |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestrator.property.node">node</a></code>                                         | <code>constructs.Node</code>                            | The tree node.                                                   |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestrator.property.eventTarget">eventTarget</a></code>                           | <code>aws-cdk-lib.aws_events.IRuleTarget</code>         | The eventTarget to use when triggering this BashJobOrchestrator. |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestrator.property.provisioningStateMachine">provisioningStateMachine</a></code> | <code>aws-cdk-lib.aws_stepfunctions.StateMachine</code> | The StateMachine used to implement this BashJobOrchestrator.     |
 
 ---
 
@@ -129,53 +129,53 @@ The StateMachine used to implement this BashJobOrchestrator.
 ---
 
 
-### BashJobRunner <a name="BashJobRunner" id="@cdklabs/sbt-aws.BashJobRunner"></a>
+### CodeBuildRunner <a name="CodeBuildRunner" id="@cdklabs/sbt-aws.CodeBuildRunner"></a>
 
-Provides a BashJobRunner to execute arbitrary bash code.
+Provides a CodeBuildRunner to execute arbitrary bash code.
 
-#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.BashJobRunner.Initializer"></a>
+#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.CodeBuildRunner.Initializer"></a>
 
 ```typescript
-import { BashJobRunner } from '@cdklabs/sbt-aws'
+import { CodeBuildRunner } from '@cdklabs/sbt-aws'
 
-new BashJobRunner(scope: Construct, id: string, props: BashJobRunnerProps)
+new CodeBuildRunner(scope: Construct, id: string, props: CodeBuildRunnerProps)
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunner.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunner.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunner.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps">BashJobRunnerProps</a></code> | *No description.* |
+| **Name**                                                                                       | **Type**                                                                               | **Description**   |
+| ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ----------------- |
+| <code><a href="#@cdklabs/sbt-aws.CodeBuildRunner.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code>                                                      | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CodeBuildRunner.Initializer.parameter.id">id</a></code>       | <code>string</code>                                                                    | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CodeBuildRunner.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.CodeBuildRunnerProps">CodeBuildRunnerProps</a></code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.BashJobRunner.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.CodeBuildRunner.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.BashJobRunner.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.CodeBuildRunner.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.BashJobRunner.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.CodeBuildRunner.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#@cdklabs/sbt-aws.BashJobRunnerProps">BashJobRunnerProps</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.CodeBuildRunnerProps">CodeBuildRunnerProps</a>
 
 ---
 
 #### Methods <a name="Methods" id="Methods"></a>
 
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunner.toString">toString</a></code> | Returns a string representation of this construct. |
+| **Name**                                                                       | **Description**                                    |
+| ------------------------------------------------------------------------------ | -------------------------------------------------- |
+| <code><a href="#@cdklabs/sbt-aws.CodeBuildRunner.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
 
-##### `toString` <a name="toString" id="@cdklabs/sbt-aws.BashJobRunner.toString"></a>
+##### `toString` <a name="toString" id="@cdklabs/sbt-aws.CodeBuildRunner.toString"></a>
 
 ```typescript
 public toString(): string
@@ -185,23 +185,23 @@ Returns a string representation of this construct.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunner.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| **Name**                                                                             | **Description**               |
+| ------------------------------------------------------------------------------------ | ----------------------------- |
+| <code><a href="#@cdklabs/sbt-aws.CodeBuildRunner.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.BashJobRunner.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.CodeBuildRunner.isConstruct"></a>
 
 ```typescript
-import { BashJobRunner } from '@cdklabs/sbt-aws'
+import { CodeBuildRunner } from '@cdklabs/sbt-aws'
 
-BashJobRunner.isConstruct(x: any)
+CodeBuildRunner.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.BashJobRunner.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.CodeBuildRunner.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -211,16 +211,16 @@ Any object.
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunner.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunner.property.codebuildProject">codebuildProject</a></code> | <code>aws-cdk-lib.aws_codebuild.Project</code> | The codebuildProject used to implement this BashJobRunner. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunner.property.eventTarget">eventTarget</a></code> | <code>aws-cdk-lib.aws_events.IRuleTarget</code> | The eventTarget to use when triggering this BashJobRunner. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunner.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | The environment variables to export into the outgoing event once the BashJobRunner has finished. |
+| **Name**                                                                                                                                      | **Type**                                        | **Description**                                                                                    |
+| --------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| <code><a href="#@cdklabs/sbt-aws.CodeBuildRunner.property.node">node</a></code>                                                               | <code>constructs.Node</code>                    | The tree node.                                                                                     |
+| <code><a href="#@cdklabs/sbt-aws.CodeBuildRunner.property.codebuildProject">codebuildProject</a></code>                                       | <code>aws-cdk-lib.aws_codebuild.Project</code>  | The codebuildProject used to implement this CodeBuildRunner.                                       |
+| <code><a href="#@cdklabs/sbt-aws.CodeBuildRunner.property.eventTarget">eventTarget</a></code>                                                 | <code>aws-cdk-lib.aws_events.IRuleTarget</code> | The eventTarget to use when triggering this CodeBuildRunner.                                       |
+| <code><a href="#@cdklabs/sbt-aws.CodeBuildRunner.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code>                           | The environment variables to export into the outgoing event once the CodeBuildRunner has finished. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.BashJobRunner.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.CodeBuildRunner.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -232,7 +232,7 @@ The tree node.
 
 ---
 
-##### `codebuildProject`<sup>Required</sup> <a name="codebuildProject" id="@cdklabs/sbt-aws.BashJobRunner.property.codebuildProject"></a>
+##### `codebuildProject`<sup>Required</sup> <a name="codebuildProject" id="@cdklabs/sbt-aws.CodeBuildRunner.property.codebuildProject"></a>
 
 ```typescript
 public readonly codebuildProject: Project;
@@ -240,11 +240,11 @@ public readonly codebuildProject: Project;
 
 - *Type:* aws-cdk-lib.aws_codebuild.Project
 
-The codebuildProject used to implement this BashJobRunner.
+The codebuildProject used to implement this CodeBuildRunner.
 
 ---
 
-##### `eventTarget`<sup>Required</sup> <a name="eventTarget" id="@cdklabs/sbt-aws.BashJobRunner.property.eventTarget"></a>
+##### `eventTarget`<sup>Required</sup> <a name="eventTarget" id="@cdklabs/sbt-aws.CodeBuildRunner.property.eventTarget"></a>
 
 ```typescript
 public readonly eventTarget: IRuleTarget;
@@ -252,11 +252,11 @@ public readonly eventTarget: IRuleTarget;
 
 - *Type:* aws-cdk-lib.aws_events.IRuleTarget
 
-The eventTarget to use when triggering this BashJobRunner.
+The eventTarget to use when triggering this CodeBuildRunner.
 
 ---
 
-##### `environmentVariablesToOutgoingEvent`<sup>Optional</sup> <a name="environmentVariablesToOutgoingEvent" id="@cdklabs/sbt-aws.BashJobRunner.property.environmentVariablesToOutgoingEvent"></a>
+##### `environmentVariablesToOutgoingEvent`<sup>Optional</sup> <a name="environmentVariablesToOutgoingEvent" id="@cdklabs/sbt-aws.CodeBuildRunner.property.environmentVariablesToOutgoingEvent"></a>
 
 ```typescript
 public readonly environmentVariablesToOutgoingEvent: string[];
@@ -264,7 +264,7 @@ public readonly environmentVariablesToOutgoingEvent: string[];
 
 - *Type:* string[]
 
-The environment variables to export into the outgoing event once the BashJobRunner has finished.
+The environment variables to export into the outgoing event once the CodeBuildRunner has finished.
 
 ---
 
@@ -284,11 +284,11 @@ import { BillingProvider } from '@cdklabs/sbt-aws'
 new BillingProvider(scope: Construct, id: string, props: BillingProviderProps)
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | The scope in which to define this construct. |
-| <code><a href="#@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.id">id</a></code> | <code>string</code> | The unique ID of this construct. |
-| <code><a href="#@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.BillingProviderProps">BillingProviderProps</a></code> | The properties for the BillingProvider. |
+| **Name**                                                                                       | **Type**                                                                               | **Description**                              |
+| ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | -------------------------------------------- |
+| <code><a href="#@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code>                                                      | The scope in which to define this construct. |
+| <code><a href="#@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.id">id</a></code>       | <code>string</code>                                                                    | The unique ID of this construct.             |
+| <code><a href="#@cdklabs/sbt-aws.BillingProvider.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.BillingProviderProps">BillingProviderProps</a></code> | The properties for the BillingProvider.      |
 
 ---
 
@@ -318,8 +318,8 @@ The properties for the BillingProvider.
 
 #### Methods <a name="Methods" id="Methods"></a>
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                                       | **Description**                                    |
+| ------------------------------------------------------------------------------ | -------------------------------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.BillingProvider.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
@@ -334,8 +334,8 @@ Returns a string representation of this construct.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                                             | **Description**               |
+| ------------------------------------------------------------------------------------ | ----------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.BillingProvider.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
@@ -360,9 +360,9 @@ Any object.
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BillingProvider.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| **Name**                                                                                                                                          | **Type**                                          | **Description**                                                   |
+| ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------- |
+| <code><a href="#@cdklabs/sbt-aws.BillingProvider.property.node">node</a></code>                                                                   | <code>constructs.Node</code>                      | The tree node.                                                    |
 | <code><a href="#@cdklabs/sbt-aws.BillingProvider.property.controlPlaneAPIBillingWebhookResource">controlPlaneAPIBillingWebhookResource</a></code> | <code>aws-cdk-lib.aws_apigateway.IResource</code> | The API Gateway resource containing the billing webhook resource. |
 
 ---
@@ -408,10 +408,10 @@ import { CognitoAuth } from '@cdklabs/sbt-aws'
 new CognitoAuth(scope: Construct, id: string, props: CognitoAuthProps)
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| **Name**                                                                                   | **Type**                                                                       | **Description**   |
+| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ | ----------------- |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code>                                              | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.Initializer.parameter.id">id</a></code>       | <code>string</code>                                                            | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps">CognitoAuthProps</a></code> | *No description.* |
 
 ---
@@ -436,8 +436,8 @@ new CognitoAuth(scope: Construct, id: string, props: CognitoAuthProps)
 
 #### Methods <a name="Methods" id="Methods"></a>
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                                   | **Description**                                    |
+| -------------------------------------------------------------------------- | -------------------------------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
@@ -452,8 +452,8 @@ Returns a string representation of this construct.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                                         | **Description**               |
+| -------------------------------------------------------------------------------- | ----------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
@@ -478,21 +478,21 @@ Any object.
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.authorizationServer">authorizationServer</a></code> | <code>string</code> | The authorization server for the control plane IdP. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.authorizer">authorizer</a></code> | <code>aws-cdk-lib.aws_apigateway.IAuthorizer</code> | The API Gateway authorizer for authenticating requests. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.clientId">clientId</a></code> | <code>string</code> | The client ID for the control plane IdP. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.controlPlaneIdpDetails">controlPlaneIdpDetails</a></code> | <code>any</code> | The details of the control plane Identity Provider (IdP). |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.createUserFunction">createUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for creating a user. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.deleteUserFunction">deleteUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for deleting a user. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.disableUserFunction">disableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for disabling a user. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.enableUserFunction">enableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for enabling a user. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchAllUsersFunction">fetchAllUsersFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for fetching all users. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchUserFunction">fetchUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for fetching a user. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.updateUserFunction">updateUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for updating a user. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.wellKnownEndpointUrl">wellKnownEndpointUrl</a></code> | <code>string</code> | The well-known endpoint URL for the control plane IdP. |
+| **Name**                                                                                                        | **Type**                                            | **Description**                                           |
+| --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | --------------------------------------------------------- |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.node">node</a></code>                                     | <code>constructs.Node</code>                        | The tree node.                                            |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.authorizationServer">authorizationServer</a></code>       | <code>string</code>                                 | The authorization server for the control plane IdP.       |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.authorizer">authorizer</a></code>                         | <code>aws-cdk-lib.aws_apigateway.IAuthorizer</code> | The API Gateway authorizer for authenticating requests.   |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.clientId">clientId</a></code>                             | <code>string</code>                                 | The client ID for the control plane IdP.                  |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.controlPlaneIdpDetails">controlPlaneIdpDetails</a></code> | <code>any</code>                                    | The details of the control plane Identity Provider (IdP). |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.createUserFunction">createUserFunction</a></code>         | <code>aws-cdk-lib.aws_lambda.IFunction</code>       | The Lambda function for creating a user.                  |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.deleteUserFunction">deleteUserFunction</a></code>         | <code>aws-cdk-lib.aws_lambda.IFunction</code>       | The Lambda function for deleting a user.                  |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.disableUserFunction">disableUserFunction</a></code>       | <code>aws-cdk-lib.aws_lambda.IFunction</code>       | The Lambda function for disabling a user.                 |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.enableUserFunction">enableUserFunction</a></code>         | <code>aws-cdk-lib.aws_lambda.IFunction</code>       | The Lambda function for enabling a user.                  |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchAllUsersFunction">fetchAllUsersFunction</a></code>   | <code>aws-cdk-lib.aws_lambda.IFunction</code>       | The Lambda function for fetching all users.               |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchUserFunction">fetchUserFunction</a></code>           | <code>aws-cdk-lib.aws_lambda.IFunction</code>       | The Lambda function for fetching a user.                  |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.updateUserFunction">updateUserFunction</a></code>         | <code>aws-cdk-lib.aws_lambda.IFunction</code>       | The Lambda function for updating a user.                  |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.wellKnownEndpointUrl">wellKnownEndpointUrl</a></code>     | <code>string</code>                                 | The well-known endpoint URL for the control plane IdP.    |
 
 ---
 
@@ -663,10 +663,10 @@ import { ControlPlane } from '@cdklabs/sbt-aws'
 new ControlPlane(scope: Construct, id: string, props: ControlPlaneProps)
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlane.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlane.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| **Name**                                                                                    | **Type**                                                                         | **Description**   |
+| ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ----------------- |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlane.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code>                                                | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlane.Initializer.parameter.id">id</a></code>       | <code>string</code>                                                              | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlane.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps">ControlPlaneProps</a></code> | *No description.* |
 
 ---
@@ -691,8 +691,8 @@ new ControlPlane(scope: Construct, id: string, props: ControlPlaneProps)
 
 #### Methods <a name="Methods" id="Methods"></a>
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                                    | **Description**                                    |
+| --------------------------------------------------------------------------- | -------------------------------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlane.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
@@ -707,8 +707,8 @@ Returns a string representation of this construct.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                                          | **Description**               |
+| --------------------------------------------------------------------------------- | ----------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlane.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
@@ -733,13 +733,13 @@ Any object.
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.controlPlaneAPIGatewayUrl">controlPlaneAPIGatewayUrl</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.eventBusArn">eventBusArn</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.tables">tables</a></code> | <code><a href="#@cdklabs/sbt-aws.Tables">Tables</a></code> | *No description.* |
+| **Name**                                                                                                               | **Type**                                                               | **Description**   |
+| ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ----------------- |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.node">node</a></code>                                           | <code>constructs.Node</code>                                           | The tree node.    |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.controlPlaneAPIGatewayUrl">controlPlaneAPIGatewayUrl</a></code> | <code>string</code>                                                    | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.eventBusArn">eventBusArn</a></code>                             | <code>string</code>                                                    | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.eventManager">eventManager</a></code>                           | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.tables">tables</a></code>                                       | <code><a href="#@cdklabs/sbt-aws.Tables">Tables</a></code>             | *No description.* |
 
 ---
 
@@ -806,10 +806,10 @@ import { ControlPlaneAPI } from '@cdklabs/sbt-aws'
 new ControlPlaneAPI(scope: Construct, id: string, props: ControlPlaneAPIProps)
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| **Name**                                                                                       | **Type**                                                                               | **Description**   |
+| ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ----------------- |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code>                                                      | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.Initializer.parameter.id">id</a></code>       | <code>string</code>                                                                    | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps">ControlPlaneAPIProps</a></code> | *No description.* |
 
 ---
@@ -834,8 +834,8 @@ new ControlPlaneAPI(scope: Construct, id: string, props: ControlPlaneAPIProps)
 
 #### Methods <a name="Methods" id="Methods"></a>
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                                       | **Description**                                    |
+| ------------------------------------------------------------------------------ | -------------------------------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
@@ -850,8 +850,8 @@ Returns a string representation of this construct.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                                             | **Description**               |
+| ------------------------------------------------------------------------------------ | ----------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
@@ -876,12 +876,12 @@ Any object.
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.billingResource">billingResource</a></code> | <code>aws-cdk-lib.aws_apigateway.Resource</code> | *No description.* |
+| **Name**                                                                                                                  | **Type**                                               | **Description**   |
+| ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ----------------- |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.node">node</a></code>                                           | <code>constructs.Node</code>                           | The tree node.    |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.billingResource">billingResource</a></code>                     | <code>aws-cdk-lib.aws_apigateway.Resource</code>       | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.tenantUpdateServiceTarget">tenantUpdateServiceTarget</a></code> | <code>aws-cdk-lib.aws_events_targets.ApiGateway</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.apiUrl">apiUrl</a></code> | <code>any</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.apiUrl">apiUrl</a></code>                                       | <code>any</code>                                       | *No description.* |
 
 ---
 
@@ -944,10 +944,10 @@ import { CoreApplicationPlane } from '@cdklabs/sbt-aws'
 new CoreApplicationPlane(scope: Construct, id: string, props: CoreApplicationPlaneProps)
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlane.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlane.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| **Name**                                                                                            | **Type**                                                                                         | **Description**   |
+| --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ----------------- |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlane.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code>                                                                | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlane.Initializer.parameter.id">id</a></code>       | <code>string</code>                                                                              | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlane.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps">CoreApplicationPlaneProps</a></code> | *No description.* |
 
 ---
@@ -972,8 +972,8 @@ new CoreApplicationPlane(scope: Construct, id: string, props: CoreApplicationPla
 
 #### Methods <a name="Methods" id="Methods"></a>
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                                            | **Description**                                    |
+| ----------------------------------------------------------------------------------- | -------------------------------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlane.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
@@ -988,8 +988,8 @@ Returns a string representation of this construct.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                                                  | **Description**               |
+| ----------------------------------------------------------------------------------------- | ----------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlane.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
@@ -1014,9 +1014,9 @@ Any object.
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlane.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| **Name**                                                                                             | **Type**                                                               | **Description**   |
+| ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ----------------- |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlane.property.node">node</a></code>                 | <code>constructs.Node</code>                                           | The tree node.    |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlane.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | *No description.* |
 
 ---
@@ -1046,6 +1046,8 @@ public readonly eventManager: EventManager;
 
 ### EventManager <a name="EventManager" id="@cdklabs/sbt-aws.EventManager"></a>
 
+- *Implements:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
+
 Provides an EventManager to interact with the EventBus shared with the SBT control plane.
 
 #### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.EventManager.Initializer"></a>
@@ -1056,10 +1058,10 @@ import { EventManager } from '@cdklabs/sbt-aws'
 new EventManager(scope: Construct, id: string, props: EventManagerProps)
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.EventManager.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.EventManager.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| **Name**                                                                                    | **Type**                                                                         | **Description**   |
+| ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ----------------- |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code>                                                | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.Initializer.parameter.id">id</a></code>       | <code>string</code>                                                              | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.EventManager.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManagerProps">EventManagerProps</a></code> | *No description.* |
 
 ---
@@ -1084,10 +1086,10 @@ new EventManager(scope: Construct, id: string, props: EventManagerProps)
 
 #### Methods <a name="Methods" id="Methods"></a>
 
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.EventManager.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@cdklabs/sbt-aws.EventManager.addTargetToEvent">addTargetToEvent</a></code> | Adds an IRuleTarget to an event. |
+| **Name**                                                                                    | **Description**                                    |
+| ------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.toString">toString</a></code>                 | Returns a string representation of this construct. |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.addTargetToEvent">addTargetToEvent</a></code> | Adds an IRuleTarget to an event.                   |
 
 ---
 
@@ -1125,8 +1127,8 @@ The target that will be added to the event.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                                          | **Description**               |
+| --------------------------------------------------------------------------------- | ----------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.EventManager.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
@@ -1151,13 +1153,13 @@ Any object.
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.EventManager.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.EventManager.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | The event source used for events emitted by the application plane. |
-| <code><a href="#@cdklabs/sbt-aws.EventManager.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The event source used for events emitted by the control plane. |
-| <code><a href="#@cdklabs/sbt-aws.EventManager.property.eventBus">eventBus</a></code> | <code>aws-cdk-lib.aws_events.IEventBus</code> | The event bus to register new rules with. |
-| <code><a href="#@cdklabs/sbt-aws.EventManager.property.supportedEvents">supportedEvents</a></code> | <code>{[ key: string ]: string}</code> | List of recognized events that are available as triggers. |
+| **Name**                                                                                                                   | **Type**                                      | **Description**                                                    |
+| -------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- | ------------------------------------------------------------------ |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.property.node">node</a></code>                                               | <code>constructs.Node</code>                  | The tree node.                                                     |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code>                           | The event source used for events emitted by the application plane. |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.property.controlPlaneEventSource">controlPlaneEventSource</a></code>         | <code>string</code>                           | The event source used for events emitted by the control plane.     |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.property.eventBus">eventBus</a></code>                                       | <code>aws-cdk-lib.aws_events.IEventBus</code> | The event bus to register new rules with.                          |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.property.supportedEvents">supportedEvents</a></code>                         | <code>{[ key: string ]: string}</code>        | List of recognized events that are available as triggers.          |
 
 ---
 
@@ -1221,6 +1223,34 @@ List of recognized events that are available as triggers.
 
 ---
 
+#### Constants <a name="Constants" id="Constants"></a>
+
+| **Name**                                                                                                     | **Type**            | **Description**   |
+| ------------------------------------------------------------------------------------------------------------ | ------------------- | ----------------- |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.property.APP_PLANE_SOURCE">APP_PLANE_SOURCE</a></code>         | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.property.CONTROL_PLANE_SOURCE">CONTROL_PLANE_SOURCE</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `APP_PLANE_SOURCE`<sup>Required</sup> <a name="APP_PLANE_SOURCE" id="@cdklabs/sbt-aws.EventManager.property.APP_PLANE_SOURCE"></a>
+
+```typescript
+public readonly APP_PLANE_SOURCE: string;
+```
+
+- *Type:* string
+
+---
+
+##### `CONTROL_PLANE_SOURCE`<sup>Required</sup> <a name="CONTROL_PLANE_SOURCE" id="@cdklabs/sbt-aws.EventManager.property.CONTROL_PLANE_SOURCE"></a>
+
+```typescript
+public readonly CONTROL_PLANE_SOURCE: string;
+```
+
+- *Type:* string
+
+---
 
 ### FirehoseAggregator <a name="FirehoseAggregator" id="@cdklabs/sbt-aws.FirehoseAggregator"></a>
 
@@ -1239,10 +1269,10 @@ import { FirehoseAggregator } from '@cdklabs/sbt-aws'
 new FirehoseAggregator(scope: Construct, id: string, props: FirehoseAggregatorProps)
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| **Name**                                                                                          | **Type**                                                                                     | **Description**   |
+| ------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ----------------- |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code>                                                            | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.Initializer.parameter.id">id</a></code>       | <code>string</code>                                                                          | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.FirehoseAggregatorProps">FirehoseAggregatorProps</a></code> | *No description.* |
 
 ---
@@ -1267,8 +1297,8 @@ new FirehoseAggregator(scope: Construct, id: string, props: FirehoseAggregatorPr
 
 #### Methods <a name="Methods" id="Methods"></a>
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                                          | **Description**                                    |
+| --------------------------------------------------------------------------------- | -------------------------------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
@@ -1283,8 +1313,8 @@ Returns a string representation of this construct.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                                                | **Description**               |
+| --------------------------------------------------------------------------------------- | ----------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
@@ -1309,13 +1339,13 @@ Any object.
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.dataAggregator">dataAggregator</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Python Lambda function responsible for aggregating the raw data coming in via the dataIngestor. |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.dataIngestor">dataIngestor</a></code> | <code>@aws-cdk/aws-kinesisfirehose-alpha.DeliveryStream</code> | The Firehose DeliveryStream ingestor responsible for accepting the incoming data. |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.dataIngestorName">dataIngestorName</a></code> | <code>string</code> | The name of the dataIngestor. |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.dataRepository">dataRepository</a></code> | <code>aws-cdk-lib.aws_dynamodb.ITable</code> | The DynamoDB table containing the aggregated data. |
+| **Name**                                                                                                   | **Type**                                                       | **Description**                                                                                     |
+| ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.node">node</a></code>                         | <code>constructs.Node</code>                                   | The tree node.                                                                                      |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.dataAggregator">dataAggregator</a></code>     | <code>aws-cdk-lib.aws_lambda.IFunction</code>                  | The Python Lambda function responsible for aggregating the raw data coming in via the dataIngestor. |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.dataIngestor">dataIngestor</a></code>         | <code>@aws-cdk/aws-kinesisfirehose-alpha.DeliveryStream</code> | The Firehose DeliveryStream ingestor responsible for accepting the incoming data.                   |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.dataIngestorName">dataIngestorName</a></code> | <code>string</code>                                            | The name of the dataIngestor.                                                                       |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregator.property.dataRepository">dataRepository</a></code>     | <code>aws-cdk-lib.aws_dynamodb.ITable</code>                   | The DynamoDB table containing the aggregated data.                                                  |
 
 ---
 
@@ -1392,10 +1422,10 @@ import { Messaging } from '@cdklabs/sbt-aws'
 new Messaging(scope: Construct, id: string)
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
+| **Name**                                                                                 | **Type**                          | **Description**   |
+| ---------------------------------------------------------------------------------------- | --------------------------------- | ----------------- |
 | <code><a href="#@cdklabs/sbt-aws.Messaging.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Messaging.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.Messaging.Initializer.parameter.id">id</a></code>       | <code>string</code>               | *No description.* |
 
 ---
 
@@ -1413,8 +1443,8 @@ new Messaging(scope: Construct, id: string)
 
 #### Methods <a name="Methods" id="Methods"></a>
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                                 | **Description**                                    |
+| ------------------------------------------------------------------------ | -------------------------------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.Messaging.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
@@ -1429,8 +1459,8 @@ Returns a string representation of this construct.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                                       | **Description**               |
+| ------------------------------------------------------------------------------ | ----------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.Messaging.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
@@ -1455,9 +1485,9 @@ Any object.
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.Messaging.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| **Name**                                                                          | **Type**                                     | **Description**   |
+| --------------------------------------------------------------------------------- | -------------------------------------------- | ----------------- |
+| <code><a href="#@cdklabs/sbt-aws.Messaging.property.node">node</a></code>         | <code>constructs.Node</code>                 | The tree node.    |
 | <code><a href="#@cdklabs/sbt-aws.Messaging.property.eventBus">eventBus</a></code> | <code>aws-cdk-lib.aws_events.EventBus</code> | *No description.* |
 
 ---
@@ -1495,10 +1525,10 @@ import { Services } from '@cdklabs/sbt-aws'
 new Services(scope: Construct, id: string, props: ServicesProps)
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.Services.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Services.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| **Name**                                                                                | **Type**                                                                 | **Description**   |
+| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ----------------- |
+| <code><a href="#@cdklabs/sbt-aws.Services.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code>                                        | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.Services.Initializer.parameter.id">id</a></code>       | <code>string</code>                                                      | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.Services.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.ServicesProps">ServicesProps</a></code> | *No description.* |
 
 ---
@@ -1523,8 +1553,8 @@ new Services(scope: Construct, id: string, props: ServicesProps)
 
 #### Methods <a name="Methods" id="Methods"></a>
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                                | **Description**                                    |
+| ----------------------------------------------------------------------- | -------------------------------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.Services.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
@@ -1539,8 +1569,8 @@ Returns a string representation of this construct.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                                      | **Description**               |
+| ----------------------------------------------------------------------------- | ----------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.Services.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
@@ -1565,9 +1595,9 @@ Any object.
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.Services.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| **Name**                                                                                                         | **Type**                                     | **Description**   |
+| ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------- | ----------------- |
+| <code><a href="#@cdklabs/sbt-aws.Services.property.node">node</a></code>                                         | <code>constructs.Node</code>                 | The tree node.    |
 | <code><a href="#@cdklabs/sbt-aws.Services.property.tenantManagementServices">tenantManagementServices</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
 
 ---
@@ -1605,10 +1635,10 @@ import { Tables } from '@cdklabs/sbt-aws'
 new Tables(scope: Construct, id: string)
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
+| **Name**                                                                              | **Type**                          | **Description**   |
+| ------------------------------------------------------------------------------------- | --------------------------------- | ----------------- |
 | <code><a href="#@cdklabs/sbt-aws.Tables.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tables.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.Tables.Initializer.parameter.id">id</a></code>       | <code>string</code>               | *No description.* |
 
 ---
 
@@ -1626,8 +1656,8 @@ new Tables(scope: Construct, id: string)
 
 #### Methods <a name="Methods" id="Methods"></a>
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                              | **Description**                                    |
+| --------------------------------------------------------------------- | -------------------------------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.Tables.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
@@ -1642,8 +1672,8 @@ Returns a string representation of this construct.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                                    | **Description**               |
+| --------------------------------------------------------------------------- | ----------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.Tables.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
@@ -1668,14 +1698,14 @@ Any object.
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.Tables.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.Tables.property.tenantConfigColumn">tenantConfigColumn</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tables.property.tenantConfigIndexName">tenantConfigIndexName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tables.property.tenantDetails">tenantDetails</a></code> | <code>aws-cdk-lib.aws_dynamodb.Table</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tables.property.tenantIdColumn">tenantIdColumn</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tables.property.tenantNameColumn">tenantNameColumn</a></code> | <code>string</code> | *No description.* |
+| **Name**                                                                                                 | **Type**                                    | **Description**   |
+| -------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ----------------- |
+| <code><a href="#@cdklabs/sbt-aws.Tables.property.node">node</a></code>                                   | <code>constructs.Node</code>                | The tree node.    |
+| <code><a href="#@cdklabs/sbt-aws.Tables.property.tenantConfigColumn">tenantConfigColumn</a></code>       | <code>string</code>                         | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.Tables.property.tenantConfigIndexName">tenantConfigIndexName</a></code> | <code>string</code>                         | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.Tables.property.tenantDetails">tenantDetails</a></code>                 | <code>aws-cdk-lib.aws_dynamodb.Table</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.Tables.property.tenantIdColumn">tenantIdColumn</a></code>               | <code>string</code>                         | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.Tables.property.tenantNameColumn">tenantNameColumn</a></code>           | <code>string</code>                         | *No description.* |
 
 ---
 
@@ -1752,10 +1782,10 @@ import { TenantConfigService } from '@cdklabs/sbt-aws'
 new TenantConfigService(scope: Construct, id: string, props: TenantConfigServiceProps)
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.TenantConfigService.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.TenantConfigService.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| **Name**                                                                                           | **Type**                                                                                       | **Description**   |
+| -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ----------------- |
+| <code><a href="#@cdklabs/sbt-aws.TenantConfigService.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code>                                                              | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantConfigService.Initializer.parameter.id">id</a></code>       | <code>string</code>                                                                            | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.TenantConfigService.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.TenantConfigServiceProps">TenantConfigServiceProps</a></code> | *No description.* |
 
 ---
@@ -1780,8 +1810,8 @@ new TenantConfigService(scope: Construct, id: string, props: TenantConfigService
 
 #### Methods <a name="Methods" id="Methods"></a>
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                                           | **Description**                                    |
+| ---------------------------------------------------------------------------------- | -------------------------------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.TenantConfigService.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
@@ -1796,8 +1826,8 @@ Returns a string representation of this construct.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
-| **Name** | **Description** |
-| --- | --- |
+| **Name**                                                                                 | **Description**               |
+| ---------------------------------------------------------------------------------------- | ----------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.TenantConfigService.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
@@ -1822,9 +1852,9 @@ Any object.
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.TenantConfigService.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| **Name**                                                                                                                      | **Type**                                     | **Description**   |
+| ----------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- | ----------------- |
+| <code><a href="#@cdklabs/sbt-aws.TenantConfigService.property.node">node</a></code>                                           | <code>constructs.Node</code>                 | The tree node.    |
 | <code><a href="#@cdklabs/sbt-aws.TenantConfigService.property.tenantConfigServiceLambda">tenantConfigServiceLambda</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
 
 ---
@@ -1868,25 +1898,25 @@ const bashJobOrchestratorProps: BashJobOrchestratorProps = { ... }
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.analyticsReporting">analyticsReporting</a></code> | <code>boolean</code> | Include runtime versioning information in this Stack. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.crossRegionReferences">crossRegionReferences</a></code> | <code>boolean</code> | Enable this flag to allow native cross region stack references. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.description">description</a></code> | <code>string</code> | A description of the stack. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.env">env</a></code> | <code>aws-cdk-lib.Environment</code> | The AWS environment (account/region) where this stack will be deployed. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.permissionsBoundary">permissionsBoundary</a></code> | <code>aws-cdk-lib.PermissionsBoundary</code> | Options for applying a permissions boundary to all IAM Roles and Users created within this Stage. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.stackName">stackName</a></code> | <code>string</code> | Name to deploy the stack with. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.suppressTemplateIndentation">suppressTemplateIndentation</a></code> | <code>boolean</code> | Enable this flag to suppress indentation in generated CloudFormation templates. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.synthesizer">synthesizer</a></code> | <code>aws-cdk-lib.IStackSynthesizer</code> | Synthesis method to use while deploying this stack. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.tags">tags</a></code> | <code>{[ key: string ]: string}</code> | Stack tags that will be applied to all the taggable resources and the stack itself. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.terminationProtection">terminationProtection</a></code> | <code>boolean</code> | Whether to enable termination protection for this stack. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.bashJobRunner">bashJobRunner</a></code> | <code><a href="#@cdklabs/sbt-aws.BashJobRunner">BashJobRunner</a></code> | The BashJobRunner to execute as part of this BashJobOrchestrator. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.detailType">detailType</a></code> | <code>string</code> | The detail type to use when publishing event bridge events. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.eventSource">eventSource</a></code> | <code>string</code> | The event source to use when publishing event bridge events. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.targetEventBus">targetEventBus</a></code> | <code>aws-cdk-lib.aws_events.IEventBus</code> | The event bus to publish the outgoing event to. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentJSONVariablesFromIncomingEvent">environmentJSONVariablesFromIncomingEvent</a></code> | <code>string[]</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentStringVariablesFromIncomingEvent">environmentStringVariablesFromIncomingEvent</a></code> | <code>string[]</code> | Environment variables to import into the bash job from event details field. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | Environment variables to export into the outgoing event once the bash job has finished. |
+| **Name**                                                                                                                                                               | **Type**                                                                     | **Description**                                                                                   |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.analyticsReporting">analyticsReporting</a></code>                                                   | <code>boolean</code>                                                         | Include runtime versioning information in this Stack.                                             |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.crossRegionReferences">crossRegionReferences</a></code>                                             | <code>boolean</code>                                                         | Enable this flag to allow native cross region stack references.                                   |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.description">description</a></code>                                                                 | <code>string</code>                                                          | A description of the stack.                                                                       |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.env">env</a></code>                                                                                 | <code>aws-cdk-lib.Environment</code>                                         | The AWS environment (account/region) where this stack will be deployed.                           |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.permissionsBoundary">permissionsBoundary</a></code>                                                 | <code>aws-cdk-lib.PermissionsBoundary</code>                                 | Options for applying a permissions boundary to all IAM Roles and Users created within this Stage. |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.stackName">stackName</a></code>                                                                     | <code>string</code>                                                          | Name to deploy the stack with.                                                                    |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.suppressTemplateIndentation">suppressTemplateIndentation</a></code>                                 | <code>boolean</code>                                                         | Enable this flag to suppress indentation in generated CloudFormation templates.                   |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.synthesizer">synthesizer</a></code>                                                                 | <code>aws-cdk-lib.IStackSynthesizer</code>                                   | Synthesis method to use while deploying this stack.                                               |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.tags">tags</a></code>                                                                               | <code>{[ key: string ]: string}</code>                                       | Stack tags that will be applied to all the taggable resources and the stack itself.               |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.terminationProtection">terminationProtection</a></code>                                             | <code>boolean</code>                                                         | Whether to enable termination protection for this stack.                                          |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.CodeBuildRunner">CodeBuildRunner</a></code>                                                         | <code><a href="#@cdklabs/sbt-aws.CodeBuildRunner">CodeBuildRunner</a></code> | The CodeBuildRunner to execute as part of this BashJobOrchestrator.                               |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.detailType">detailType</a></code>                                                                   | <code>string</code>                                                          | The detail type to use when publishing event bridge events.                                       |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.eventSource">eventSource</a></code>                                                                 | <code>string</code>                                                          | The event source to use when publishing event bridge events.                                      |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.targetEventBus">targetEventBus</a></code>                                                           | <code>aws-cdk-lib.aws_events.IEventBus</code>                                | The event bus to publish the outgoing event to.                                                   |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentJSONVariablesFromIncomingEvent">environmentJSONVariablesFromIncomingEvent</a></code>     | <code>string[]</code>                                                        | *No description.*                                                                                 |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentStringVariablesFromIncomingEvent">environmentStringVariablesFromIncomingEvent</a></code> | <code>string[]</code>                                                        | Environment variables to import into the bash job from event details field.                       |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code>                 | <code>string[]</code>                                                        | Environment variables to export into the outgoing event once the bash job has finished.           |
 
 ---
 
@@ -2100,15 +2130,15 @@ Whether to enable termination protection for this stack.
 
 ---
 
-##### `bashJobRunner`<sup>Required</sup> <a name="bashJobRunner" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.bashJobRunner"></a>
+##### `CodeBuildRunner`<sup>Required</sup> <a name="CodeBuildRunner" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.CodeBuildRunner"></a>
 
 ```typescript
-public readonly bashJobRunner: BashJobRunner;
+public readonly CodeBuildRunner: CodeBuildRunner;
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.BashJobRunner">BashJobRunner</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.CodeBuildRunner">CodeBuildRunner</a>
 
-The BashJobRunner to execute as part of this BashJobOrchestrator.
+The CodeBuildRunner to execute as part of this BashJobOrchestrator.
 
 ---
 
@@ -2182,33 +2212,33 @@ Environment variables to export into the outgoing event once the bash job has fi
 
 ---
 
-### BashJobRunnerProps <a name="BashJobRunnerProps" id="@cdklabs/sbt-aws.BashJobRunnerProps"></a>
+### CodeBuildRunnerProps <a name="CodeBuildRunnerProps" id="@cdklabs/sbt-aws.CodeBuildRunnerProps"></a>
 
-Encapsulates the list of properties for a BashJobRunner.
+Encapsulates the list of properties for a CodeBuildRunner.
 
-#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.BashJobRunnerProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.CodeBuildRunnerProps.Initializer"></a>
 
 ```typescript
-import { BashJobRunnerProps } from '@cdklabs/sbt-aws'
+import { CodeBuildRunnerProps } from '@cdklabs/sbt-aws'
 
-const bashJobRunnerProps: BashJobRunnerProps = { ... }
+const CodeBuildRunnerProps: CodeBuildRunnerProps = { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.name">name</a></code> | <code>string</code> | The name of the BashJobRunner. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.permissions">permissions</a></code> | <code>aws-cdk-lib.aws_iam.PolicyDocument</code> | The IAM permission document for the BashJobRunner. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.script">script</a></code> | <code>string</code> | The bash script to run as part of the BashJobRunner. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.environmentVariablesFromIncomingEvent">environmentVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the BashJobRunner from event details field. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | The environment variables to export into the outgoing event once the BashJobRunner has finished. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.postScript">postScript</a></code> | <code>string</code> | The bash script to run after the main script has completed. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.scriptEnvironmentVariables">scriptEnvironmentVariables</a></code> | <code>{[ key: string ]: string}</code> | The variables to pass into the codebuild BashJobRunner. |
+| **Name**                                                                                                                                               | **Type**                                        | **Description**                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| <code><a href="#@cdklabs/sbt-aws.CodeBuildRunnerProps.property.name">name</a></code>                                                                   | <code>string</code>                             | The name of the CodeBuildRunner.                                                                   |
+| <code><a href="#@cdklabs/sbt-aws.CodeBuildRunnerProps.property.permissions">permissions</a></code>                                                     | <code>aws-cdk-lib.aws_iam.PolicyDocument</code> | The IAM permission document for the CodeBuildRunner.                                               |
+| <code><a href="#@cdklabs/sbt-aws.CodeBuildRunnerProps.property.script">script</a></code>                                                               | <code>string</code>                             | The bash script to run as part of the CodeBuildRunner.                                             |
+| <code><a href="#@cdklabs/sbt-aws.CodeBuildRunnerProps.property.environmentVariablesFromIncomingEvent">environmentVariablesFromIncomingEvent</a></code> | <code>string[]</code>                           | The environment variables to import into the CodeBuildRunner from event details field.             |
+| <code><a href="#@cdklabs/sbt-aws.CodeBuildRunnerProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code>     | <code>string[]</code>                           | The environment variables to export into the outgoing event once the CodeBuildRunner has finished. |
+| <code><a href="#@cdklabs/sbt-aws.CodeBuildRunnerProps.property.postScript">postScript</a></code>                                                       | <code>string</code>                             | The bash script to run after the main script has completed.                                        |
+| <code><a href="#@cdklabs/sbt-aws.CodeBuildRunnerProps.property.scriptEnvironmentVariables">scriptEnvironmentVariables</a></code>                       | <code>{[ key: string ]: string}</code>          | The variables to pass into the codebuild CodeBuildRunner.                                          |
 
 ---
 
-##### `name`<sup>Required</sup> <a name="name" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.name"></a>
+##### `name`<sup>Required</sup> <a name="name" id="@cdklabs/sbt-aws.CodeBuildRunnerProps.property.name"></a>
 
 ```typescript
 public readonly name: string;
@@ -2216,13 +2246,13 @@ public readonly name: string;
 
 - *Type:* string
 
-The name of the BashJobRunner.
+The name of the CodeBuildRunner.
 
 Note that this value must be unique.
 
 ---
 
-##### `permissions`<sup>Required</sup> <a name="permissions" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.permissions"></a>
+##### `permissions`<sup>Required</sup> <a name="permissions" id="@cdklabs/sbt-aws.CodeBuildRunnerProps.property.permissions"></a>
 
 ```typescript
 public readonly permissions: PolicyDocument;
@@ -2230,11 +2260,11 @@ public readonly permissions: PolicyDocument;
 
 - *Type:* aws-cdk-lib.aws_iam.PolicyDocument
 
-The IAM permission document for the BashJobRunner.
+The IAM permission document for the CodeBuildRunner.
 
 ---
 
-##### `script`<sup>Required</sup> <a name="script" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.script"></a>
+##### `script`<sup>Required</sup> <a name="script" id="@cdklabs/sbt-aws.CodeBuildRunnerProps.property.script"></a>
 
 ```typescript
 public readonly script: string;
@@ -2242,11 +2272,11 @@ public readonly script: string;
 
 - *Type:* string
 
-The bash script to run as part of the BashJobRunner.
+The bash script to run as part of the CodeBuildRunner.
 
 ---
 
-##### `environmentVariablesFromIncomingEvent`<sup>Optional</sup> <a name="environmentVariablesFromIncomingEvent" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.environmentVariablesFromIncomingEvent"></a>
+##### `environmentVariablesFromIncomingEvent`<sup>Optional</sup> <a name="environmentVariablesFromIncomingEvent" id="@cdklabs/sbt-aws.CodeBuildRunnerProps.property.environmentVariablesFromIncomingEvent"></a>
 
 ```typescript
 public readonly environmentVariablesFromIncomingEvent: string[];
@@ -2254,11 +2284,11 @@ public readonly environmentVariablesFromIncomingEvent: string[];
 
 - *Type:* string[]
 
-The environment variables to import into the BashJobRunner from event details field.
+The environment variables to import into the CodeBuildRunner from event details field.
 
 ---
 
-##### `environmentVariablesToOutgoingEvent`<sup>Optional</sup> <a name="environmentVariablesToOutgoingEvent" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.environmentVariablesToOutgoingEvent"></a>
+##### `environmentVariablesToOutgoingEvent`<sup>Optional</sup> <a name="environmentVariablesToOutgoingEvent" id="@cdklabs/sbt-aws.CodeBuildRunnerProps.property.environmentVariablesToOutgoingEvent"></a>
 
 ```typescript
 public readonly environmentVariablesToOutgoingEvent: string[];
@@ -2266,11 +2296,11 @@ public readonly environmentVariablesToOutgoingEvent: string[];
 
 - *Type:* string[]
 
-The environment variables to export into the outgoing event once the BashJobRunner has finished.
+The environment variables to export into the outgoing event once the CodeBuildRunner has finished.
 
 ---
 
-##### `postScript`<sup>Optional</sup> <a name="postScript" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.postScript"></a>
+##### `postScript`<sup>Optional</sup> <a name="postScript" id="@cdklabs/sbt-aws.CodeBuildRunnerProps.property.postScript"></a>
 
 ```typescript
 public readonly postScript: string;
@@ -2282,7 +2312,7 @@ The bash script to run after the main script has completed.
 
 ---
 
-##### `scriptEnvironmentVariables`<sup>Optional</sup> <a name="scriptEnvironmentVariables" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.scriptEnvironmentVariables"></a>
+##### `scriptEnvironmentVariables`<sup>Optional</sup> <a name="scriptEnvironmentVariables" id="@cdklabs/sbt-aws.CodeBuildRunnerProps.property.scriptEnvironmentVariables"></a>
 
 ```typescript
 public readonly scriptEnvironmentVariables: {[ key: string ]: string};
@@ -2290,7 +2320,7 @@ public readonly scriptEnvironmentVariables: {[ key: string ]: string};
 
 - *Type:* {[ key: string ]: string}
 
-The variables to pass into the codebuild BashJobRunner.
+The variables to pass into the codebuild CodeBuildRunner.
 
 ---
 
@@ -2308,11 +2338,11 @@ const billingProviderProps: BillingProviderProps = { ... }
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.billing">billing</a></code> | <code><a href="#@cdklabs/sbt-aws.IBilling">IBilling</a></code> | An implementation of the IBilling interface. |
-| <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.controlPlaneAPIBillingResource">controlPlaneAPIBillingResource</a></code> | <code>aws-cdk-lib.aws_apigateway.Resource</code> | An API Gateway Resource for the BillingProvider to use when setting up API endpoints. |
-| <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | An EventManager object to help coordinate events. |
+| **Name**                                                                                                                                 | **Type**                                                               | **Description**                                                                       |
+| ---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.billing">billing</a></code>                                               | <code><a href="#@cdklabs/sbt-aws.IBilling">IBilling</a></code>         | An implementation of the IBilling interface.                                          |
+| <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.controlPlaneAPIBillingResource">controlPlaneAPIBillingResource</a></code> | <code>aws-cdk-lib.aws_apigateway.Resource</code>                       | An API Gateway Resource for the BillingProvider to use when setting up API endpoints. |
+| <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.eventManager">eventManager</a></code>                                     | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | An EventManager object to help coordinate events.                                     |
 
 ---
 
@@ -2366,12 +2396,12 @@ const cognitoAuthProps: CognitoAuthProps = { ... }
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.idpName">idpName</a></code> | <code>string</code> | The name of the Identity Provider (IdP) for the control plane. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminEmail">systemAdminEmail</a></code> | <code>string</code> | The email address of the system admin. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminRoleName">systemAdminRoleName</a></code> | <code>string</code> | The name of the system admin role. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.controlPlaneCallbackURL">controlPlaneCallbackURL</a></code> | <code>string</code> | The callback URL for the control plane. |
+| **Name**                                                                                                               | **Type**            | **Description**                                                |
+| ---------------------------------------------------------------------------------------------------------------------- | ------------------- | -------------------------------------------------------------- |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.idpName">idpName</a></code>                                 | <code>string</code> | The name of the Identity Provider (IdP) for the control plane. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminEmail">systemAdminEmail</a></code>               | <code>string</code> | The email address of the system admin.                         |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminRoleName">systemAdminRoleName</a></code>         | <code>string</code> | The name of the system admin role.                             |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.controlPlaneCallbackURL">controlPlaneCallbackURL</a></code> | <code>string</code> | The callback URL for the control plane.                        |
 
 ---
 
@@ -2438,12 +2468,12 @@ const controlPlaneAPIProps: ControlPlaneAPIProps = { ... }
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.auth">auth</a></code> | <code><a href="#@cdklabs/sbt-aws.IAuth">IAuth</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.services">services</a></code> | <code><a href="#@cdklabs/sbt-aws.Services">Services</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.tenantConfigServiceLambda">tenantConfigServiceLambda</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.disableAPILogging">disableAPILogging</a></code> | <code>boolean</code> | *No description.* |
+| **Name**                                                                                                                       | **Type**                                                       | **Description**   |
+| ------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------- | ----------------- |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.auth">auth</a></code>                                           | <code><a href="#@cdklabs/sbt-aws.IAuth">IAuth</a></code>       | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.services">services</a></code>                                   | <code><a href="#@cdklabs/sbt-aws.Services">Services</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.tenantConfigServiceLambda">tenantConfigServiceLambda</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code>                   | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.disableAPILogging">disableAPILogging</a></code>                 | <code>boolean</code>                                           | *No description.* |
 
 ---
 
@@ -2499,14 +2529,14 @@ const controlPlaneProps: ControlPlaneProps = { ... }
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.auth">auth</a></code> | <code><a href="#@cdklabs/sbt-aws.IAuth">IAuth</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | The source to use for outgoing events that will be placed on the EventBus. |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.billing">billing</a></code> | <code><a href="#@cdklabs/sbt-aws.IBilling">IBilling</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The source to use when listening for events coming from the SBT control plane. |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.disableAPILogging">disableAPILogging</a></code> | <code>boolean</code> | (Optional) If true, the API Gateway will not log requests to the CloudWatch Logs. |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.eventMetadata">eventMetadata</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
+| **Name**                                                                                                                        | **Type**                                                       | **Description**                                                                   |
+| ------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.auth">auth</a></code>                                               | <code><a href="#@cdklabs/sbt-aws.IAuth">IAuth</a></code>       | *No description.*                                                                 |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code>                                            | The source to use for outgoing events that will be placed on the EventBus.        |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.billing">billing</a></code>                                         | <code><a href="#@cdklabs/sbt-aws.IBilling">IBilling</a></code> | *No description.*                                                                 |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.controlPlaneEventSource">controlPlaneEventSource</a></code>         | <code>string</code>                                            | The source to use when listening for events coming from the SBT control plane.    |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.disableAPILogging">disableAPILogging</a></code>                     | <code>boolean</code>                                           | (Optional) If true, the API Gateway will not log requests to the CloudWatch Logs. |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.eventMetadata">eventMetadata</a></code>                             | <code>{[ key: string ]: string}</code>                         | *No description.*                                                                 |
 
 ---
 
@@ -2582,162 +2612,6 @@ public readonly eventMetadata: {[ key: string ]: string};
 
 ---
 
-### CoreApplicationPlaneJobRunnerProps <a name="CoreApplicationPlaneJobRunnerProps" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps"></a>
-
-Encapsulates the list of properties for a CoreApplicationPlaneJobRunner.
-
-#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.Initializer"></a>
-
-```typescript
-import { CoreApplicationPlaneJobRunnerProps } from '@cdklabs/sbt-aws'
-
-const coreApplicationPlaneJobRunnerProps: CoreApplicationPlaneJobRunnerProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The incoming event DetailType that triggers this job. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.name">name</a></code> | <code>string</code> | The name of the CoreApplicationPlaneJobRunner. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.outgoingEvent">outgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The outgoing event DetailType that is emitted upon job completion. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.permissions">permissions</a></code> | <code>aws-cdk-lib.aws_iam.PolicyDocument</code> | The IAM permission document for the CoreApplicationPlaneJobRunner. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.script">script</a></code> | <code>string</code> | The bash script to run as part of the CoreApplicationPlaneJobRunner. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.environmentJSONVariablesFromIncomingEvent">environmentJSONVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the CoreApplicationPlaneJobRunner from event details field. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.environmentStringVariablesFromIncomingEvent">environmentStringVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the CoreApplicationPlaneJobRunner from event details field. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | The environment variables to export into the outgoing event once the CoreApplicationPlaneJobRunner has finished. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.postScript">postScript</a></code> | <code>string</code> | The bash script to run after the main script has completed. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.scriptEnvironmentVariables">scriptEnvironmentVariables</a></code> | <code>{[ key: string ]: string}</code> | The variables to pass into the codebuild CoreApplicationPlaneJobRunner. |
-
----
-
-##### `incomingEvent`<sup>Required</sup> <a name="incomingEvent" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.incomingEvent"></a>
-
-```typescript
-public readonly incomingEvent: DetailType;
-```
-
-- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
-
-The incoming event DetailType that triggers this job.
-
----
-
-##### `name`<sup>Required</sup> <a name="name" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.name"></a>
-
-```typescript
-public readonly name: string;
-```
-
-- *Type:* string
-
-The name of the CoreApplicationPlaneJobRunner.
-
-Note that this value must be unique.
-
----
-
-##### `outgoingEvent`<sup>Required</sup> <a name="outgoingEvent" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.outgoingEvent"></a>
-
-```typescript
-public readonly outgoingEvent: DetailType;
-```
-
-- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
-
-The outgoing event DetailType that is emitted upon job completion.
-
----
-
-##### `permissions`<sup>Required</sup> <a name="permissions" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.permissions"></a>
-
-```typescript
-public readonly permissions: PolicyDocument;
-```
-
-- *Type:* aws-cdk-lib.aws_iam.PolicyDocument
-
-The IAM permission document for the CoreApplicationPlaneJobRunner.
-
----
-
-##### `script`<sup>Required</sup> <a name="script" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.script"></a>
-
-```typescript
-public readonly script: string;
-```
-
-- *Type:* string
-
-The bash script to run as part of the CoreApplicationPlaneJobRunner.
-
----
-
-##### `environmentJSONVariablesFromIncomingEvent`<sup>Optional</sup> <a name="environmentJSONVariablesFromIncomingEvent" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.environmentJSONVariablesFromIncomingEvent"></a>
-
-```typescript
-public readonly environmentJSONVariablesFromIncomingEvent: string[];
-```
-
-- *Type:* string[]
-
-The environment variables to import into the CoreApplicationPlaneJobRunner from event details field.
-
-This argument consists of the names of only JSON-formatted string type variables.
-Ex. '{"test": 2}'
-
----
-
-##### `environmentStringVariablesFromIncomingEvent`<sup>Optional</sup> <a name="environmentStringVariablesFromIncomingEvent" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.environmentStringVariablesFromIncomingEvent"></a>
-
-```typescript
-public readonly environmentStringVariablesFromIncomingEvent: string[];
-```
-
-- *Type:* string[]
-
-The environment variables to import into the CoreApplicationPlaneJobRunner from event details field.
-
-This argument consists of the names of only string type variables. Ex. 'test'
-
----
-
-##### `environmentVariablesToOutgoingEvent`<sup>Optional</sup> <a name="environmentVariablesToOutgoingEvent" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.environmentVariablesToOutgoingEvent"></a>
-
-```typescript
-public readonly environmentVariablesToOutgoingEvent: string[];
-```
-
-- *Type:* string[]
-
-The environment variables to export into the outgoing event once the CoreApplicationPlaneJobRunner has finished.
-
----
-
-##### `postScript`<sup>Optional</sup> <a name="postScript" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.postScript"></a>
-
-```typescript
-public readonly postScript: string;
-```
-
-- *Type:* string
-
-The bash script to run after the main script has completed.
-
----
-
-##### `scriptEnvironmentVariables`<sup>Optional</sup> <a name="scriptEnvironmentVariables" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.scriptEnvironmentVariables"></a>
-
-```typescript
-public readonly scriptEnvironmentVariables: {[ key: string ]: string};
-```
-
-- *Type:* {[ key: string ]: string}
-
-The variables to pass into the codebuild CoreApplicationPlaneJobRunner.
-
----
-
 ### CoreApplicationPlaneProps <a name="CoreApplicationPlaneProps" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps"></a>
 
 Encapsulates the list of properties for a CoreApplicationPlane.
@@ -2752,23 +2626,24 @@ const coreApplicationPlaneProps: CoreApplicationPlaneProps = { ... }
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventBusArn">eventBusArn</a></code> | <code>string</code> | The arn belonging to the EventBus to listen for incoming messages. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | The source to use for outgoing events that will be placed on the EventBus. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The source to use when listening for events coming from the SBT control plane. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventMetadata">eventMetadata</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.jobRunnerPropsList">jobRunnerPropsList</a></code> | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps">CoreApplicationPlaneJobRunnerProps</a>[]</code> | The list of JobRunner definitions to create. |
+| **Name**                                                                                                                                | **Type**                                                                 | **Description**                                                                |
+| --------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventBus">eventBus</a></code>                                       | <code>aws-cdk-lib.aws_events.IEventBus</code>                            | The arn belonging to the EventBus to listen for incoming messages.             |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code>                                                      | The source to use for outgoing events that will be placed on the EventBus.     |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.controlPlaneEventSource">controlPlaneEventSource</a></code>         | <code>string</code>                                                      | The source to use when listening for events coming from the SBT control plane. |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventManger">eventManger</a></code>                                 | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | *No description.*                                                              |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventMetadata">eventMetadata</a></code>                             | <code>{[ key: string ]: string}</code>                                   | *No description.*                                                              |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.jobRunners">jobRunners</a></code>                                   | <code><a href="#@cdklabs/sbt-aws.IJobRunner">IJobRunner</a>[]</code>     | The list of JobRunner definitions to create.                                   |
 
 ---
 
-##### `eventBusArn`<sup>Required</sup> <a name="eventBusArn" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventBusArn"></a>
+##### `eventBus`<sup>Required</sup> <a name="eventBus" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventBus"></a>
 
 ```typescript
-public readonly eventBusArn: string;
+public readonly eventBus: IEventBus;
 ```
 
-- *Type:* string
+- *Type:* aws-cdk-lib.aws_events.IEventBus
 
 The arn belonging to the EventBus to listen for incoming messages.
 
@@ -2804,6 +2679,16 @@ This is used as the default if the IncomingEventMetadata source field is not set
 
 ---
 
+##### `eventManger`<sup>Optional</sup> <a name="eventManger" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventManger"></a>
+
+```typescript
+public readonly eventManger: IEventManager;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
+
+---
+
 ##### `eventMetadata`<sup>Optional</sup> <a name="eventMetadata" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventMetadata"></a>
 
 ```typescript
@@ -2814,13 +2699,13 @@ public readonly eventMetadata: {[ key: string ]: string};
 
 ---
 
-##### `jobRunnerPropsList`<sup>Optional</sup> <a name="jobRunnerPropsList" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.jobRunnerPropsList"></a>
+##### `jobRunners`<sup>Optional</sup> <a name="jobRunners" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.jobRunners"></a>
 
 ```typescript
-public readonly jobRunnerPropsList: CoreApplicationPlaneJobRunnerProps[];
+public readonly jobRunners: IJobRunner[];
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps">CoreApplicationPlaneJobRunnerProps</a>[]
+- *Type:* <a href="#@cdklabs/sbt-aws.IJobRunner">IJobRunner</a>[]
 
 The list of JobRunner definitions to create.
 
@@ -2840,12 +2725,12 @@ const eventManagerProps: EventManagerProps = { ... }
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.eventBus">eventBus</a></code> | <code>aws-cdk-lib.aws_events.IEventBus</code> | The event bus to register new rules with. |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | The source to use for outgoing events that will be placed on the EventBus. |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The source to use when listening for events coming from the SBT control plane. |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.eventMetadata">eventMetadata</a></code> | <code>{[ key: string ]: string}</code> | The EventMetadata to use to update the event defaults. |
+| **Name**                                                                                                                        | **Type**                                      | **Description**                                                                |
+| ------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------ |
+| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.eventBus">eventBus</a></code>                                       | <code>aws-cdk-lib.aws_events.IEventBus</code> | The event bus to register new rules with.                                      |
+| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code>                           | The source to use for outgoing events that will be placed on the EventBus.     |
+| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.controlPlaneEventSource">controlPlaneEventSource</a></code>         | <code>string</code>                           | The source to use when listening for events coming from the SBT control plane. |
+| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.eventMetadata">eventMetadata</a></code>                             | <code>{[ key: string ]: string}</code>        | The EventMetadata to use to update the event defaults.                         |
 
 ---
 
@@ -2911,12 +2796,12 @@ const firehoseAggregatorProps: FirehoseAggregatorProps = { ... }
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregatorProps.property.aggregateKeyPath">aggregateKeyPath</a></code> | <code>string</code> | The JMESPath to find the key value in the incoming data stream that will be aggregated. |
+| **Name**                                                                                                            | **Type**            | **Description**                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------- | ------------------- | -------------------------------------------------------------------------------------------------- |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregatorProps.property.aggregateKeyPath">aggregateKeyPath</a></code>     | <code>string</code> | The JMESPath to find the key value in the incoming data stream that will be aggregated.            |
 | <code><a href="#@cdklabs/sbt-aws.FirehoseAggregatorProps.property.aggregateValuePath">aggregateValuePath</a></code> | <code>string</code> | The JMESPath to find the numeric value of key in the incoming data stream that will be aggregated. |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregatorProps.property.primaryKeyColumn">primaryKeyColumn</a></code> | <code>string</code> | The name to use for the primary key column for the dynamoDB database. |
-| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregatorProps.property.primaryKeyPath">primaryKeyPath</a></code> | <code>string</code> | The JMESPath to find the primary key value in the incoming data stream. |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregatorProps.property.primaryKeyColumn">primaryKeyColumn</a></code>     | <code>string</code> | The name to use for the primary key column for the dynamoDB database.                              |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregatorProps.property.primaryKeyPath">primaryKeyPath</a></code>         | <code>string</code> | The JMESPath to find the primary key value in the incoming data stream.                            |
 
 ---
 
@@ -2982,10 +2867,10 @@ const incomingEventMetadata: IncomingEventMetadata = { ... }
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
+| **Name**                                                                                          | **Type**              | **Description**                                              |
+| ------------------------------------------------------------------------------------------------- | --------------------- | ------------------------------------------------------------ |
 | <code><a href="#@cdklabs/sbt-aws.IncomingEventMetadata.property.detailType">detailType</a></code> | <code>string[]</code> | The list of detailTypes to listen for in the incoming event. |
-| <code><a href="#@cdklabs/sbt-aws.IncomingEventMetadata.property.source">source</a></code> | <code>string[]</code> | The list of sources to listen for in the incoming event. |
+| <code><a href="#@cdklabs/sbt-aws.IncomingEventMetadata.property.source">source</a></code>         | <code>string[]</code> | The list of sources to listen for in the incoming event.     |
 
 ---
 
@@ -3028,10 +2913,10 @@ const outgoingEventMetadata: OutgoingEventMetadata = { ... }
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
+| **Name**                                                                                          | **Type**            | **Description**                              |
+| ------------------------------------------------------------------------------------------------- | ------------------- | -------------------------------------------- |
 | <code><a href="#@cdklabs/sbt-aws.OutgoingEventMetadata.property.detailType">detailType</a></code> | <code>string</code> | The detailType to set in the outgoing event. |
-| <code><a href="#@cdklabs/sbt-aws.OutgoingEventMetadata.property.source">source</a></code> | <code>string</code> | The source to set in the outgoing event. |
+| <code><a href="#@cdklabs/sbt-aws.OutgoingEventMetadata.property.source">source</a></code>         | <code>string</code> | The source to set in the outgoing event.     |
 
 ---
 
@@ -3072,10 +2957,10 @@ const servicesProps: ServicesProps = { ... }
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
+| **Name**                                                                                      | **Type**                                                               | **Description**   |
+| --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ----------------- |
 | <code><a href="#@cdklabs/sbt-aws.ServicesProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ServicesProps.property.tables">tables</a></code> | <code><a href="#@cdklabs/sbt-aws.Tables">Tables</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ServicesProps.property.tables">tables</a></code>             | <code><a href="#@cdklabs/sbt-aws.Tables">Tables</a></code>             | *No description.* |
 
 ---
 
@@ -3111,26 +2996,26 @@ const tenant: Tenant = { ... }
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.adminEmail">adminEmail</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.adminUserName">adminUserName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.callbackUrls">callbackUrls</a></code> | <code>string[]</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.clientId">clientId</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.clientName">clientName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.customDomainName">customDomainName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.groupName">groupName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.idpDetails">idpDetails</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.name">name</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.oidcClientId">oidcClientId</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.oidcClientSecret">oidcClientSecret</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.oidcIssuer">oidcIssuer</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.providerName">providerName</a></code> | <code>string</code> | *No description.* |
+| **Name**                                                                                                           | **Type**              | **Description**   |
+| ------------------------------------------------------------------------------------------------------------------ | --------------------- | ----------------- |
+| <code><a href="#@cdklabs/sbt-aws.Tenant.property.adminEmail">adminEmail</a></code>                                 | <code>string</code>   | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.Tenant.property.adminUserName">adminUserName</a></code>                           | <code>string</code>   | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.Tenant.property.callbackUrls">callbackUrls</a></code>                             | <code>string[]</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.Tenant.property.clientId">clientId</a></code>                                     | <code>string</code>   | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.Tenant.property.clientName">clientName</a></code>                                 | <code>string</code>   | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.Tenant.property.customDomainName">customDomainName</a></code>                     | <code>string</code>   | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.Tenant.property.groupName">groupName</a></code>                                   | <code>string</code>   | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.Tenant.property.id">id</a></code>                                                 | <code>string</code>   | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.Tenant.property.idpDetails">idpDetails</a></code>                                 | <code>string</code>   | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.Tenant.property.name">name</a></code>                                             | <code>string</code>   | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.Tenant.property.oidcClientId">oidcClientId</a></code>                             | <code>string</code>   | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.Tenant.property.oidcClientSecret">oidcClientSecret</a></code>                     | <code>string</code>   | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.Tenant.property.oidcIssuer">oidcIssuer</a></code>                                 | <code>string</code>   | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.Tenant.property.providerName">providerName</a></code>                             | <code>string</code>   | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.Tenant.property.supportedIdentityProviders">supportedIdentityProviders</a></code> | <code>string[]</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.tenantDomain">tenantDomain</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.tier">tier</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.uniqueName">uniqueName</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.Tenant.property.tenantDomain">tenantDomain</a></code>                             | <code>string</code>   | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.Tenant.property.tier">tier</a></code>                                             | <code>string</code>   | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.Tenant.property.uniqueName">uniqueName</a></code>                                 | <code>string</code>   | *No description.* |
 
 ---
 
@@ -3326,12 +3211,12 @@ const tenantConfigServiceProps: TenantConfigServiceProps = { ... }
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.TenantConfigServiceProps.property.tenantConfigIndexName">tenantConfigIndexName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.TenantConfigServiceProps.property.tenantDetails">tenantDetails</a></code> | <code>aws-cdk-lib.aws_dynamodb.Table</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.TenantConfigServiceProps.property.tenantDetailsTenantConfigColumn">tenantDetailsTenantConfigColumn</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.TenantConfigServiceProps.property.tenantDetailsTenantNameColumn">tenantDetailsTenantNameColumn</a></code> | <code>string</code> | *No description.* |
+| **Name**                                                                                                                                       | **Type**                                    | **Description**   |
+| ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ----------------- |
+| <code><a href="#@cdklabs/sbt-aws.TenantConfigServiceProps.property.tenantConfigIndexName">tenantConfigIndexName</a></code>                     | <code>string</code>                         | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantConfigServiceProps.property.tenantDetails">tenantDetails</a></code>                                     | <code>aws-cdk-lib.aws_dynamodb.Table</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantConfigServiceProps.property.tenantDetailsTenantConfigColumn">tenantDetailsTenantConfigColumn</a></code> | <code>string</code>                         | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantConfigServiceProps.property.tenantDetailsTenantNameColumn">tenantDetailsTenantNameColumn</a></code>     | <code>string</code>                         | *No description.* |
 
 ---
 
@@ -3387,20 +3272,20 @@ Encapsulates the list of properties expected as outputs of Auth plugins.
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.authorizationServer">authorizationServer</a></code> | <code>string</code> | Authorization server Url. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.authorizer">authorizer</a></code> | <code>aws-cdk-lib.aws_apigateway.IAuthorizer</code> | Authorizer referenced by the ControlPlaneAPI. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.clientId">clientId</a></code> | <code>string</code> | The OAuth clientId for the identity provider. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.controlPlaneIdpDetails">controlPlaneIdpDetails</a></code> | <code>any</code> | Contains any information relevant to the IDP implementation required by the Authorizer and User Function implementations. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.createUserFunction">createUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- POST /users. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.deleteUserFunction">deleteUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- DELETE /user/{username}. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.disableUserFunction">disableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- PUT /user/{username}/disable. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.enableUserFunction">enableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- PUT /user/{username}/enable. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchAllUsersFunction">fetchAllUsersFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- GET /users. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchUserFunction">fetchUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- GET /user/{username}. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.updateUserFunction">updateUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- PUT /user/{username}. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.wellKnownEndpointUrl">wellKnownEndpointUrl</a></code> | <code>string</code> | OpenID configuration Url. |
+| **Name**                                                                                                  | **Type**                                            | **Description**                                                                                                           |
+| --------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.authorizationServer">authorizationServer</a></code>       | <code>string</code>                                 | Authorization server Url.                                                                                                 |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.authorizer">authorizer</a></code>                         | <code>aws-cdk-lib.aws_apigateway.IAuthorizer</code> | Authorizer referenced by the ControlPlaneAPI.                                                                             |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.clientId">clientId</a></code>                             | <code>string</code>                                 | The OAuth clientId for the identity provider.                                                                             |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.controlPlaneIdpDetails">controlPlaneIdpDetails</a></code> | <code>any</code>                                    | Contains any information relevant to the IDP implementation required by the Authorizer and User Function implementations. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.createUserFunction">createUserFunction</a></code>         | <code>aws-cdk-lib.aws_lambda.IFunction</code>       | Function referenced by the ControlPlaneAPI -- POST /users.                                                                |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.deleteUserFunction">deleteUserFunction</a></code>         | <code>aws-cdk-lib.aws_lambda.IFunction</code>       | Function referenced by the ControlPlaneAPI -- DELETE /user/{username}.                                                    |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.disableUserFunction">disableUserFunction</a></code>       | <code>aws-cdk-lib.aws_lambda.IFunction</code>       | Function referenced by the ControlPlaneAPI -- PUT /user/{username}/disable.                                               |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.enableUserFunction">enableUserFunction</a></code>         | <code>aws-cdk-lib.aws_lambda.IFunction</code>       | Function referenced by the ControlPlaneAPI -- PUT /user/{username}/enable.                                                |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchAllUsersFunction">fetchAllUsersFunction</a></code>   | <code>aws-cdk-lib.aws_lambda.IFunction</code>       | Function referenced by the ControlPlaneAPI -- GET /users.                                                                 |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchUserFunction">fetchUserFunction</a></code>           | <code>aws-cdk-lib.aws_lambda.IFunction</code>       | Function referenced by the ControlPlaneAPI -- GET /user/{username}.                                                       |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.updateUserFunction">updateUserFunction</a></code>         | <code>aws-cdk-lib.aws_lambda.IFunction</code>       | Function referenced by the ControlPlaneAPI -- PUT /user/{username}.                                                       |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.wellKnownEndpointUrl">wellKnownEndpointUrl</a></code>     | <code>string</code>                                 | OpenID configuration Url.                                                                                                 |
 
 ---
 
@@ -3557,16 +3442,16 @@ Encapsulates the list of properties for an IBilling construct.
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.IBilling.property.createCustomerFunction">createCustomerFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction \| <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a></code> | The function to trigger to create a new customer. |
-| <code><a href="#@cdklabs/sbt-aws.IBilling.property.deleteCustomerFunction">deleteCustomerFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction \| <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a></code> | The function to trigger to delete a customer. |
-| <code><a href="#@cdklabs/sbt-aws.IBilling.property.createUserFunction">createUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction \| <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a></code> | The function to trigger to create a new user. |
-| <code><a href="#@cdklabs/sbt-aws.IBilling.property.deleteUserFunction">deleteUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction \| <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a></code> | The function to trigger to delete a user. |
-| <code><a href="#@cdklabs/sbt-aws.IBilling.property.ingestor">ingestor</a></code> | <code><a href="#@cdklabs/sbt-aws.IDataIngestorAggregator">IDataIngestorAggregator</a></code> | The IDataIngestorAggregator responsible for accepting and aggregating the raw billing data. |
-| <code><a href="#@cdklabs/sbt-aws.IBilling.property.putUsageFunction">putUsageFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction \| <a href="#@cdklabs/sbt-aws.IFunctionSchedule">IFunctionSchedule</a></code> | The function responsible for taking the aggregated data and pushing that to the billing provider. |
-| <code><a href="#@cdklabs/sbt-aws.IBilling.property.webhookFunction">webhookFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger when a webhook request is received. |
-| <code><a href="#@cdklabs/sbt-aws.IBilling.property.webhookPath">webhookPath</a></code> | <code>string</code> | The path to the webhook resource. |
+| **Name**                                                                                                     | **Type**                                                                                                             | **Description**                                                                                   |
+| ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.createCustomerFunction">createCustomerFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction \| <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a></code>   | The function to trigger to create a new customer.                                                 |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.deleteCustomerFunction">deleteCustomerFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction \| <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a></code>   | The function to trigger to delete a customer.                                                     |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.createUserFunction">createUserFunction</a></code>         | <code>aws-cdk-lib.aws_lambda.IFunction \| <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a></code>   | The function to trigger to create a new user.                                                     |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.deleteUserFunction">deleteUserFunction</a></code>         | <code>aws-cdk-lib.aws_lambda.IFunction \| <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a></code>   | The function to trigger to delete a user.                                                         |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.ingestor">ingestor</a></code>                             | <code><a href="#@cdklabs/sbt-aws.IDataIngestorAggregator">IDataIngestorAggregator</a></code>                         | The IDataIngestorAggregator responsible for accepting and aggregating the raw billing data.       |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.putUsageFunction">putUsageFunction</a></code>             | <code>aws-cdk-lib.aws_lambda.IFunction \| <a href="#@cdklabs/sbt-aws.IFunctionSchedule">IFunctionSchedule</a></code> | The function responsible for taking the aggregated data and pushing that to the billing provider. |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.webhookFunction">webhookFunction</a></code>               | <code>aws-cdk-lib.aws_lambda.IFunction</code>                                                                        | The function to trigger when a webhook request is received.                                       |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.webhookPath">webhookPath</a></code>                       | <code>string</code>                                                                                                  | The path to the webhook resource.                                                                 |
 
 ---
 
@@ -3683,11 +3568,11 @@ Encapsulates the list of properties for a IDataIngestorAggregator.
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.IDataIngestorAggregator.property.dataAggregator">dataAggregator</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function responsible for aggregating the raw data coming in via the dataIngestor. |
-| <code><a href="#@cdklabs/sbt-aws.IDataIngestorAggregator.property.dataIngestorName">dataIngestorName</a></code> | <code>string</code> | The ingestor responsible for accepting and storing the incoming data. |
-| <code><a href="#@cdklabs/sbt-aws.IDataIngestorAggregator.property.dataRepository">dataRepository</a></code> | <code>aws-cdk-lib.aws_dynamodb.ITable</code> | The table containing the aggregated data. |
+| **Name**                                                                                                        | **Type**                                      | **Description**                                                                       |
+| --------------------------------------------------------------------------------------------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------- |
+| <code><a href="#@cdklabs/sbt-aws.IDataIngestorAggregator.property.dataAggregator">dataAggregator</a></code>     | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function responsible for aggregating the raw data coming in via the dataIngestor. |
+| <code><a href="#@cdklabs/sbt-aws.IDataIngestorAggregator.property.dataIngestorName">dataIngestorName</a></code> | <code>string</code>                           | The ingestor responsible for accepting and storing the incoming data.                 |
+| <code><a href="#@cdklabs/sbt-aws.IDataIngestorAggregator.property.dataRepository">dataRepository</a></code>     | <code>aws-cdk-lib.aws_dynamodb.ITable</code>  | The table containing the aggregated data.                                             |
 
 ---
 
@@ -3727,6 +3612,43 @@ The table containing the aggregated data.
 
 ---
 
+### IEventManager <a name="IEventManager" id="@cdklabs/sbt-aws.IEventManager"></a>
+
+- *Implemented By:* <a href="#@cdklabs/sbt-aws.EventManager">EventManager</a>, <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name**                                                                                     | **Description**                                                               |
+| -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| <code><a href="#@cdklabs/sbt-aws.IEventManager.addTargetToEvent">addTargetToEvent</a></code> | Registers a new rule that will be triggered when the given event is received. |
+
+---
+
+##### `addTargetToEvent` <a name="addTargetToEvent" id="@cdklabs/sbt-aws.IEventManager.addTargetToEvent"></a>
+
+```typescript
+public addTargetToEvent(detailType: DetailType, target: IRuleTarget): void
+```
+
+Registers a new rule that will be triggered when the given event is received.
+
+###### `detailType`<sup>Required</sup> <a name="detailType" id="@cdklabs/sbt-aws.IEventManager.addTargetToEvent.parameter.detailType"></a>
+
+- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+
+The event to listen for.
+
+---
+
+###### `target`<sup>Required</sup> <a name="target" id="@cdklabs/sbt-aws.IEventManager.addTargetToEvent.parameter.target"></a>
+
+- *Type:* aws-cdk-lib.aws_events.IRuleTarget
+
+The target to invoke when the event is received.
+
+---
+
+
 ### IFunctionSchedule <a name="IFunctionSchedule" id="@cdklabs/sbt-aws.IFunctionSchedule"></a>
 
 - *Implemented By:* <a href="#@cdklabs/sbt-aws.IFunctionSchedule">IFunctionSchedule</a>
@@ -3736,10 +3658,10 @@ Optional interface that allows specifying both the function to trigger and the s
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.IFunctionSchedule.property.handler">handler</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function definition. |
-| <code><a href="#@cdklabs/sbt-aws.IFunctionSchedule.property.schedule">schedule</a></code> | <code>aws-cdk-lib.aws_events.Schedule</code> | The schedule that will trigger the handler function. |
+| **Name**                                                                                  | **Type**                                      | **Description**                                      |
+| ----------------------------------------------------------------------------------------- | --------------------------------------------- | ---------------------------------------------------- |
+| <code><a href="#@cdklabs/sbt-aws.IFunctionSchedule.property.handler">handler</a></code>   | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function definition.                             |
+| <code><a href="#@cdklabs/sbt-aws.IFunctionSchedule.property.schedule">schedule</a></code> | <code>aws-cdk-lib.aws_events.Schedule</code>  | The schedule that will trigger the handler function. |
 
 ---
 
@@ -3776,9 +3698,9 @@ Optional interface that allows specifying both the function to trigger and the e
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.IFunctionTrigger.property.handler">handler</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function definition. |
+| **Name**                                                                               | **Type**                                                           | **Description**                                         |
+| -------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------- |
+| <code><a href="#@cdklabs/sbt-aws.IFunctionTrigger.property.handler">handler</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code>                      | The function definition.                                |
 | <code><a href="#@cdklabs/sbt-aws.IFunctionTrigger.property.trigger">trigger</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The detail-type that will trigger the handler function. |
 
 ---
@@ -3807,6 +3729,157 @@ The detail-type that will trigger the handler function.
 
 ---
 
+### IJobRunner <a name="IJobRunner" id="@cdklabs/sbt-aws.IJobRunner"></a>
+
+- *Implemented By:* <a href="#@cdklabs/sbt-aws.IJobRunner">IJobRunner</a>
+
+Encapsulates the list of properties for a CoreApplicationPlaneJobRunner.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name**                                                                                                                                                 | **Type**                                                           | **Description**                                                                                                  |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| <code><a href="#@cdklabs/sbt-aws.IJobRunner.property.incomingEvent">incomingEvent</a></code>                                                             | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The incoming event DetailType that triggers this job.                                                            |
+| <code><a href="#@cdklabs/sbt-aws.IJobRunner.property.name">name</a></code>                                                                               | <code>string</code>                                                | The name of the CoreApplicationPlaneJobRunner.                                                                   |
+| <code><a href="#@cdklabs/sbt-aws.IJobRunner.property.outgoingEvent">outgoingEvent</a></code>                                                             | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The outgoing event DetailType that is emitted upon job completion.                                               |
+| <code><a href="#@cdklabs/sbt-aws.IJobRunner.property.permissions">permissions</a></code>                                                                 | <code>aws-cdk-lib.aws_iam.PolicyDocument</code>                    | The IAM permission document for the CoreApplicationPlaneJobRunner.                                               |
+| <code><a href="#@cdklabs/sbt-aws.IJobRunner.property.script">script</a></code>                                                                           | <code>string</code>                                                | The bash script to run as part of the CoreApplicationPlaneJobRunner.                                             |
+| <code><a href="#@cdklabs/sbt-aws.IJobRunner.property.environmentJSONVariablesFromIncomingEvent">environmentJSONVariablesFromIncomingEvent</a></code>     | <code>string[]</code>                                              | The environment variables to import into the CoreApplicationPlaneJobRunner from event details field.             |
+| <code><a href="#@cdklabs/sbt-aws.IJobRunner.property.environmentStringVariablesFromIncomingEvent">environmentStringVariablesFromIncomingEvent</a></code> | <code>string[]</code>                                              | The environment variables to import into the CoreApplicationPlaneJobRunner from event details field.             |
+| <code><a href="#@cdklabs/sbt-aws.IJobRunner.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code>                 | <code>string[]</code>                                              | The environment variables to export into the outgoing event once the CoreApplicationPlaneJobRunner has finished. |
+| <code><a href="#@cdklabs/sbt-aws.IJobRunner.property.postScript">postScript</a></code>                                                                   | <code>string</code>                                                | The bash script to run after the main script has completed.                                                      |
+| <code><a href="#@cdklabs/sbt-aws.IJobRunner.property.scriptEnvironmentVariables">scriptEnvironmentVariables</a></code>                                   | <code>{[ key: string ]: string}</code>                             | The variables to pass into the codebuild CoreApplicationPlaneJobRunner.                                          |
+
+---
+
+##### `incomingEvent`<sup>Required</sup> <a name="incomingEvent" id="@cdklabs/sbt-aws.IJobRunner.property.incomingEvent"></a>
+
+```typescript
+public readonly incomingEvent: DetailType;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+
+The incoming event DetailType that triggers this job.
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="@cdklabs/sbt-aws.IJobRunner.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+
+The name of the CoreApplicationPlaneJobRunner.
+
+Note that this value must be unique.
+
+---
+
+##### `outgoingEvent`<sup>Required</sup> <a name="outgoingEvent" id="@cdklabs/sbt-aws.IJobRunner.property.outgoingEvent"></a>
+
+```typescript
+public readonly outgoingEvent: DetailType;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+
+The outgoing event DetailType that is emitted upon job completion.
+
+---
+
+##### `permissions`<sup>Required</sup> <a name="permissions" id="@cdklabs/sbt-aws.IJobRunner.property.permissions"></a>
+
+```typescript
+public readonly permissions: PolicyDocument;
+```
+
+- *Type:* aws-cdk-lib.aws_iam.PolicyDocument
+
+The IAM permission document for the CoreApplicationPlaneJobRunner.
+
+---
+
+##### `script`<sup>Required</sup> <a name="script" id="@cdklabs/sbt-aws.IJobRunner.property.script"></a>
+
+```typescript
+public readonly script: string;
+```
+
+- *Type:* string
+
+The bash script to run as part of the CoreApplicationPlaneJobRunner.
+
+---
+
+##### `environmentJSONVariablesFromIncomingEvent`<sup>Optional</sup> <a name="environmentJSONVariablesFromIncomingEvent" id="@cdklabs/sbt-aws.IJobRunner.property.environmentJSONVariablesFromIncomingEvent"></a>
+
+```typescript
+public readonly environmentJSONVariablesFromIncomingEvent: string[];
+```
+
+- *Type:* string[]
+
+The environment variables to import into the CoreApplicationPlaneJobRunner from event details field.
+
+This argument consists of the names of only JSON-formatted string type variables.
+Ex. '{"test": 2}'
+
+---
+
+##### `environmentStringVariablesFromIncomingEvent`<sup>Optional</sup> <a name="environmentStringVariablesFromIncomingEvent" id="@cdklabs/sbt-aws.IJobRunner.property.environmentStringVariablesFromIncomingEvent"></a>
+
+```typescript
+public readonly environmentStringVariablesFromIncomingEvent: string[];
+```
+
+- *Type:* string[]
+
+The environment variables to import into the CoreApplicationPlaneJobRunner from event details field.
+
+This argument consists of the names of only string type variables. Ex. 'test'
+
+---
+
+##### `environmentVariablesToOutgoingEvent`<sup>Optional</sup> <a name="environmentVariablesToOutgoingEvent" id="@cdklabs/sbt-aws.IJobRunner.property.environmentVariablesToOutgoingEvent"></a>
+
+```typescript
+public readonly environmentVariablesToOutgoingEvent: string[];
+```
+
+- *Type:* string[]
+
+The environment variables to export into the outgoing event once the CoreApplicationPlaneJobRunner has finished.
+
+---
+
+##### `postScript`<sup>Optional</sup> <a name="postScript" id="@cdklabs/sbt-aws.IJobRunner.property.postScript"></a>
+
+```typescript
+public readonly postScript: string;
+```
+
+- *Type:* string
+
+The bash script to run after the main script has completed.
+
+---
+
+##### `scriptEnvironmentVariables`<sup>Optional</sup> <a name="scriptEnvironmentVariables" id="@cdklabs/sbt-aws.IJobRunner.property.scriptEnvironmentVariables"></a>
+
+```typescript
+public readonly scriptEnvironmentVariables: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+
+The variables to pass into the codebuild CoreApplicationPlaneJobRunner.
+
+---
+
 ## Enums <a name="Enums" id="Enums"></a>
 
 ### DetailType <a name="DetailType" id="@cdklabs/sbt-aws.DetailType"></a>
@@ -3818,26 +3891,26 @@ events sent across the EventBus.
 
 #### Members <a name="Members" id="Members"></a>
 
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.ONBOARDING_REQUEST">ONBOARDING_REQUEST</a></code> | Event detail type for onboarding request. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.ONBOARDING_SUCCESS">ONBOARDING_SUCCESS</a></code> | Event detail type for successful onboarding. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.ONBOARDING_FAILURE">ONBOARDING_FAILURE</a></code> | Event detail type for failed onboarding. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.OFFBOARDING_REQUEST">OFFBOARDING_REQUEST</a></code> | Event detail type for offboarding request. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.OFFBOARDING_SUCCESS">OFFBOARDING_SUCCESS</a></code> | Event detail type for successful offboarding. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.OFFBOARDING_FAILURE">OFFBOARDING_FAILURE</a></code> | Event detail type for failed offboarding. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.PROVISION_SUCCESS">PROVISION_SUCCESS</a></code> | Event detail type for successful provisioning. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.PROVISION_FAILURE">PROVISION_FAILURE</a></code> | Event detail type for failed provisioning. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.DEPROVISION_SUCCESS">DEPROVISION_SUCCESS</a></code> | Event detail type for successful deprovisioning. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.DEPROVISION_FAILURE">DEPROVISION_FAILURE</a></code> | Event detail type for failed deprovisioning. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.BILLING_SUCCESS">BILLING_SUCCESS</a></code> | Event detail type for successful billing configuration. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.BILLING_FAILURE">BILLING_FAILURE</a></code> | Event detail type for failure to configure billing. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.ACTIVATE_REQUEST">ACTIVATE_REQUEST</a></code> | Event detail type for activation request. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.ACTIVATE_SUCCESS">ACTIVATE_SUCCESS</a></code> | Event detail type for successful activation. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.ACTIVATE_FAILURE">ACTIVATE_FAILURE</a></code> | Event detail type for failed activation. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.DEACTIVATE_REQUEST">DEACTIVATE_REQUEST</a></code> | Event detail type for deactivation request. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.DEACTIVATE_SUCCESS">DEACTIVATE_SUCCESS</a></code> | Event detail type for successful deactivation. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.DEACTIVATE_FAILURE">DEACTIVATE_FAILURE</a></code> | Event detail type for failed deactivation. |
+| **Name**                                                                                        | **Description**                                            |
+| ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.ONBOARDING_REQUEST">ONBOARDING_REQUEST</a></code>   | Event detail type for onboarding request.                  |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.ONBOARDING_SUCCESS">ONBOARDING_SUCCESS</a></code>   | Event detail type for successful onboarding.               |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.ONBOARDING_FAILURE">ONBOARDING_FAILURE</a></code>   | Event detail type for failed onboarding.                   |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.OFFBOARDING_REQUEST">OFFBOARDING_REQUEST</a></code> | Event detail type for offboarding request.                 |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.OFFBOARDING_SUCCESS">OFFBOARDING_SUCCESS</a></code> | Event detail type for successful offboarding.              |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.OFFBOARDING_FAILURE">OFFBOARDING_FAILURE</a></code> | Event detail type for failed offboarding.                  |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.PROVISION_SUCCESS">PROVISION_SUCCESS</a></code>     | Event detail type for successful provisioning.             |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.PROVISION_FAILURE">PROVISION_FAILURE</a></code>     | Event detail type for failed provisioning.                 |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.DEPROVISION_SUCCESS">DEPROVISION_SUCCESS</a></code> | Event detail type for successful deprovisioning.           |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.DEPROVISION_FAILURE">DEPROVISION_FAILURE</a></code> | Event detail type for failed deprovisioning.               |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.BILLING_SUCCESS">BILLING_SUCCESS</a></code>         | Event detail type for successful billing configuration.    |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.BILLING_FAILURE">BILLING_FAILURE</a></code>         | Event detail type for failure to configure billing.        |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.ACTIVATE_REQUEST">ACTIVATE_REQUEST</a></code>       | Event detail type for activation request.                  |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.ACTIVATE_SUCCESS">ACTIVATE_SUCCESS</a></code>       | Event detail type for successful activation.               |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.ACTIVATE_FAILURE">ACTIVATE_FAILURE</a></code>       | Event detail type for failed activation.                   |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.DEACTIVATE_REQUEST">DEACTIVATE_REQUEST</a></code>   | Event detail type for deactivation request.                |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.DEACTIVATE_SUCCESS">DEACTIVATE_SUCCESS</a></code>   | Event detail type for successful deactivation.             |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.DEACTIVATE_FAILURE">DEACTIVATE_FAILURE</a></code>   | Event detail type for failed deactivation.                 |
 | <code><a href="#@cdklabs/sbt-aws.DetailType.TENANT_USER_CREATED">TENANT_USER_CREATED</a></code> | Event detail type for user creation on the app-plane side. |
 | <code><a href="#@cdklabs/sbt-aws.DetailType.TENANT_USER_DELETED">TENANT_USER_DELETED</a></code> | Event detail type for user deletion on the app-plane side. |
 

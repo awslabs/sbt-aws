@@ -6,9 +6,9 @@ import { CfnRule, EventBus, Rule } from 'aws-cdk-lib/aws-events';
 import { Effect, PolicyDocument, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { AwsSolutionsChecks, NagSuppressions } from 'cdk-nag';
-import { CoreApplicationPlane, CoreApplicationPlaneJobRunnerProps } from '.';
+import { DefaultApplicationPlane } from '.';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
-import { DetailType } from '../utils';
+import { DetailType, EventManager } from '../utils';
 
 export interface IntegStackProps extends cdk.StackProps {
   eventBusArn?: string;
@@ -25,7 +25,7 @@ export class IntegStack extends cdk.Stack {
       eventBus = new EventBus(this, 'EventBus');
     }
 
-    const provisioningJobRunnerProps: CoreApplicationPlaneJobRunnerProps = {
+    const provisioningJob = {
       name: 'provisioning',
       permissions: new PolicyDocument({
         statements: [
@@ -101,8 +101,9 @@ echo "done!"
       incomingEvent: DetailType.ONBOARDING_REQUEST,
     };
 
-    const deprovisioningJobRunnerProps: CoreApplicationPlaneJobRunnerProps = {
+    const deprovisioningJob = {
       name: 'deprovisioning',
+      eventBus: eventBus,
       permissions: new PolicyDocument({
         statements: [
           new PolicyStatement({
@@ -133,19 +134,16 @@ echo "done!"
       incomingEvent: DetailType.OFFBOARDING_REQUEST,
     };
 
-    const coreApplicationPlane = new CoreApplicationPlane(this, 'CoreApplicationPlane', {
+    new DefaultApplicationPlane(this, 'CoreApplicationPlane', {
       eventBusArn: eventBus.eventBusArn,
-      jobRunnerPropsList: [provisioningJobRunnerProps, deprovisioningJobRunnerProps],
+      jobRunners: [provisioningJob, deprovisioningJob],
     });
 
     const eventBusWatcherRule = new Rule(this, 'EventBusWatcherRule', {
       eventBus: eventBus,
       enabled: true,
       eventPattern: {
-        source: [
-          coreApplicationPlane.eventManager.controlPlaneEventSource,
-          coreApplicationPlane.eventManager.applicationPlaneEventSource,
-        ],
+        source: [EventManager.CONTROL_PLANE_SOURCE, EventManager.APP_PLANE_SOURCE],
       },
     });
 

@@ -78,7 +78,7 @@ export class Services extends Construct {
       ],
       environment: {
         EVENTBUS_NAME: props.eventManager.eventBus.eventBusName,
-        EVENT_SOURCE: props.eventManager.controlPlaneEventSource,
+        EVENT_SOURCE: EventManager.CONTROL_PLANE_SOURCE,
         TENANT_DETAILS_TABLE: props.tables.tenantDetails.tableName,
         ONBOARDING_DETAIL_TYPE: DetailType.ONBOARDING_REQUEST,
         OFFBOARDING_DETAIL_TYPE: DetailType.OFFBOARDING_REQUEST,
