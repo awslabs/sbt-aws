@@ -1012,7 +1012,7 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlane.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlane.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | The EventManager instance that allows connecting to events flowing between the Control Plane and other components. |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlane.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | The EventManager instance that allows connecting to events flowing between the Control Plane and other components. |
 
 ---
 
@@ -1031,10 +1031,10 @@ The tree node.
 ##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.CoreApplicationPlane.property.eventManager"></a>
 
 ```typescript
-public readonly eventManager: EventManager;
+public readonly eventManager: IEventManager;
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.EventManager">EventManager</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
 
 The EventManager instance that allows connecting to events flowing between the Control Plane and other components.
 
@@ -2429,7 +2429,7 @@ const controlPlaneProps: ControlPlaneProps = { ... }
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.auth">auth</a></code> | <code><a href="#@cdklabs/sbt-aws.IAuth">IAuth</a></code> | The authentication provider for the control plane. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.billing">billing</a></code> | <code><a href="#@cdklabs/sbt-aws.IBilling">IBilling</a></code> | The billing provider configuration. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.disableAPILogging">disableAPILogging</a></code> | <code>boolean</code> | If true, the API Gateway will not log requests to the CloudWatch Logs. |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | The event manager instance. |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | The event manager instance. |
 
 ---
 
@@ -2473,10 +2473,10 @@ If true, the API Gateway will not log requests to the CloudWatch Logs.
 ##### `eventManager`<sup>Optional</sup> <a name="eventManager" id="@cdklabs/sbt-aws.ControlPlaneProps.property.eventManager"></a>
 
 ```typescript
-public readonly eventManager: EventManager;
+public readonly eventManager: IEventManager;
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.EventManager">EventManager</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
 
 The event manager instance.
 
@@ -2656,7 +2656,7 @@ const coreApplicationPlaneProps: CoreApplicationPlaneProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.jobRunnerPropsList">jobRunnerPropsList</a></code> | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps">CoreApplicationPlaneJobRunnerProps</a>[]</code> | The list of JobRunner definitions to create. |
 
 ---
@@ -2664,10 +2664,10 @@ const coreApplicationPlaneProps: CoreApplicationPlaneProps = { ... }
 ##### `eventManager`<sup>Optional</sup> <a name="eventManager" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventManager"></a>
 
 ```typescript
-public readonly eventManager: EventManager;
+public readonly eventManager: IEventManager;
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.EventManager">EventManager</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
 
 ---
 
@@ -3555,6 +3555,7 @@ The grantee resource that will be granted the permission(s).
 | <code><a href="#@cdklabs/sbt-aws.IEventManager.property.busArn">busArn</a></code> | <code>string</code> | The ARN/ID of the bus that will be used to send and receive events. |
 | <code><a href="#@cdklabs/sbt-aws.IEventManager.property.busName">busName</a></code> | <code>string</code> | The name of the bus that will be used to send and receive events. |
 | <code><a href="#@cdklabs/sbt-aws.IEventManager.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The event source used for events emitted by the control plane. |
+| <code><a href="#@cdklabs/sbt-aws.IEventManager.property.supportedEvents">supportedEvents</a></code> | <code>{[ key: string ]: string}</code> | List of recognized events that are available as triggers. |
 
 ---
 
@@ -3603,6 +3604,18 @@ public readonly controlPlaneEventSource: string;
 - *Type:* string
 
 The event source used for events emitted by the control plane.
+
+---
+
+##### `supportedEvents`<sup>Required</sup> <a name="supportedEvents" id="@cdklabs/sbt-aws.IEventManager.property.supportedEvents"></a>
+
+```typescript
+public readonly supportedEvents: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+
+List of recognized events that are available as triggers.
 
 ---
 
