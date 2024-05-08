@@ -27,7 +27,7 @@ export interface ControlPlaneProps {
   /**
    * The event manager instance. If not provided, a new instance will be created.
    */
-  readonly eventManager?: EventManager;
+  readonly eventManager?: IEventManager;
 
   /**
    * If true, the API Gateway will not log requests to the CloudWatch Logs.

@@ -160,6 +160,11 @@ export interface IEventManager {
   readonly busArn: string;
 
   /**
+   * List of recognized events that are available as triggers.
+   */
+  readonly supportedEvents: EventMetadata;
+
+  /**
    * Adds an IRuleTarget to an event.
    *
    * @param eventType The detail type of the event to add a target to.

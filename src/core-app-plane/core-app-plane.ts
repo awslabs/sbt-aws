@@ -1,11 +1,12 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
+import { EventBus } from 'aws-cdk-lib/aws-events';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 import { BashJobOrchestrator } from './bash-job-orchestrator';
 import { BashJobRunner } from './bash-job-runner';
-import { EventManager, DetailType, setTemplateDesc } from '../utils';
+import { EventManager, IEventManager, DetailType, setTemplateDesc } from '../utils';
 
 /**
  * Encapsulates the list of properties for a CoreApplicationPlaneJobRunner.
@@ -71,7 +72,7 @@ export interface CoreApplicationPlaneJobRunnerProps {
  * Encapsulates the list of properties for a CoreApplicationPlane.
  */
 export interface CoreApplicationPlaneProps {
-  readonly eventManager?: EventManager;
+  readonly eventManager?: IEventManager;
 
   /**
    * The list of JobRunner definitions to create.
@@ -90,12 +91,13 @@ export class CoreApplicationPlane extends Construct {
    * The EventManager instance that allows connecting to events flowing between
    * the Control Plane and other components.
    */
-  readonly eventManager: EventManager;
+  readonly eventManager: IEventManager;
 
   constructor(scope: Construct, id: string, props: CoreApplicationPlaneProps) {
     super(scope, id);
     setTemplateDesc(this, 'SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)');
     this.eventManager = props.eventManager ?? new EventManager(this, 'EventManager');
+    const eventBus = EventBus.fromEventBusArn(this, 'EventBus', this.eventManager.busArn);
 
     props.jobRunnerPropsList?.forEach((jobRunnerProps) => {
       // Only BashJobOrchestrator requires differentiating between
@@ -120,7 +122,7 @@ export class CoreApplicationPlane extends Construct {
       });
 
       let jobOrchestrator = new BashJobOrchestrator(this, `${jobRunnerProps.name}-orchestrator`, {
-        targetEventBus: this.eventManager.eventBus,
+        targetEventBus: eventBus,
         detailType: jobRunnerProps.outgoingEvent,
         eventSource: this.eventManager.supportedEvents[jobRunnerProps.outgoingEvent],
         environmentVariablesToOutgoingEvent: jobRunnerProps.environmentVariablesToOutgoingEvent,
