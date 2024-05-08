@@ -8,7 +8,7 @@ import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { AwsSolutionsChecks, NagSuppressions } from 'cdk-nag';
 import { CoreApplicationPlane, CoreApplicationPlaneJobRunnerProps } from '.';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
-import { DetailType } from '../utils';
+import { DetailType, EventManager } from '../utils';
 
 export interface IntegStackProps extends cdk.StackProps {
   eventBusArn?: string;
@@ -19,10 +19,14 @@ export class IntegStack extends cdk.Stack {
     super(scope, id, props);
 
     let eventBus;
+    let eventManager;
     if (props?.eventBusArn) {
       eventBus = EventBus.fromEventBusArn(this, 'EventBus', props.eventBusArn);
+      eventManager = new EventManager(this, 'EventManager', {
+        eventBus: eventBus,
+      });
     } else {
-      eventBus = new EventBus(this, 'EventBus');
+      eventManager = new EventManager(this, 'EventManager');
     }
 
     const provisioningJobRunnerProps: CoreApplicationPlaneJobRunnerProps = {
@@ -133,19 +137,15 @@ echo "done!"
       incomingEvent: DetailType.OFFBOARDING_REQUEST,
     };
 
-    const coreApplicationPlane = new CoreApplicationPlane(this, 'CoreApplicationPlane', {
-      eventBusArn: eventBus.eventBusArn,
+    new CoreApplicationPlane(this, 'CoreApplicationPlane', {
+      eventManager: eventManager,
       jobRunnerPropsList: [provisioningJobRunnerProps, deprovisioningJobRunnerProps],
     });
 
     const eventBusWatcherRule = new Rule(this, 'EventBusWatcherRule', {
       eventBus: eventBus,
-      enabled: true,
       eventPattern: {
-        source: [
-          coreApplicationPlane.eventManager.controlPlaneEventSource,
-          coreApplicationPlane.eventManager.applicationPlaneEventSource,
-        ],
+        source: [eventManager.controlPlaneEventSource, eventManager.applicationPlaneEventSource],
       },
     });
 

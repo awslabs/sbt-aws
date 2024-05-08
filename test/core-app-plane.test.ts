@@ -3,12 +3,11 @@
 
 import * as cdk from 'aws-cdk-lib';
 import { Annotations, Match, Template } from 'aws-cdk-lib/assertions';
-import { EventBus } from 'aws-cdk-lib/aws-events';
 import { PolicyDocument } from 'aws-cdk-lib/aws-iam';
 import { AwsSolutionsChecks, NagSuppressions } from 'cdk-nag';
 import { Construct, IConstruct } from 'constructs';
 import { CoreApplicationPlane } from '../src/core-app-plane';
-import { DetailType } from '../src/utils';
+import { DetailType, EventManager } from '../src/utils';
 
 class DestroyPolicySetter implements cdk.IAspect {
   public visit(node: IConstruct): void {
@@ -23,11 +22,9 @@ describe('No unsuppressed cdk-nag Warnings or Errors', () => {
   class CoreApplicationPlaneStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
       super(scope, id, props);
-      const eventBus = new EventBus(this, 'EventBus');
+      const eventManager = new EventManager(this, 'EventManager');
       new CoreApplicationPlane(this, 'CoreApplicationPlane', {
-        eventBusArn: eventBus.eventBusArn,
-        controlPlaneEventSource: 'sbt-control-plane-api',
-        applicationPlaneEventSource: 'sbt-application-plane-api',
+        eventManager: eventManager,
         jobRunnerPropsList: [
           {
             name: 'provisioning',
@@ -89,11 +86,9 @@ describe('CoreApplicationPlane', () => {
     class CoreApplicationPlaneStack extends cdk.Stack {
       constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
-        const eventBus = new EventBus(this, 'EventBus');
+        const eventManager = new EventManager(this, 'EventManager');
         new CoreApplicationPlane(this, 'CoreApplicationPlane', {
-          eventBusArn: eventBus.eventBusArn,
-          controlPlaneEventSource: 'sbt-control-plane-api',
-          applicationPlaneEventSource: 'sbt-application-plane-api',
+          eventManager: eventManager,
           jobRunnerPropsList: [
             {
               name: 'provisioning',
@@ -140,11 +135,9 @@ describe('CoreApplicationPlane', () => {
     class CoreApplicationPlaneStack extends cdk.Stack {
       constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
-        const eventBus = new EventBus(this, 'EventBus');
+        const eventManager = new EventManager(this, 'EventManager');
         const coreApplicationPlane = new CoreApplicationPlane(this, 'CoreApplicationPlane', {
-          eventBusArn: eventBus.eventBusArn,
-          controlPlaneEventSource: 'sbt-control-plane-api',
-          applicationPlaneEventSource: 'sbt-application-plane-api',
+          eventManager: eventManager,
           jobRunnerPropsList: [
             {
               name: 'provisioning',
