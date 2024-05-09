@@ -91,27 +91,6 @@ describe('ControlPlane Targets', () => {
   });
 });
 
-describe('ControlPlane description', () => {
-  it('should have a fixed template description, when the containing stack does not have description', () => {
-    const stackWithoutDescription = new TestStack(app, 'stackWithoutDescription', {
-      systemAdminEmail: 'test@example.com',
-    });
-    const actual = stackWithoutDescription.templateOptions.description;
-    const expected = 'SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)';
-    expect(actual).toStrictEqual(expected);
-  });
-
-  it('should have a concatenated template description, when the containing stack has an existing desc', () => {
-    const stackWithDescription = new TestStack(app, 'stackWithDescription', {
-      systemAdminEmail: 'test@example.com',
-      description: 'ABC',
-    });
-    const actual = stackWithDescription.templateOptions.description;
-    const expected = 'ABC - SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)';
-    expect(expected).toStrictEqual(actual);
-  });
-});
-
 describe('ControlPlane cloudwatch roles', () => {
   it('should create the cloudwatch IAM apigw push to cw role by default', () => {
     const stackWithLogging = new TestStack(new cdk.App(), 'stackWithLogging', {

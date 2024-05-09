@@ -12,6 +12,7 @@ import * as tasks from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { BashJobRunner } from './bash-job-runner';
+import { addTemplateTag } from '../utils';
 
 /**
  * Encapsulates the list of properties for a BashJobOrchestrator.
@@ -67,6 +68,7 @@ export class BashJobOrchestrator extends Construct {
 
   constructor(scope: Construct, id: string, props: BashJobOrchestratorProps) {
     super(scope, id);
+    addTemplateTag(this, 'BashJobOrchestrator');
 
     const eventSource = props.eventSource;
     const detailType = props.detailType;

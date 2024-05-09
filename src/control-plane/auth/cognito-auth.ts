@@ -16,6 +16,7 @@ import { Runtime, IFunction, LayerVersion } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IAuth } from './auth-interface';
+import { addTemplateTag } from '../../utils';
 
 /**
  * Properties for the CognitoAuth construct.
@@ -105,6 +106,7 @@ export class CognitoAuth extends Construct implements IAuth {
 
   constructor(scope: Construct, id: string, props: CognitoAuthProps) {
     super(scope, id);
+    addTemplateTag(this, 'CognitoAuth');
 
     const idpName = 'COGNITO';
     const systemAdminRoleName = props.systemAdminRoleName ?? 'SystemAdmin';

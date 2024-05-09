@@ -9,7 +9,7 @@ import { Runtime, LayerVersion, Function } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { Tables } from './tables';
-import { DetailType, IEventManager } from '../utils';
+import { DetailType, IEventManager, addTemplateTag } from '../utils';
 
 export interface ServicesProps {
   readonly tables: Tables;
@@ -21,6 +21,7 @@ export class Services extends Construct {
 
   constructor(scope: Construct, id: string, props: ServicesProps) {
     super(scope, id);
+    addTemplateTag(this, 'Services');
 
     const tenantManagementExecRole = new Role(this, 'tenantManagementExecRole', {
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),

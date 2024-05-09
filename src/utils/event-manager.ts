@@ -4,6 +4,7 @@
 import { IEventBus, Rule, IRuleTarget, EventBus } from 'aws-cdk-lib/aws-events';
 import { IGrantable } from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
+import { addTemplateTag } from './utils';
 
 /**
  * Provides an easy way of accessing event detail types.
@@ -221,6 +222,7 @@ export class EventManager extends Construct implements IEventManager {
 
   constructor(scope: Construct, id: string, props?: EventManagerProps) {
     super(scope, id);
+    addTemplateTag(this, 'EventManager');
     this.eventBus = props?.eventBus ?? new EventBus(this, 'SbtEventBus');
     this.busName = this.eventBus.eventBusName;
     this.busArn = this.eventBus.eventBusArn;
