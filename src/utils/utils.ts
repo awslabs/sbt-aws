@@ -6,7 +6,7 @@ import { Construct } from 'constructs';
 
 export const addTemplateTag = (construct: Construct, tag: string) => {
   const stackDesc = Stack.of(construct).templateOptions.description;
-  const baseTelemetry = 'SaaS Builder Toolkit (uksb-1tupboc57)';
+  const baseTelemetry = 'sbt-aws (uksb-1tupboc57)';
   let description = stackDesc;
   // There is no description, just make it telemetry + tags
   if (stackDesc === undefined) {

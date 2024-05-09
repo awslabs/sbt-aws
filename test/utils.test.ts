@@ -4,7 +4,7 @@
 import { App, Stack } from 'aws-cdk-lib';
 import { addTemplateTag } from '../src/utils';
 const app = new App();
-const telemetryConst = 'SaaS Builder Toolkit (uksb-1tupboc57)';
+const telemetryConst = 'sbt-aws (uksb-1tupboc57)';
 
 describe('addTemplateTag', () => {
   it('should append telemetry and tags to existing template description', () => {
