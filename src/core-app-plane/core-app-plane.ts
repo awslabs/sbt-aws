@@ -6,7 +6,7 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 import { BashJobOrchestrator } from './bash-job-orchestrator';
 import { BashJobRunner } from './bash-job-runner';
-import { EventManager, IEventManager, DetailType, setTemplateDesc } from '../utils';
+import { EventManager, IEventManager, DetailType, addTemplateTag } from '../utils';
 
 /**
  * Encapsulates the list of properties for a CoreApplicationPlaneJobRunner.
@@ -95,7 +95,7 @@ export class CoreApplicationPlane extends Construct {
 
   constructor(scope: Construct, id: string, props: CoreApplicationPlaneProps) {
     super(scope, id);
-    setTemplateDesc(this, 'SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)');
+    addTemplateTag(this, 'CoreApplicationPlane');
     this.eventManager = props.eventManager ?? new EventManager(this, 'EventManager');
     const eventBus = EventBus.fromEventBusArn(this, 'EventBus', this.eventManager.busArn);
 

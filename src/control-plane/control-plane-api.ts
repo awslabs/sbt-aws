@@ -12,6 +12,7 @@ import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IAuth } from './auth/auth-interface';
 import { Services } from './services';
+import { addTemplateTag } from '../utils';
 
 export interface ControlPlaneAPIProps {
   readonly services: Services;
@@ -26,7 +27,7 @@ export class ControlPlaneAPI extends Construct {
   public readonly tenantUpdateServiceTarget: targets.ApiGateway;
   constructor(scope: Construct, id: string, props: ControlPlaneAPIProps) {
     super(scope, id);
-
+    addTemplateTag(this, 'ControlPlaneAPI');
     let options: any = {
       defaultCorsPreflightOptions: {
         allowOrigins: apigateway.Cors.ALL_ORIGINS,

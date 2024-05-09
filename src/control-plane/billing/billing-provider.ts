@@ -9,7 +9,7 @@ import { IFunction } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IBilling, IFunctionTrigger } from './billing-interface';
-import { DetailType, IEventManager } from '../../utils';
+import { DetailType, IEventManager, addTemplateTag } from '../../utils';
 
 /**
  * Encapsulates the list of properties for a BillingProvider.
@@ -54,6 +54,7 @@ export class BillingProvider extends Construct {
    */
   constructor(scope: Construct, id: string, props: BillingProviderProps) {
     super(scope, id);
+    addTemplateTag(this, 'BillingProvider');
 
     this.createEventTarget(
       props.eventManager,
