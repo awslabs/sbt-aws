@@ -76,7 +76,7 @@ Typescript に馴染みがない人でも、この部分が何を行っている
 
 ### チュートリアル
 
-> [!警告]
+> [!WARNING]
 > このチュートリアルを実行すると、AWS アカウントで料金が発生する可能性があります。
 
 前述の通り、SBT は CDK を利用して構築されています。 その使用例を示すため、まず CDK の入門ガイドに従って新しい CDK アプリケーションを初期化してください。 ガイドは[こちら](https://docs.aws.amazon.com/cdk/v2/guide/hello_world.html#hello_world_tutorial_create_app)にあります。 hello cdk チュートリアルのステップ 1 まで完了してから、ここに戻って SBT の作業を続けてください。 サンプルアプリを構築やデプロイする必要はありません。
@@ -144,7 +144,7 @@ const cp = new ControlPlaneStack(app, 'ControlPlaneStack', {});
 
 コメントアウトされた数行は、後でアプリケーションプレーンを説明する際に戻って触れます。 すべてを保存したら、hello-cdk プロジェクトのルートから次のコマンドを実行してください。
 
-> [!警告]  
+> [!WARNING]
 > ControlPlane が Lambda 関数 をデプロイするため、Docker がインストールされている必要があります。
 >
 
@@ -304,7 +304,7 @@ echo "tenantId: $tenantId"
 echo "tier: $tier"
 ```
 
-これらの変数がどのように設定されるかを確認してみましょう。 `JobRunner` は内部的に [AWS CodeBuild](https://docs.aws.amazon.com/codebuild/latest/userguide/welcome.html) プロジェクトを作成することを思い出してください。 `JobRunner` が CodeBuild プロジェクトを作成するとき、どの環境変数を提供するかを指定できます。 また、`JobRunner` ユーティリティは、`incomingEvent` パラメータで指定された条件を満たす EventBridge メッセージによって起動されることを思い出してください。EventBridge を介して到着するメッセージには、送信者 (この場合はコントロールプレーン) が含めたコンテキスト情報を持つ `detail` JSON オブジェクトがあります (ドキュメントは[こちら](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-events-structure.html))。 `importedVariables` の各キーに対して、`JobRunner` は EventBridge メッセージの `detail` JSON オブジェクトから一致するキーの値を取得し、その値を環境変数として CodeBuild プロジェクトに提供します。
+これらの変数がどのように設定されるかを確認してみましょう。 `JobRunner` は内部的に [AWS CodeBuild](https://docs.aws.amazon.com/ja_jp/codebuild/latest/userguide/welcome.html) プロジェクトを作成することを思い出してください。 `JobRunner` が CodeBuild プロジェクトを作成するとき、どの環境変数を提供するかを指定できます。 また、`JobRunner` ユーティリティは、`incomingEvent` パラメータで指定された条件を満たす EventBridge メッセージによって起動されることを思い出してください。EventBridge を介して到着するメッセージには、送信者 (この場合はコントロールプレーン) が含めたコンテキスト情報を持つ `detail` JSON オブジェクトがあります (ドキュメントは[こちら](https://docs.aws.amazon.com/ja_jp/eventbridge/latest/userguide/eb-events-structure.html))。 `importedVariables` の各キーに対して、`JobRunner` は EventBridge メッセージの `detail` JSON オブジェクトから一致するキーの値を取得し、その値を環境変数として CodeBuild プロジェクトに提供します。
 
 例えば、次のようなプロビジョニングメッセージがコントロールプレーンから EventBridge 経由で送信された場合を考えてみましょう。
 
