@@ -12,7 +12,7 @@ import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IAuth } from './auth/auth-interface';
 import { Services } from './services';
-import { addTemplateTag } from '../utils';
+import { addTemplateTag, generateAWSManagedRuleSet } from '../utils';
 
 export interface ControlPlaneAPIProps {
   readonly services: Services;
@@ -63,26 +63,6 @@ export class ControlPlaneAPI extends Construct {
       validateRequestBody: true,
       validateRequestParameters: true,
     });
-
-    function generateAWSManagedRuleSet(managedGroupName: string, priority: number) {
-      const vendorName = 'AWS';
-      return {
-        name: `${vendorName}-${managedGroupName}`,
-        priority,
-        overrideAction: { none: {} },
-        statement: {
-          managedRuleGroupStatement: {
-            name: managedGroupName,
-            vendorName: vendorName,
-          },
-        },
-        visibilityConfig: {
-          cloudWatchMetricsEnabled: true,
-          metricName: managedGroupName,
-          sampledRequestsEnabled: true,
-        },
-      };
-    }
 
     const cfnWAF = new wafv2.CfnWebACL(this, 'WAF', {
       defaultAction: { allow: {} },

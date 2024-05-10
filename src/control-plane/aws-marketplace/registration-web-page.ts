@@ -10,6 +10,7 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import { BucketDeployment, DeployTimeSubstitutedFile, Source } from 'aws-cdk-lib/aws-s3-deployment';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
+import { generateAWSManagedRuleSet } from '../../utils';
 
 export interface RegistrationWebPageProps {
   readonly baseUrl: string;
@@ -183,26 +184,6 @@ export class RegistrationWebPage extends Construct {
         reason: 'Uses default certificate.',
       },
     ]);
-
-    function generateAWSManagedRuleSet(managedGroupName: string, priority: number) {
-      const vendorName = 'AWS';
-      return {
-        name: `${vendorName}-${managedGroupName}`,
-        priority,
-        overrideAction: { none: {} },
-        statement: {
-          managedRuleGroupStatement: {
-            name: managedGroupName,
-            vendorName: vendorName,
-          },
-        },
-        visibilityConfig: {
-          cloudWatchMetricsEnabled: true,
-          metricName: managedGroupName,
-          sampledRequestsEnabled: true,
-        },
-      };
-    }
 
     new cdk.CfnOutput(this, 'LandingPageUrl', {
       value: `https://${distribution.distributionDomainName}/index.html`,
