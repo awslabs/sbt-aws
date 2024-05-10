@@ -113,6 +113,7 @@
     },
     {
       "name": "@aws-cdk/aws-kinesisfirehose-alpha",
+      "version": "2.140.0-alpha.0",
       "type": "peer"
     },
     {
@@ -127,10 +128,12 @@
     },
     {
       "name": "@aws-cdk/aws-kinesisfirehose-alpha",
+      "version": "2.140.0-alpha.0",
       "type": "runtime"
     },
     {
       "name": "@aws-cdk/aws-kinesisfirehose-destinations-alpha",
+      "version": "2.140.0-alpha.0",
       "type": "runtime"
     },
     {

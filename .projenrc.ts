@@ -35,8 +35,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
   deps: [
     '@aws-cdk/aws-lambda-python-alpha',
     'cdk-nag',
-    '@aws-cdk/aws-kinesisfirehose-alpha',
-    '@aws-cdk/aws-kinesisfirehose-destinations-alpha',
+    `@aws-cdk/aws-kinesisfirehose-alpha@${CDK_VERSION}-alpha.0`,
+    `@aws-cdk/aws-kinesisfirehose-destinations-alpha@${CDK_VERSION}-alpha.0`,
   ],
   description:
     'SaaS Builder Toolkit for AWS is a developer toolkit to implement SaaS best practices and increase developer velocity.',
@@ -55,7 +55,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   name: `@${PUBLICATION_NAMESPACE}/${PROJECT_NAME}`,
   npmignoreEnabled: true,
   packageManager: javascript.NodePackageManager.NPM,
-  peerDeps: ['@aws-cdk/aws-kinesisfirehose-alpha'],
+  peerDeps: [`@aws-cdk/aws-kinesisfirehose-alpha@${CDK_VERSION}-alpha.0`],
   prettier: true,
   projenrcTs: true,
   projenVersion: PROJEN_VERSION,
