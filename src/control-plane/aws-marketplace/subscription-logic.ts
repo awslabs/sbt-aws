@@ -27,7 +27,6 @@ export class SubscriptionLogic extends Construct {
       sortKey: { name: 'create_timestamp', type: dynamodb.AttributeType.NUMBER },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       pointInTimeRecovery: true,
-      // tableName: props.awsMarketplaceMeteringRecordsTableName, // todo: test if this is required
     });
 
     meteringRecordsTable.addGlobalSecondaryIndex({
@@ -96,7 +95,9 @@ export class SubscriptionLogic extends Construct {
         {
           id: 'AwsSolutions-IAM5',
           reason: 'Index name(s) not known beforehand.',
-          appliesTo: [`Resource::<MarketplaceAWSMarketplaceMeteringRecords3B0F9D94.Arn>/index/*`],
+          appliesTo: [
+            `Resource::<${cdk.Stack.of(this).getLogicalId(meteringRecordsTable.node.defaultChild as dynamodb.CfnTable)}.Arn>/index/*`,
+          ],
         },
         {
           id: 'AwsSolutions-IAM5',
@@ -151,7 +152,7 @@ export class SubscriptionLogic extends Construct {
           id: 'AwsSolutions-IAM5',
           reason: 'Index name(s) not known beforehand.',
           appliesTo: [
-            `Resource::<MarketplaceAWSMarketplaceMeteringRecords3B0F9D94.Arn>/index/*`,
+            `Resource::<${cdk.Stack.of(this).getLogicalId(meteringRecordsTable.node.defaultChild as dynamodb.CfnTable)}.Arn>/index/*`,
             `Action::kms:ReEncrypt*`,
             `Action::kms:GenerateDataKey*`,
           ],

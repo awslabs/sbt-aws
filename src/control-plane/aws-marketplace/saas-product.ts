@@ -1,6 +1,8 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
+import * as path from 'path';
+import { PythonFunction } from '@aws-cdk/aws-lambda-python-alpha';
 import * as cdk from 'aws-cdk-lib';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
@@ -15,49 +17,48 @@ import * as sqs from 'aws-cdk-lib/aws-sqs';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { EntitlementLogic } from './entitlement-logic';
-import { RegistrationWebPage } from './registration-web-page';
 import { SubscriptionLogic } from './subscription-logic';
-import { generateAWSManagedRuleSet } from '../../utils';
+import { DetailType, IEventManager, generateAWSManagedRuleSet } from '../../utils';
 
-export interface MarketplaceProps {
-  readonly artifactBucketName?: string;
-  readonly newSubscribersTableName: string;
-  readonly awsMarketplaceMeteringRecordsTableName: string;
-  readonly typeOfSaaSListing: string;
+export enum AWSMarketplaceSaaSPricingModel {
+  CONTRACTS = 'contracts',
+  SUBSCRIPTIONS = 'subscriptions',
+  CONTRACTS_WITH_SUBSCRIPTION = 'contracts_with_subscription',
+}
+
+export interface AWSMarketplaceSaaSProductProps {
   readonly productCode: string;
+  readonly pricingModel: AWSMarketplaceSaaSPricingModel;
   readonly marketplaceTechAdminEmail: string;
   readonly marketplaceSellerEmail?: string;
   readonly entitlementSNSTopic: string;
   readonly subscriptionSNSTopic: string;
-  readonly createRegistrationWebPage: boolean;
+  readonly eventManager: IEventManager;
   readonly disableAPILogging?: boolean;
 }
 
-export class Marketplace extends Construct {
-  constructor(scope: Construct, id: string, props: MarketplaceProps) {
+export class AWSMarketplaceSaaSProduct extends Construct {
+  readonly registerCustomerAPI: apigateway.RestApi;
+  readonly subscribersTable: dynamodb.Table;
+
+  constructor(scope: Construct, id: string, props: AWSMarketplaceSaaSProductProps) {
     super(scope, id);
 
-    const quickstartBucket = s3.Bucket.fromBucketName(
-      this,
-      'CodeBucket',
-      props.artifactBucketName ?? 'aws-quickstart'
-    );
+    const quickstartBucket = s3.Bucket.fromBucketName(this, 'CodeBucket', 'aws-quickstart');
 
     const createEntitlementLogic =
-      props.typeOfSaaSListing === 'contracts_with_subscription' ||
-      props.typeOfSaaSListing === 'contracts';
+      props.pricingModel === AWSMarketplaceSaaSPricingModel.CONTRACTS_WITH_SUBSCRIPTION ||
+      props.pricingModel === AWSMarketplaceSaaSPricingModel.CONTRACTS;
 
     const createSubscriptionLogic =
-      props.typeOfSaaSListing === 'contracts_with_subscription' ||
-      props.typeOfSaaSListing === 'subscriptions';
+      props.pricingModel === AWSMarketplaceSaaSPricingModel.CONTRACTS_WITH_SUBSCRIPTION ||
+      props.pricingModel === AWSMarketplaceSaaSPricingModel.SUBSCRIPTIONS;
 
-    // DynamoDB Tables
-    const subscribersTable = new dynamodb.Table(this, 'AWSMarketplaceSubscribers', {
+    this.subscribersTable = new dynamodb.Table(this, 'AWSMarketplaceSubscribers', {
       partitionKey: { name: 'customerIdentifier', type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       stream: dynamodb.StreamViewType.NEW_AND_OLD_IMAGES,
       pointInTimeRecovery: true,
-      // tableName: props.newSubscribersTableName, // todo: test if this is required
     });
 
     if (createSubscriptionLogic) {
@@ -67,7 +68,6 @@ export class Marketplace extends Construct {
       });
     }
 
-    // SQS Queues and SNS Topics
     const supportTopicMasterKey = new cdk.aws_kms.Key(this, 'SupportTopicMasterKey', {
       enableKeyRotation: true,
     });
@@ -79,7 +79,70 @@ export class Marketplace extends Construct {
       new subscriptions.EmailSubscription(props.marketplaceTechAdminEmail)
     );
 
-    // Lambda Functions
+    // https://docs.powertools.aws.dev/lambda/python/2.31.0/#lambda-layer
+    const lambdaPowerToolsLayerARN = `arn:aws:lambda:${
+      cdk.Stack.of(this).region
+    }:017000801446:layer:AWSLambdaPowertoolsPythonV2:59`;
+
+    const powerToolsLayer = lambda.LayerVersion.fromLayerVersionArn(
+      this,
+      'LambdaPowerTools',
+      lambdaPowerToolsLayerARN
+    );
+
+    const grantOrRevokeAccessFunctionPython = new PythonFunction(
+      this,
+      'GrantOrRevokeAccessFunctionPython',
+      {
+        entry: path.join(
+          __dirname,
+          '../../../resources/aws-marketplace/functions/grant-revoke-access-to-product'
+        ),
+        runtime: lambda.Runtime.PYTHON_3_12,
+        index: 'index.py',
+        handler: 'lambda_handler',
+        timeout: cdk.Duration.seconds(60),
+        layers: [powerToolsLayer],
+        environment: {
+          SupportSNSArn: supportTopic.topicArn,
+          EVENTBUS_NAME: props.eventManager.busName,
+          EVENT_SOURCE: props.eventManager.controlPlaneEventSource,
+          OFFBOARDING_DETAIL_TYPE: DetailType.OFFBOARDING_REQUEST,
+        },
+        events: [
+          new DynamoEventSource(this.subscribersTable, {
+            startingPosition: lambda.StartingPosition.TRIM_HORIZON,
+            batchSize: 1,
+          }),
+        ],
+      }
+    );
+    props.eventManager.grantPutEventsTo(grantOrRevokeAccessFunctionPython);
+
+    const registerNewMarketplaceCustomerPython = new PythonFunction(
+      this,
+      'RegisterNewMarketplaceCustomerPython',
+      {
+        entry: path.join(
+          __dirname,
+          '../../../resources/aws-marketplace/functions/register-new-subscriber'
+        ),
+        runtime: lambda.Runtime.PYTHON_3_12,
+        index: 'index.py',
+        handler: 'lambda_handler',
+        timeout: cdk.Duration.seconds(60),
+        layers: [powerToolsLayer],
+        environment: {
+          NewSubscribersTableName: this.subscribersTable.tableName,
+          EntitlementQueueUrl: '',
+          EVENTBUS_NAME: props.eventManager.busName,
+          EVENT_SOURCE: props.eventManager.controlPlaneEventSource,
+          ONBOARDING_DETAIL_TYPE: DetailType.ONBOARDING_REQUEST,
+        },
+      }
+    );
+    props.eventManager.grantPutEventsTo(registerNewMarketplaceCustomerPython);
+
     const registerNewMarketplaceCustomer = new lambda.Function(
       this,
       'RegisterNewMarketplaceCustomer',
@@ -91,40 +154,12 @@ export class Marketplace extends Construct {
           'cloudformation-aws-marketplace-saas/9c1e36f06f022c95bcc9129bbacfa195'
         ),
         environment: {
-          NewSubscribersTableName: subscribersTable.tableName,
+          NewSubscribersTableName: this.subscribersTable.tableName,
           EntitlementQueueUrl: '',
         },
       }
     );
 
-    NagSuppressions.addResourceSuppressions(
-      [registerNewMarketplaceCustomer],
-      [
-        {
-          id: 'AwsSolutions-IAM4',
-          reason: 'Suppress usage of AWSLambdaBasicExecutionRole.',
-          appliesTo: [
-            'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
-          ],
-        },
-        {
-          id: 'AwsSolutions-L1',
-          reason: 'NODEJS 18 is the version used in the official quickstart CFN template.',
-        },
-        {
-          id: 'AwsSolutions-IAM5',
-          reason: 'Index name(s) not known beforehand.',
-          appliesTo: [`Resource::<MarketplaceAWSMarketplaceMeteringRecords3B0F9D94.Arn>/index/*`],
-        },
-        {
-          id: 'AwsSolutions-IAM5',
-          reason:
-            'TBD: FIX! This is Resource::* being used to output logs and x-ray traces and nothing else.',
-          appliesTo: ['Resource::*'],
-        },
-      ],
-      true // applyToChildren = true, so that it applies to policies created for the role.
-    );
     let options: any = {
       defaultCorsPreflightOptions: {
         allowOrigins: apigateway.Cors.ALL_ORIGINS,
@@ -155,17 +190,18 @@ export class Marketplace extends Construct {
       };
     }
 
-    const registerCustomerAPI = new apigateway.RestApi(this, 'RegisterCustomerAPI', options);
-    registerCustomerAPI.addRequestValidator('request-validator', {
+    this.registerCustomerAPI = new apigateway.RestApi(this, 'RegisterCustomerAPI', options);
+    this.registerCustomerAPI.addRequestValidator('request-validator', {
       requestValidatorName: 'register-customer-validator',
       validateRequestBody: true,
       validateRequestParameters: true,
     });
 
-    const subscriberResource = registerCustomerAPI.root.addResource('subscriber');
+    const subscriberResource = this.registerCustomerAPI.root.addResource('subscriber');
     subscriberResource.addMethod(
       'POST',
-      new apigateway.LambdaIntegration(registerNewMarketplaceCustomer)
+      // new apigateway.LambdaIntegration(registerNewMarketplaceCustomer)
+      new apigateway.LambdaIntegration(registerNewMarketplaceCustomerPython)
     );
 
     NagSuppressions.addResourceSuppressions(
@@ -185,7 +221,7 @@ export class Marketplace extends Construct {
     NagSuppressions.addResourceSuppressionsByPath(
       cdk.Stack.of(this),
       [
-        `${registerCustomerAPI.root}/OPTIONS/Resource`,
+        `${this.registerCustomerAPI.root}/OPTIONS/Resource`,
         `${subscriberResource}/OPTIONS/Resource`,
         `${subscriberResource}/POST/Resource`,
       ],
@@ -222,39 +258,40 @@ export class Marketplace extends Construct {
 
     new cdk.aws_wafv2.CfnWebACLAssociation(this, 'WAFAssociation', {
       webAclArn: cfnWAF.attrArn,
-      resourceArn: registerCustomerAPI.deploymentStage.stageArn,
+      resourceArn: this.registerCustomerAPI.deploymentStage.stageArn,
     });
 
     new cdk.CfnOutput(this, 'APIUrl', {
-      value: registerCustomerAPI.url,
+      value: this.registerCustomerAPI.url,
       description: 'API gateway URL to replace baseUrl value in web/script.js',
     });
-
-    if (props.createRegistrationWebPage) {
-      new RegistrationWebPage(this, 'RegistrationWebPage', {
-        assetBucket: quickstartBucket,
-        baseUrl: registerCustomerAPI.url,
-      });
-    }
 
     if (props.marketplaceSellerEmail) {
       registerNewMarketplaceCustomer.addEnvironment(
         'MarketplaceSellerEmail',
         props.marketplaceSellerEmail
       );
+      registerNewMarketplaceCustomerPython.addEnvironment(
+        'MarketplaceSellerEmail',
+        props.marketplaceSellerEmail
+      );
     }
 
-    subscribersTable.grantWriteData(registerNewMarketplaceCustomer);
+    this.subscribersTable.grantWriteData(registerNewMarketplaceCustomer);
+    this.subscribersTable.grantWriteData(registerNewMarketplaceCustomerPython);
     registerNewMarketplaceCustomer.addToRolePolicy(
       new iam.PolicyStatement({
-        actions: ['aws-marketplace:ResolveCustomer'],
+        actions: ['aws-marketplace:ResolveCustomer', 'ses:SendEmail'],
         resources: ['*'],
       })
     );
-
-    registerNewMarketplaceCustomer.addToRolePolicy(
+    registerNewMarketplaceCustomerPython.addToRolePolicy(
       new iam.PolicyStatement({
-        actions: ['ses:SendEmail'],
+        actions: [
+          'aws-marketplace:GetEntitlements',
+          'aws-marketplace:ResolveCustomer',
+          'ses:SendEmail',
+        ],
         resources: ['*'],
       })
     );
@@ -262,11 +299,40 @@ export class Marketplace extends Construct {
     if (createEntitlementLogic) {
       new EntitlementLogic(this, 'EntitlementLogic', {
         assetBucket: quickstartBucket,
-        subscribersTable: subscribersTable,
-        registerNewMarketplaceCustomer: registerNewMarketplaceCustomer,
+        subscribersTable: this.subscribersTable,
+        registerNewMarketplaceCustomer: registerNewMarketplaceCustomerPython,
         entitlementSNSTopic: props.entitlementSNSTopic,
       });
     }
+
+    NagSuppressions.addResourceSuppressions(
+      [registerNewMarketplaceCustomer, registerNewMarketplaceCustomerPython],
+      [
+        {
+          id: 'AwsSolutions-IAM4',
+          reason: 'Suppress usage of AWSLambdaBasicExecutionRole.',
+          appliesTo: [
+            'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
+          ],
+        },
+        {
+          id: 'AwsSolutions-L1',
+          reason: 'NODEJS 18 is the version used in the official quickstart CFN template.',
+        },
+        {
+          id: 'AwsSolutions-IAM5',
+          reason: 'Index name(s) not known beforehand.',
+          appliesTo: [`Resource::<MarketplaceAWSMarketplaceMeteringRecords3B0F9D94.Arn>/index/*`],
+        },
+        {
+          id: 'AwsSolutions-IAM5',
+          reason:
+            'TBD: FIX! This is Resource::* being used to output logs and x-ray traces and nothing else.',
+          appliesTo: ['Resource::*'],
+        },
+      ],
+      true // applyToChildren = true, so that it applies to policies created for the role.
+    );
 
     const subscriptionSQSQueueEncryptionKey = new cdk.aws_kms.Key(
       this,
@@ -304,40 +370,21 @@ export class Marketplace extends Construct {
         'cloudformation-aws-marketplace-saas/9c1e36f06f022c95bcc9129bbacfa195'
       ),
       environment: {
-        NewSubscribersTableName: subscribersTable.tableName,
+        NewSubscribersTableName: this.subscribersTable.tableName,
         SupportSNSArn: supportTopic.topicArn,
       },
       events: [new SqsEventSource(subscriptionSQSQueue, { batchSize: 1 })],
     });
 
-    subscribersTable.grantWriteData(subscriptionSQSHandler);
+    this.subscribersTable.grantWriteData(subscriptionSQSHandler);
     supportTopicMasterKey.grantEncrypt(subscriptionSQSHandler);
     supportTopic.grantPublish(subscriptionSQSHandler);
 
-    const grantOrRevokeAccessFunction = new lambda.Function(this, 'GrantOrRevokeAccess', {
-      runtime: lambda.Runtime.NODEJS_18_X,
-      handler: 'grant-revoke-access-to-product.dynamodbStreamHandler',
-      code: lambda.Code.fromBucket(
-        quickstartBucket,
-        'cloudformation-aws-marketplace-saas/9c1e36f06f022c95bcc9129bbacfa195'
-      ),
-      environment: {
-        SupportSNSArn: supportTopic.topicArn,
-        LOG_LEVEL: 'info',
-      },
-      events: [
-        new DynamoEventSource(subscribersTable, {
-          startingPosition: lambda.StartingPosition.TRIM_HORIZON,
-          batchSize: 1,
-        }),
-      ],
-    });
-    supportTopicMasterKey.grantEncryptDecrypt(grantOrRevokeAccessFunction);
-    supportTopic.grantPublish(grantOrRevokeAccessFunction);
-    subscribersTable.grantStreamRead(grantOrRevokeAccessFunction);
+    supportTopicMasterKey.grantEncryptDecrypt(grantOrRevokeAccessFunctionPython);
+    supportTopic.grantPublish(grantOrRevokeAccessFunctionPython);
 
     NagSuppressions.addResourceSuppressions(
-      [grantOrRevokeAccessFunction, subscriptionSQSHandler],
+      [grantOrRevokeAccessFunctionPython, subscriptionSQSHandler],
       [
         {
           id: 'AwsSolutions-IAM4',

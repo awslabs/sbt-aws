@@ -12,19 +12,23 @@ import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { generateAWSManagedRuleSet } from '../../utils';
 
-export interface RegistrationWebPageProps {
+export interface SampleRegistrationWebPageProps {
   readonly baseUrl: string;
-  readonly assetBucket: s3.IBucket;
 }
 
-export class RegistrationWebPage extends Construct {
-  constructor(scope: Construct, id: string, props: RegistrationWebPageProps) {
+export class SampleRegistrationWebPage extends Construct {
+  constructor(scope: Construct, id: string, props: SampleRegistrationWebPageProps) {
     super(scope, id);
     const websiteBucket = new s3.Bucket(this, 'WebsiteS3Bucket', {
       enforceSSL: true,
     });
 
-    new DeployTimeSubstitutedFile(this, 'DynamicFile', {
+    const staticFiles = new BucketDeployment(this, 'StaticFiles', {
+      sources: [Source.asset(path.join(__dirname, '../../../resources/aws-marketplace/static'))],
+      destinationBucket: websiteBucket,
+    });
+
+    const dynamicFile = new DeployTimeSubstitutedFile(this, 'DynamicFileScript', {
       source: path.join(__dirname, '../../../resources/aws-marketplace/dynamic/script.js'),
       destinationBucket: websiteBucket,
       destinationKey: 'script.js',
@@ -33,10 +37,7 @@ export class RegistrationWebPage extends Construct {
       },
     });
 
-    new BucketDeployment(this, 'StaticFiles', {
-      sources: [Source.asset(path.join(__dirname, '../../../resources/aws-marketplace/static'))],
-      destinationBucket: websiteBucket,
-    });
+    dynamicFile.node.addDependency(staticFiles);
 
     NagSuppressions.addResourceSuppressionsByPath(
       cdk.Stack.of(this),
@@ -94,11 +95,13 @@ export class RegistrationWebPage extends Construct {
       true // applyToChildren = true, so that it applies to policies created for the role.
     );
 
+    const quickstartBucket = s3.Bucket.fromBucketName(this, 'CodeBucket', 'aws-quickstart');
+
     const edgeRedirectLambda = new lambda.Function(this, 'EdgeRedirectLambda', {
       runtime: lambda.Runtime.NODEJS_18_X,
       handler: 'edge-redirect.lambdaHandler',
       code: lambda.Code.fromBucket(
-        props.assetBucket,
+        quickstartBucket,
         'cloudformation-aws-marketplace-saas/6c6763ea280ce511fb099fc98397a298'
       ),
     });
