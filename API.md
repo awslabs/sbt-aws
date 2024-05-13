@@ -2,6 +2,127 @@
 
 ## Constructs <a name="Constructs" id="Constructs"></a>
 
+### AWSMarketplaceSaaSProduct <a name="AWSMarketplaceSaaSProduct" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct"></a>
+
+#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.Initializer"></a>
+
+```typescript
+import { AWSMarketplaceSaaSProduct } from '@cdklabs/sbt-aws'
+
+new AWSMarketplaceSaaSProduct(scope: Construct, id: string, props: AWSMarketplaceSaaSProductProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps">AWSMarketplaceSaaSProductProps</a></code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps">AWSMarketplaceSaaSProductProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.toString">toString</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `toString` <a name="toString" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.isConstruct"></a>
+
+```typescript
+import { AWSMarketplaceSaaSProduct } from '@cdklabs/sbt-aws'
+
+AWSMarketplaceSaaSProduct.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.registerCustomerAPI">registerCustomerAPI</a></code> | <code>aws-cdk-lib.aws_apigateway.RestApi</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.subscribersTable">subscribersTable</a></code> | <code>aws-cdk-lib.aws_dynamodb.Table</code> | *No description.* |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `registerCustomerAPI`<sup>Required</sup> <a name="registerCustomerAPI" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.registerCustomerAPI"></a>
+
+```typescript
+public readonly registerCustomerAPI: RestApi;
+```
+
+- *Type:* aws-cdk-lib.aws_apigateway.RestApi
+
+---
+
+##### `subscribersTable`<sup>Required</sup> <a name="subscribersTable" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.subscribersTable"></a>
+
+```typescript
+public readonly subscribersTable: Table;
+```
+
+- *Type:* aws-cdk-lib.aws_dynamodb.Table
+
+---
+
+
 ### BashJobOrchestrator <a name="BashJobOrchestrator" id="@cdklabs/sbt-aws.BashJobOrchestrator"></a>
 
 Provides a BashJobOrchestrator to execute a BashJobRunner.
@@ -1801,6 +1922,111 @@ public readonly tenantConfigServiceLambda: Function;
 
 ## Structs <a name="Structs" id="Structs"></a>
 
+### AWSMarketplaceSaaSProductProps <a name="AWSMarketplaceSaaSProductProps" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps"></a>
+
+#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.Initializer"></a>
+
+```typescript
+import { AWSMarketplaceSaaSProductProps } from '@cdklabs/sbt-aws'
+
+const aWSMarketplaceSaaSProductProps: AWSMarketplaceSaaSProductProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.entitlementSNSTopic">entitlementSNSTopic</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.marketplaceTechAdminEmail">marketplaceTechAdminEmail</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.pricingModel">pricingModel</a></code> | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel">AWSMarketplaceSaaSPricingModel</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.productCode">productCode</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.subscriptionSNSTopic">subscriptionSNSTopic</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.disableAPILogging">disableAPILogging</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.marketplaceSellerEmail">marketplaceSellerEmail</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `entitlementSNSTopic`<sup>Required</sup> <a name="entitlementSNSTopic" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.entitlementSNSTopic"></a>
+
+```typescript
+public readonly entitlementSNSTopic: string;
+```
+
+- *Type:* string
+
+---
+
+##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.eventManager"></a>
+
+```typescript
+public readonly eventManager: IEventManager;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
+
+---
+
+##### `marketplaceTechAdminEmail`<sup>Required</sup> <a name="marketplaceTechAdminEmail" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.marketplaceTechAdminEmail"></a>
+
+```typescript
+public readonly marketplaceTechAdminEmail: string;
+```
+
+- *Type:* string
+
+---
+
+##### `pricingModel`<sup>Required</sup> <a name="pricingModel" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.pricingModel"></a>
+
+```typescript
+public readonly pricingModel: AWSMarketplaceSaaSPricingModel;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel">AWSMarketplaceSaaSPricingModel</a>
+
+---
+
+##### `productCode`<sup>Required</sup> <a name="productCode" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.productCode"></a>
+
+```typescript
+public readonly productCode: string;
+```
+
+- *Type:* string
+
+---
+
+##### `subscriptionSNSTopic`<sup>Required</sup> <a name="subscriptionSNSTopic" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.subscriptionSNSTopic"></a>
+
+```typescript
+public readonly subscriptionSNSTopic: string;
+```
+
+- *Type:* string
+
+---
+
+##### `disableAPILogging`<sup>Optional</sup> <a name="disableAPILogging" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.disableAPILogging"></a>
+
+```typescript
+public readonly disableAPILogging: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+##### `marketplaceSellerEmail`<sup>Optional</sup> <a name="marketplaceSellerEmail" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.marketplaceSellerEmail"></a>
+
+```typescript
+public readonly marketplaceSellerEmail: string;
+```
+
+- *Type:* string
+
+---
+
 ### BashJobOrchestratorProps <a name="BashJobOrchestratorProps" id="@cdklabs/sbt-aws.BashJobOrchestratorProps"></a>
 
 Encapsulates the list of properties for a BashJobOrchestrator.
@@ -1831,9 +2057,10 @@ const bashJobOrchestratorProps: BashJobOrchestratorProps = { ... }
 | <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.detailType">detailType</a></code> | <code>string</code> | The detail type to use when publishing event bridge events. |
 | <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.eventSource">eventSource</a></code> | <code>string</code> | The event source to use when publishing event bridge events. |
 | <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.targetEventBus">targetEventBus</a></code> | <code>aws-cdk-lib.aws_events.IEventBus</code> | The event bus to publish the outgoing event to. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentJSONVariablesFromIncomingEvent">environmentJSONVariablesFromIncomingEvent</a></code> | <code>string[]</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentStringVariablesFromIncomingEvent">environmentStringVariablesFromIncomingEvent</a></code> | <code>string[]</code> | Environment variables to import into the bash job from event details field. |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentJSONVariablesFromIncomingEvent">environmentJSONVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the CoreApplicationPlaneJobRunner from event details field. |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentStringVariablesFromIncomingEvent">environmentStringVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the CoreApplicationPlaneJobRunner from event details field. |
 | <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | Environment variables to export into the outgoing event once the bash job has finished. |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.tenantIdentifierKeyInIncomingEvent">tenantIdentifierKeyInIncomingEvent</a></code> | <code>string</code> | The key where the tenant identifier is to be extracted from. |
 
 ---
 
@@ -2103,6 +2330,11 @@ public readonly environmentJSONVariablesFromIncomingEvent: string[];
 
 - *Type:* string[]
 
+The environment variables to import into the CoreApplicationPlaneJobRunner from event details field.
+
+This argument consists of the names of only JSON-formatted string type variables.
+Ex. '{"test": 2}'
+
 ---
 
 ##### `environmentStringVariablesFromIncomingEvent`<sup>Optional</sup> <a name="environmentStringVariablesFromIncomingEvent" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentStringVariablesFromIncomingEvent"></a>
@@ -2113,7 +2345,9 @@ public readonly environmentStringVariablesFromIncomingEvent: string[];
 
 - *Type:* string[]
 
-Environment variables to import into the bash job from event details field.
+The environment variables to import into the CoreApplicationPlaneJobRunner from event details field.
+
+This argument consists of the names of only string type variables. Ex. 'test'
 
 ---
 
@@ -2126,6 +2360,19 @@ public readonly environmentVariablesToOutgoingEvent: string[];
 - *Type:* string[]
 
 Environment variables to export into the outgoing event once the bash job has finished.
+
+---
+
+##### `tenantIdentifierKeyInIncomingEvent`<sup>Optional</sup> <a name="tenantIdentifierKeyInIncomingEvent" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.tenantIdentifierKeyInIncomingEvent"></a>
+
+```typescript
+public readonly tenantIdentifierKeyInIncomingEvent: string;
+```
+
+- *Type:* string
+- *Default:* 'tenantId'
+
+The key where the tenant identifier is to be extracted from.
 
 ---
 
@@ -2518,6 +2765,7 @@ const coreApplicationPlaneJobRunnerProps: CoreApplicationPlaneJobRunnerProps = {
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | The environment variables to export into the outgoing event once the CoreApplicationPlaneJobRunner has finished. |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.postScript">postScript</a></code> | <code>string</code> | The bash script to run after the main script has completed. |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.scriptEnvironmentVariables">scriptEnvironmentVariables</a></code> | <code>{[ key: string ]: string}</code> | The variables to pass into the codebuild CoreApplicationPlaneJobRunner. |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.tenantIdentifierKeyInIncomingEvent">tenantIdentifierKeyInIncomingEvent</a></code> | <code>string</code> | The key where the tenant identifier is to be extracted from in the incoming event. |
 
 ---
 
@@ -2645,6 +2893,19 @@ public readonly scriptEnvironmentVariables: {[ key: string ]: string};
 - *Type:* {[ key: string ]: string}
 
 The variables to pass into the codebuild CoreApplicationPlaneJobRunner.
+
+---
+
+##### `tenantIdentifierKeyInIncomingEvent`<sup>Optional</sup> <a name="tenantIdentifierKeyInIncomingEvent" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.tenantIdentifierKeyInIncomingEvent"></a>
+
+```typescript
+public readonly tenantIdentifierKeyInIncomingEvent: string;
+```
+
+- *Type:* string
+- *Default:* 'tenantId'
+
+The key where the tenant identifier is to be extracted from in the incoming event.
 
 ---
 
@@ -3714,6 +3975,33 @@ The detail-type that will trigger the handler function.
 ---
 
 ## Enums <a name="Enums" id="Enums"></a>
+
+### AWSMarketplaceSaaSPricingModel <a name="AWSMarketplaceSaaSPricingModel" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel"></a>
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel.CONTRACTS">CONTRACTS</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel.SUBSCRIPTIONS">SUBSCRIPTIONS</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel.CONTRACTS_WITH_SUBSCRIPTION">CONTRACTS_WITH_SUBSCRIPTION</a></code> | *No description.* |
+
+---
+
+##### `CONTRACTS` <a name="CONTRACTS" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel.CONTRACTS"></a>
+
+---
+
+
+##### `SUBSCRIPTIONS` <a name="SUBSCRIPTIONS" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel.SUBSCRIPTIONS"></a>
+
+---
+
+
+##### `CONTRACTS_WITH_SUBSCRIPTION` <a name="CONTRACTS_WITH_SUBSCRIPTION" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel.CONTRACTS_WITH_SUBSCRIPTION"></a>
+
+---
+
 
 ### DetailType <a name="DetailType" id="@cdklabs/sbt-aws.DetailType"></a>
 
