@@ -1,4 +1,3 @@
-// const baseUrl = 'https://API-ID.execute-api.us-east-1.amazonaws.com/Prod/'; // TODO: This needs to be replaced
 const baseUrl = '{{ baseUrl }}';
 const form = document.getElementsByClassName('form-signin')[0];
 
