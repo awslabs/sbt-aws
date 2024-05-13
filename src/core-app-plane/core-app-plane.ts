@@ -13,6 +13,13 @@ import { EventManager, IEventManager, DetailType, addTemplateTag } from '../util
  */
 export interface CoreApplicationPlaneJobRunnerProps {
   /**
+   * The key where the tenant identifier is to be extracted from in
+   * the incoming event.
+   * @default 'tenantId'
+   */
+  readonly tenantIdentifierKeyInIncomingEvent?: string;
+
+  /**
    * The name of the CoreApplicationPlaneJobRunner. Note that this value must be unique.
    */
   readonly name: string;
@@ -131,6 +138,7 @@ export class CoreApplicationPlane extends Construct {
         environmentJSONVariablesFromIncomingEvent:
           jobRunnerProps.environmentJSONVariablesFromIncomingEvent,
         bashJobRunner: job,
+        tenantIdentifierKeyInIncomingEvent: jobRunnerProps.tenantIdentifierKeyInIncomingEvent,
       });
 
       this.eventManager.addTargetToEvent(

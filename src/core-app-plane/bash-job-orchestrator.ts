@@ -19,6 +19,12 @@ import { addTemplateTag } from '../utils';
  */
 export interface BashJobOrchestratorProps extends cdk.StackProps {
   /**
+   * The key where the tenant identifier is to be extracted from.
+   * @default 'tenantId'
+   */
+  readonly tenantIdentifierKeyInIncomingEvent?: string;
+
+  /**
    * The event bus to publish the outgoing event to.
    */
   readonly targetEventBus: events.IEventBus;
@@ -34,9 +40,16 @@ export interface BashJobOrchestratorProps extends cdk.StackProps {
   readonly eventSource: string;
 
   /**
-   * Environment variables to import into the bash job from event details field.
+   * The environment variables to import into the CoreApplicationPlaneJobRunner from event details field.
+   * This argument consists of the names of only string type variables. Ex. 'test'
    */
   readonly environmentStringVariablesFromIncomingEvent?: string[];
+
+  /**
+   * The environment variables to import into the CoreApplicationPlaneJobRunner from event details field.
+   * This argument consists of the names of only JSON-formatted string type variables.
+   * Ex. '{"test": 2}'
+   */
   readonly environmentJSONVariablesFromIncomingEvent?: string[];
 
   /**
@@ -76,6 +89,9 @@ export class BashJobOrchestrator extends Construct {
       [name: string]: codebuild.BuildEnvironmentVariable;
     } = {};
 
+    const tenantIdentifierKeyInIncomingEvent =
+      props.tenantIdentifierKeyInIncomingEvent ?? 'tenantId';
+
     props.environmentStringVariablesFromIncomingEvent?.forEach((importedVar: string) => {
       environmentVariablesOverride[importedVar] = {
         type: codebuild.BuildEnvironmentVariableType.PLAINTEXT,
@@ -108,7 +124,7 @@ export class BashJobOrchestrator extends Construct {
     );
 
     const exportedVarObj: { [key: string]: any } = {
-      tenantId: sfn.JsonPath.stringAt(`$.detail.tenantId`),
+      tenantId: sfn.JsonPath.stringAt(`$.detail.${tenantIdentifierKeyInIncomingEvent}`),
       tenantOutput: {},
     };
     props.environmentVariablesToOutgoingEvent?.forEach((exportedVar: string) => {
