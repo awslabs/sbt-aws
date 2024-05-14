@@ -70,6 +70,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   npmIgnoreOptions: {
     ignorePatterns: NPM_IGNORE_PATTERNS,
   },
+  releaseTagPrefix: '@cdklabs/sbt-aws',
 });
 
 // Add License header automatically
@@ -147,6 +148,7 @@ const jsiiLibraryProjectOptions: cdk.JsiiProjectOptions = {
       run: 'npm ci',
     },
   ],
+  releaseTagPrefix: '@aws/sbt-point-solutions-lib',
   bundledDeps: [
     '@aws-sdk/client-sts',
     '@aws-sdk/client-ssm',
