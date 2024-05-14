@@ -32,7 +32,7 @@
         "CHANGELOG": "dist/changelog.md",
         "BUMPFILE": "dist/version.txt",
         "RELEASETAG": "dist/releasetag.txt",
-        "RELEASE_TAG_PREFIX": "@cdklabs/sbt-aws"
+        "RELEASE_TAG_PREFIX": "@cdklabs/sbt-aws-"
       },
       "steps": [
         {
@@ -198,7 +198,7 @@
       "description": "Prepare a release from \"main\" branch",
       "env": {
         "RELEASE": "true",
-        "RELEASE_TAG_PREFIX": "@cdklabs/sbt-aws"
+        "RELEASE_TAG_PREFIX": "@cdklabs/sbt-aws-"
       },
       "steps": [
         {
@@ -248,7 +248,7 @@
         "CHANGELOG": "dist/changelog.md",
         "BUMPFILE": "dist/version.txt",
         "RELEASETAG": "dist/releasetag.txt",
-        "RELEASE_TAG_PREFIX": "@cdklabs/sbt-aws"
+        "RELEASE_TAG_PREFIX": "@cdklabs/sbt-aws-"
       },
       "steps": [
         {
