@@ -22,6 +22,7 @@ Jump To:
 [Developer Guide](/docs/public/README.md) |
 [API Reference](/API.md) |
 [Getting Started](#getting-started) |
+[Examples](#examples) |
 [Getting Help](#getting-help) |
 [Contributing](#contributing) |
 [Roadmap](#roadmap) |
@@ -90,6 +91,14 @@ Deploy this to your account:
 cdk deploy
 ```
 
+## Examples
+
+Interested in seeing SBT used in a comprehensive SaaS reference architecture? Take a look at the following:
+
+* [Elastic Kubernetes Service (EKS) Reference Architecture](https://github.com/aws-samples/aws-saas-factory-eks-reference-architecture/tree/feat/sbt-merge)
+* [Elastic Container Service (ECS) Reference Architecture](https://github.com/aws-samples/saas-reference-architecture-ecs)
+* [Serverless Reference Architecture](TBD)
+
 ## Getting Help
 
 The best way to interact with our team is through GitHub. You can open an [issue](https://github.com/awslabs/sbt-aws/issues/new/choose) and choose from one of our templates for bug reports, feature requests, documentation issues, or guidance.
@@ -110,7 +119,6 @@ We welcome community contributions and pull requests. See
 ## More Resources
 
 * [SaaS on AWS](http://aws.amazon.com/saas)
-* [Examples](PLACEHOLDER)
 * [Changelog](./CHANGELOG.md)
 * [NOTICE](./NOTICE)
 * [License](./LICENSE)
