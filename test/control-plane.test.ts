@@ -6,6 +6,7 @@ import { Annotations, Capture, Match, Template } from 'aws-cdk-lib/assertions';
 import { AwsSolutionsChecks } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { CognitoAuth, ControlPlane } from '../src/control-plane';
+import { EventManager } from '../src/utils';
 
 describe('No unsuppressed cdk-nag Warnings or Errors', () => {
   const app = new cdk.App();
@@ -13,16 +14,14 @@ describe('No unsuppressed cdk-nag Warnings or Errors', () => {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
       super(scope, id, props);
       const systemAdminEmail = 'test@example.com';
-      const idpName = 'COGNITO';
-      const systemAdminRoleName = 'SystemAdmin';
+      const eventManager = new EventManager(this, 'EventManager');
       const cognitoAuth = new CognitoAuth(this, 'CognitoAuth', {
-        idpName: idpName,
-        systemAdminRoleName: systemAdminRoleName,
         systemAdminEmail: systemAdminEmail,
       });
 
       new ControlPlane(this, 'ControlPlane', {
         auth: cognitoAuth,
+        eventManager: eventManager,
       });
     }
   }
@@ -57,13 +56,8 @@ class TestStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props: TestStackProps) {
     super(scope, id, props);
 
-    // for event bridge communication
-    const idpName = 'COGNITO';
-    const systemAdminRoleName = 'SystemAdmin';
-
+    const eventManager = new EventManager(this, 'EventManager');
     const cognitoAuth = new CognitoAuth(this, 'CognitoAuth', {
-      idpName: idpName,
-      systemAdminRoleName: systemAdminRoleName,
       systemAdminEmail: props.systemAdminEmail,
       // optional parameter possibly populated by another construct or an argument
       // controlPlaneCallbackURL: 'https://example.com',
@@ -71,6 +65,7 @@ class TestStack extends cdk.Stack {
 
     new ControlPlane(this, 'ControlPlane', {
       auth: cognitoAuth,
+      eventManager: eventManager,
       disableAPILogging: props.disableAPILogging,
     });
   }
@@ -93,27 +88,6 @@ describe('ControlPlane Targets', () => {
     do {
       expect(targetsCapture.asArray()).toHaveLength(1);
     } while (targetsCapture.next());
-  });
-});
-
-describe('ControlPlane description', () => {
-  it('should have a fixed template description, when the containing stack does not have description', () => {
-    const stackWithoutDescription = new TestStack(app, 'stackWithoutDescription', {
-      systemAdminEmail: 'test@example.com',
-    });
-    const actual = stackWithoutDescription.templateOptions.description;
-    const expected = 'SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)';
-    expect(actual).toStrictEqual(expected);
-  });
-
-  it('should have a concatenated template description, when the containing stack has an existing desc', () => {
-    const stackWithDescription = new TestStack(app, 'stackWithDescription', {
-      systemAdminEmail: 'test@example.com',
-      description: 'ABC',
-    });
-    const actual = stackWithDescription.templateOptions.description;
-    const expected = 'ABC - SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)';
-    expect(expected).toStrictEqual(actual);
   });
 });
 

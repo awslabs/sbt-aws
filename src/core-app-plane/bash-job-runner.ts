@@ -8,6 +8,7 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as kms from 'aws-cdk-lib/aws-kms';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
+import { addTemplateTag } from '../utils';
 
 /**
  * Encapsulates the list of properties for a BashJobRunner.
@@ -75,6 +76,8 @@ export class BashJobRunner extends Construct {
 
   constructor(scope: Construct, id: string, props: BashJobRunnerProps) {
     super(scope, id);
+    addTemplateTag(this, 'BashJobRunner');
+
     const environmentVariablesOverride: {
       name: string;
       value: string;

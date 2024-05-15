@@ -8,6 +8,7 @@ import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
+import { addTemplateTag } from '../../utils';
 
 export interface TenantConfigServiceProps {
   readonly tenantDetails: Table;
@@ -20,6 +21,7 @@ export class TenantConfigService extends Construct {
   public readonly tenantConfigServiceLambda: lambda.Function;
   constructor(scope: Construct, id: string, props: TenantConfigServiceProps) {
     super(scope, id);
+    addTemplateTag(this, 'TenantConfigService');
 
     // https://docs.powertools.aws.dev/lambda/python/2.31.0/#lambda-layer
     const lambdaPowerToolsLayerARN = `arn:aws:lambda:${

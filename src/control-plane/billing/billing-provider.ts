@@ -2,14 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as cdk from 'aws-cdk-lib';
-import { IResource, Resource } from 'aws-cdk-lib/aws-apigateway';
+import { IResource } from 'aws-cdk-lib/aws-apigateway';
 import * as aws_events from 'aws-cdk-lib/aws-events';
 import * as event_targets from 'aws-cdk-lib/aws-events-targets';
 import { IFunction } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IBilling, IFunctionTrigger } from './billing-interface';
-import { EventManager, DetailType } from '../../utils';
+import { DetailType, IEventManager, addTemplateTag } from '../../utils';
 
 /**
  * Encapsulates the list of properties for a BillingProvider.
@@ -21,15 +21,15 @@ export interface BillingProviderProps {
   readonly billing: IBilling;
 
   /**
-   * An EventManager object to help coordinate events.
+   * An IEventManager object to help coordinate events.
    */
-  readonly eventManager: EventManager;
+  readonly eventManager: IEventManager;
 
   /**
    * An API Gateway Resource for the BillingProvider to use
    * when setting up API endpoints.
    */
-  readonly controlPlaneAPIBillingResource: Resource;
+  readonly controlPlaneAPIBillingResource: IResource;
 }
 
 /**
@@ -54,6 +54,7 @@ export class BillingProvider extends Construct {
    */
   constructor(scope: Construct, id: string, props: BillingProviderProps) {
     super(scope, id);
+    addTemplateTag(this, 'BillingProvider');
 
     this.createEventTarget(
       props.eventManager,
@@ -143,7 +144,7 @@ export class BillingProvider extends Construct {
   }
 
   private createEventTarget(
-    eventManager: EventManager,
+    eventManager: IEventManager,
     defaultEvent: DetailType,
     fn?: IFunction | IFunctionTrigger
   ) {

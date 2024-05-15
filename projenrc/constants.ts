@@ -26,7 +26,7 @@ export const PULL_REQUEST_TEMPLATE: string[] = [
   '- [ ] My code adheres to the [CONTRIBUTING GUIDE](https://github.com/awslabs/sbt-aws/blob/main/CONTRIBUTING.md)',
 ];
 
-export const GIT_IGNORE: string[] = [
+export const GIT_IGNORE_PATTERNS: string[] = [
   '*.DS_STORE',
   '!.node-version',
   '*.pyc',

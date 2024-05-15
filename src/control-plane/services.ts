@@ -9,11 +9,11 @@ import { Runtime, LayerVersion, Function } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { Tables } from './tables';
-import { DetailType, EventManager } from '../utils';
+import { DetailType, IEventManager } from '../utils';
 
 export interface ServicesProps {
   readonly tables: Tables;
-  readonly eventManager: EventManager;
+  readonly eventManager: IEventManager;
 }
 
 export class Services extends Construct {
@@ -27,7 +27,7 @@ export class Services extends Construct {
     });
 
     props.tables.tenantDetails.grantReadWriteData(tenantManagementExecRole);
-    props.eventManager.eventBus.grantPutEventsTo(tenantManagementExecRole);
+    props.eventManager.grantPutEventsTo(tenantManagementExecRole);
 
     tenantManagementExecRole.addManagedPolicy(
       ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')
@@ -77,7 +77,7 @@ export class Services extends Construct {
         LayerVersion.fromLayerVersionArn(this, 'LambdaPowerTools', lambdaPowerToolsLayerARN),
       ],
       environment: {
-        EVENTBUS_NAME: props.eventManager.eventBus.eventBusName,
+        EVENTBUS_NAME: props.eventManager.busName,
         EVENT_SOURCE: props.eventManager.controlPlaneEventSource,
         TENANT_DETAILS_TABLE: props.tables.tenantDetails.tableName,
         ONBOARDING_DETAIL_TYPE: DetailType.ONBOARDING_REQUEST,

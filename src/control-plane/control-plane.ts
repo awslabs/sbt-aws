@@ -2,65 +2,69 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as cdk from 'aws-cdk-lib';
-import { EventBus } from 'aws-cdk-lib/aws-events';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IAuth } from './auth/auth-interface';
 import { IBilling, BillingProvider } from './billing';
 import { ControlPlaneAPI } from './control-plane-api';
-import { Messaging } from './messaging';
 import { Services } from './services';
 import { Tables } from './tables';
 import { TenantConfigService } from './tenant-config/tenant-config-service';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
-import { EventManager, setTemplateDesc, EventMetadata, DetailType } from '../utils';
+import { addTemplateTag, DetailType, EventManager, IEventManager } from '../utils';
 
 export interface ControlPlaneProps {
+  /**
+   * The authentication provider for the control plane.
+   */
   readonly auth: IAuth;
+
+  /**
+   * The billing provider configuration.
+   */
   readonly billing?: IBilling;
-  readonly eventMetadata?: EventMetadata;
-  /**
-   * The source to use when listening for events coming from the SBT control plane.
-   * This is used as the default if the IncomingEventMetadata source field is not set.
-   */
-  readonly controlPlaneEventSource?: string;
 
   /**
-   * The source to use for outgoing events that will be placed on the EventBus.
-   * This is used as the default if the OutgoingEventMetadata source field is not set.
+   * The event manager instance. If not provided, a new instance will be created.
    */
-  readonly applicationPlaneEventSource?: string;
+  readonly eventManager?: IEventManager;
 
   /**
-   * (Optional) If true, the API Gateway will not log requests to the CloudWatch Logs.
-   * (Default: false)
+   * If true, the API Gateway will not log requests to the CloudWatch Logs.
+   * @default false
    */
   readonly disableAPILogging?: boolean;
 }
 
 export class ControlPlane extends Construct {
-  readonly eventBusArn: string;
-  readonly eventManager: EventManager;
+  /**
+   * The URL of the control plane API Gateway.
+   */
   readonly controlPlaneAPIGatewayUrl: string;
+
+  /**
+   * The Tables instance containing the DynamoDB tables for tenant data and configurations.
+   */
   readonly tables: Tables;
+
+  /**
+   * The EventManager instance that allows connecting to events flowing between
+   * the Control Plane and other components.
+   */
+  readonly eventManager: IEventManager;
 
   constructor(scope: Construct, id: string, props: ControlPlaneProps) {
     super(scope, id);
-    setTemplateDesc(this, 'SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)');
+    addTemplateTag(this, 'ControlPlane');
 
     cdk.Aspects.of(this).add(new DestroyPolicySetter());
 
-    const messaging = new Messaging(this, 'messaging-stack');
+    // todo: decompose 'Tables' into purpose-specific constructs (ex. TenantManagement)
     this.tables = new Tables(this, 'tables-stack');
 
-    const eventBus = EventBus.fromEventBusArn(this, 'eventBus', messaging.eventBus.eventBusArn);
-    this.eventManager = new EventManager(this, 'EventManager', {
-      eventBus: eventBus,
-      eventMetadata: props.eventMetadata,
-      applicationPlaneEventSource: props.applicationPlaneEventSource,
-      controlPlaneEventSource: props.controlPlaneEventSource,
-    });
+    this.eventManager = props.eventManager ?? new EventManager(this, 'EventManager');
 
+    // todo: decompose 'Services' into purpose-specific constructs (ex. TenantManagement)
     const services = new Services(this, 'services-stack', {
       tables: this.tables,
       eventManager: this.eventManager,
@@ -73,6 +77,7 @@ export class ControlPlane extends Construct {
       tenantDetailsTenantConfigColumn: this.tables.tenantConfigColumn,
     });
 
+    // todo: decompose 'ControlPlaneAPI' into purpose-specific constructs (ex. TenantManagement)
     const controlPlaneAPI = new ControlPlaneAPI(this, 'controlplane-api-stack', {
       auth: props.auth,
       disableAPILogging: props.disableAPILogging,
@@ -80,7 +85,6 @@ export class ControlPlane extends Construct {
       tenantConfigServiceLambda: tenantConfigService.tenantConfigServiceLambda,
     });
 
-    this.eventBusArn = messaging.eventBus.eventBusArn;
     this.controlPlaneAPIGatewayUrl = controlPlaneAPI.apiUrl;
 
     this.eventManager.addTargetToEvent(
@@ -99,7 +103,7 @@ export class ControlPlane extends Construct {
     });
 
     new cdk.CfnOutput(this, 'eventBridgeArn', {
-      value: this.eventManager.eventBus.eventBusArn,
+      value: this.eventManager.busArn,
       key: 'eventBridgeArn',
     });
 

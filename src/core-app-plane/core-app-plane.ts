@@ -1,48 +1,12 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import * as cdk from 'aws-cdk-lib';
 import { EventBus } from 'aws-cdk-lib/aws-events';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 import { BashJobOrchestrator } from './bash-job-orchestrator';
 import { BashJobRunner } from './bash-job-runner';
-import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
-import { EventManager, EventMetadata, DetailType, setTemplateDesc } from '../utils';
-
-/**
- * Provides metadata for outgoing events.
- */
-export interface OutgoingEventMetadata {
-  /**
-   * The detailType to set in the outgoing event.
-   */
-  readonly detailType: string;
-
-  /**
-   * The source to set in the outgoing event.
-   *
-   * @default CoreApplicationPlaneProps.applicationPlaneEventSource
-   */
-  readonly source?: string;
-}
-
-/**
- * Provides metadata for incoming events.
- */
-export interface IncomingEventMetadata {
-  /**
-   * The list of detailTypes to listen for in the incoming event.
-   */
-  readonly detailType: string[];
-
-  /**
-   * The list of sources to listen for in the incoming event.
-   *
-   * @default CoreApplicationPlaneProps.controlPlaneEventSource
-   */
-  readonly source?: string[];
-}
+import { EventManager, IEventManager, DetailType, addTemplateTag } from '../utils';
 
 /**
  * Encapsulates the list of properties for a CoreApplicationPlaneJobRunner.
@@ -108,30 +72,12 @@ export interface CoreApplicationPlaneJobRunnerProps {
  * Encapsulates the list of properties for a CoreApplicationPlane.
  */
 export interface CoreApplicationPlaneProps {
-  /**
-   * The arn belonging to the EventBus to listen for incoming messages.
-   * This is also the EventBus on which the CoreApplicationPlane places outgoing messages on.
-   */
-  readonly eventBusArn: string;
-
-  /**
-   * The source to use when listening for events coming from the SBT control plane.
-   * This is used as the default if the IncomingEventMetadata source field is not set.
-   */
-  readonly controlPlaneEventSource?: string;
-
-  /**
-   * The source to use for outgoing events that will be placed on the EventBus.
-   * This is used as the default if the OutgoingEventMetadata source field is not set.
-   */
-  readonly applicationPlaneEventSource?: string;
+  readonly eventManager?: IEventManager;
 
   /**
    * The list of JobRunner definitions to create.
    */
   readonly jobRunnerPropsList?: CoreApplicationPlaneJobRunnerProps[];
-
-  readonly eventMetadata?: EventMetadata;
 }
 
 /**
@@ -141,22 +87,17 @@ export interface CoreApplicationPlaneProps {
  * and respond to events created by the control plane.
  */
 export class CoreApplicationPlane extends Construct {
-  readonly eventManager: EventManager;
+  /**
+   * The EventManager instance that allows connecting to events flowing between
+   * the Control Plane and other components.
+   */
+  readonly eventManager: IEventManager;
 
   constructor(scope: Construct, id: string, props: CoreApplicationPlaneProps) {
     super(scope, id);
-    setTemplateDesc(this, 'SaaS Builder Toolkit - CoreApplicationPlane (uksb-1tupboc57)');
-
-    cdk.Aspects.of(this).add(new DestroyPolicySetter());
-
-    const eventBus = EventBus.fromEventBusArn(this, 'eventBus', props.eventBusArn);
-
-    this.eventManager = new EventManager(this, 'EventManager', {
-      eventBus: eventBus,
-      eventMetadata: props.eventMetadata,
-      applicationPlaneEventSource: props.applicationPlaneEventSource,
-      controlPlaneEventSource: props.controlPlaneEventSource,
-    });
+    addTemplateTag(this, 'CoreApplicationPlane');
+    this.eventManager = props.eventManager ?? new EventManager(this, 'EventManager');
+    const eventBus = EventBus.fromEventBusArn(this, 'EventBus', this.eventManager.busArn);
 
     props.jobRunnerPropsList?.forEach((jobRunnerProps) => {
       // Only BashJobOrchestrator requires differentiating between
