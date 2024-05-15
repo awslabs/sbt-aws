@@ -163,7 +163,6 @@ export class SampleRegistrationWebPage extends Construct {
       logFilePrefix: 'access-logs/',
       httpVersion: cloudfront.HttpVersion.HTTP2,
       webAclId: cfnWAF.attrArn,
-      // minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.,
       defaultBehavior: {
         origin: new origins.S3Origin(websiteBucket, {
           originAccessIdentity,

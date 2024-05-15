@@ -134,7 +134,6 @@ export class AWSMarketplaceSaaSProduct extends Construct {
         layers: [powerToolsLayer],
         environment: {
           NewSubscribersTableName: this.subscribersTable.tableName,
-          EntitlementQueueUrl: '',
           EVENTBUS_NAME: props.eventManager.busName,
           EVENT_SOURCE: props.eventManager.controlPlaneEventSource,
           ONBOARDING_DETAIL_TYPE: DetailType.ONBOARDING_REQUEST,
@@ -142,23 +141,6 @@ export class AWSMarketplaceSaaSProduct extends Construct {
       }
     );
     props.eventManager.grantPutEventsTo(registerNewMarketplaceCustomerPython);
-
-    const registerNewMarketplaceCustomer = new lambda.Function(
-      this,
-      'RegisterNewMarketplaceCustomer',
-      {
-        runtime: lambda.Runtime.NODEJS_18_X,
-        handler: 'register-new-subscriber.registerNewSubscriber',
-        code: lambda.Code.fromBucket(
-          quickstartBucket,
-          'cloudformation-aws-marketplace-saas/9c1e36f06f022c95bcc9129bbacfa195'
-        ),
-        environment: {
-          NewSubscribersTableName: this.subscribersTable.tableName,
-          EntitlementQueueUrl: '',
-        },
-      }
-    );
 
     let options: any = {
       defaultCorsPreflightOptions: {
@@ -267,24 +249,13 @@ export class AWSMarketplaceSaaSProduct extends Construct {
     });
 
     if (props.marketplaceSellerEmail) {
-      registerNewMarketplaceCustomer.addEnvironment(
-        'MarketplaceSellerEmail',
-        props.marketplaceSellerEmail
-      );
       registerNewMarketplaceCustomerPython.addEnvironment(
         'MarketplaceSellerEmail',
         props.marketplaceSellerEmail
       );
     }
 
-    this.subscribersTable.grantWriteData(registerNewMarketplaceCustomer);
     this.subscribersTable.grantWriteData(registerNewMarketplaceCustomerPython);
-    registerNewMarketplaceCustomer.addToRolePolicy(
-      new iam.PolicyStatement({
-        actions: ['aws-marketplace:ResolveCustomer', 'ses:SendEmail'],
-        resources: ['*'],
-      })
-    );
     registerNewMarketplaceCustomerPython.addToRolePolicy(
       new iam.PolicyStatement({
         actions: [
@@ -306,7 +277,7 @@ export class AWSMarketplaceSaaSProduct extends Construct {
     }
 
     NagSuppressions.addResourceSuppressions(
-      [registerNewMarketplaceCustomer, registerNewMarketplaceCustomerPython],
+      [registerNewMarketplaceCustomerPython],
       [
         {
           id: 'AwsSolutions-IAM4',
