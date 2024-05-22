@@ -87,6 +87,7 @@ Any object.
 | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.registerCustomerAPI">registerCustomerAPI</a></code> | <code>aws-cdk-lib.aws_apigateway.RestApi</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.subscribersTable">subscribersTable</a></code> | <code>aws-cdk-lib.aws_dynamodb.Table</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.userProvidedRequiredFieldsForRegistration">userProvidedRequiredFieldsForRegistration</a></code> | <code>string[]</code> | *No description.* |
 
 ---
 
@@ -119,6 +120,16 @@ public readonly subscribersTable: Table;
 ```
 
 - *Type:* aws-cdk-lib.aws_dynamodb.Table
+
+---
+
+##### `userProvidedRequiredFieldsForRegistration`<sup>Required</sup> <a name="userProvidedRequiredFieldsForRegistration" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.userProvidedRequiredFieldsForRegistration"></a>
+
+```typescript
+public readonly userProvidedRequiredFieldsForRegistration: string[];
+```
+
+- *Type:* string[]
 
 ---
 
@@ -1944,6 +1955,7 @@ const aWSMarketplaceSaaSProductProps: AWSMarketplaceSaaSProductProps = { ... }
 | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.subscriptionSNSTopic">subscriptionSNSTopic</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.disableAPILogging">disableAPILogging</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.marketplaceSellerEmail">marketplaceSellerEmail</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.requiredFieldsForRegistration">requiredFieldsForRegistration</a></code> | <code>string[]</code> | *No description.* |
 
 ---
 
@@ -2024,6 +2036,16 @@ public readonly marketplaceSellerEmail: string;
 ```
 
 - *Type:* string
+
+---
+
+##### `requiredFieldsForRegistration`<sup>Optional</sup> <a name="requiredFieldsForRegistration" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.requiredFieldsForRegistration"></a>
+
+```typescript
+public readonly requiredFieldsForRegistration: string[];
+```
+
+- *Type:* string[]
 
 ---
 
