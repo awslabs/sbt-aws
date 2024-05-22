@@ -30,12 +30,13 @@ marketplace_entitlement = boto3.client('marketplace-entitlement', region_name="u
 sqs = boto3.client("sqs")
 event_bus = boto3.client('events')
 
-new_subscribers_table = os.environ["NewSubscribersTableName"]
-entitlement_queue_url = os.environ.get("EntitlementQueueUrl")
+new_subscribers_table = os.environ["NEW_SUBSCRIBERS_TABLE_NAME"]
+entitlement_queue_url = os.environ.get("ENTITLEMENT_QUEUE_URL")
 marketplace_seller_email = os.environ.get("MARKETPLACE_SELLER_EMAIL")
 onboarding_detail_type = os.environ['ONBOARDING_DETAIL_TYPE']
 eventbus_name = os.environ['EVENTBUS_NAME']
 control_plane_event_source = os.environ['EVENT_SOURCE']
+required_fields = os.environ.get('REQUIRED_FIELDS', '').split(',')
 
 new_subscribers_table_handler = dynamodb.Table(new_subscribers_table)
 
@@ -74,14 +75,18 @@ def send_buyer_notification(contact_email):
 def register_new_subscriber():
     try:
         data = app.current_event.json_body
-        reg_token = data.get("regToken")
-        company_name = data.get("companyName")
-        contact_person = data.get("contactPerson")
-        contact_phone = data.get("contactPhone")
-        contact_email = data.get("contactEmail")
 
-        if not all([reg_token, company_name, contact_person, contact_phone, contact_email]):
-            raise BadRequestError("Invalid request data")
+        # The resulting `missing_fields` list will contain the names of any required
+        # fields that are missing or have a falsy value in the `data` dictionary.
+        missing_fields = [field for field in required_fields if field not in data or not data[field]]
+
+        if missing_fields:
+            raise BadRequestError(f"Missing required fields: {', '.join(missing_fields)}")
+
+        # pop() so that it removes regToken from the data object
+        reg_token = data.pop("regToken")
+
+        contact_email = data.get("contactEmail")
 
         resolve_customer_response = metering_marketplace.resolve_customer(RegistrationToken=reg_token)
         customer_identifier = resolve_customer_response["CustomerIdentifier"]
@@ -90,11 +95,7 @@ def register_new_subscriber():
 
         datetime = str(int(time.time()))
 
-        new_subscriber_item = {
-            "companyName": company_name,
-            "contactPerson": contact_person,
-            "contactPhone": contact_phone,
-            "contactEmail": contact_email,
+        new_subscriber_item = data | {
             "customerIdentifier": customer_identifier,
             "productCode": product_code,
             "customerAWSAccountID": customer_aws_account_id,
@@ -154,7 +155,7 @@ def register_new_subscriber():
         send_buyer_notification(contact_email)
 
         return {
-            'message:': 'Success! Registration completed. You have purchased an ' +
+            'message': 'Success! Registration completed. You have purchased an ' +
             'enterprise product that requires some additional setup. A representative ' +
             'from our team will be contacting you within two business days ' +
             'with your account credentials. Please contact Support through our ' +
