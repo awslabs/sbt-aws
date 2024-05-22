@@ -108,7 +108,7 @@ export class EntitlementLogic extends Construct {
     );
 
     props.registerNewMarketplaceCustomer.addEnvironment(
-      'EntitlementQueueUrl',
+      'ENTITLEMENT_QUEUE_URL',
       entitlementQueue.queueUrl
     );
     entitlementSQSQueueEncryptionKey.grantEncrypt(props.registerNewMarketplaceCustomer);

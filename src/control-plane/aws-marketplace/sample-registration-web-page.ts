@@ -5,15 +5,17 @@ import * as path from 'path';
 import * as cdk from 'aws-cdk-lib';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
-import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { BucketDeployment, DeployTimeSubstitutedFile, Source } from 'aws-cdk-lib/aws-s3-deployment';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
+import { AWSMarketplaceSaaSProduct } from './saas-product';
 import { generateAWSManagedRuleSet } from '../../utils';
 
 export interface SampleRegistrationWebPageProps {
-  readonly baseUrl: string;
+  readonly saaSProduct: AWSMarketplaceSaaSProduct;
+  readonly autoDeleteBucketObjects?: boolean;
+  readonly imageLogoUrl?: string;
 }
 
 export class SampleRegistrationWebPage extends Construct {
@@ -21,6 +23,8 @@ export class SampleRegistrationWebPage extends Construct {
     super(scope, id);
     const websiteBucket = new s3.Bucket(this, 'WebsiteS3Bucket', {
       enforceSSL: true,
+      autoDeleteObjects: props.autoDeleteBucketObjects,
+      ...(props.autoDeleteBucketObjects && { removalPolicy: cdk.RemovalPolicy.DESTROY }),
     });
 
     const staticFiles = new BucketDeployment(this, 'StaticFiles', {
@@ -33,7 +37,8 @@ export class SampleRegistrationWebPage extends Construct {
       destinationBucket: websiteBucket,
       destinationKey: 'script.js',
       substitutions: {
-        baseUrl: props.baseUrl,
+        requiredFields: props.saaSProduct.userProvidedRequiredFieldsForRegistration.join(','),
+        imageLogoUrl: props.imageLogoUrl ?? 'https://via.placeholder.com/150',
       },
     });
 
@@ -75,6 +80,8 @@ export class SampleRegistrationWebPage extends Construct {
 
     const logBucket = new s3.Bucket(this, 'WebsiteS3BucketLog', {
       enforceSSL: true,
+      autoDeleteObjects: props.autoDeleteBucketObjects,
+      ...(props.autoDeleteBucketObjects && { removalPolicy: cdk.RemovalPolicy.DESTROY }),
       objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_PREFERRED,
       intelligentTieringConfigurations: [
         {
@@ -94,39 +101,6 @@ export class SampleRegistrationWebPage extends Construct {
       ],
       true // applyToChildren = true, so that it applies to policies created for the role.
     );
-
-    const quickstartBucket = s3.Bucket.fromBucketName(this, 'CodeBucket', 'aws-quickstart');
-
-    const edgeRedirectLambda = new lambda.Function(this, 'EdgeRedirectLambda', {
-      runtime: lambda.Runtime.NODEJS_18_X,
-      handler: 'edge-redirect.lambdaHandler',
-      code: lambda.Code.fromBucket(
-        quickstartBucket,
-        'cloudformation-aws-marketplace-saas/6c6763ea280ce511fb099fc98397a298'
-      ),
-    });
-
-    NagSuppressions.addResourceSuppressions(
-      [edgeRedirectLambda],
-      [
-        {
-          id: 'AwsSolutions-IAM4',
-          reason: 'Suppress usage of AWSLambdaBasicExecutionRole.',
-          appliesTo: [
-            'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
-          ],
-        },
-        {
-          id: 'AwsSolutions-L1',
-          reason: 'NODEJS 18 is the version used in the official quickstart CFN template.',
-        },
-      ],
-      true // applyToChildren = true, so that it applies to policies created for the role.
-    );
-
-    const edgeRedirectLambdaVersion = new lambda.Version(this, 'EdgeRedirectLambdaVersion', {
-      lambda: edgeRedirectLambda,
-    });
 
     const cfnWAF = new cdk.aws_wafv2.CfnWebACL(this, 'WAF', {
       defaultAction: { allow: {} },
@@ -170,13 +144,20 @@ export class SampleRegistrationWebPage extends Construct {
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
         compress: true,
-        edgeLambdas: [
-          {
-            eventType: cloudfront.LambdaEdgeEventType.VIEWER_REQUEST,
-            functionVersion: edgeRedirectLambdaVersion,
-            includeBody: true,
-          },
-        ],
+      },
+      additionalBehaviors: {
+        '/redirectmarketplacetoken': {
+          compress: true,
+          allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
+          viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+          origin: new origins.RestApiOrigin(props.saaSProduct.registerCustomerAPI),
+        },
+        '/subscriber': {
+          compress: true,
+          allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
+          viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+          origin: new origins.RestApiOrigin(props.saaSProduct.registerCustomerAPI),
+        },
       },
     });
 
@@ -187,9 +168,9 @@ export class SampleRegistrationWebPage extends Construct {
       },
     ]);
 
-    new cdk.CfnOutput(this, 'LandingPageUrl', {
-      value: `https://${distribution.distributionDomainName}/index.html`,
-      description: 'URL to access your landing page and update SaaS URL field in your listing.',
+    new cdk.CfnOutput(this, 'CloudfrontMarketplaceFulfillmentURL', {
+      value: `https://${distribution.distributionDomainName}/redirectmarketplacetoken`,
+      description: 'CDN-fronted URL to access your landing page',
     });
   }
 }

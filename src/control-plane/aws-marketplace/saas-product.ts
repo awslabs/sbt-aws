@@ -35,11 +35,13 @@ export interface AWSMarketplaceSaaSProductProps {
   readonly subscriptionSNSTopic: string;
   readonly eventManager: IEventManager;
   readonly disableAPILogging?: boolean;
+  readonly requiredFieldsForRegistration?: string[];
 }
 
 export class AWSMarketplaceSaaSProduct extends Construct {
   readonly registerCustomerAPI: apigateway.RestApi;
   readonly subscribersTable: dynamodb.Table;
+  readonly userProvidedRequiredFieldsForRegistration: string[];
 
   constructor(scope: Construct, id: string, props: AWSMarketplaceSaaSProductProps) {
     super(scope, id);
@@ -119,6 +121,17 @@ export class AWSMarketplaceSaaSProduct extends Construct {
     );
     props.eventManager.grantPutEventsTo(grantOrRevokeAccessFunctionPython);
 
+    const baseRequiredFieldsForRegistration = ['regToken'];
+    this.userProvidedRequiredFieldsForRegistration = ['contactEmail'];
+    const requiredFields = [
+      ...baseRequiredFieldsForRegistration,
+      ...this.userProvidedRequiredFieldsForRegistration,
+      ...(props.requiredFieldsForRegistration || []),
+    ];
+    this.userProvidedRequiredFieldsForRegistration.push(
+      ...(props.requiredFieldsForRegistration || [])
+    );
+
     const registerNewMarketplaceCustomerPython = new PythonFunction(
       this,
       'RegisterNewMarketplaceCustomerPython',
@@ -133,10 +146,11 @@ export class AWSMarketplaceSaaSProduct extends Construct {
         timeout: cdk.Duration.seconds(60),
         layers: [powerToolsLayer],
         environment: {
-          NewSubscribersTableName: this.subscribersTable.tableName,
+          NEW_SUBSCRIBERS_TABLE_NAME: this.subscribersTable.tableName,
           EVENTBUS_NAME: props.eventManager.busName,
           EVENT_SOURCE: props.eventManager.controlPlaneEventSource,
           ONBOARDING_DETAIL_TYPE: DetailType.ONBOARDING_REQUEST,
+          REQUIRED_FIELDS: requiredFields.join(','),
         },
       }
     );
@@ -179,10 +193,34 @@ export class AWSMarketplaceSaaSProduct extends Construct {
       validateRequestParameters: true,
     });
 
+    const redirectHandler = new lambda.Function(this, 'RedirectHandler', {
+      code: lambda.Code.fromInline(`
+exports.redirecthandler = async(event, context, callback) => {
+
+  const redirectUrl = "/?" + event['body'];
+  const response = {
+      statusCode: 302,
+      headers: {
+          Location: redirectUrl
+      },
+  };
+
+  return response;
+
+};`),
+      runtime: lambda.Runtime.NODEJS_20_X,
+      handler: 'index.redirecthandler',
+    });
+    const redirectResource = this.registerCustomerAPI.root.addResource('redirectmarketplacetoken');
+    redirectResource.addMethod('POST', new apigateway.LambdaIntegration(redirectHandler));
+    new cdk.CfnOutput(this, 'APIGWMarketplaceFulfillmentURL', {
+      value: this.registerCustomerAPI.urlForPath(redirectResource.path),
+      description: 'URL to access your landing page',
+    });
+
     const subscriberResource = this.registerCustomerAPI.root.addResource('subscriber');
     subscriberResource.addMethod(
       'POST',
-      // new apigateway.LambdaIntegration(registerNewMarketplaceCustomer)
       new apigateway.LambdaIntegration(registerNewMarketplaceCustomerPython)
     );
 
@@ -206,6 +244,8 @@ export class AWSMarketplaceSaaSProduct extends Construct {
         `${this.registerCustomerAPI.root}/OPTIONS/Resource`,
         `${subscriberResource}/OPTIONS/Resource`,
         `${subscriberResource}/POST/Resource`,
+        `${redirectResource}/OPTIONS/Resource`,
+        `${redirectResource}/POST/Resource`,
       ],
       [
         {
@@ -277,7 +317,7 @@ export class AWSMarketplaceSaaSProduct extends Construct {
     }
 
     NagSuppressions.addResourceSuppressions(
-      [registerNewMarketplaceCustomerPython],
+      [registerNewMarketplaceCustomerPython, redirectHandler],
       [
         {
           id: 'AwsSolutions-IAM4',
@@ -285,21 +325,6 @@ export class AWSMarketplaceSaaSProduct extends Construct {
           appliesTo: [
             'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
           ],
-        },
-        {
-          id: 'AwsSolutions-L1',
-          reason: 'NODEJS 18 is the version used in the official quickstart CFN template.',
-        },
-        {
-          id: 'AwsSolutions-IAM5',
-          reason: 'Index name(s) not known beforehand.',
-          appliesTo: [`Resource::<MarketplaceAWSMarketplaceMeteringRecords3B0F9D94.Arn>/index/*`],
-        },
-        {
-          id: 'AwsSolutions-IAM5',
-          reason:
-            'TBD: FIX! This is Resource::* being used to output logs and x-ray traces and nothing else.',
-          appliesTo: ['Resource::*'],
         },
       ],
       true // applyToChildren = true, so that it applies to policies created for the role.
