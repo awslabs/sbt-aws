@@ -101,8 +101,7 @@ export class SubscriptionLogic extends Construct {
         },
         {
           id: 'AwsSolutions-IAM5',
-          reason:
-            'TBD: FIX! This is Resource::* being used to output logs and x-ray traces and nothing else.',
+          reason: 'Used as part of the policy that allows aws-marketplace:BatchMeterUsage.',
           appliesTo: ['Resource::*'],
         },
       ],

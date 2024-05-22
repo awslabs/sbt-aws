@@ -90,8 +90,7 @@ export class EntitlementLogic extends Construct {
         },
         {
           id: 'AwsSolutions-IAM5',
-          reason:
-            'TBD: FIX! This is Resource::* being used to output logs and x-ray traces and nothing else.',
+          reason: 'Used as part of IAM policy that allows calling aws-marketplace:GetEntitlements',
           appliesTo: ['Resource::*'],
         },
       ],
@@ -124,7 +123,7 @@ export class EntitlementLogic extends Construct {
         {
           id: 'AwsSolutions-IAM5',
           reason:
-            'TBD: FIX! This is Resource::* being used to output logs and x-ray traces and nothing else.',
+            'Used as part of the policy that allows aws-marketplace:GetEntitlements, aws-marketplace:ResolveCustomer, and ses:SendEmail',
           appliesTo: ['Resource::*'],
         },
       ],

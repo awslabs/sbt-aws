@@ -454,10 +454,15 @@ exports.redirecthandler = async(event, context, callback) => {
             `Action::kms:GenerateDataKey*`,
           ],
         },
+      ],
+      true // applyToChildren = true, so that it applies to policies created for the role.
+    );
+    NagSuppressions.addResourceSuppressions(
+      [grantOrRevokeAccessFunctionPython],
+      [
         {
           id: 'AwsSolutions-IAM5',
-          reason:
-            'TBD: FIX! This is Resource::* being used to output logs and x-ray traces and nothing else.',
+          reason: 'Used as part of the policy that allows dynamodb:ListStreams.',
           appliesTo: ['Resource::*'],
         },
       ],
