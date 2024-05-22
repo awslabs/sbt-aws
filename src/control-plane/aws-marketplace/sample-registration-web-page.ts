@@ -3,21 +3,55 @@
 
 import * as path from 'path';
 import * as cdk from 'aws-cdk-lib';
+import { RestApiBase } from 'aws-cdk-lib/aws-apigateway';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { BucketDeployment, DeployTimeSubstitutedFile, Source } from 'aws-cdk-lib/aws-s3-deployment';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
-import { AWSMarketplaceSaaSProduct } from './saas-product';
 import { generateAWSManagedRuleSet } from '../../utils';
 
+/**
+ * Properties for the SampleRegistrationWebPage construct.
+ */
 export interface SampleRegistrationWebPageProps {
-  readonly saaSProduct: AWSMarketplaceSaaSProduct;
+  /**
+   * The API Gateway that serves the following endpoints:
+   * - POST /redirectmarketplacetoken: redirects to a registration page.
+   * - POST /subscriber: creates a new subscriber.
+   */
+  readonly registrationAPI: RestApiBase;
+
+  /**
+   * The list of required user-provided fields for registration.
+   * This contains the set of fields that must be provided by the user
+   * when registering a new customer.
+   *
+   * This is used to dynamically update the registration page to create a
+   * form that accepts each of the fields present in this list.
+   *
+   * ex. ['name', 'phone']
+   */
+  readonly userProvidedRequiredFieldsForRegistration: string[];
+
+  /**
+   * Whether to automatically delete objects from the S3 bucket when the stack is deleted.
+   * @default - false
+   */
   readonly autoDeleteBucketObjects?: boolean;
+
+  /**
+   * The URL of the image logo to display on the registration page.
+   * @default - Amazon logo
+   */
   readonly imageLogoUrl?: string;
 }
 
+/**
+ * Constructs a sample registration web page hosted on Amazon S3 and fronted by Amazon CloudFront.
+ * The web page includes a form for users to register for the SaaS product.
+ */
 export class SampleRegistrationWebPage extends Construct {
   constructor(scope: Construct, id: string, props: SampleRegistrationWebPageProps) {
     super(scope, id);
@@ -32,13 +66,16 @@ export class SampleRegistrationWebPage extends Construct {
       destinationBucket: websiteBucket,
     });
 
+    const defaultImageLogoUrl =
+      'https://m.media-amazon.com/images/G/01/AdProductsWebsite/images/AUX/02_amazon_logo_RGB_SQUID._TTW_.png';
+
     const dynamicFile = new DeployTimeSubstitutedFile(this, 'DynamicFileScript', {
       source: path.join(__dirname, '../../../resources/aws-marketplace/dynamic/script.js'),
       destinationBucket: websiteBucket,
       destinationKey: 'script.js',
       substitutions: {
-        requiredFields: props.saaSProduct.userProvidedRequiredFieldsForRegistration.join(','),
-        imageLogoUrl: props.imageLogoUrl ?? 'https://via.placeholder.com/150',
+        requiredFields: props.userProvidedRequiredFieldsForRegistration.join(','),
+        imageLogoUrl: props.imageLogoUrl ?? defaultImageLogoUrl,
       },
     });
 
@@ -150,13 +187,13 @@ export class SampleRegistrationWebPage extends Construct {
           compress: true,
           allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
           viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-          origin: new origins.RestApiOrigin(props.saaSProduct.registerCustomerAPI),
+          origin: new origins.RestApiOrigin(props.registrationAPI),
         },
         '/subscriber': {
           compress: true,
           allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
           viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-          origin: new origins.RestApiOrigin(props.saaSProduct.registerCustomerAPI),
+          origin: new origins.RestApiOrigin(props.registrationAPI),
         },
       },
     });

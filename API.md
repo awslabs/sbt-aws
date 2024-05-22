@@ -4,6 +4,8 @@
 
 ### AWSMarketplaceSaaSProduct <a name="AWSMarketplaceSaaSProduct" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct"></a>
 
+Construct for creating an AWS Marketplace SaaS product.
+
 #### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.Initializer"></a>
 
 ```typescript
@@ -14,9 +16,9 @@ new AWSMarketplaceSaaSProduct(scope: Construct, id: string, props: AWSMarketplac
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps">AWSMarketplaceSaaSProductProps</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | - The scope in which to define this construct. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.Initializer.parameter.id">id</a></code> | <code>string</code> | - The unique identifier for this construct. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps">AWSMarketplaceSaaSProductProps</a></code> | - The properties for configuring the AWS Marketplace SaaS product. |
 
 ---
 
@@ -24,17 +26,23 @@ new AWSMarketplaceSaaSProduct(scope: Construct, id: string, props: AWSMarketplac
 
 - *Type:* constructs.Construct
 
+The scope in which to define this construct.
+
 ---
 
 ##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.Initializer.parameter.id"></a>
 
 - *Type:* string
 
+The unique identifier for this construct.
+
 ---
 
 ##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.Initializer.parameter.props"></a>
 
 - *Type:* <a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps">AWSMarketplaceSaaSProductProps</a>
+
+The properties for configuring the AWS Marketplace SaaS product.
 
 ---
 
@@ -85,9 +93,9 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.registerCustomerAPI">registerCustomerAPI</a></code> | <code>aws-cdk-lib.aws_apigateway.RestApi</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.subscribersTable">subscribersTable</a></code> | <code>aws-cdk-lib.aws_dynamodb.Table</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.userProvidedRequiredFieldsForRegistration">userProvidedRequiredFieldsForRegistration</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.registerCustomerAPI">registerCustomerAPI</a></code> | <code>aws-cdk-lib.aws_apigateway.RestApi</code> | The API Gateway REST API for registering customers. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.subscribersTable">subscribersTable</a></code> | <code>aws-cdk-lib.aws_dynamodb.Table</code> | The DynamoDB table for storing subscriber information. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.userProvidedRequiredFieldsForRegistration">userProvidedRequiredFieldsForRegistration</a></code> | <code>string[]</code> | The list of required user-provided fields for registration. |
 
 ---
 
@@ -111,6 +119,8 @@ public readonly registerCustomerAPI: RestApi;
 
 - *Type:* aws-cdk-lib.aws_apigateway.RestApi
 
+The API Gateway REST API for registering customers.
+
 ---
 
 ##### `subscribersTable`<sup>Required</sup> <a name="subscribersTable" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.subscribersTable"></a>
@@ -121,6 +131,8 @@ public readonly subscribersTable: Table;
 
 - *Type:* aws-cdk-lib.aws_dynamodb.Table
 
+The DynamoDB table for storing subscriber information.
+
 ---
 
 ##### `userProvidedRequiredFieldsForRegistration`<sup>Required</sup> <a name="userProvidedRequiredFieldsForRegistration" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.userProvidedRequiredFieldsForRegistration"></a>
@@ -130,6 +142,11 @@ public readonly userProvidedRequiredFieldsForRegistration: string[];
 ```
 
 - *Type:* string[]
+
+The list of required user-provided fields for registration.
+
+This contains the set of fields that must be provided by the user
+when registering a new customer.
 
 ---
 
@@ -1935,6 +1952,8 @@ public readonly tenantConfigServiceLambda: Function;
 
 ### AWSMarketplaceSaaSProductProps <a name="AWSMarketplaceSaaSProductProps" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps"></a>
 
+Properties for configuring an AWS Marketplace SaaS product.
+
 #### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.Initializer"></a>
 
 ```typescript
@@ -1947,15 +1966,15 @@ const aWSMarketplaceSaaSProductProps: AWSMarketplaceSaaSProductProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.entitlementSNSTopic">entitlementSNSTopic</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.marketplaceTechAdminEmail">marketplaceTechAdminEmail</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.pricingModel">pricingModel</a></code> | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel">AWSMarketplaceSaaSPricingModel</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.productCode">productCode</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.subscriptionSNSTopic">subscriptionSNSTopic</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.disableAPILogging">disableAPILogging</a></code> | <code>boolean</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.marketplaceSellerEmail">marketplaceSellerEmail</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.requiredFieldsForRegistration">requiredFieldsForRegistration</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.entitlementSNSTopic">entitlementSNSTopic</a></code> | <code>string</code> | SNS topic ARN provided from AWS Marketplace. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | The event manager for the AWS Marketplace SaaS product. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.marketplaceTechAdminEmail">marketplaceTechAdminEmail</a></code> | <code>string</code> | Email to be notified on changes requiring action. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.pricingModel">pricingModel</a></code> | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel">AWSMarketplaceSaaSPricingModel</a></code> | The pricing model for the AWS Marketplace SaaS product. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.productCode">productCode</a></code> | <code>string</code> | Product code provided from AWS Marketplace. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.subscriptionSNSTopic">subscriptionSNSTopic</a></code> | <code>string</code> | SNS topic ARN provided from AWS Marketplace. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.disableAPILogging">disableAPILogging</a></code> | <code>boolean</code> | Flag to disable API logging. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.marketplaceSellerEmail">marketplaceSellerEmail</a></code> | <code>string</code> | Seller email address, verified in SES and in 'Production' mode. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.requiredFieldsForRegistration">requiredFieldsForRegistration</a></code> | <code>string[]</code> | List of required fields for registration. |
 
 ---
 
@@ -1967,6 +1986,10 @@ public readonly entitlementSNSTopic: string;
 
 - *Type:* string
 
+SNS topic ARN provided from AWS Marketplace.
+
+Must exist.
+
 ---
 
 ##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.eventManager"></a>
@@ -1976,6 +1999,8 @@ public readonly eventManager: IEventManager;
 ```
 
 - *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
+
+The event manager for the AWS Marketplace SaaS product.
 
 ---
 
@@ -1987,6 +2012,8 @@ public readonly marketplaceTechAdminEmail: string;
 
 - *Type:* string
 
+Email to be notified on changes requiring action.
+
 ---
 
 ##### `pricingModel`<sup>Required</sup> <a name="pricingModel" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.pricingModel"></a>
@@ -1996,6 +2023,8 @@ public readonly pricingModel: AWSMarketplaceSaaSPricingModel;
 ```
 
 - *Type:* <a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel">AWSMarketplaceSaaSPricingModel</a>
+
+The pricing model for the AWS Marketplace SaaS product.
 
 ---
 
@@ -2007,6 +2036,8 @@ public readonly productCode: string;
 
 - *Type:* string
 
+Product code provided from AWS Marketplace.
+
 ---
 
 ##### `subscriptionSNSTopic`<sup>Required</sup> <a name="subscriptionSNSTopic" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.subscriptionSNSTopic"></a>
@@ -2016,6 +2047,10 @@ public readonly subscriptionSNSTopic: string;
 ```
 
 - *Type:* string
+
+SNS topic ARN provided from AWS Marketplace.
+
+Must exist.
 
 ---
 
@@ -2027,6 +2062,8 @@ public readonly disableAPILogging: boolean;
 
 - *Type:* boolean
 
+Flag to disable API logging.
+
 ---
 
 ##### `marketplaceSellerEmail`<sup>Optional</sup> <a name="marketplaceSellerEmail" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.marketplaceSellerEmail"></a>
@@ -2037,6 +2074,8 @@ public readonly marketplaceSellerEmail: string;
 
 - *Type:* string
 
+Seller email address, verified in SES and in 'Production' mode.
+
 ---
 
 ##### `requiredFieldsForRegistration`<sup>Optional</sup> <a name="requiredFieldsForRegistration" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.requiredFieldsForRegistration"></a>
@@ -2046,6 +2085,11 @@ public readonly requiredFieldsForRegistration: string[];
 ```
 
 - *Type:* string[]
+
+List of required fields for registration.
+
+The existence of these
+fields is checked when a new customer is registered.
 
 ---
 
@@ -4000,27 +4044,35 @@ The detail-type that will trigger the handler function.
 
 ### AWSMarketplaceSaaSPricingModel <a name="AWSMarketplaceSaaSPricingModel" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel"></a>
 
+Enum representing the pricing models for an AWS Marketplace SaaS product.
+
 #### Members <a name="Members" id="Members"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel.CONTRACTS">CONTRACTS</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel.SUBSCRIPTIONS">SUBSCRIPTIONS</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel.CONTRACTS_WITH_SUBSCRIPTION">CONTRACTS_WITH_SUBSCRIPTION</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel.CONTRACTS">CONTRACTS</a></code> | Contracts pricing model. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel.SUBSCRIPTIONS">SUBSCRIPTIONS</a></code> | Subscriptions pricing model. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel.CONTRACTS_WITH_SUBSCRIPTION">CONTRACTS_WITH_SUBSCRIPTION</a></code> | Contracts with subscription pricing model. |
 
 ---
 
 ##### `CONTRACTS` <a name="CONTRACTS" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel.CONTRACTS"></a>
+
+Contracts pricing model.
 
 ---
 
 
 ##### `SUBSCRIPTIONS` <a name="SUBSCRIPTIONS" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel.SUBSCRIPTIONS"></a>
 
+Subscriptions pricing model.
+
 ---
 
 
 ##### `CONTRACTS_WITH_SUBSCRIPTION` <a name="CONTRACTS_WITH_SUBSCRIPTION" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel.CONTRACTS_WITH_SUBSCRIPTION"></a>
+
+Contracts with subscription pricing model.
 
 ---
 

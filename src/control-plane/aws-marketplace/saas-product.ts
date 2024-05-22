@@ -20,29 +20,81 @@ import { EntitlementLogic } from './entitlement-logic';
 import { SubscriptionLogic } from './subscription-logic';
 import { DetailType, IEventManager, generateAWSManagedRuleSet } from '../../utils';
 
+/**
+ * Enum representing the pricing models for an AWS Marketplace SaaS product.
+ * @enum {string}
+ */
 export enum AWSMarketplaceSaaSPricingModel {
+  /** Contracts pricing model */
   CONTRACTS = 'contracts',
+
+  /** Subscriptions pricing model */
   SUBSCRIPTIONS = 'subscriptions',
+
+  /** Contracts with subscription pricing model */
   CONTRACTS_WITH_SUBSCRIPTION = 'contracts_with_subscription',
 }
 
+/**
+ * Properties for configuring an AWS Marketplace SaaS product.
+ * @interface
+ */
 export interface AWSMarketplaceSaaSProductProps {
+  /** Product code provided from AWS Marketplace */
   readonly productCode: string;
+
+  /** The pricing model for the AWS Marketplace SaaS product. */
   readonly pricingModel: AWSMarketplaceSaaSPricingModel;
+
+  /** Email to be notified on changes requiring action */
   readonly marketplaceTechAdminEmail: string;
+
+  /** Seller email address, verified in SES and in 'Production' mode */
   readonly marketplaceSellerEmail?: string;
+
+  /** SNS topic ARN provided from AWS Marketplace. Must exist. */
   readonly entitlementSNSTopic: string;
+
+  /** SNS topic ARN provided from AWS Marketplace. Must exist. */
   readonly subscriptionSNSTopic: string;
+
+  /** The event manager for the AWS Marketplace SaaS product. */
   readonly eventManager: IEventManager;
+
+  /** Flag to disable API logging. */
   readonly disableAPILogging?: boolean;
+
+  /**
+   * List of required fields for registration. The existence of these
+   * fields is checked when a new customer is registered.
+   */
   readonly requiredFieldsForRegistration?: string[];
 }
 
+/**
+ * Construct for creating an AWS Marketplace SaaS product.
+ * @class
+ */
 export class AWSMarketplaceSaaSProduct extends Construct {
+  /** The API Gateway REST API for registering customers. */
   readonly registerCustomerAPI: apigateway.RestApi;
+
+  /** The DynamoDB table for storing subscriber information. */
   readonly subscribersTable: dynamodb.Table;
+
+  /**
+   * The list of required user-provided fields for registration.
+   * This contains the set of fields that must be provided by the user
+   * when registering a new customer.
+   */
   readonly userProvidedRequiredFieldsForRegistration: string[];
 
+  /**
+   * Creates an instance of the AWSMarketplaceSaaSProduct construct.
+   * @param {Construct} scope - The scope in which to define this construct.
+   * @param {string} id - The unique identifier for this construct.
+   * @param {AWSMarketplaceSaaSProductProps} props - The properties for configuring the AWS Marketplace SaaS product.
+   */
   constructor(scope: Construct, id: string, props: AWSMarketplaceSaaSProductProps) {
     super(scope, id);
 
