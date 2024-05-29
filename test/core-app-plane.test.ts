@@ -173,7 +173,6 @@ describe('CoreApplicationPlane', () => {
     const template = Template.fromStack(coreApplicationPlaneStack);
 
     template.hasResourceProperties('AWS::CodeBuild::Project', {
-      // check that codebuild has the MY_TEST_ENV_VAR environment variable defined
       Environment: Match.objectLike({
         EnvironmentVariables: Match.anyValue(),
       }),

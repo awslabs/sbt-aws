@@ -88,11 +88,13 @@ export class ControlPlane extends Construct {
     this.controlPlaneAPIGatewayUrl = controlPlaneAPI.apiUrl;
 
     this.eventManager.addTargetToEvent(
+      this,
       DetailType.PROVISION_SUCCESS,
       controlPlaneAPI.tenantUpdateServiceTarget
     );
 
     this.eventManager.addTargetToEvent(
+      this,
       DetailType.DEPROVISION_SUCCESS,
       controlPlaneAPI.tenantUpdateServiceTarget
     );

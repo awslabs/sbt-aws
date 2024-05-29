@@ -133,7 +133,11 @@ export class CoreApplicationPlane extends Construct {
         bashJobRunner: job,
       });
 
-      this.eventManager.addTargetToEvent(jobRunnerProps.incomingEvent, jobOrchestrator.eventTarget);
+      this.eventManager.addTargetToEvent(
+        this,
+        jobRunnerProps.incomingEvent,
+        jobOrchestrator.eventTarget
+      );
     });
   }
 }
