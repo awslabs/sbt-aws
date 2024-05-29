@@ -283,7 +283,7 @@ export class EventManager extends Construct implements IEventManager {
 
   /**
    * Returns a Rule for the given eventType in the context of a scope.
-   * A new one is created not found in a scope.
+   * A new one is created if the rule is not found in the scope.
    *
    * @param scope The scope in which to find (or create) the Rule.
    * @param eventType The detail type of the event to add a target to.
