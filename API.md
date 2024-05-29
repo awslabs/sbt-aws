@@ -1102,10 +1102,18 @@ Returns a string representation of this construct.
 ##### `addTargetToEvent` <a name="addTargetToEvent" id="@cdklabs/sbt-aws.EventManager.addTargetToEvent"></a>
 
 ```typescript
-public addTargetToEvent(eventType: DetailType, target: IRuleTarget): void
+public addTargetToEvent(scope: Construct, eventType: DetailType, target: IRuleTarget): void
 ```
 
 Adds an IRuleTarget to an event.
+
+###### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.EventManager.addTargetToEvent.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+The scope in which to find (or create) the Rule.
+
+---
 
 ###### `eventType`<sup>Required</sup> <a name="eventType" id="@cdklabs/sbt-aws.EventManager.addTargetToEvent.parameter.eventType"></a>
 
@@ -3510,10 +3518,16 @@ The table containing the aggregated data.
 ##### `addTargetToEvent` <a name="addTargetToEvent" id="@cdklabs/sbt-aws.IEventManager.addTargetToEvent"></a>
 
 ```typescript
-public addTargetToEvent(eventType: DetailType, target: IRuleTarget): void
+public addTargetToEvent(scope: Construct, eventType: DetailType, target: IRuleTarget): void
 ```
 
 Adds an IRuleTarget to an event.
+
+###### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.IEventManager.addTargetToEvent.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
 
 ###### `eventType`<sup>Required</sup> <a name="eventType" id="@cdklabs/sbt-aws.IEventManager.addTargetToEvent.parameter.eventType"></a>
 
