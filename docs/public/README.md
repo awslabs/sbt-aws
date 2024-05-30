@@ -84,7 +84,7 @@ As mentioned before, SBT is built on top of CDK. To illustrate its use, please f
 Now that you've initialized a new CDK app, let's install the SBT components. From within the `hello-cdk` directory, please run the following command:
 
 ```sh
-npm install @cdklabs/sbt-aws
+npm install @cdklabs/sbt-aws@0.0.26
 ```
 
 #### Control Plane
