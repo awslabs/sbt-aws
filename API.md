@@ -1967,12 +1967,12 @@ const aWSMarketplaceSaaSProductProps: AWSMarketplaceSaaSProductProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.entitlementSNSTopic">entitlementSNSTopic</a></code> | <code>string</code> | SNS topic ARN provided from AWS Marketplace. |
-| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | The event manager for the AWS Marketplace SaaS product. |
 | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.marketplaceTechAdminEmail">marketplaceTechAdminEmail</a></code> | <code>string</code> | Email to be notified on changes requiring action. |
 | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.pricingModel">pricingModel</a></code> | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel">AWSMarketplaceSaaSPricingModel</a></code> | The pricing model for the AWS Marketplace SaaS product. |
 | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.productCode">productCode</a></code> | <code>string</code> | Product code provided from AWS Marketplace. |
 | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.subscriptionSNSTopic">subscriptionSNSTopic</a></code> | <code>string</code> | SNS topic ARN provided from AWS Marketplace. |
 | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.disableAPILogging">disableAPILogging</a></code> | <code>boolean</code> | Flag to disable API logging. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | The EventManager for the AWS Marketplace SaaS product. |
 | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.marketplaceSellerEmail">marketplaceSellerEmail</a></code> | <code>string</code> | Seller email address, verified in SES and in 'Production' mode. |
 | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.requiredFieldsForRegistration">requiredFieldsForRegistration</a></code> | <code>string[]</code> | List of required fields for registration. |
 
@@ -1989,18 +1989,6 @@ public readonly entitlementSNSTopic: string;
 SNS topic ARN provided from AWS Marketplace.
 
 Must exist.
-
----
-
-##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.eventManager"></a>
-
-```typescript
-public readonly eventManager: IEventManager;
-```
-
-- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
-
-The event manager for the AWS Marketplace SaaS product.
 
 ---
 
@@ -2063,6 +2051,20 @@ public readonly disableAPILogging: boolean;
 - *Type:* boolean
 
 Flag to disable API logging.
+
+---
+
+##### `eventManager`<sup>Optional</sup> <a name="eventManager" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.eventManager"></a>
+
+```typescript
+public readonly eventManager: IEventManager;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
+
+The EventManager for the AWS Marketplace SaaS product.
+
+This is used to enable integration with sbt-aws.
 
 ---
 
