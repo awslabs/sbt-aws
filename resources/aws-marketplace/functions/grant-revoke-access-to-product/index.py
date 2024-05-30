@@ -14,10 +14,10 @@ tracer = Tracer(service='dynamodb-stream-handler')
 sns = boto3.client('sns')
 topic_arn = os.environ.get('SupportSNSArn')
 
-event_bus = boto3.client('events')
-eventbus_name = os.environ['EVENTBUS_NAME']
-control_plane_event_source = os.environ['EVENT_SOURCE']
-offboarding_detail_type = os.environ['OFFBOARDING_DETAIL_TYPE']
+events_client = boto3.client('events')
+eventbus_name = os.environ.get('EVENTBUS_NAME')
+control_plane_event_source = os.environ.get('EVENT_SOURCE')
+offboarding_detail_type = os.environ.get('OFFBOARDING_DETAIL_TYPE')
 
 
 @logger.inject_lambda_context
@@ -69,17 +69,18 @@ def lambda_handler(event: DynamoDBStreamEvent, context: LambdaContext):
             elif revoke_access:
                 subject = 'AWS Marketplace customer end of subscription'
                 message = f'unsubscribe-success: {json.dumps(new_image)}'
-                response = event_bus.put_events(
-                    Entries=[
-                        {
-                            'EventBusName': eventbus_name,
-                            'Source': control_plane_event_source,
-                            'DetailType': offboarding_detail_type,
-                            'Detail': json.dumps(new_image),
-                        }
-                    ]
-                )
-                logger.info(response)
+                if eventbus_name:
+                    response = events_client.put_events(
+                        Entries=[
+                            {
+                                'EventBusName': eventbus_name,
+                                'Source': control_plane_event_source,
+                                'DetailType': offboarding_detail_type,
+                                'Detail': json.dumps(new_image),
+                            }
+                        ]
+                    )
+                    logger.info(response)
 
             elif entitlement_updated:
                 subject = 'AWS Marketplace customer change of subscription'

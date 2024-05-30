@@ -58,8 +58,11 @@ export interface AWSMarketplaceSaaSProductProps {
   /** SNS topic ARN provided from AWS Marketplace. Must exist. */
   readonly subscriptionSNSTopic: string;
 
-  /** The event manager for the AWS Marketplace SaaS product. */
-  readonly eventManager: IEventManager;
+  /**
+   * The EventManager for the AWS Marketplace SaaS product.
+   * This is used to enable integration with sbt-aws.
+   */
+  readonly eventManager?: IEventManager;
 
   /** Flag to disable API logging. */
   readonly disableAPILogging?: boolean;
@@ -159,9 +162,6 @@ export class AWSMarketplaceSaaSProduct extends Construct {
         layers: [powerToolsLayer],
         environment: {
           SupportSNSArn: supportTopic.topicArn,
-          EVENTBUS_NAME: props.eventManager.busName,
-          EVENT_SOURCE: props.eventManager.controlPlaneEventSource,
-          OFFBOARDING_DETAIL_TYPE: DetailType.OFFBOARDING_REQUEST,
         },
         events: [
           new DynamoEventSource(this.subscribersTable, {
@@ -171,7 +171,20 @@ export class AWSMarketplaceSaaSProduct extends Construct {
         ],
       }
     );
-    props.eventManager.grantPutEventsTo(grantOrRevokeAccessFunctionPython);
+
+    if (props.eventManager) {
+      grantOrRevokeAccessFunctionPython.addEnvironment('EVENTBUS_NAME', props.eventManager.busName);
+      grantOrRevokeAccessFunctionPython.addEnvironment(
+        'EVENT_SOURCE',
+        props.eventManager.controlPlaneEventSource
+      );
+      grantOrRevokeAccessFunctionPython.addEnvironment(
+        'OFFBOARDING_DETAIL_TYPE',
+        DetailType.OFFBOARDING_REQUEST
+      );
+
+      props.eventManager.grantPutEventsTo(grantOrRevokeAccessFunctionPython);
+    }
 
     const baseRequiredFieldsForRegistration = ['regToken'];
     this.userProvidedRequiredFieldsForRegistration = ['contactEmail'];
@@ -199,14 +212,26 @@ export class AWSMarketplaceSaaSProduct extends Construct {
         layers: [powerToolsLayer],
         environment: {
           NEW_SUBSCRIBERS_TABLE_NAME: this.subscribersTable.tableName,
-          EVENTBUS_NAME: props.eventManager.busName,
-          EVENT_SOURCE: props.eventManager.controlPlaneEventSource,
-          ONBOARDING_DETAIL_TYPE: DetailType.ONBOARDING_REQUEST,
           REQUIRED_FIELDS: requiredFields.join(','),
         },
       }
     );
-    props.eventManager.grantPutEventsTo(registerNewMarketplaceCustomerPython);
+
+    if (props.eventManager) {
+      registerNewMarketplaceCustomerPython.addEnvironment(
+        'EVENTBUS_NAME',
+        props.eventManager.busName
+      );
+      registerNewMarketplaceCustomerPython.addEnvironment(
+        'EVENT_SOURCE',
+        props.eventManager.controlPlaneEventSource
+      );
+      registerNewMarketplaceCustomerPython.addEnvironment(
+        'ONBOARDING_DETAIL_TYPE',
+        DetailType.ONBOARDING_REQUEST
+      );
+      props.eventManager.grantPutEventsTo(registerNewMarketplaceCustomerPython);
+    }
 
     let options: any = {
       defaultCorsPreflightOptions: {

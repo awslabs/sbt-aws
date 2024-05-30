@@ -28,15 +28,16 @@ ses = boto3.client("ses", region_name="us-east-1")
 metering_marketplace = boto3.client("meteringmarketplace", region_name="us-east-1")
 marketplace_entitlement = boto3.client('marketplace-entitlement', region_name="us-east-1")
 sqs = boto3.client("sqs")
-event_bus = boto3.client('events')
+events_client = boto3.client('events')
 
 new_subscribers_table = os.environ["NEW_SUBSCRIBERS_TABLE_NAME"]
 entitlement_queue_url = os.environ.get("ENTITLEMENT_QUEUE_URL")
 marketplace_seller_email = os.environ.get("MARKETPLACE_SELLER_EMAIL")
-onboarding_detail_type = os.environ['ONBOARDING_DETAIL_TYPE']
-eventbus_name = os.environ['EVENTBUS_NAME']
-control_plane_event_source = os.environ['EVENT_SOURCE']
 required_fields = os.environ.get('REQUIRED_FIELDS', '').split(',')
+
+eventbus_name = os.environ.get('EVENTBUS_NAME')
+onboarding_detail_type = os.environ.get('ONBOARDING_DETAIL_TYPE')
+control_plane_event_source = os.environ.get('EVENT_SOURCE')
 
 new_subscribers_table_handler = dynamodb.Table(new_subscribers_table)
 
@@ -120,24 +121,25 @@ def register_new_subscriber():
         for page in page_iterator:
             entitlements.append(page['Entitlements'])
 
-        response = event_bus.put_events(
-            Entries=[
-                {
-                    'EventBusName': eventbus_name,
-                    'Source': control_plane_event_source,
-                    'DetailType': onboarding_detail_type,
-                    'Detail': json.dumps(
-                        # add entitlements to inform sbt-aws onboarding process
-                        new_subscriber_item | {
-                            "entitlements": entitlements,
-                        },
-                        # to avoid datetime serialization issues
-                        default=str
-                    ),
-                }
-            ]
-        )
-        logger.info(response)
+        if eventbus_name:
+            response = events_client.put_events(
+                Entries=[
+                    {
+                        'EventBusName': eventbus_name,
+                        'Source': control_plane_event_source,
+                        'DetailType': onboarding_detail_type,
+                        'Detail': json.dumps(
+                            # add entitlements to inform sbt-aws onboarding process
+                            new_subscriber_item | {
+                                "entitlements": entitlements,
+                            },
+                            # to avoid datetime serialization issues
+                            default=str
+                        ),
+                    }
+                ]
+            )
+            logger.info(response)
 
         if entitlement_queue_url:
             sqs.send_message(
