@@ -12,6 +12,7 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as sqs from 'aws-cdk-lib/aws-sqs';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
+import { addTemplateTag } from '../../utils';
 
 export interface SubscriptionLogicProps {
   readonly productCode: string;
@@ -21,6 +22,7 @@ export interface SubscriptionLogicProps {
 export class SubscriptionLogic extends Construct {
   constructor(scope: Construct, id: string, props: SubscriptionLogicProps) {
     super(scope, id);
+    addTemplateTag(this, 'SubscriptionLogic');
 
     const meteringRecordsTable = new dynamodb.Table(this, 'AWSMarketplaceMeteringRecords', {
       partitionKey: { name: 'customerIdentifier', type: dynamodb.AttributeType.STRING },

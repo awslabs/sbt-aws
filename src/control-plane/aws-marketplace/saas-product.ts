@@ -18,7 +18,7 @@ import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { EntitlementLogic } from './entitlement-logic';
 import { SubscriptionLogic } from './subscription-logic';
-import { DetailType, IEventManager, generateAWSManagedRuleSet } from '../../utils';
+import { DetailType, IEventManager, addTemplateTag, generateAWSManagedRuleSet } from '../../utils';
 
 /**
  * Enum representing the pricing models for an AWS Marketplace SaaS product.
@@ -100,6 +100,7 @@ export class AWSMarketplaceSaaSProduct extends Construct {
    */
   constructor(scope: Construct, id: string, props: AWSMarketplaceSaaSProductProps) {
     super(scope, id);
+    addTemplateTag(this, 'AWSMarketplaceSaaSProduct');
 
     const quickstartBucket = s3.Bucket.fromBucketName(this, 'CodeBucket', 'aws-quickstart');
 

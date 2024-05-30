@@ -10,7 +10,7 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import { BucketDeployment, DeployTimeSubstitutedFile, Source } from 'aws-cdk-lib/aws-s3-deployment';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
-import { generateAWSManagedRuleSet } from '../../utils';
+import { addTemplateTag, generateAWSManagedRuleSet } from '../../utils';
 
 /**
  * Properties for the SampleRegistrationWebPage construct.
@@ -55,6 +55,8 @@ export interface SampleRegistrationWebPageProps {
 export class SampleRegistrationWebPage extends Construct {
   constructor(scope: Construct, id: string, props: SampleRegistrationWebPageProps) {
     super(scope, id);
+    addTemplateTag(this, 'SampleRegistrationWebPage');
+
     const websiteBucket = new s3.Bucket(this, 'WebsiteS3Bucket', {
       enforceSSL: true,
       autoDeleteObjects: props.autoDeleteBucketObjects,

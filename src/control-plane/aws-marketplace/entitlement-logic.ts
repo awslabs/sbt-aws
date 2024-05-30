@@ -12,6 +12,7 @@ import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
 import * as sqs from 'aws-cdk-lib/aws-sqs';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
+import { addTemplateTag } from '../../utils';
 
 export interface EntitlementLogicProps {
   readonly assetBucket: s3.IBucket;
@@ -23,6 +24,7 @@ export interface EntitlementLogicProps {
 export class EntitlementLogic extends Construct {
   constructor(scope: Construct, id: string, props: EntitlementLogicProps) {
     super(scope, id);
+    addTemplateTag(this, 'EntitlementLogic');
 
     const entitlementSQSQueueEncryptionKey = new cdk.aws_kms.Key(
       this,
