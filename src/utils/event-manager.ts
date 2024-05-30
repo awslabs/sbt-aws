@@ -171,7 +171,7 @@ export interface IEventManager {
    * @param eventType The detail type of the event to add a target to.
    * @param target The target that will be added to the event.
    */
-  addTargetToEvent(eventType: DetailType, target: IRuleTarget): void;
+  addTargetToEvent(scope: Construct, eventType: DetailType, target: IRuleTarget): void;
 
   /**
    * Provides grantee the permissions to place events
@@ -217,8 +217,6 @@ export class EventManager extends Construct implements IEventManager {
    * The ARN/ID of the bus that will be used to send and receive events.
    */
   public readonly busArn: string;
-
-  private readonly connectedRules: Map<DetailType, Rule> = new Map<DetailType, Rule>();
 
   constructor(scope: Construct, id: string, props?: EventManagerProps) {
     super(scope, id);
@@ -275,25 +273,32 @@ export class EventManager extends Construct implements IEventManager {
   /**
    * Adds an IRuleTarget to an event.
    *
+   * @param scope The scope in which to find (or create) the Rule.
    * @param eventType The detail type of the event to add a target to.
    * @param target The target that will be added to the event.
    */
-  public addTargetToEvent(eventType: DetailType, target: IRuleTarget): void {
-    this.getOrCreateRule(eventType).addTarget(target);
+  public addTargetToEvent(scope: Construct, eventType: DetailType, target: IRuleTarget): void {
+    this.getOrCreateRule(scope, eventType).addTarget(target);
   }
 
-  private getOrCreateRule(eventType: DetailType): Rule {
-    let rule = this.connectedRules.get(eventType);
-
+  /**
+   * Returns a Rule for the given eventType in the context of a scope.
+   * A new one is created if the rule is not found in the scope.
+   *
+   * @param scope The scope in which to find (or create) the Rule.
+   * @param eventType The detail type of the event to add a target to.
+   * @returns A Rule for the given eventType in the provided scope.
+   */
+  private getOrCreateRule(scope: Construct, eventType: DetailType): Rule {
+    let rule = scope.node.tryFindChild(`${eventType}Rule`) as Rule;
     if (!rule) {
-      rule = new Rule(this, `${eventType}Rule`, {
+      rule = new Rule(scope, `${eventType}Rule`, {
         eventBus: this.eventBus,
         eventPattern: {
           source: [this.supportedEvents[eventType]],
           detailType: [eventType],
         },
       });
-      this.connectedRules.set(eventType, rule);
     }
 
     return rule;

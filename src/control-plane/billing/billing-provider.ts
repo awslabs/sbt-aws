@@ -153,6 +153,6 @@ export class BillingProvider extends Construct {
     }
 
     const { handler, trigger } = this.getFunctionProps(fn, defaultEvent);
-    eventManager.addTargetToEvent(trigger, new event_targets.LambdaFunction(handler));
+    eventManager.addTargetToEvent(this, trigger, new event_targets.LambdaFunction(handler));
   }
 }
