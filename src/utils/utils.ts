@@ -25,9 +25,9 @@ export const addTemplateTag = (construct: Construct, tag: string) => {
 
 const appendTagToDescription = (existingDescription: string, newTag: string): string => {
   // Check if the existing description already has tags
-  if (existingDescription.includes('(Tags:')) {
+  if (existingDescription.includes('(tag:')) {
     // Extract the existing tags
-    const startIndex = existingDescription.indexOf('(Tags:') + 6;
+    const startIndex = existingDescription.indexOf('(tag:') + 6;
     const endIndex = existingDescription.lastIndexOf(')');
     const existingTags = existingDescription.substring(startIndex, endIndex).split(', ');
 
@@ -43,6 +43,6 @@ const appendTagToDescription = (existingDescription: string, newTag: string): st
     }
   } else {
     // Append the new tag to the description
-    return `${existingDescription} (Tags: ${newTag})`;
+    return `${existingDescription} (tag: ${newTag})`;
   }
 };
