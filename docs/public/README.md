@@ -685,4 +685,6 @@ The toolkit also includes a `SampleRegistrationWebPage` construct, which creates
 
 Additionally, the toolkit provides utilities for managing entitlement and subscription logic, such as handling subscription events from AWS Marketplace, metering usage, and granting or revoking access to the product based on subscription status.
 
-By leveraging these constructs and utilities, you can streamline the process of integrating your SaaS application with AWS Marketplace, ensuring compliance with AWS Marketplace requirements and providing a seamless registration and subscription experience for your customers.
+By leveraging these constructs and utilities, you can streamline the process of integrating your SaaS application with AWS Marketplace, ensuring compliance with Marketplace requirements and providing a seamless registration and subscription experience for your customers.
+
+For more information, see [AWS Marketplace Integration](/docs/public/marketplace-integration.md)
