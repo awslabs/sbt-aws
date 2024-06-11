@@ -44,6 +44,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     `aws-cdk@${CDK_VERSION}`,
     'eslint-plugin-header',
     `@aws-cdk/aws-kinesisfirehose-alpha@${CDK_VERSION}-alpha.0`,
+    `braces@>=3.0.3`, // fixes CVE-2024-4068
   ],
   github: true,
   jsiiVersion: JSII_VERSION,

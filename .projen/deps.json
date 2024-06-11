@@ -30,6 +30,11 @@
       "type": "build"
     },
     {
+      "name": "braces",
+      "version": ">=3.0.3",
+      "type": "build"
+    },
+    {
       "name": "eslint-config-prettier",
       "type": "build"
     },
