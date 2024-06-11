@@ -11,3 +11,4 @@ export * from './tables';
 export * from './billing/index';
 export * from './ingestor-aggregator/index';
 export * from './tenant-config/tenant-config-service';
+export * from './aws-marketplace/index';

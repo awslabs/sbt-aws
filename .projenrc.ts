@@ -17,9 +17,10 @@ const PUBLICATION_NAMESPACE: string = 'cdklabs';
 const PS_PUBLICATION_NAMESPACE: string = 'aws';
 const PROJECT_NAME: string = 'sbt-aws';
 const PROJEN_VERSION: string = '0.80.18';
-const CDK_VERSION: string = '2.123.0';
+const CDK_VERSION: string = '2.140.0';
 const JSII_VERSION: string = '~5.2.0';
 const CONSTRUCTS_VERSION: string = '10.0.5';
+const POINT_SOLUTIONS_CDK_VERSION: string = '2.123.0';
 const POINT_SOLUTIONS_LIB_PROJECT_NAME: string = 'sbt-point-solutions-lib';
 
 const project = new awscdk.AwsCdkConstructLibrary({
@@ -34,8 +35,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
   deps: [
     '@aws-cdk/aws-lambda-python-alpha',
     'cdk-nag',
-    '@aws-cdk/aws-kinesisfirehose-alpha',
-    '@aws-cdk/aws-kinesisfirehose-destinations-alpha',
+    `@aws-cdk/aws-kinesisfirehose-alpha@${CDK_VERSION}-alpha.0`,
+    `@aws-cdk/aws-kinesisfirehose-destinations-alpha@${CDK_VERSION}-alpha.0`,
   ],
   description:
     'SaaS Builder Toolkit for AWS is a developer toolkit to implement SaaS best practices and increase developer velocity.',
@@ -54,7 +55,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   name: `@${PUBLICATION_NAMESPACE}/${PROJECT_NAME}`,
   npmignoreEnabled: true,
   packageManager: javascript.NodePackageManager.NPM,
-  peerDeps: ['@aws-cdk/aws-kinesisfirehose-alpha'],
+  peerDeps: [`@aws-cdk/aws-kinesisfirehose-alpha@${CDK_VERSION}-alpha.0`],
   prettier: true,
   projenrcTs: true,
   projenVersion: PROJEN_VERSION,
@@ -96,7 +97,7 @@ const jsiiLibraryProjectOptions: cdk.JsiiProjectOptions = {
     'jsonwebtoken',
     'jwks-rsa',
     'uuid',
-    `aws-cdk-lib@${CDK_VERSION}`,
+    `aws-cdk-lib@${POINT_SOLUTIONS_CDK_VERSION}`,
     '@types/uuid',
     '@aws-sdk/types',
   ],
@@ -113,7 +114,7 @@ const jsiiLibraryProjectOptions: cdk.JsiiProjectOptions = {
   name: `@${PS_PUBLICATION_NAMESPACE}/${POINT_SOLUTIONS_LIB_PROJECT_NAME}`,
   npmignoreEnabled: true,
   packageManager: javascript.NodePackageManager.NPM,
-  peerDeps: [`constructs@${CONSTRUCTS_VERSION}`, `aws-cdk-lib@${CDK_VERSION}`],
+  peerDeps: [`constructs@${CONSTRUCTS_VERSION}`, `aws-cdk-lib@${POINT_SOLUTIONS_CDK_VERSION}`],
   prettier: true,
   projenrcTs: true,
   projenVersion: PROJEN_VERSION,

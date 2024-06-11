@@ -1,6 +1,6 @@
 # What is the SaaS Builder Toolkit?
 
-Welcome to the SaaS Builder Toolkit (SBT) developer guide. This document provides information about SBT, and how to use it to accelerate SaaS application development. 
+Welcome to the SaaS Builder Toolkit (SBT) developer guide. This document provides information about SBT, and how to use it to accelerate SaaS application development.
 
 SBT is being developed in partnership with interested AWS partners. The project is [open sourced on GitHub](https://github.com/awslabs/sbt-aws). Please see the [contributing](/CONTRIBUTING.md) document in the project root for information on how to contribute to SBT.
 
@@ -8,14 +8,14 @@ SBT is being developed in partnership with interested AWS partners. The project 
 
 At AWS, we create a number of resources and SaaS artifacts, year after year, for partner and customer enablement. In the course of building, we started to see the same patterns and bits of code showing up across these artifacts--specifically our reference architectures, and some "point solutions". Often times the teams responsible for development of these artifacts would copy code from one solution to the next, but code duplication obviously has drawbacks, particularly with long-term maintenance and agility. As a result, we started looking for ways to abstract this duplication behind reusable constructs.
 
-Additionally, over the last few years, we’ve drawn clearer boundaries in the SaaS architecture domain, identifying the Application Plane and the Control Plane as two distinct halves of a multi-tenant architecture. This approach has resonated with customers, partners, and the broader SaaS community, providing the division of responsibilities and services that must be addressed when building a SaaS solution. 
+Additionally, over the last few years, we’ve drawn clearer boundaries in the SaaS architecture domain, identifying the Application Plane and the Control Plane as two distinct halves of a multi-tenant architecture. This approach has resonated with customers, partners, and the broader SaaS community, providing the division of responsibilities and services that must be addressed when building a SaaS solution.
 
 SBT is a project designed to address both of these realities. In short, SBT attempts to:
 
-* Identify the Control and Application planes as first-class concepts in a SaaS architecture, along with their commensurate roles and responsibilities
-* Codify the generalizations of each of these planes into reusable constructs and abstractions
-* Establish well-documented message flows between the two planes, including payload shape, behavioral expectations, and state management
-* Provide a framework and set of components that include SaaS best practices on AWS, across various technology stacks and AWS services
+- Identify the Control and Application planes as first-class concepts in a SaaS architecture, along with their commensurate roles and responsibilities
+- Codify the generalizations of each of these planes into reusable constructs and abstractions
+- Establish well-documented message flows between the two planes, including payload shape, behavioral expectations, and state management
+- Provide a framework and set of components that include SaaS best practices on AWS, across various technology stacks and AWS services
 
 Our hope is that SBT accelerates the development cycle for new SaaS apps by handling, or at least abstracting, much of the boilerplate code and components that comprise good multi-tenant architectures. A side benefit of this approach is that we not only get acceleration in development, but we establish a common set of patterns, and vocabulary providing for more efficient, and precise communication in the SaaS domain.
 
@@ -40,6 +40,7 @@ Along the top, you see the "builder provided configuration". This is the applica
 In the middle, notice we have Amazon EventBridge. EventBridge is a serverless event bus used for building event-driven applications at scale. SBT provides helpers in each plane to both publish messages relevant to SaaS workflows, and subscribe to said messages. The shape and data/behavior expectations of these messages is detailed in the [Interface Definitions](#interface-definitions) section of this document.
 
 ## Builder experience
+
 Before we describe the components of SBT in detail, we first want to discuss SBT's desired user experience. SBT makes extensive use of the AWS Cloud Development Kit (CDK), and adheres to CDK's Construct Programming Model (CPM). What does all this mean? It's probably easier to show, than to explain. The following example is lifted straight out of [CDK's Getting Started docs](https://docs.aws.amazon.com/cdk/v2/guide/home.html#why_use_cdk).
 
 ### CDK Example
@@ -49,22 +50,22 @@ export class MyEcsConstructStack extends Stack {
   constructor(scope: App, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const vpc = new ec2.Vpc(this, "MyVpc", {
-      maxAzs: 3 // Default is all AZs in region
+    const vpc = new ec2.Vpc(this, 'MyVpc', {
+      maxAzs: 3, // Default is all AZs in region
     });
 
-    const cluster = new ecs.Cluster(this, "MyCluster", {
-      vpc: vpc
+    const cluster = new ecs.Cluster(this, 'MyCluster', {
+      vpc: vpc,
     });
 
     // Create a load-balanced Fargate service and make it public
-    new ecs_patterns.ApplicationLoadBalancedFargateService(this, "MyFargateService", {
+    new ecs_patterns.ApplicationLoadBalancedFargateService(this, 'MyFargateService', {
       cluster: cluster, // Required
       cpu: 512, // Default is 256
       desiredCount: 6, // Default is 1
-      taskImageOptions: { image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample") },
+      taskImageOptions: { image: ecs.ContainerImage.fromRegistry('amazon/amazon-ecs-sample') },
       memoryLimitMiB: 2048, // Default is 512
-      publicLoadBalancer: true // Default is false
+      publicLoadBalancer: true, // Default is false
     });
   }
 }
@@ -108,9 +109,9 @@ export class ControlPlaneStack extends Stack {
       systemAdminEmail: 'ENTER YOUR EMAIL HERE',
     });
 
-  // NOTE: To explicitly disable cloudwatch logging (and potentially save costs on CloudWatch), 
-  // pass the disableAPILogging flag as true
-  const controlPlane = new ControlPlane(this, 'ControlPlane', {
+    // NOTE: To explicitly disable cloudwatch logging (and potentially save costs on CloudWatch),
+    // pass the disableAPILogging flag as true
+    const controlPlane = new ControlPlane(this, 'ControlPlane', {
       auth: cognitoAuth,
       //disableAPILogging: true
     });
@@ -146,7 +147,6 @@ Notice we're leaving a few lines commented out here, we'll come back to those la
 
 > [!WARNING]  
 > Because our ControlPlane deploys a Lambda function, you'll need Docker installed to build and deploy this CDK stack
->
 
 ```sh
 npm run build
@@ -158,9 +158,9 @@ This will kick of the synthesis of your CDK application to AWS CloudFormation, t
 
 Feel free to open your AWS Console and take a look at the following (ensure you're in the same region you deployed to):
 
-* [AWS Lambda](https://console.aws.amazon.com/lambda/home)
-* [Amazon Cognito](https://console.aws.amazon.com/cognito/v2/idp/user-pools)
-* [API Gateway](https://console.aws.amazon.com/apigateway/main/apis)
+- [AWS Lambda](https://console.aws.amazon.com/lambda/home)
+- [Amazon Cognito](https://console.aws.amazon.com/cognito/v2/idp/user-pools)
+- [API Gateway](https://console.aws.amazon.com/apigateway/main/apis)
 
 Once done, we now have the left side of our conceptual [diagram](#high-level-design) deployed, and we did it with a single construct. It deployed not only the API surface of our control plane, but also wired it up to EventBridge. Next, we'll start deploy the application plane, and connect it to the same EventBridge bus, so we can act upon those control plane messages.
 
@@ -170,7 +170,6 @@ As mentioned before, SBT is unopinionated about the application in which it's de
 
 ```typescript
 export class ApplicationPlaneStack extends Stack {
-
   constructor(scope: Construct, id: string, props: any) {
     super(scope, id, props);
 
@@ -199,25 +198,25 @@ Although entirely optional, SBT includes a utility that lets you define, and run
 Notice the use of the `provisioning.sh` and `deprovisioning.sh` scripts at the top. These scripts are fed to the `JobRunner` as parameters. Internally the `JobRunner` launches an AWS CodeBuild project, wrapped inside an AWS Step Function, to execute the bash scripts. The `JobRunner` also lets you specify what input variables to feed to the scripts, along with what output variables you expect them to return. Note that in this version of SBT, `JobRunner`s are created by the `CoreAppPlane` based on its `jobRunnerPropsList` input (the empty array in the code above). The type of object here is the [`jobRunnerProps`](/API.md#coreapplicationplanejobrunnerprops-). Let's take a simple example: imagine our SaaS application deployed only a single S3 bucket per tenant. Let's create a job runner for that provisioning now.
 
 ```typescript
-    const provisioningJobRunnerProps = {
-      name: 'provisioning',
-      permissions: PolicyDocument.fromJson(/*See below*/),
-      script: '' /*See below*/,
-      postScript: '',
-      importedVariables: ['tenantId', 'tier'],
-      exportedVariables: ['tenantS3Bucket', 'someOtherVariable', 'tenantConfig'],
-      scriptEnvironmentVariables: {
-        TEST: 'test',
-      },
-      outgoingEvent: {
-        source: applicationNamePlaneSource,
-        detailType: provisioningDetailType,
-      },
-      incomingEvent: {
-        source: [controlPlaneSource],
-        detailType: [onboardingDetailType],
-      },
-    };
+const provisioningJobRunnerProps = {
+  name: 'provisioning',
+  permissions: PolicyDocument.fromJson(/*See below*/),
+  script: '' /*See below*/,
+  postScript: '',
+  importedVariables: ['tenantId', 'tier'],
+  exportedVariables: ['tenantS3Bucket', 'someOtherVariable', 'tenantConfig'],
+  scriptEnvironmentVariables: {
+    TEST: 'test',
+  },
+  outgoingEvent: {
+    source: applicationNamePlaneSource,
+    detailType: provisioningDetailType,
+  },
+  incomingEvent: {
+    source: [controlPlaneSource],
+    detailType: [onboardingDetailType],
+  },
+};
 ```
 
 ##### Bash Job Runner Properties
@@ -271,13 +270,13 @@ echo $tenantConfig
 echo "done!"
 ```
 
-Let's break this script down section by section. 
+Let's break this script down section by section.
 
 ---
 
 ###### CloudFormation template
 
-Notice the first few lines contains a sample [AWS CloudFormation](https://aws.amazon.com/cloudformation/) template that contains our S3 Bucket. 
+Notice the first few lines contains a sample [AWS CloudFormation](https://aws.amazon.com/cloudformation/) template that contains our S3 Bucket.
 
 ```sh
 # note that this template.json is being created here, but
@@ -293,7 +292,7 @@ EOM
 
 In this case we're declaring it inline with the script, but as the comment points out, there's no reason this template couldn't live in an S3 bucket, or any other place supported by the CloudFormation SDK.
 
-Next we're echoing the value of the `tenantId` and `tier` environment variables below the CloudFormation template. 
+Next we're echoing the value of the `tenantId` and `tier` environment variables below the CloudFormation template.
 
 ---
 
@@ -317,9 +316,7 @@ So, take for example, this sample EventBridge provisioning message sent by our c
   "account": "111122223333",
   "time": "2017-12-22T18:43:48Z",
   "region": "us-west-1",
-  "resources": [
-    "arn:aws:ec2:us-west-1:123456789012:instance/i-1234567890abcdef0"
-  ],
+  "resources": ["arn:aws:ec2:us-west-1:123456789012:instance/i-1234567890abcdef0"],
   "detail": {
     "tenantId": "e6878e03-ae2c-43ed-a863-08314487318b",
     "tier": "standard"
@@ -332,7 +329,6 @@ When executing, the script cited above would echo both `tenantId` and `tier` wit
 ---
 
 ###### Deploy tenant CloudFormation artifacts
-
 
 Next, we're deploying tenant infrastructure by way of the CloudFormation template we saw above.
 
@@ -441,7 +437,6 @@ echo "done!"
     });
   }
 }
-
 ```
 
 Although this looks like a lot of code, it's still a single construct, with a lot of configuration sent to it. Now that we've defined our app plane, let's again open up the `hello-cdk.ts` file in the `bin` directory of your CDK app. Once open, uncomment each commented line. The final file should look like this:
@@ -474,7 +469,7 @@ Once deployed, let's run a few tests to see our basic control plane and applicat
 ```sh
 PASSWORD="INSERT PASSWORD HERE"
 # Change this to a real email if you'd like to log into the tenant
-TENANT_EMAIL="tenant@example.com" 
+TENANT_EMAIL="tenant@example.com"
 CONTROL_PLANE_STACK_NAME="ControlPlaneStack"
 TENANT_NAME="tenant$RANDOM"
 
@@ -557,15 +552,15 @@ The control plane emits this event any time it onboards a new tenant. This event
 
 ```json
 {
-    "source": "sbt-control-plane-api",
-    "detail-type": "Onboarding",
-    "detail": {
-        "tenantId": "guid string",
-        "tenantStatus": "see notes",
-        "tenantName": "tenant name",
-        "email": "admin@saas.com",
-        "isActive": "boolean"
-    }
+  "source": "sbt-control-plane-api",
+  "detail-type": "Onboarding",
+  "detail": {
+    "tenantId": "guid string",
+    "tenantStatus": "see notes",
+    "tenantName": "tenant name",
+    "email": "admin@saas.com",
+    "isActive": "boolean"
+  }
 }
 ```
 
@@ -581,12 +576,12 @@ Upon successful tenant provisioning, the Serverless SaaS reference architecture 
 
 ```json
 {
-    "source": "sbt-application-plane-api",
-    "detail-type": "Onboarding",
-    "detail": {
-        "tenantConfig": "json string - see notes",
-        "tenantStatus": "Complete",
-    }
+  "source": "sbt-application-plane-api",
+  "detail-type": "Onboarding",
+  "detail": {
+    "tenantConfig": "json string - see notes",
+    "tenantStatus": "Complete"
+  }
 }
 ```
 
@@ -598,12 +593,12 @@ The control plane emits this event any time it offboards a tenant. At a minimum 
 
 ```json
 {
-    "source": "sbt-control-plane-api",
-    "detail-type": "Offboarding",
-    "detail": {
-        "tenantId": "string",
-        "tier": "string",
-    }
+  "source": "sbt-control-plane-api",
+  "detail-type": "Offboarding",
+  "detail": {
+    "tenantId": "string",
+    "tier": "string"
+  }
 }
 ```
 
@@ -615,11 +610,11 @@ The application plane emits this event upon completion of offboarding. Similar t
 
 ```json
 {
-    "source": "sbt-application-plane-api",
-    "detail-type": "Offboarding",
-    "detail": {
-        "tenantStatus": "Deleted",
-    }
+  "source": "sbt-application-plane-api",
+  "detail-type": "Offboarding",
+  "detail": {
+    "tenantStatus": "Deleted"
+  }
 }
 ```
 
@@ -643,7 +638,6 @@ The application plane emits this event upon completion of tenant deactivation. A
 
 ##### Sample activate status event
 
-
 ## Design tenets
 
 - **A templated model for producing best practices SaaS applications** - SBT strives to provide a mental model, and a foundational implementation from which almost any SaaS application can be built
@@ -656,17 +650,41 @@ The application plane emits this event upon completion of tenant deactivation. A
 ## Additional documentation and resources
 
 #### Tenant management
+
 Currently this service simply records the result of an successful onboarding request sent to the application plane, and for now that proves efficient. As we continue to build out additional reference architectures in the SBT model we may identify the need for additional features, perhaps tenant configuration, routing or identity.
+
 #### System user management
-System users represent the administrative users that manage your SaaS environment. These users must have their own identity mechanism that is used to authenticate and manage the different system users that will be managing your SaaS environment. The nature and lifecycle of these users is much simpler than the tenant users. These users will only live and be used through the experience provided by the control plane. As such, they’ll require less customization and will be access through the tooling/console that’s native to the control plane.  
+
+System users represent the administrative users that manage your SaaS environment. These users must have their own identity mechanism that is used to authenticate and manage the different system users that will be managing your SaaS environment. The nature and lifecycle of these users is much simpler than the tenant users. These users will only live and be used through the experience provided by the control plane. As such, they’ll require less customization and will be access through the tooling/console that’s native to the control plane.
+
 #### Tenant user management
-Every SaaS system needs some way to manage the users of that system. These users could be managed entirely within the scope of the application plane. However, these same users must also be connected to tenants as part of the onboarding and authentication experience. This need to have tenants be connected to identity makes it necessary to have tenant users stored and managed within the scope of the control plane. This allows for a much greater level of automation within the control plane, enabling all the mechanics of connecting users to tenants, authenticating users with tenant context, and injecting tenant context into the application plane. However, with tenant user management hosted in the control, this service must take on the added responsibility of managing the additional attributes that are associated with tenant users in different environments. This is where the control plane as a service will need to enable greater flexibility and customization to allow builders to have greater control over the configuration of tenant users. In fact, there may be scenarios where the application plane will include the user experience that integrates with this tenant management service to manage/configure tenant users.  
+
+Every SaaS system needs some way to manage the users of that system. These users could be managed entirely within the scope of the application plane. However, these same users must also be connected to tenants as part of the onboarding and authentication experience. This need to have tenants be connected to identity makes it necessary to have tenant users stored and managed within the scope of the control plane. This allows for a much greater level of automation within the control plane, enabling all the mechanics of connecting users to tenants, authenticating users with tenant context, and injecting tenant context into the application plane. However, with tenant user management hosted in the control, this service must take on the added responsibility of managing the additional attributes that are associated with tenant users in different environments. This is where the control plane as a service will need to enable greater flexibility and customization to allow builders to have greater control over the configuration of tenant users. In fact, there may be scenarios where the application plane will include the user experience that integrates with this tenant management service to manage/configure tenant users.
+
 #### Onboarding
-Managing the full lifecycle of tenant onboarding is one of the most essential roles of the control plane. This service owns responsibility for orchestrating all the configuration and downstream events associated with the introduction of a new tenant. So, here you’ll see interaction with both tenant management and tenant user management. Now, where onboarding gets more interesting is when we look at how onboarding also relies on integration with the application plane. As each new tenant is onboarded via the control plane, this service must also send events to the application plane to trigger the creation of any application plane resources/infrastructure that may be needed on a per-tenant basis. The boarding service must publish this application provisioning event and listen for various events that represent the progress of the application plane’s tenant provisioning lifecycle.   
+
+Managing the full lifecycle of tenant onboarding is one of the most essential roles of the control plane. This service owns responsibility for orchestrating all the configuration and downstream events associated with the introduction of a new tenant. So, here you’ll see interaction with both tenant management and tenant user management. Now, where onboarding gets more interesting is when we look at how onboarding also relies on integration with the application plane. As each new tenant is onboarded via the control plane, this service must also send events to the application plane to trigger the creation of any application plane resources/infrastructure that may be needed on a per-tenant basis. The boarding service must publish this application provisioning event and listen for various events that represent the progress of the application plane’s tenant provisioning lifecycle.
+
 #### Billing
-Many SaaS providers rely on integration with a billing service that allows them to created the billing plans that are mapped to their tiering and monetization strategy. Generally, the approach here is to provide an API within the control plane that will provide a universal mechanism for creating billing accounts (onboarding) and publishing billing/consumption events for individual tenants. This service will also include integration with tenant management, enabling tenant state events to be conveyed to/from the billing service. For example, a tenant being disabled could be triggered from billing to tenant management. A change in tiers could also be part of this integration.  
+
+Many SaaS providers rely on integration with a billing service that allows them to created the billing plans that are mapped to their tiering and monetization strategy. Generally, the approach here is to provide an API within the control plane that will provide a universal mechanism for creating billing accounts (onboarding) and publishing billing/consumption events for individual tenants. This service will also include integration with tenant management, enabling tenant state events to be conveyed to/from the billing service. For example, a tenant being disabled could be triggered from billing to tenant management. A change in tiers could also be part of this integration.
 
 #### Metrics
+
 Multi-tenant operations teams often need tenant-aware insights into the activity and consumption profiles of their tenants and tiers. This data is used in a variety contexts, allowing teams to make operational, business, and design decisions based on the tenant-aware patterns they can observe through metrics that are published by the application tier. The control plane will provide standardized metrics API that will be used to ingest these metrics events. It will also enable builders to define custom events with some standardization around how tenant and tier context is conveyed via these events. These metrics will all be aggregated by the control plane and surfaced through dashboards in the control plan admin console. There may also be support for ingesting the metrics data into other analytics tools
+
 #### Tiering
-Tiering is a very basic construct in the control plane. However it needs to exist to provider a universal, centralized home to the tiering configuration of a SaaS environment. This provides a point of alignment between the application plane and the control plane, that allows for a clear mapping of tenants to tiers that are used across a number of experiences insides and outside of the control plane.  
+
+Tiering is a very basic construct in the control plane. However it needs to exist to provider a universal, centralized home to the tiering configuration of a SaaS environment. This provides a point of alignment between the application plane and the control plane, that allows for a clear mapping of tenants to tiers that are used across a number of experiences insides and outside of the control plane.
+
+### AWS Marketplace Integration
+
+The SaaS Builder Toolkit provides constructs to simplify the integration of your SaaS application with AWS Marketplace. The `AWSMarketplaceSaaSProduct` construct enables you to create an AWS Marketplace SaaS product, including a registration API, a DynamoDB table for storing subscriber information, and necessary AWS Lambda functions and event sources for handling subscription and entitlement events.
+
+The toolkit also includes a `SampleRegistrationWebPage` construct, which creates a sample registration web page hosted on Amazon S3 and fronted by Amazon CloudFront. The web page includes a dynamic form for users to register for the SaaS product, with the required fields for registration specified as a prop to the construct.
+
+Additionally, the toolkit provides utilities for managing entitlement and subscription logic, such as handling subscription events from AWS Marketplace, metering usage, and granting or revoking access to the product based on subscription status.
+
+By leveraging these constructs and utilities, you can streamline the process of integrating your SaaS application with AWS Marketplace, ensuring compliance with Marketplace requirements and providing a seamless registration and subscription experience for your customers.
+
+For more information, see [AWS Marketplace Integration](/docs/public/marketplace-integration.md)

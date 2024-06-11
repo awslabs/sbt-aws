@@ -46,3 +46,23 @@ const appendTagToDescription = (existingDescription: string, newTag: string): st
     return `${existingDescription} (tag: ${newTag})`;
   }
 };
+
+export const generateAWSManagedRuleSet = (managedGroupName: string, priority: number) => {
+  const vendorName = 'AWS';
+  return {
+    name: `${vendorName}-${managedGroupName}`,
+    priority,
+    overrideAction: { none: {} },
+    statement: {
+      managedRuleGroupStatement: {
+        name: managedGroupName,
+        vendorName: vendorName,
+      },
+    },
+    visibilityConfig: {
+      cloudWatchMetricsEnabled: true,
+      metricName: managedGroupName,
+      sampledRequestsEnabled: true,
+    },
+  };
+};
