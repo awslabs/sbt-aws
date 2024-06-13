@@ -1,7 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { IAuthorizer } from 'aws-cdk-lib/aws-apigateway';
+import { SecretValue } from 'aws-cdk-lib';
 import { IFunction } from 'aws-cdk-lib/aws-lambda';
 
 /**
@@ -9,24 +9,43 @@ import { IFunction } from 'aws-cdk-lib/aws-lambda';
  */
 export interface IAuth {
   /**
-   * Authorizer referenced by the ControlPlaneAPI
-   */
-  readonly authorizer: IAuthorizer;
-
-  /**
-   * Contains any information relevant to the IDP implementation required by the Authorizer and User Function implementations
-   */
-  readonly controlPlaneIdpDetails: any;
-
-  /**
    * Authorization server Url
    */
   readonly authorizationServer: string;
 
+  readonly userClientId: string;
+  readonly machineClientId: string;
+  readonly machineClientSecret: SecretValue;
+
+  readonly fetchTenantScope?: string;
+  readonly fetchAllTenantsScope?: string;
+  readonly deleteTenantScope?: string;
+  readonly createTenantScope?: string;
+  readonly updateTenantScope?: string;
+  readonly activateTenantScope?: string;
+  readonly deactivateTenantScope?: string;
+  readonly fetchUserScope?: string;
+  readonly fetchAllUsersScope?: string;
+  readonly deleteUserScope?: string;
+  readonly createUserScope?: string;
+  readonly updateUserScope?: string;
+  readonly disableUserScope?: string;
+  readonly enableUserScope?: string;
+
   /**
-   * The OAuth clientId for the identity provider
+   * The JWT issuer domain for the identity provider.
    */
-  readonly clientId: string;
+  readonly jwtIssuer: string;
+
+  /**
+   * The list of recipients of the JWT.
+   */
+  readonly jwtAudience: string[];
+
+  /**
+   * The endpoint for granting OAuth tokens.
+   */
+  readonly tokenEndpoint: string;
 
   /**
    * OpenID configuration Url

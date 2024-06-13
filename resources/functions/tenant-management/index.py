@@ -10,7 +10,7 @@ import boto3
 from boto3.dynamodb.conditions import Attr
 import botocore
 from aws_lambda_powertools import Logger, Tracer
-from aws_lambda_powertools.event_handler import (APIGatewayRestResolver,
+from aws_lambda_powertools.event_handler import (APIGatewayHttpResolver,
                                                 CORSConfig)
 from aws_lambda_powertools.logging import correlation_paths
 from aws_lambda_powertools.event_handler.exceptions import (
@@ -22,7 +22,7 @@ tracer = Tracer()
 logger = Logger()
 # TODO Make sure we fill in an appropriate origin for this call (the CloudFront domain)
 cors_config = CORSConfig(allow_origin="*", max_age=300)
-app = APIGatewayRestResolver(cors=cors_config)
+app = APIGatewayHttpResolver(cors=cors_config)
 
 event_bus = boto3.client('events')
 eventbus_name = os.environ['EVENTBUS_NAME']
@@ -224,7 +224,7 @@ def __create_control_plane_event(event_details, detail_type):
     logger.info(response)
 
 
-@logger.inject_lambda_context(correlation_id_path=correlation_paths.API_GATEWAY_REST, log_event=True)
+@logger.inject_lambda_context(correlation_id_path=correlation_paths.API_GATEWAY_HTTP, log_event=True)
 @tracer.capture_lambda_handler
 def lambda_handler(event, context):
     logger.debug(event)

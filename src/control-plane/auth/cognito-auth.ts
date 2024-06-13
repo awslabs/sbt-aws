@@ -3,8 +3,9 @@
 
 import * as path from 'path';
 import { PythonFunction } from '@aws-cdk/aws-lambda-python-alpha';
-import { CfnOutput, CustomResource, Duration, Stack } from 'aws-cdk-lib';
-import { IAuthorizer, TokenAuthorizer } from 'aws-cdk-lib/aws-apigateway';
+import * as cdk from 'aws-cdk-lib';
+import { CustomResource, Duration, SecretValue, Stack } from 'aws-cdk-lib';
+import * as cognito from 'aws-cdk-lib/aws-cognito';
 import {
   ManagedPolicy,
   PolicyStatement,
@@ -45,25 +46,42 @@ export interface CognitoAuthProps {
  */
 export class CognitoAuth extends Construct implements IAuth {
   /**
-   * The API Gateway authorizer for authenticating requests.
+   * The JWT issuer domain for the identity provider.
    */
-  public readonly authorizer: IAuthorizer;
+  readonly jwtIssuer: string;
 
   /**
-   * The details of the control plane Identity Provider (IdP).
+   * The list of recipients of the JWT.
    */
-  public readonly controlPlaneIdpDetails: any;
+  readonly jwtAudience: string[];
+
+  /**
+   * The endpoint for granting OAuth tokens.
+   */
+  readonly tokenEndpoint: string;
 
   /**
    * The authorization server for the control plane IdP.
    */
   public readonly authorizationServer: string;
 
-  /**
-   * The client ID for the control plane IdP.
-   */
-  public readonly clientId: string;
-
+  readonly userClientId: string;
+  readonly machineClientId: string;
+  readonly machineClientSecret: SecretValue;
+  readonly fetchTenantScope?: string;
+  readonly fetchAllTenantsScope?: string;
+  readonly deleteTenantScope?: string;
+  readonly createTenantScope?: string;
+  readonly updateTenantScope?: string;
+  readonly activateTenantScope?: string;
+  readonly deactivateTenantScope?: string;
+  readonly fetchUserScope?: string;
+  readonly fetchAllUsersScope?: string;
+  readonly deleteUserScope?: string;
+  readonly createUserScope?: string;
+  readonly updateUserScope?: string;
+  readonly disableUserScope?: string;
+  readonly enableUserScope?: string;
   /**
    * The well-known endpoint URL for the control plane IdP.
    */
@@ -136,16 +154,11 @@ export class CognitoAuth extends Construct implements IAuth {
     lambdaIdpExecRole.addToPolicy(
       new PolicyStatement({
         actions: [
-          'cognito-idp:CreateUserPoolDomain',
           'cognito-idp:AdminCreateUser',
-          'cognito-idp:CreateUserPoolClient',
           'cognito-idp:CreateGroup',
-          'cognito-idp:CreateUserPool',
           'cognito-idp:AdminAddUserToGroup',
           'cognito-idp:GetGroup',
-          'cognito-idp:DeleteUserPool',
           'cognito-idp:DescribeUserPool',
-          'cognito-idp:DeleteUserPoolDomain',
         ],
         effect: Effect.ALLOW,
         resources: ['*'],
@@ -173,66 +186,192 @@ export class CognitoAuth extends Construct implements IAuth {
       true // applyToChildren = true, so that it applies to policies created for the role.
     );
 
-    const createControlPlaneIdpFunction = new PythonFunction(
-      this,
-      'createControlPlaneIdpFunction',
-      {
-        entry: path.join(__dirname, '../../../resources/functions/auth-custom-resource'),
-        runtime: Runtime.PYTHON_3_12,
-        index: 'index.py',
-        handler: 'handler',
-        timeout: Duration.seconds(60),
-        role: lambdaIdpExecRole,
-        layers: [lambdaPowertoolsLayer],
-        environment: {
-          IDP_NAME: idpName,
-        },
-      }
-    );
-
-    const createControlPlaneIdpCustomResource = new CustomResource(
-      this,
-      'createControlPlaneIdpCustomResource',
-      {
-        serviceToken: createControlPlaneIdpFunction.functionArn,
-        properties: {
-          ControlPlaneCallbackURL: props.controlPlaneCallbackURL || defaultControlPlaneCallbackURL,
-          SystemAdminRoleName: systemAdminRoleName,
-          SystemAdminEmail: props.systemAdminEmail,
-          UserPoolName: `SaaSControlPlaneUserPool-${this.node.addr}`,
-        },
-      }
-    );
-
-    this.controlPlaneIdpDetails = createControlPlaneIdpCustomResource.getAttString('IdpDetails');
-    this.authorizationServer =
-      createControlPlaneIdpCustomResource.getAttString('AuthorizationServer');
-    this.clientId = createControlPlaneIdpCustomResource.getAttString('ClientId');
-    this.wellKnownEndpointUrl =
-      createControlPlaneIdpCustomResource.getAttString('WellKnownEndpointUrl');
-
-    new CfnOutput(this, 'ControlPlaneIdpDetails', {
-      value: this.controlPlaneIdpDetails,
-      key: 'ControlPlaneIdpDetails',
+    const userPool = new cognito.UserPool(this, 'UserPool', {
+      autoVerify: { email: true },
+      passwordPolicy: {
+        minLength: 8,
+        requireUppercase: true,
+        requireLowercase: true,
+        requireDigits: true,
+        requireSymbols: true,
+      },
+      userInvitation: {
+        emailSubject: 'Your temporary password for control plane UI',
+        emailBody: `Login into control plane UI at ${props.controlPlaneCallbackURL} with username {username} and temporary password {####}`,
+      },
+      accountRecovery: cognito.AccountRecovery.EMAIL_ONLY,
+      standardAttributes: {
+        email: { required: true, mutable: true },
+      },
+      customAttributes: {
+        userRole: new cognito.StringAttribute({ mutable: true, minLen: 1, maxLen: 256 }),
+      },
+      advancedSecurityMode: cognito.AdvancedSecurityMode.ENFORCED,
     });
 
-    const customAuthorizerFunction = new PythonFunction(this, 'CustomAuthorizerFunction', {
-      entry: path.join(__dirname, '../../../resources/functions/authorizer'),
+    NagSuppressions.addResourceSuppressions(userPool, [
+      {
+        id: 'AwsSolutions-COG2',
+        reason: 'Not requiring MFA at this phase.',
+      },
+    ]);
+
+    const readUserScope = new cognito.ResourceServerScope({
+      scopeName: 'user_read',
+      scopeDescription: 'Read access to users.',
+    });
+    const writeUserScope = new cognito.ResourceServerScope({
+      scopeName: 'user_write',
+      scopeDescription: 'Write access to users.',
+    });
+    const userResourceServer = userPool.addResourceServer('UserResourceServer', {
+      identifier: 'user',
+      scopes: [readUserScope, writeUserScope],
+    });
+    const userResourceServerReadScope = cognito.OAuthScope.resourceServer(
+      userResourceServer,
+      readUserScope
+    );
+    const userResourceServerWriteScope = cognito.OAuthScope.resourceServer(
+      userResourceServer,
+      writeUserScope
+    );
+
+    // this.fetchUserScope = userResourceServerReadScope.scopeName;
+    // this.fetchAllUsersScope = userResourceServerReadScope.scopeName;
+    // this.deleteUserScope = userResourceServerWriteScope.scopeName;
+    // this.createUserScope = userResourceServerWriteScope.scopeName;
+    // this.updateUserScope = userResourceServerWriteScope.scopeName;
+    // this.disableUserScope = userResourceServerWriteScope.scopeName;
+    // this.enableUserScope = userResourceServerWriteScope.scopeName;
+
+    const readTenantScope = new cognito.ResourceServerScope({
+      scopeName: 'tenant_read',
+      scopeDescription: 'Read access to tenants.',
+    });
+    const writeTenantScope = new cognito.ResourceServerScope({
+      scopeName: 'tenant_write',
+      scopeDescription: 'Write access to tenants.',
+    });
+    const tenantResourceServer = userPool.addResourceServer('TenantResourceServer', {
+      identifier: 'tenant',
+      scopes: [readTenantScope, writeTenantScope],
+    });
+    const tenantResourceServerReadScope = cognito.OAuthScope.resourceServer(
+      tenantResourceServer,
+      readTenantScope
+    );
+    const tenantResourceServerWriteScope = cognito.OAuthScope.resourceServer(
+      tenantResourceServer,
+      writeTenantScope
+    );
+
+    // this.fetchTenantScope = tenantResourceServerReadScope.scopeName;
+    // this.fetchAllTenantsScope = tenantResourceServerReadScope.scopeName;
+    // this.deleteTenantScope = tenantResourceServerWriteScope.scopeName;
+    // this.createTenantScope = tenantResourceServerWriteScope.scopeName;
+    // this.updateTenantScope = tenantResourceServerWriteScope.scopeName;
+    // this.activateTenantScope = tenantResourceServerWriteScope.scopeName;
+    // this.deactivateTenantScope = tenantResourceServerWriteScope.scopeName;
+
+    // Create a Cognito User Pool Domain
+    const userPoolDomain = new cognito.UserPoolDomain(this, 'UserPoolDomain', {
+      userPool: userPool,
+      cognitoDomain: {
+        domainPrefix: `saascontrolplane-${this.node.addr}`,
+      },
+    });
+
+    const userPoolMachineClient = new cognito.UserPoolClient(this, 'UserPoolMachineClient', {
+      userPool: userPool,
+      generateSecret: true,
+      authFlows: {
+        userPassword: false,
+        userSrp: false,
+      },
+      oAuth: {
+        flows: {
+          authorizationCodeGrant: false,
+          implicitCodeGrant: false,
+          clientCredentials: true,
+        },
+        scopes: [tenantResourceServerWriteScope],
+      },
+    });
+
+    const userPoolUserClient = new cognito.UserPoolClient(this, 'UserPoolUserClient', {
+      userPool: userPool,
+      generateSecret: false,
+      authFlows: {
+        userPassword: true,
+        userSrp: true,
+      },
+      supportedIdentityProviders: [cognito.UserPoolClientIdentityProvider.COGNITO],
+      oAuth: {
+        callbackUrls: [props.controlPlaneCallbackURL || defaultControlPlaneCallbackURL],
+        logoutUrls: [props.controlPlaneCallbackURL || defaultControlPlaneCallbackURL],
+        flows: {
+          authorizationCodeGrant: true,
+          implicitCodeGrant: true,
+        },
+        scopes: [
+          cognito.OAuthScope.EMAIL,
+          cognito.OAuthScope.OPENID,
+          cognito.OAuthScope.PROFILE,
+          tenantResourceServerReadScope,
+          tenantResourceServerWriteScope,
+          userResourceServerReadScope,
+          userResourceServerWriteScope,
+        ],
+      },
+      writeAttributes: new cognito.ClientAttributes()
+        .withStandardAttributes({ email: true })
+        .withCustomAttributes('userRole'),
+    });
+
+    const createAdminUserFunction = new PythonFunction(this, 'createAdminUserFunction', {
+      entry: path.join(__dirname, '../../../resources/functions/auth-custom-resource'),
       runtime: Runtime.PYTHON_3_12,
       index: 'index.py',
-      handler: 'lambda_handler',
+      handler: 'handler',
       timeout: Duration.seconds(60),
       role: lambdaIdpExecRole,
       layers: [lambdaPowertoolsLayer],
       environment: {
         IDP_NAME: idpName,
-        IDP_DETAILS: this.controlPlaneIdpDetails,
-        SYS_ADMIN_ROLE_NAME: systemAdminRoleName,
       },
     });
-    customAuthorizerFunction.node.addDependency(createControlPlaneIdpCustomResource);
-    this.authorizer = new TokenAuthorizer(this, 'CustomAuthorizer', {
-      handler: customAuthorizerFunction,
+
+    new CustomResource(this, 'createAdminUserCustomResource', {
+      serviceToken: createAdminUserFunction.functionArn,
+      properties: {
+        UserPoolId: userPool.userPoolId,
+        SystemAdminRoleName: systemAdminRoleName,
+        SystemAdminEmail: props.systemAdminEmail,
+      },
+    });
+
+    const region = cdk.Stack.of(this).region;
+    this.authorizationServer = `https://${userPoolDomain.domainName}.auth.${region}.amazoncognito.com`;
+    this.userClientId = userPoolUserClient.userPoolClientId;
+    this.machineClientId = userPoolMachineClient.userPoolClientId;
+    this.machineClientSecret = userPoolMachineClient.userPoolClientSecret;
+    this.wellKnownEndpointUrl = `https://cognito-idp.${region}.amazonaws.com/${userPool.userPoolId}/.well-known/openid-configuration`;
+    this.jwtIssuer = `https://cognito-idp.${region}.amazonaws.com/${userPool.userPoolId}`;
+    this.jwtAudience = [
+      userPoolUserClient.userPoolClientId,
+      userPoolMachineClient.userPoolClientId,
+    ];
+    this.tokenEndpoint = `https://${userPoolDomain.domainName}.auth.${region}.amazoncognito.com/oauth2/token`;
+
+    new cdk.CfnOutput(this, 'ControlPlaneIdpUserPoolId', {
+      value: userPool.userPoolId,
+      key: 'ControlPlaneIdpUserPoolId',
+    });
+
+    new cdk.CfnOutput(this, 'ControlPlaneIdpClientId', {
+      value: userPoolUserClient.userPoolClientId,
+      key: 'ControlPlaneIdpClientId',
     });
 
     const userManagementExecRole = new Role(this, 'userManagementExecRole', {
@@ -297,7 +436,15 @@ export class CognitoAuth extends Construct implements IAuth {
       layers: [lambdaPowertoolsLayer],
       environment: {
         IDP_NAME: idpName,
-        IDP_DETAILS: this.controlPlaneIdpDetails,
+        IDP_DETAILS: JSON.stringify({
+          idp: {
+            name: idpName,
+            userPoolId: userPool.userPoolId,
+            clientId: userPoolUserClient.userPoolClientId,
+            authorizationServer: this.authorizationServer,
+            wellKnownEndpointUrl: this.wellKnownEndpointUrl,
+          },
+        }),
       },
     });
 
@@ -308,5 +455,27 @@ export class CognitoAuth extends Construct implements IAuth {
     this.deleteUserFunction = userManagementServices;
     this.disableUserFunction = userManagementServices;
     this.enableUserFunction = userManagementServices;
+
+    // https://github.com/aws/aws-cdk/issues/23204
+    NagSuppressions.addResourceSuppressionsByPath(
+      cdk.Stack.of(this),
+      [
+        `/${cdk.Stack.of(this).stackName}/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/Resource`,
+        `/${cdk.Stack.of(this).stackName}/AWS679f53fac002430cb0da5b7982bd2287/Resource`,
+      ],
+      [
+        {
+          id: 'AwsSolutions-IAM4',
+          reason: 'Suppress usage of AWSLambdaBasicExecutionRole.',
+          appliesTo: [
+            'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
+          ],
+        },
+        {
+          id: 'AwsSolutions-L1',
+          reason: 'NODEJS 18 is the version used in the official quickstart CFN template.',
+        },
+      ]
+    );
   }
 }

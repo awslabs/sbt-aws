@@ -2,9 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as cdk from 'aws-cdk-lib';
-import { IResource } from 'aws-cdk-lib/aws-apigateway';
-import * as aws_events from 'aws-cdk-lib/aws-events';
-import * as event_targets from 'aws-cdk-lib/aws-events-targets';
+import * as apigatewayV2 from 'aws-cdk-lib/aws-apigatewayv2';
+import * as apigatewayV2Integrations from 'aws-cdk-lib/aws-apigatewayv2-integrations';
+import * as events from 'aws-cdk-lib/aws-events';
+import * as targets from 'aws-cdk-lib/aws-events-targets';
 import { IFunction } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
@@ -29,7 +30,7 @@ export interface BillingProviderProps {
    * An API Gateway Resource for the BillingProvider to use
    * when setting up API endpoints.
    */
-  readonly controlPlaneAPIBillingResource: IResource;
+  readonly controlPlaneAPI: apigatewayV2.HttpApi;
 }
 
 /**
@@ -43,7 +44,7 @@ export class BillingProvider extends Construct {
    * The API Gateway resource containing the billing webhook resource.
    * Only set when the IBilling webhookFunction is defined.
    */
-  public readonly controlPlaneAPIBillingWebhookResource?: IResource;
+  public readonly controlPlaneAPIBillingWebhookResourcePath?: string;
 
   /**
    * Creates a new instance of the BillingProvider construct.
@@ -84,16 +85,16 @@ export class BillingProvider extends Construct {
       const schedule =
         'handler' in props.billing.putUsageFunction
           ? props.billing.putUsageFunction.schedule
-          : aws_events.Schedule.rate(cdk.Duration.hours(24));
+          : events.Schedule.rate(cdk.Duration.hours(24));
 
       const handler =
         'handler' in props.billing.putUsageFunction
           ? props.billing.putUsageFunction.handler
           : props.billing.putUsageFunction;
 
-      new aws_events.Rule(this, 'BillingPutUsageRule', {
+      new events.Rule(this, 'BillingPutUsageRule', {
         schedule: schedule,
-        targets: [new event_targets.LambdaFunction(handler)],
+        targets: [new targets.LambdaFunction(handler)],
       });
     }
 
@@ -105,29 +106,25 @@ export class BillingProvider extends Construct {
     }
 
     if (props.billing.webhookFunction && props.billing.webhookPath) {
-      this.controlPlaneAPIBillingWebhookResource = props.controlPlaneAPIBillingResource.addResource(
-        props.billing.webhookPath
-      );
+      this.controlPlaneAPIBillingWebhookResourcePath = `/billing/${props.billing.webhookPath}`;
 
-      this.controlPlaneAPIBillingWebhookResource.addMethod(
-        'POST',
-        new cdk.aws_apigateway.LambdaIntegration(props.billing.webhookFunction)
-      );
+      const [controlPlaneAPIBillingWebhookResourceRoute] = props.controlPlaneAPI.addRoutes({
+        path: this.controlPlaneAPIBillingWebhookResourcePath,
+        methods: [apigatewayV2.HttpMethod.POST],
+        integration: new apigatewayV2Integrations.HttpLambdaIntegration(
+          'billingWebhookHttpLambdaIntegration',
+          props.billing.webhookFunction
+        ),
+      });
 
       NagSuppressions.addResourceSuppressionsByPath(
         cdk.Stack.of(this),
-        [
-          `${this.controlPlaneAPIBillingWebhookResource}/OPTIONS/Resource`,
-          `${this.controlPlaneAPIBillingWebhookResource}/POST/Resource`,
-        ],
+        [controlPlaneAPIBillingWebhookResourceRoute.node.path],
         [
           {
             id: 'AwsSolutions-APIG4',
-            reason: 'Authorization not needed for webhook function or OPTIONS method.',
-          },
-          {
-            id: 'AwsSolutions-COG4',
-            reason: 'These methods do not require a cognito authorizer.',
+            reason:
+              'Authorization for webhook function not standardized. Will have to be done in API target.',
           },
         ]
       );
@@ -153,6 +150,6 @@ export class BillingProvider extends Construct {
     }
 
     const { handler, trigger } = this.getFunctionProps(fn, defaultEvent);
-    eventManager.addTargetToEvent(this, trigger, new event_targets.LambdaFunction(handler));
+    eventManager.addTargetToEvent(this, trigger, new targets.LambdaFunction(handler));
   }
 }

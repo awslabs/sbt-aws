@@ -7,12 +7,12 @@ from http import HTTPStatus
 from aws_lambda_powertools import Tracer
 from aws_lambda_powertools import Logger
 from aws_lambda_powertools.logging import correlation_paths
-from aws_lambda_powertools.event_handler import APIGatewayRestResolver
+from aws_lambda_powertools.event_handler import APIGatewayHttpResolver
 from cognito_user_management_service import CognitoUserManagementService
 
 tracer = Tracer()
 logger = Logger()
-app = APIGatewayRestResolver()
+app = APIGatewayHttpResolver()
 
 idp_name = os.environ['IDP_NAME']
 idp_details=json.loads(os.environ['IDP_DETAILS'])
@@ -89,7 +89,8 @@ def delete_user(username):
     logger.info(response)    
     return {"response": "User deleted"}, HTTPStatus.OK.value
 
-@logger.inject_lambda_context(correlation_id_path=correlation_paths.API_GATEWAY_REST, log_event=True)
+
+@logger.inject_lambda_context(correlation_id_path=correlation_paths.API_GATEWAY_HTTP, log_event=True)
 @tracer.capture_lambda_handler
 def lambda_handler(event, context):
     logger.debug(event)

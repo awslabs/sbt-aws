@@ -66,3 +66,10 @@ export const generateAWSManagedRuleSet = (managedGroupName: string, priority: nu
     },
   };
 };
+
+export const conditionallyAddScope = (unknownScope?: string) => {
+  if (unknownScope) {
+    return [unknownScope];
+  }
+  return [];
+};

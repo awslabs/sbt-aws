@@ -113,14 +113,12 @@ export class ControlPlane extends Construct {
       const billingTemplate = new BillingProvider(this, 'Billing', {
         billing: props.billing,
         eventManager: this.eventManager,
-        controlPlaneAPIBillingResource: controlPlaneAPI.billingResource,
+        controlPlaneAPI: controlPlaneAPI.api,
       });
 
-      if (billingTemplate.controlPlaneAPIBillingWebhookResource) {
+      if (billingTemplate.controlPlaneAPIBillingWebhookResourcePath) {
         new cdk.CfnOutput(this, 'billingWebhookURL', {
-          value: `${
-            controlPlaneAPI.apiUrl
-          }${billingTemplate.controlPlaneAPIBillingWebhookResource.path.substring(1)}`,
+          value: `${controlPlaneAPI.apiUrl}${billingTemplate.controlPlaneAPIBillingWebhookResourcePath}`,
           key: 'billingWebhookURL',
         });
       }
