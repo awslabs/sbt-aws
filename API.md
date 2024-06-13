@@ -512,7 +512,7 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.BillingProvider.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.BillingProvider.property.controlPlaneAPIBillingWebhookResource">controlPlaneAPIBillingWebhookResource</a></code> | <code>aws-cdk-lib.aws_apigateway.IResource</code> | The API Gateway resource containing the billing webhook resource. |
+| <code><a href="#@cdklabs/sbt-aws.BillingProvider.property.controlPlaneAPIBillingWebhookResourcePath">controlPlaneAPIBillingWebhookResourcePath</a></code> | <code>string</code> | The API Gateway resource containing the billing webhook resource. |
 
 ---
 
@@ -528,13 +528,13 @@ The tree node.
 
 ---
 
-##### `controlPlaneAPIBillingWebhookResource`<sup>Optional</sup> <a name="controlPlaneAPIBillingWebhookResource" id="@cdklabs/sbt-aws.BillingProvider.property.controlPlaneAPIBillingWebhookResource"></a>
+##### `controlPlaneAPIBillingWebhookResourcePath`<sup>Optional</sup> <a name="controlPlaneAPIBillingWebhookResourcePath" id="@cdklabs/sbt-aws.BillingProvider.property.controlPlaneAPIBillingWebhookResourcePath"></a>
 
 ```typescript
-public readonly controlPlaneAPIBillingWebhookResource: IResource;
+public readonly controlPlaneAPIBillingWebhookResourcePath: string;
 ```
 
-- *Type:* aws-cdk-lib.aws_apigateway.IResource
+- *Type:* string
 
 The API Gateway resource containing the billing webhook resource.
 
@@ -631,17 +631,34 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.authorizationServer">authorizationServer</a></code> | <code>string</code> | The authorization server for the control plane IdP. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.authorizer">authorizer</a></code> | <code>aws-cdk-lib.aws_apigateway.IAuthorizer</code> | The API Gateway authorizer for authenticating requests. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.clientId">clientId</a></code> | <code>string</code> | The client ID for the control plane IdP. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.controlPlaneIdpDetails">controlPlaneIdpDetails</a></code> | <code>any</code> | The details of the control plane Identity Provider (IdP). |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.createUserFunction">createUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for creating a user. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.deleteUserFunction">deleteUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for deleting a user. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.disableUserFunction">disableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for disabling a user. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.enableUserFunction">enableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for enabling a user. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchAllUsersFunction">fetchAllUsersFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for fetching all users. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchUserFunction">fetchUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for fetching a user. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.jwtAudience">jwtAudience</a></code> | <code>string[]</code> | The list of recipients of the JWT. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.jwtIssuer">jwtIssuer</a></code> | <code>string</code> | The JWT issuer domain for the identity provider. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.machineClientId">machineClientId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.machineClientSecret">machineClientSecret</a></code> | <code>aws-cdk-lib.SecretValue</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.tokenEndpoint">tokenEndpoint</a></code> | <code>string</code> | The endpoint for granting OAuth tokens. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.updateUserFunction">updateUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for updating a user. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.userClientId">userClientId</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.wellKnownEndpointUrl">wellKnownEndpointUrl</a></code> | <code>string</code> | The well-known endpoint URL for the control plane IdP. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.activateTenantScope">activateTenantScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.createTenantScope">createTenantScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.createUserScope">createUserScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.deactivateTenantScope">deactivateTenantScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.deleteTenantScope">deleteTenantScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.deleteUserScope">deleteUserScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.disableUserScope">disableUserScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.enableUserScope">enableUserScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchAllTenantsScope">fetchAllTenantsScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchAllUsersScope">fetchAllUsersScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchTenantScope">fetchTenantScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchUserScope">fetchUserScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.updateTenantScope">updateTenantScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.updateUserScope">updateUserScope</a></code> | <code>string</code> | *No description.* |
 
 ---
 
@@ -666,42 +683,6 @@ public readonly authorizationServer: string;
 - *Type:* string
 
 The authorization server for the control plane IdP.
-
----
-
-##### `authorizer`<sup>Required</sup> <a name="authorizer" id="@cdklabs/sbt-aws.CognitoAuth.property.authorizer"></a>
-
-```typescript
-public readonly authorizer: IAuthorizer;
-```
-
-- *Type:* aws-cdk-lib.aws_apigateway.IAuthorizer
-
-The API Gateway authorizer for authenticating requests.
-
----
-
-##### `clientId`<sup>Required</sup> <a name="clientId" id="@cdklabs/sbt-aws.CognitoAuth.property.clientId"></a>
-
-```typescript
-public readonly clientId: string;
-```
-
-- *Type:* string
-
-The client ID for the control plane IdP.
-
----
-
-##### `controlPlaneIdpDetails`<sup>Required</sup> <a name="controlPlaneIdpDetails" id="@cdklabs/sbt-aws.CognitoAuth.property.controlPlaneIdpDetails"></a>
-
-```typescript
-public readonly controlPlaneIdpDetails: any;
-```
-
-- *Type:* any
-
-The details of the control plane Identity Provider (IdP).
 
 ---
 
@@ -777,6 +758,62 @@ The Lambda function for fetching a user.
 
 ---
 
+##### `jwtAudience`<sup>Required</sup> <a name="jwtAudience" id="@cdklabs/sbt-aws.CognitoAuth.property.jwtAudience"></a>
+
+```typescript
+public readonly jwtAudience: string[];
+```
+
+- *Type:* string[]
+
+The list of recipients of the JWT.
+
+---
+
+##### `jwtIssuer`<sup>Required</sup> <a name="jwtIssuer" id="@cdklabs/sbt-aws.CognitoAuth.property.jwtIssuer"></a>
+
+```typescript
+public readonly jwtIssuer: string;
+```
+
+- *Type:* string
+
+The JWT issuer domain for the identity provider.
+
+---
+
+##### `machineClientId`<sup>Required</sup> <a name="machineClientId" id="@cdklabs/sbt-aws.CognitoAuth.property.machineClientId"></a>
+
+```typescript
+public readonly machineClientId: string;
+```
+
+- *Type:* string
+
+---
+
+##### `machineClientSecret`<sup>Required</sup> <a name="machineClientSecret" id="@cdklabs/sbt-aws.CognitoAuth.property.machineClientSecret"></a>
+
+```typescript
+public readonly machineClientSecret: SecretValue;
+```
+
+- *Type:* aws-cdk-lib.SecretValue
+
+---
+
+##### `tokenEndpoint`<sup>Required</sup> <a name="tokenEndpoint" id="@cdklabs/sbt-aws.CognitoAuth.property.tokenEndpoint"></a>
+
+```typescript
+public readonly tokenEndpoint: string;
+```
+
+- *Type:* string
+
+The endpoint for granting OAuth tokens.
+
+---
+
 ##### `updateUserFunction`<sup>Required</sup> <a name="updateUserFunction" id="@cdklabs/sbt-aws.CognitoAuth.property.updateUserFunction"></a>
 
 ```typescript
@@ -789,6 +826,16 @@ The Lambda function for updating a user.
 
 ---
 
+##### `userClientId`<sup>Required</sup> <a name="userClientId" id="@cdklabs/sbt-aws.CognitoAuth.property.userClientId"></a>
+
+```typescript
+public readonly userClientId: string;
+```
+
+- *Type:* string
+
+---
+
 ##### `wellKnownEndpointUrl`<sup>Required</sup> <a name="wellKnownEndpointUrl" id="@cdklabs/sbt-aws.CognitoAuth.property.wellKnownEndpointUrl"></a>
 
 ```typescript
@@ -798,6 +845,146 @@ public readonly wellKnownEndpointUrl: string;
 - *Type:* string
 
 The well-known endpoint URL for the control plane IdP.
+
+---
+
+##### `activateTenantScope`<sup>Optional</sup> <a name="activateTenantScope" id="@cdklabs/sbt-aws.CognitoAuth.property.activateTenantScope"></a>
+
+```typescript
+public readonly activateTenantScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `createTenantScope`<sup>Optional</sup> <a name="createTenantScope" id="@cdklabs/sbt-aws.CognitoAuth.property.createTenantScope"></a>
+
+```typescript
+public readonly createTenantScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `createUserScope`<sup>Optional</sup> <a name="createUserScope" id="@cdklabs/sbt-aws.CognitoAuth.property.createUserScope"></a>
+
+```typescript
+public readonly createUserScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `deactivateTenantScope`<sup>Optional</sup> <a name="deactivateTenantScope" id="@cdklabs/sbt-aws.CognitoAuth.property.deactivateTenantScope"></a>
+
+```typescript
+public readonly deactivateTenantScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `deleteTenantScope`<sup>Optional</sup> <a name="deleteTenantScope" id="@cdklabs/sbt-aws.CognitoAuth.property.deleteTenantScope"></a>
+
+```typescript
+public readonly deleteTenantScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `deleteUserScope`<sup>Optional</sup> <a name="deleteUserScope" id="@cdklabs/sbt-aws.CognitoAuth.property.deleteUserScope"></a>
+
+```typescript
+public readonly deleteUserScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `disableUserScope`<sup>Optional</sup> <a name="disableUserScope" id="@cdklabs/sbt-aws.CognitoAuth.property.disableUserScope"></a>
+
+```typescript
+public readonly disableUserScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `enableUserScope`<sup>Optional</sup> <a name="enableUserScope" id="@cdklabs/sbt-aws.CognitoAuth.property.enableUserScope"></a>
+
+```typescript
+public readonly enableUserScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `fetchAllTenantsScope`<sup>Optional</sup> <a name="fetchAllTenantsScope" id="@cdklabs/sbt-aws.CognitoAuth.property.fetchAllTenantsScope"></a>
+
+```typescript
+public readonly fetchAllTenantsScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `fetchAllUsersScope`<sup>Optional</sup> <a name="fetchAllUsersScope" id="@cdklabs/sbt-aws.CognitoAuth.property.fetchAllUsersScope"></a>
+
+```typescript
+public readonly fetchAllUsersScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `fetchTenantScope`<sup>Optional</sup> <a name="fetchTenantScope" id="@cdklabs/sbt-aws.CognitoAuth.property.fetchTenantScope"></a>
+
+```typescript
+public readonly fetchTenantScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `fetchUserScope`<sup>Optional</sup> <a name="fetchUserScope" id="@cdklabs/sbt-aws.CognitoAuth.property.fetchUserScope"></a>
+
+```typescript
+public readonly fetchUserScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `updateTenantScope`<sup>Optional</sup> <a name="updateTenantScope" id="@cdklabs/sbt-aws.CognitoAuth.property.updateTenantScope"></a>
+
+```typescript
+public readonly updateTenantScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `updateUserScope`<sup>Optional</sup> <a name="updateUserScope" id="@cdklabs/sbt-aws.CognitoAuth.property.updateUserScope"></a>
+
+```typescript
+public readonly updateUserScope: string;
+```
+
+- *Type:* string
 
 ---
 
@@ -1023,8 +1210,8 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.billingResource">billingResource</a></code> | <code>aws-cdk-lib.aws_apigateway.Resource</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.tenantUpdateServiceTarget">tenantUpdateServiceTarget</a></code> | <code>aws-cdk-lib.aws_events_targets.ApiGateway</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.api">api</a></code> | <code>aws-cdk-lib.aws_apigatewayv2.HttpApi</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.tenantUpdateServiceTarget">tenantUpdateServiceTarget</a></code> | <code>aws-cdk-lib.aws_events.IRuleTarget</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.apiUrl">apiUrl</a></code> | <code>any</code> | *No description.* |
 
 ---
@@ -1041,23 +1228,23 @@ The tree node.
 
 ---
 
-##### `billingResource`<sup>Required</sup> <a name="billingResource" id="@cdklabs/sbt-aws.ControlPlaneAPI.property.billingResource"></a>
+##### `api`<sup>Required</sup> <a name="api" id="@cdklabs/sbt-aws.ControlPlaneAPI.property.api"></a>
 
 ```typescript
-public readonly billingResource: Resource;
+public readonly api: HttpApi;
 ```
 
-- *Type:* aws-cdk-lib.aws_apigateway.Resource
+- *Type:* aws-cdk-lib.aws_apigatewayv2.HttpApi
 
 ---
 
 ##### `tenantUpdateServiceTarget`<sup>Required</sup> <a name="tenantUpdateServiceTarget" id="@cdklabs/sbt-aws.ControlPlaneAPI.property.tenantUpdateServiceTarget"></a>
 
 ```typescript
-public readonly tenantUpdateServiceTarget: ApiGateway;
+public readonly tenantUpdateServiceTarget: IRuleTarget;
 ```
 
-- *Type:* aws-cdk-lib.aws_events_targets.ApiGateway
+- *Type:* aws-cdk-lib.aws_events.IRuleTarget
 
 ---
 
@@ -2573,7 +2760,7 @@ const billingProviderProps: BillingProviderProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.billing">billing</a></code> | <code><a href="#@cdklabs/sbt-aws.IBilling">IBilling</a></code> | An implementation of the IBilling interface. |
-| <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.controlPlaneAPIBillingResource">controlPlaneAPIBillingResource</a></code> | <code>aws-cdk-lib.aws_apigateway.IResource</code> | An API Gateway Resource for the BillingProvider to use when setting up API endpoints. |
+| <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.controlPlaneAPI">controlPlaneAPI</a></code> | <code>aws-cdk-lib.aws_apigatewayv2.HttpApi</code> | An API Gateway Resource for the BillingProvider to use when setting up API endpoints. |
 | <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | An IEventManager object to help coordinate events. |
 
 ---
@@ -2590,13 +2777,13 @@ An implementation of the IBilling interface.
 
 ---
 
-##### `controlPlaneAPIBillingResource`<sup>Required</sup> <a name="controlPlaneAPIBillingResource" id="@cdklabs/sbt-aws.BillingProviderProps.property.controlPlaneAPIBillingResource"></a>
+##### `controlPlaneAPI`<sup>Required</sup> <a name="controlPlaneAPI" id="@cdklabs/sbt-aws.BillingProviderProps.property.controlPlaneAPI"></a>
 
 ```typescript
-public readonly controlPlaneAPIBillingResource: IResource;
+public readonly controlPlaneAPI: HttpApi;
 ```
 
-- *Type:* aws-cdk-lib.aws_apigateway.IResource
+- *Type:* aws-cdk-lib.aws_apigatewayv2.HttpApi
 
 An API Gateway Resource for the BillingProvider to use when setting up API endpoints.
 
@@ -3494,17 +3681,34 @@ Encapsulates the list of properties expected as outputs of Auth plugins.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.authorizationServer">authorizationServer</a></code> | <code>string</code> | Authorization server Url. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.authorizer">authorizer</a></code> | <code>aws-cdk-lib.aws_apigateway.IAuthorizer</code> | Authorizer referenced by the ControlPlaneAPI. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.clientId">clientId</a></code> | <code>string</code> | The OAuth clientId for the identity provider. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.controlPlaneIdpDetails">controlPlaneIdpDetails</a></code> | <code>any</code> | Contains any information relevant to the IDP implementation required by the Authorizer and User Function implementations. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.createUserFunction">createUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- POST /users. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.deleteUserFunction">deleteUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- DELETE /user/{username}. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.disableUserFunction">disableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- PUT /user/{username}/disable. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.enableUserFunction">enableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- PUT /user/{username}/enable. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchAllUsersFunction">fetchAllUsersFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- GET /users. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchUserFunction">fetchUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- GET /user/{username}. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.jwtAudience">jwtAudience</a></code> | <code>string[]</code> | The list of recipients of the JWT. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.jwtIssuer">jwtIssuer</a></code> | <code>string</code> | The JWT issuer domain for the identity provider. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.machineClientId">machineClientId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.machineClientSecret">machineClientSecret</a></code> | <code>aws-cdk-lib.SecretValue</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.tokenEndpoint">tokenEndpoint</a></code> | <code>string</code> | The endpoint for granting OAuth tokens. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.updateUserFunction">updateUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- PUT /user/{username}. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.userClientId">userClientId</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.wellKnownEndpointUrl">wellKnownEndpointUrl</a></code> | <code>string</code> | OpenID configuration Url. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.activateTenantScope">activateTenantScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.createTenantScope">createTenantScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.createUserScope">createUserScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.deactivateTenantScope">deactivateTenantScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.deleteTenantScope">deleteTenantScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.deleteUserScope">deleteUserScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.disableUserScope">disableUserScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.enableUserScope">enableUserScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchAllTenantsScope">fetchAllTenantsScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchAllUsersScope">fetchAllUsersScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchTenantScope">fetchTenantScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchUserScope">fetchUserScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.updateTenantScope">updateTenantScope</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.updateUserScope">updateUserScope</a></code> | <code>string</code> | *No description.* |
 
 ---
 
@@ -3517,42 +3721,6 @@ public readonly authorizationServer: string;
 - *Type:* string
 
 Authorization server Url.
-
----
-
-##### `authorizer`<sup>Required</sup> <a name="authorizer" id="@cdklabs/sbt-aws.IAuth.property.authorizer"></a>
-
-```typescript
-public readonly authorizer: IAuthorizer;
-```
-
-- *Type:* aws-cdk-lib.aws_apigateway.IAuthorizer
-
-Authorizer referenced by the ControlPlaneAPI.
-
----
-
-##### `clientId`<sup>Required</sup> <a name="clientId" id="@cdklabs/sbt-aws.IAuth.property.clientId"></a>
-
-```typescript
-public readonly clientId: string;
-```
-
-- *Type:* string
-
-The OAuth clientId for the identity provider.
-
----
-
-##### `controlPlaneIdpDetails`<sup>Required</sup> <a name="controlPlaneIdpDetails" id="@cdklabs/sbt-aws.IAuth.property.controlPlaneIdpDetails"></a>
-
-```typescript
-public readonly controlPlaneIdpDetails: any;
-```
-
-- *Type:* any
-
-Contains any information relevant to the IDP implementation required by the Authorizer and User Function implementations.
 
 ---
 
@@ -3628,6 +3796,62 @@ Function referenced by the ControlPlaneAPI -- GET /user/{username}.
 
 ---
 
+##### `jwtAudience`<sup>Required</sup> <a name="jwtAudience" id="@cdklabs/sbt-aws.IAuth.property.jwtAudience"></a>
+
+```typescript
+public readonly jwtAudience: string[];
+```
+
+- *Type:* string[]
+
+The list of recipients of the JWT.
+
+---
+
+##### `jwtIssuer`<sup>Required</sup> <a name="jwtIssuer" id="@cdklabs/sbt-aws.IAuth.property.jwtIssuer"></a>
+
+```typescript
+public readonly jwtIssuer: string;
+```
+
+- *Type:* string
+
+The JWT issuer domain for the identity provider.
+
+---
+
+##### `machineClientId`<sup>Required</sup> <a name="machineClientId" id="@cdklabs/sbt-aws.IAuth.property.machineClientId"></a>
+
+```typescript
+public readonly machineClientId: string;
+```
+
+- *Type:* string
+
+---
+
+##### `machineClientSecret`<sup>Required</sup> <a name="machineClientSecret" id="@cdklabs/sbt-aws.IAuth.property.machineClientSecret"></a>
+
+```typescript
+public readonly machineClientSecret: SecretValue;
+```
+
+- *Type:* aws-cdk-lib.SecretValue
+
+---
+
+##### `tokenEndpoint`<sup>Required</sup> <a name="tokenEndpoint" id="@cdklabs/sbt-aws.IAuth.property.tokenEndpoint"></a>
+
+```typescript
+public readonly tokenEndpoint: string;
+```
+
+- *Type:* string
+
+The endpoint for granting OAuth tokens.
+
+---
+
 ##### `updateUserFunction`<sup>Required</sup> <a name="updateUserFunction" id="@cdklabs/sbt-aws.IAuth.property.updateUserFunction"></a>
 
 ```typescript
@@ -3640,6 +3864,16 @@ Function referenced by the ControlPlaneAPI -- PUT /user/{username}.
 
 ---
 
+##### `userClientId`<sup>Required</sup> <a name="userClientId" id="@cdklabs/sbt-aws.IAuth.property.userClientId"></a>
+
+```typescript
+public readonly userClientId: string;
+```
+
+- *Type:* string
+
+---
+
 ##### `wellKnownEndpointUrl`<sup>Required</sup> <a name="wellKnownEndpointUrl" id="@cdklabs/sbt-aws.IAuth.property.wellKnownEndpointUrl"></a>
 
 ```typescript
@@ -3649,6 +3883,146 @@ public readonly wellKnownEndpointUrl: string;
 - *Type:* string
 
 OpenID configuration Url.
+
+---
+
+##### `activateTenantScope`<sup>Optional</sup> <a name="activateTenantScope" id="@cdklabs/sbt-aws.IAuth.property.activateTenantScope"></a>
+
+```typescript
+public readonly activateTenantScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `createTenantScope`<sup>Optional</sup> <a name="createTenantScope" id="@cdklabs/sbt-aws.IAuth.property.createTenantScope"></a>
+
+```typescript
+public readonly createTenantScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `createUserScope`<sup>Optional</sup> <a name="createUserScope" id="@cdklabs/sbt-aws.IAuth.property.createUserScope"></a>
+
+```typescript
+public readonly createUserScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `deactivateTenantScope`<sup>Optional</sup> <a name="deactivateTenantScope" id="@cdklabs/sbt-aws.IAuth.property.deactivateTenantScope"></a>
+
+```typescript
+public readonly deactivateTenantScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `deleteTenantScope`<sup>Optional</sup> <a name="deleteTenantScope" id="@cdklabs/sbt-aws.IAuth.property.deleteTenantScope"></a>
+
+```typescript
+public readonly deleteTenantScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `deleteUserScope`<sup>Optional</sup> <a name="deleteUserScope" id="@cdklabs/sbt-aws.IAuth.property.deleteUserScope"></a>
+
+```typescript
+public readonly deleteUserScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `disableUserScope`<sup>Optional</sup> <a name="disableUserScope" id="@cdklabs/sbt-aws.IAuth.property.disableUserScope"></a>
+
+```typescript
+public readonly disableUserScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `enableUserScope`<sup>Optional</sup> <a name="enableUserScope" id="@cdklabs/sbt-aws.IAuth.property.enableUserScope"></a>
+
+```typescript
+public readonly enableUserScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `fetchAllTenantsScope`<sup>Optional</sup> <a name="fetchAllTenantsScope" id="@cdklabs/sbt-aws.IAuth.property.fetchAllTenantsScope"></a>
+
+```typescript
+public readonly fetchAllTenantsScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `fetchAllUsersScope`<sup>Optional</sup> <a name="fetchAllUsersScope" id="@cdklabs/sbt-aws.IAuth.property.fetchAllUsersScope"></a>
+
+```typescript
+public readonly fetchAllUsersScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `fetchTenantScope`<sup>Optional</sup> <a name="fetchTenantScope" id="@cdklabs/sbt-aws.IAuth.property.fetchTenantScope"></a>
+
+```typescript
+public readonly fetchTenantScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `fetchUserScope`<sup>Optional</sup> <a name="fetchUserScope" id="@cdklabs/sbt-aws.IAuth.property.fetchUserScope"></a>
+
+```typescript
+public readonly fetchUserScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `updateTenantScope`<sup>Optional</sup> <a name="updateTenantScope" id="@cdklabs/sbt-aws.IAuth.property.updateTenantScope"></a>
+
+```typescript
+public readonly updateTenantScope: string;
+```
+
+- *Type:* string
+
+---
+
+##### `updateUserScope`<sup>Optional</sup> <a name="updateUserScope" id="@cdklabs/sbt-aws.IAuth.property.updateUserScope"></a>
+
+```typescript
+public readonly updateUserScope: string;
+```
+
+- *Type:* string
 
 ---
 
