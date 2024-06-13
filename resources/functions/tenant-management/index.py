@@ -65,14 +65,49 @@ def create_tenant():
 def get_tenants():
     logger.info("Request received to get all tenants")
     tenants = None
+    last_evaluated_key = None
+
+    # Get the pagination parameters from the query string
+    limit_default = 10
+    if app.current_event.query_string_parameters:
+        try:
+            limit = int(app.current_event.query_string_parameters.get('limit', limit_default))
+        except ValueError:
+            limit = limit_default
+        start_key = app.current_event.query_string_parameters.get("start_key")
+    else:
+        limit = limit_default
+        start_key = None
+
     try:
-        response = tenant_details_table.scan()
-        tenants = response['Items']
+        if start_key:
+            response = tenant_details_table.scan(
+                Limit=limit,
+                ExclusiveStartKey={
+                    'tenantId': start_key
+                }
+            )
+        else:
+            response = tenant_details_table.scan(Limit=limit)
+
+        tenants = response["Items"]
+        last_evaluated_key = response.get("LastEvaluatedKey")
+
     except botocore.exceptions.ClientError as error:
         logger.error(error)
         raise InternalServerError("Unknown error during processing!")
+
     else:
-        return {'data': tenants}, HTTPStatus.OK
+        return_response = {
+            "data": tenants
+        }
+        if last_evaluated_key:
+            next_start_key = last_evaluated_key['tenantId']
+            return_response["next_start_key"] = next_start_key
+        else:
+            next_start_key = None
+
+        return return_response, HTTPStatus.OK
 
 
 @app.get("/tenants/<tenantId>")

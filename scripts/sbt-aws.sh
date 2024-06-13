@@ -15,7 +15,7 @@ help() {
   echo "  refresh-tokens"
   echo "  create-tenant"
   echo "  get-tenant <tenant_id>"
-  echo "  get-all-tenants"
+  echo "  get-all-tenants <limit> <start_key>"
   echo "  delete-tenant <tenant_id>"
   echo "  update-tenant <tenant_id> <key> <value>"
   echo "  create-user"
@@ -218,8 +218,12 @@ get_all_tenants() {
     echo "Getting all tenants"
   fi
 
+  # add default if limit is not specified
+  MY_LIMIT=$1
+  START_KEY=$2
+
   RESPONSE=$(curl --request GET \
-    --url "${CONTROL_PLANE_API_ENDPOINT}tenants" \
+    --url "${CONTROL_PLANE_API_ENDPOINT}tenants?limit=${MY_LIMIT}&start_key=${START_KEY}" \
     --header "Authorization: Bearer $ACCESS_TOKEN" \
     --silent)
 
@@ -389,7 +393,7 @@ case "$1" in
   ;;
 
 "get-all-tenants")
-  get_all_tenants
+  get_all_tenants "$2" "$3"
   ;;
 
 "delete-tenant")
