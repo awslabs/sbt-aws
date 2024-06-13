@@ -39,6 +39,13 @@ export interface CognitoAuthProps {
    * @default 'SystemAdmin'
    */
   readonly systemAdminRoleName?: string;
+
+  /**
+   * Whether or not to specify scopes for validation at the API GW.
+   * Can be used for testing purposes.
+   * @default true
+   */
+  readonly setAPIGWScopes?: boolean;
 }
 
 /**
@@ -325,14 +332,15 @@ export class CognitoAuth extends Construct implements IAuth {
       writeUserScope
     );
 
-    // uncomment to enable scope checking at API GW
-    // this.fetchUserScope = userResourceServerReadScope.scopeName;
-    // this.fetchAllUsersScope = userResourceServerReadScope.scopeName;
-    // this.deleteUserScope = userResourceServerWriteScope.scopeName;
-    // this.createUserScope = userResourceServerWriteScope.scopeName;
-    // this.updateUserScope = userResourceServerWriteScope.scopeName;
-    // this.disableUserScope = userResourceServerWriteScope.scopeName;
-    // this.enableUserScope = userResourceServerWriteScope.scopeName;
+    if (props.setAPIGWScopes != false) {
+      this.fetchUserScope = userResourceServerReadScope.scopeName;
+      this.fetchAllUsersScope = userResourceServerReadScope.scopeName;
+      this.deleteUserScope = userResourceServerWriteScope.scopeName;
+      this.createUserScope = userResourceServerWriteScope.scopeName;
+      this.updateUserScope = userResourceServerWriteScope.scopeName;
+      this.disableUserScope = userResourceServerWriteScope.scopeName;
+      this.enableUserScope = userResourceServerWriteScope.scopeName;
+    }
 
     const readTenantScope = new cognito.ResourceServerScope({
       scopeName: 'tenant_read',
@@ -359,14 +367,15 @@ export class CognitoAuth extends Construct implements IAuth {
       writeTenantScope
     );
 
-    // uncomment to enable scope checking at API GW
-    // this.fetchTenantScope = tenantResourceServerReadScope.scopeName;
-    // this.fetchAllTenantsScope = tenantResourceServerReadScope.scopeName;
-    // this.deleteTenantScope = tenantResourceServerWriteScope.scopeName;
-    // this.createTenantScope = tenantResourceServerWriteScope.scopeName;
-    // this.updateTenantScope = tenantResourceServerWriteScope.scopeName;
-    // this.activateTenantScope = tenantResourceServerWriteScope.scopeName;
-    // this.deactivateTenantScope = tenantResourceServerWriteScope.scopeName;
+    if (props.setAPIGWScopes != false) {
+      this.fetchTenantScope = tenantResourceServerReadScope.scopeName;
+      this.fetchAllTenantsScope = tenantResourceServerReadScope.scopeName;
+      this.deleteTenantScope = tenantResourceServerWriteScope.scopeName;
+      this.createTenantScope = tenantResourceServerWriteScope.scopeName;
+      this.updateTenantScope = tenantResourceServerWriteScope.scopeName;
+      this.activateTenantScope = tenantResourceServerWriteScope.scopeName;
+      this.deactivateTenantScope = tenantResourceServerWriteScope.scopeName;
+    }
 
     // Create a Cognito User Pool Domain
     const userPoolDomain = new cognito.UserPoolDomain(this, 'UserPoolDomain', {
