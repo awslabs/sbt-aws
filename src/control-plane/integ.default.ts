@@ -19,6 +19,7 @@ export class IntegStack extends cdk.Stack {
 
     const cognitoAuth = new CognitoAuth(this, 'CognitoAuth', {
       systemAdminEmail: props.systemAdminEmail,
+      setAPIGWScopes: false,
     });
 
     const eventManager = new EventManager(this, 'EventManager');
