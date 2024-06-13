@@ -588,6 +588,7 @@ new CognitoAuth(scope: Construct, id: string, props: CognitoAuthProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.createAdminUser">createAdminUser</a></code> | Function to create an admin user. |
 
 ---
 
@@ -598,6 +599,32 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
+
+##### `createAdminUser` <a name="createAdminUser" id="@cdklabs/sbt-aws.CognitoAuth.createAdminUser"></a>
+
+```typescript
+public createAdminUser(scope: Construct, id: string, props: CreateAdminUserProps): void
+```
+
+Function to create an admin user.
+
+###### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.CognitoAuth.createAdminUser.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+###### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.CognitoAuth.createAdminUser.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+###### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.CognitoAuth.createAdminUser.parameter.props"></a>
+
+- *Type:* <a href="#@cdklabs/sbt-aws.CreateAdminUserProps">CreateAdminUserProps</a>
+
+---
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -2893,22 +2920,8 @@ const cognitoAuthProps: CognitoAuthProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminEmail">systemAdminEmail</a></code> | <code>string</code> | The email address of the system admin. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.controlPlaneCallbackURL">controlPlaneCallbackURL</a></code> | <code>string</code> | The callback URL for the control plane. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.setAPIGWScopes">setAPIGWScopes</a></code> | <code>boolean</code> | Whether or not to specify scopes for validation at the API GW. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminRoleName">systemAdminRoleName</a></code> | <code>string</code> | The name of the system admin role. |
-
----
-
-##### `systemAdminEmail`<sup>Required</sup> <a name="systemAdminEmail" id="@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminEmail"></a>
-
-```typescript
-public readonly systemAdminEmail: string;
-```
-
-- *Type:* string
-
-The email address of the system admin.
 
 ---
 
@@ -2937,19 +2950,6 @@ public readonly setAPIGWScopes: boolean;
 Whether or not to specify scopes for validation at the API GW.
 
 Can be used for testing purposes.
-
----
-
-##### `systemAdminRoleName`<sup>Optional</sup> <a name="systemAdminRoleName" id="@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminRoleName"></a>
-
-```typescript
-public readonly systemAdminRoleName: string;
-```
-
-- *Type:* string
-- *Default:* 'SystemAdmin'
-
-The name of the system admin role.
 
 ---
 
@@ -3029,9 +3029,11 @@ const controlPlaneProps: ControlPlaneProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.auth">auth</a></code> | <code><a href="#@cdklabs/sbt-aws.IAuth">IAuth</a></code> | The authentication provider for the control plane. |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminEmail">systemAdminEmail</a></code> | <code>string</code> | The email address of the system admin. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.billing">billing</a></code> | <code><a href="#@cdklabs/sbt-aws.IBilling">IBilling</a></code> | The billing provider configuration. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.disableAPILogging">disableAPILogging</a></code> | <code>boolean</code> | If true, the API Gateway will not log requests to the CloudWatch Logs. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | The event manager instance. |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminRoleName">systemAdminRoleName</a></code> | <code>string</code> | The name of the system admin role. |
 
 ---
 
@@ -3044,6 +3046,18 @@ public readonly auth: IAuth;
 - *Type:* <a href="#@cdklabs/sbt-aws.IAuth">IAuth</a>
 
 The authentication provider for the control plane.
+
+---
+
+##### `systemAdminEmail`<sup>Required</sup> <a name="systemAdminEmail" id="@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminEmail"></a>
+
+```typescript
+public readonly systemAdminEmail: string;
+```
+
+- *Type:* string
+
+The email address of the system admin.
 
 ---
 
@@ -3083,6 +3097,19 @@ public readonly eventManager: IEventManager;
 The event manager instance.
 
 If not provided, a new instance will be created.
+
+---
+
+##### `systemAdminRoleName`<sup>Optional</sup> <a name="systemAdminRoleName" id="@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminRoleName"></a>
+
+```typescript
+public readonly systemAdminRoleName: string;
+```
+
+- *Type:* string
+- *Default:* 'SystemAdmin'
+
+The name of the system admin role.
 
 ---
 
@@ -3296,6 +3323,51 @@ public readonly jobRunnerPropsList: CoreApplicationPlaneJobRunnerProps[];
 - *Type:* <a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps">CoreApplicationPlaneJobRunnerProps</a>[]
 
 The list of JobRunner definitions to create.
+
+---
+
+### CreateAdminUserProps <a name="CreateAdminUserProps" id="@cdklabs/sbt-aws.CreateAdminUserProps"></a>
+
+Encapsulates the list of properties expected as inputs for creating new admin users.
+
+#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.CreateAdminUserProps.Initializer"></a>
+
+```typescript
+import { CreateAdminUserProps } from '@cdklabs/sbt-aws'
+
+const createAdminUserProps: CreateAdminUserProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.CreateAdminUserProps.property.email">email</a></code> | <code>string</code> | The email address of the new admin user. |
+| <code><a href="#@cdklabs/sbt-aws.CreateAdminUserProps.property.role">role</a></code> | <code>string</code> | The name of the role of the new admin user. |
+
+---
+
+##### `email`<sup>Required</sup> <a name="email" id="@cdklabs/sbt-aws.CreateAdminUserProps.property.email"></a>
+
+```typescript
+public readonly email: string;
+```
+
+- *Type:* string
+
+The email address of the new admin user.
+
+---
+
+##### `role`<sup>Required</sup> <a name="role" id="@cdklabs/sbt-aws.CreateAdminUserProps.property.role"></a>
+
+```typescript
+public readonly role: string;
+```
+
+- *Type:* string
+
+The name of the role of the new admin user.
 
 ---
 
@@ -3767,6 +3839,39 @@ public readonly tenantDetailsTenantNameColumn: string;
 
 Encapsulates the list of properties expected as outputs of Auth plugins.
 
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.createAdminUser">createAdminUser</a></code> | Function to create an admin user. |
+
+---
+
+##### `createAdminUser` <a name="createAdminUser" id="@cdklabs/sbt-aws.IAuth.createAdminUser"></a>
+
+```typescript
+public createAdminUser(scope: Construct, id: string, props: CreateAdminUserProps): void
+```
+
+Function to create an admin user.
+
+###### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.IAuth.createAdminUser.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+###### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.IAuth.createAdminUser.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+###### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.IAuth.createAdminUser.parameter.props"></a>
+
+- *Type:* <a href="#@cdklabs/sbt-aws.CreateAdminUserProps">CreateAdminUserProps</a>
+
+---
 
 #### Properties <a name="Properties" id="Properties"></a>
 
