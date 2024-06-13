@@ -20,6 +20,17 @@ export interface ControlPlaneProps {
   readonly auth: IAuth;
 
   /**
+   * The email address of the system admin.
+   */
+  readonly systemAdminEmail: string;
+
+  /**
+   * The name of the system admin role.
+   * @default 'SystemAdmin'
+   */
+  readonly systemAdminRoleName?: string;
+
+  /**
    * The billing provider configuration.
    */
   readonly billing?: IBilling;
@@ -57,7 +68,14 @@ export class ControlPlane extends Construct {
     super(scope, id);
     addTemplateTag(this, 'ControlPlane');
 
+    const systemAdminRoleName = props.systemAdminRoleName || 'SystemAdmin';
+
     cdk.Aspects.of(this).add(new DestroyPolicySetter());
+
+    props.auth.createAdminUser(this, 'adminUser', {
+      email: props.systemAdminEmail,
+      role: systemAdminRoleName,
+    });
 
     // todo: decompose 'Tables' into purpose-specific constructs (ex. TenantManagement)
     this.tables = new Tables(this, 'tables-stack');

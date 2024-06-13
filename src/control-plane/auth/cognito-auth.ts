@@ -13,10 +13,10 @@ import {
   ServicePrincipal,
   Effect,
 } from 'aws-cdk-lib/aws-iam';
-import { Runtime, IFunction, LayerVersion } from 'aws-cdk-lib/aws-lambda';
+import { Runtime, IFunction, LayerVersion, ILayerVersion } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
-import { IAuth } from './auth-interface';
+import { CreateAdminUserProps, IAuth } from './auth-interface';
 import { addTemplateTag } from '../../utils';
 
 /**
@@ -24,21 +24,10 @@ import { addTemplateTag } from '../../utils';
  */
 export interface CognitoAuthProps {
   /**
-   * The email address of the system admin.
-   */
-  readonly systemAdminEmail: string;
-
-  /**
    * The callback URL for the control plane.
    * @default 'http://localhost'
    */
   readonly controlPlaneCallbackURL?: string;
-
-  /**
-   * The name of the system admin role.
-   * @default 'SystemAdmin'
-   */
-  readonly systemAdminRoleName?: string;
 
   /**
    * Whether or not to specify scopes for validation at the API GW.
@@ -214,70 +203,34 @@ export class CognitoAuth extends Construct implements IAuth {
    */
   readonly enableUserFunction: IFunction;
 
+  /**
+   * UserPool created as part of this construct.
+   */
+  private readonly userPool: cognito.UserPool;
+
+  /**
+   * The Lambda Layer containing the Powertools library.
+   */
+  private readonly lambdaPowertoolsLayer: ILayerVersion;
+
+  /**
+   * The IAM Role for Lambda that enables creating admin users.
+   */
+  private readonly lambdaIdpExecRole: Role;
+
   constructor(scope: Construct, id: string, props: CognitoAuthProps) {
     super(scope, id);
     addTemplateTag(this, 'CognitoAuth');
 
-    const systemAdminRoleName = props.systemAdminRoleName ?? 'SystemAdmin';
-    const defaultControlPlaneCallbackURL = 'http://localhost';
-
     // https://docs.powertools.aws.dev/lambda/python/2.31.0/#lambda-layer
-    const lambdaPowertoolsLayer = LayerVersion.fromLayerVersionArn(
+    this.lambdaPowertoolsLayer = LayerVersion.fromLayerVersionArn(
       this,
       'LambdaPowerTools',
       `arn:aws:lambda:${Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV2:59`
     );
+    const defaultControlPlaneCallbackURL = 'http://localhost';
 
-    const lambdaIdpExecRole = new Role(this, 'lambdaIdpExecRole', {
-      assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
-    });
-
-    lambdaIdpExecRole.addManagedPolicy(
-      ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')
-    );
-    lambdaIdpExecRole.addManagedPolicy(
-      ManagedPolicy.fromAwsManagedPolicyName('CloudWatchLambdaInsightsExecutionRolePolicy')
-    );
-    lambdaIdpExecRole.addManagedPolicy(
-      ManagedPolicy.fromAwsManagedPolicyName('AWSXrayWriteOnlyAccess')
-    );
-
-    lambdaIdpExecRole.addToPolicy(
-      new PolicyStatement({
-        actions: [
-          'cognito-idp:AdminCreateUser',
-          'cognito-idp:CreateGroup',
-          'cognito-idp:AdminAddUserToGroup',
-          'cognito-idp:GetGroup',
-          'cognito-idp:DescribeUserPool',
-        ],
-        effect: Effect.ALLOW,
-        resources: ['*'],
-      })
-    );
-
-    NagSuppressions.addResourceSuppressions(
-      lambdaIdpExecRole,
-      [
-        {
-          id: 'AwsSolutions-IAM5',
-          reason: 'Auth resource name(s) not known beforehand.',
-        },
-        {
-          id: 'AwsSolutions-IAM4',
-          reason:
-            'Suppress usage of AWSLambdaBasicExecutionRole, CloudWatchLambdaInsightsExecutionRolePolicy, and AWSXrayWriteOnlyAccess.',
-          appliesTo: [
-            'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
-            'Policy::arn:<AWS::Partition>:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy',
-            'Policy::arn:<AWS::Partition>:iam::aws:policy/AWSXrayWriteOnlyAccess',
-          ],
-        },
-      ],
-      true // applyToChildren = true, so that it applies to policies created for the role.
-    );
-
-    const userPool = new cognito.UserPool(this, 'UserPool', {
+    this.userPool = new cognito.UserPool(this, 'UserPool', {
       autoVerify: { email: true },
       passwordPolicy: {
         minLength: 8,
@@ -300,7 +253,7 @@ export class CognitoAuth extends Construct implements IAuth {
       advancedSecurityMode: cognito.AdvancedSecurityMode.ENFORCED,
     });
 
-    NagSuppressions.addResourceSuppressions(userPool, [
+    NagSuppressions.addResourceSuppressions(this.userPool, [
       {
         id: 'AwsSolutions-COG2',
         reason: 'Not requiring MFA at this phase.',
@@ -317,7 +270,7 @@ export class CognitoAuth extends Construct implements IAuth {
       scopeDescription: 'Write access to users.',
     });
 
-    const userResourceServer = userPool.addResourceServer('UserResourceServer', {
+    const userResourceServer = this.userPool.addResourceServer('UserResourceServer', {
       identifier: 'user',
       scopes: [readUserScope, writeUserScope],
     });
@@ -352,7 +305,7 @@ export class CognitoAuth extends Construct implements IAuth {
       scopeDescription: 'Write access to tenants.',
     });
 
-    const tenantResourceServer = userPool.addResourceServer('TenantResourceServer', {
+    const tenantResourceServer = this.userPool.addResourceServer('TenantResourceServer', {
       identifier: 'tenant',
       scopes: [readTenantScope, writeTenantScope],
     });
@@ -379,14 +332,14 @@ export class CognitoAuth extends Construct implements IAuth {
 
     // Create a Cognito User Pool Domain
     const userPoolDomain = new cognito.UserPoolDomain(this, 'UserPoolDomain', {
-      userPool: userPool,
+      userPool: this.userPool,
       cognitoDomain: {
         domainPrefix: `saascontrolplane-${this.node.addr}`,
       },
     });
 
     const userPoolMachineClient = new cognito.UserPoolClient(this, 'UserPoolMachineClient', {
-      userPool: userPool,
+      userPool: this.userPool,
       generateSecret: true,
       authFlows: {
         userPassword: false,
@@ -403,7 +356,7 @@ export class CognitoAuth extends Construct implements IAuth {
     });
 
     const userPoolUserClient = new cognito.UserPoolClient(this, 'UserPoolUserClient', {
-      userPool: userPool,
+      userPool: this.userPool,
       generateSecret: false,
       authFlows: {
         userPassword: true,
@@ -432,31 +385,12 @@ export class CognitoAuth extends Construct implements IAuth {
         .withCustomAttributes('userRole'),
     });
 
-    const createAdminUserFunction = new PythonFunction(this, 'createAdminUserFunction', {
-      entry: path.join(__dirname, '../../../resources/functions/auth-custom-resource'),
-      runtime: Runtime.PYTHON_3_12,
-      index: 'index.py',
-      handler: 'handler',
-      timeout: Duration.seconds(60),
-      role: lambdaIdpExecRole,
-      layers: [lambdaPowertoolsLayer],
-    });
-
-    new CustomResource(this, 'createAdminUserCustomResource', {
-      serviceToken: createAdminUserFunction.functionArn,
-      properties: {
-        UserPoolId: userPool.userPoolId,
-        SystemAdminRoleName: systemAdminRoleName,
-        SystemAdminEmail: props.systemAdminEmail,
-      },
-    });
-
     const region = cdk.Stack.of(this).region;
     this.userClientId = userPoolUserClient.userPoolClientId;
     this.machineClientId = userPoolMachineClient.userPoolClientId;
     this.machineClientSecret = userPoolMachineClient.userPoolClientSecret;
-    this.wellKnownEndpointUrl = `https://cognito-idp.${region}.amazonaws.com/${userPool.userPoolId}/.well-known/openid-configuration`;
-    this.jwtIssuer = `https://cognito-idp.${region}.amazonaws.com/${userPool.userPoolId}`;
+    this.wellKnownEndpointUrl = `https://cognito-idp.${region}.amazonaws.com/${this.userPool.userPoolId}/.well-known/openid-configuration`;
+    this.jwtIssuer = `https://cognito-idp.${region}.amazonaws.com/${this.userPool.userPoolId}`;
     this.jwtAudience = [
       userPoolUserClient.userPoolClientId,
       userPoolMachineClient.userPoolClientId,
@@ -464,7 +398,7 @@ export class CognitoAuth extends Construct implements IAuth {
     this.tokenEndpoint = `https://${userPoolDomain.domainName}.auth.${region}.amazoncognito.com/oauth2/token`;
 
     new cdk.CfnOutput(this, 'ControlPlaneIdpUserPoolId', {
-      value: userPool.userPoolId,
+      value: this.userPool.userPoolId,
       key: 'ControlPlaneIdpUserPoolId',
     });
 
@@ -532,9 +466,9 @@ export class CognitoAuth extends Construct implements IAuth {
       handler: 'lambda_handler',
       timeout: Duration.seconds(60),
       role: userManagementExecRole,
-      layers: [lambdaPowertoolsLayer],
+      layers: [this.lambdaPowertoolsLayer],
       environment: {
-        USER_POOL_ID: userPool.userPoolId,
+        USER_POOL_ID: this.userPool.userPoolId,
       },
     });
 
@@ -567,5 +501,75 @@ export class CognitoAuth extends Construct implements IAuth {
         },
       ]
     );
+
+    this.lambdaIdpExecRole = new Role(this, 'lambdaIdpExecRole', {
+      assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
+    });
+
+    this.lambdaIdpExecRole.addManagedPolicy(
+      ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')
+    );
+    this.lambdaIdpExecRole.addManagedPolicy(
+      ManagedPolicy.fromAwsManagedPolicyName('CloudWatchLambdaInsightsExecutionRolePolicy')
+    );
+    this.lambdaIdpExecRole.addManagedPolicy(
+      ManagedPolicy.fromAwsManagedPolicyName('AWSXrayWriteOnlyAccess')
+    );
+
+    this.lambdaIdpExecRole.addToPolicy(
+      new PolicyStatement({
+        actions: [
+          'cognito-idp:AdminCreateUser',
+          'cognito-idp:CreateGroup',
+          'cognito-idp:AdminAddUserToGroup',
+          'cognito-idp:GetGroup',
+          'cognito-idp:DescribeUserPool',
+        ],
+        effect: Effect.ALLOW,
+        resources: ['*'],
+      })
+    );
+
+    NagSuppressions.addResourceSuppressions(
+      this.lambdaIdpExecRole,
+      [
+        {
+          id: 'AwsSolutions-IAM5',
+          reason: 'Auth resource name(s) not known beforehand.',
+        },
+        {
+          id: 'AwsSolutions-IAM4',
+          reason:
+            'Suppress usage of AWSLambdaBasicExecutionRole, CloudWatchLambdaInsightsExecutionRolePolicy, and AWSXrayWriteOnlyAccess.',
+          appliesTo: [
+            'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
+            'Policy::arn:<AWS::Partition>:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy',
+            'Policy::arn:<AWS::Partition>:iam::aws:policy/AWSXrayWriteOnlyAccess',
+          ],
+        },
+      ],
+      true // applyToChildren = true, so that it applies to policies created for the role.
+    );
+  }
+
+  createAdminUser(scope: Construct, id: string, props: CreateAdminUserProps) {
+    const createAdminUserFunction = new PythonFunction(scope, `createAdminUserFunction-${id}`, {
+      entry: path.join(__dirname, '../../../resources/functions/auth-custom-resource'),
+      runtime: Runtime.PYTHON_3_12,
+      index: 'index.py',
+      handler: 'handler',
+      timeout: Duration.seconds(60),
+      role: this.lambdaIdpExecRole,
+      layers: [this.lambdaPowertoolsLayer],
+    });
+
+    new CustomResource(scope, `createAdminUserCustomResource-${id}`, {
+      serviceToken: createAdminUserFunction.functionArn,
+      properties: {
+        UserPoolId: this.userPool.userPoolId,
+        SystemAdminEmail: props.email,
+        SystemAdminRoleName: props.role,
+      },
+    });
   }
 }

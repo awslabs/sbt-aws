@@ -18,13 +18,13 @@ export class IntegStack extends cdk.Stack {
     super(scope, id, props);
 
     const cognitoAuth = new CognitoAuth(this, 'CognitoAuth', {
-      systemAdminEmail: props.systemAdminEmail,
-      setAPIGWScopes: false,
+      setAPIGWScopes: false, // optional parameter
     });
 
     const eventManager = new EventManager(this, 'EventManager');
 
     const controlPlane = new ControlPlane(this, 'ControlPlane', {
+      systemAdminEmail: props.systemAdminEmail,
       auth: cognitoAuth,
       eventManager: eventManager,
     });

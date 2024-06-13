@@ -3,6 +3,23 @@
 
 import { SecretValue } from 'aws-cdk-lib';
 import { IFunction } from 'aws-cdk-lib/aws-lambda';
+import { Construct } from 'constructs';
+
+/**
+ * Encapsulates the list of properties expected as inputs for creating
+ * new admin users.
+ */
+export interface CreateAdminUserProps {
+  /**
+   * The email address of the new admin user.
+   */
+  readonly email: string;
+
+  /**
+   * The name of the role of the new admin user.
+   */
+  readonly role: string;
+}
 
 /**
  * Encapsulates the list of properties expected as outputs of Auth plugins
@@ -169,4 +186,9 @@ export interface IAuth {
    * The Lambda function for enabling a user. -- PUT /user/{userId}/enable
    */
   readonly enableUserFunction: IFunction;
+
+  /**
+   * Function to create an admin user.
+   */
+  createAdminUser(scope: Construct, id: string, props: CreateAdminUserProps): void;
 }
