@@ -47,86 +47,170 @@ export interface CognitoAuthProps {
 export class CognitoAuth extends Construct implements IAuth {
   /**
    * The JWT issuer domain for the identity provider.
+   * This is the domain where the JSON Web Tokens (JWTs) are issued from.
    */
   readonly jwtIssuer: string;
 
   /**
-   * The list of recipients of the JWT.
+   * The list of recipients (audience) for which the JWT is intended.
+   * This will be checked by the API GW to ensure only authorized
+   * clients are provided access.
    */
   readonly jwtAudience: string[];
 
   /**
-   * The endpoint for granting OAuth tokens.
+   * The endpoint URL for granting OAuth tokens.
+   * This is the URL where OAuth tokens can be obtained from the authorization server.
    */
   readonly tokenEndpoint: string;
 
   /**
-   * The authorization server for the control plane IdP.
+   * The client ID enabled for user-centric authentication flows, such as Authorization Code flow.
+   * This client ID is used for authenticating end-users.
    */
-  public readonly authorizationServer: string;
-
   readonly userClientId: string;
+
+  /**
+   * The client ID enabled for machine-to-machine authorization flows, such as Client Credentials flow.
+   * This client ID is used for authenticating applications or services.
+   */
   readonly machineClientId: string;
+
+  /**
+   * The client secret enabled for machine-to-machine authorization flows, such as Client Credentials flow.
+   * This secret is used in combination with the machine client ID for authenticating applications or services.
+   */
   readonly machineClientSecret: SecretValue;
+
+  /**
+   * The scope required to authorize requests for fetching a single tenant.
+   * This scope grants permission to fetch the details of a specific tenant.
+   */
   readonly fetchTenantScope?: string;
+
+  /**
+   * The scope required to authorize requests for fetching all tenants.
+   * This scope grants permission to fetch the details of all tenants.
+   */
   readonly fetchAllTenantsScope?: string;
+
+  /**
+   * The scope required to authorize requests for deleting a tenant.
+   * This scope grants permission to delete a specific tenant.
+   */
   readonly deleteTenantScope?: string;
+
+  /**
+   * The scope required to authorize requests for creating a tenant.
+   * This scope grants permission to create a new tenant.
+   */
   readonly createTenantScope?: string;
+
+  /**
+   * The scope required to authorize requests for updating a tenant.
+   * This scope grants permission to update the details of a specific tenant.
+   */
   readonly updateTenantScope?: string;
+
+  /**
+   * The scope required to authorize requests for activating a tenant.
+   * This scope grants permission to activate a specific tenant.
+   */
   readonly activateTenantScope?: string;
+
+  /**
+   * The scope required to authorize requests for deactivating a tenant.
+   * This scope grants permission to deactivate a specific tenant.
+   */
   readonly deactivateTenantScope?: string;
+
+  /**
+   * The scope required to authorize requests for fetching a single user.
+   * This scope grants permission to fetch the details of a specific user.
+   */
   readonly fetchUserScope?: string;
+
+  /**
+   * The scope required to authorize requests for fetching all users.
+   * This scope grants permission to fetch the details of all users.
+   */
   readonly fetchAllUsersScope?: string;
+
+  /**
+   * The scope required to authorize requests for deleting a user.
+   * This scope grants permission to delete a specific user.
+   */
   readonly deleteUserScope?: string;
+
+  /**
+   * The scope required to authorize requests for creating a user.
+   * This scope grants permission to create a new user.
+   */
   readonly createUserScope?: string;
+
+  /**
+   * The scope required to authorize requests for updating a user.
+   * This scope grants permission to update the details of a specific user.
+   */
   readonly updateUserScope?: string;
+
+  /**
+   * The scope required to authorize requests for disabling a user.
+   * This scope grants permission to disable a specific user.
+   */
   readonly disableUserScope?: string;
+
+  /**
+   * The scope required to authorize requests for enabling a user.
+   * This scope grants permission to enable a specific user.
+   */
   readonly enableUserScope?: string;
-  /**
-   * The well-known endpoint URL for the control plane IdP.
-   */
-  public readonly wellKnownEndpointUrl: string;
 
   /**
-   * The Lambda function for creating a user.
+   * The well-known endpoint URL for the control plane identity provider.
+   * This URL provides configuration information about the identity provider, such as issuer, authorization endpoint, and token endpoint.
    */
-  public readonly createUserFunction: IFunction;
+  readonly wellKnownEndpointUrl: string;
 
   /**
-   * The Lambda function for fetching all users.
+   * The Lambda function for creating a user. -- POST /users
    */
-  public readonly fetchAllUsersFunction: IFunction;
+  readonly createUserFunction: IFunction;
 
   /**
-   * The Lambda function for fetching a user.
+   * The Lambda function for fetching all users -- GET /users
    */
-  public readonly fetchUserFunction: IFunction;
+  readonly fetchAllUsersFunction: IFunction; // use 'fetch*' instead of 'get*' to avoid error JSII5000
 
   /**
-   * The Lambda function for updating a user.
+   * The Lambda function for fetching a user. -- GET /user/{userId}
    */
-  public readonly updateUserFunction: IFunction;
+  readonly fetchUserFunction: IFunction; // use 'fetch*' instead of 'get*' to avoid error JSII5000
 
   /**
-   * The Lambda function for deleting a user.
+   * The Lambda function for updating a user. -- PUT /user/{userId}
    */
-  public readonly deleteUserFunction: IFunction;
+  readonly updateUserFunction: IFunction;
 
   /**
-   * The Lambda function for disabling a user.
+   * The Lambda function for deleting a user. -- DELETE /user/{userId}
    */
-  public readonly disableUserFunction: IFunction;
+  readonly deleteUserFunction: IFunction;
 
   /**
-   * The Lambda function for enabling a user.
+   * The Lambda function for disabling a user. -- PUT /user/{userId}/disable
    */
-  public readonly enableUserFunction: IFunction;
+  readonly disableUserFunction: IFunction;
+
+  /**
+   * The Lambda function for enabling a user. -- PUT /user/{userId}/enable
+   */
+  readonly enableUserFunction: IFunction;
 
   constructor(scope: Construct, id: string, props: CognitoAuthProps) {
     super(scope, id);
     addTemplateTag(this, 'CognitoAuth');
 
-    const idpName = 'COGNITO';
     const systemAdminRoleName = props.systemAdminRoleName ?? 'SystemAdmin';
     const defaultControlPlaneCallbackURL = 'http://localhost';
 
@@ -220,23 +304,28 @@ export class CognitoAuth extends Construct implements IAuth {
       scopeName: 'user_read',
       scopeDescription: 'Read access to users.',
     });
+
     const writeUserScope = new cognito.ResourceServerScope({
       scopeName: 'user_write',
       scopeDescription: 'Write access to users.',
     });
+
     const userResourceServer = userPool.addResourceServer('UserResourceServer', {
       identifier: 'user',
       scopes: [readUserScope, writeUserScope],
     });
+
     const userResourceServerReadScope = cognito.OAuthScope.resourceServer(
       userResourceServer,
       readUserScope
     );
+
     const userResourceServerWriteScope = cognito.OAuthScope.resourceServer(
       userResourceServer,
       writeUserScope
     );
 
+    // uncomment to enable scope checking at API GW
     // this.fetchUserScope = userResourceServerReadScope.scopeName;
     // this.fetchAllUsersScope = userResourceServerReadScope.scopeName;
     // this.deleteUserScope = userResourceServerWriteScope.scopeName;
@@ -249,23 +338,28 @@ export class CognitoAuth extends Construct implements IAuth {
       scopeName: 'tenant_read',
       scopeDescription: 'Read access to tenants.',
     });
+
     const writeTenantScope = new cognito.ResourceServerScope({
       scopeName: 'tenant_write',
       scopeDescription: 'Write access to tenants.',
     });
+
     const tenantResourceServer = userPool.addResourceServer('TenantResourceServer', {
       identifier: 'tenant',
       scopes: [readTenantScope, writeTenantScope],
     });
+
     const tenantResourceServerReadScope = cognito.OAuthScope.resourceServer(
       tenantResourceServer,
       readTenantScope
     );
+
     const tenantResourceServerWriteScope = cognito.OAuthScope.resourceServer(
       tenantResourceServer,
       writeTenantScope
     );
 
+    // uncomment to enable scope checking at API GW
     // this.fetchTenantScope = tenantResourceServerReadScope.scopeName;
     // this.fetchAllTenantsScope = tenantResourceServerReadScope.scopeName;
     // this.deleteTenantScope = tenantResourceServerWriteScope.scopeName;
@@ -337,9 +431,6 @@ export class CognitoAuth extends Construct implements IAuth {
       timeout: Duration.seconds(60),
       role: lambdaIdpExecRole,
       layers: [lambdaPowertoolsLayer],
-      environment: {
-        IDP_NAME: idpName,
-      },
     });
 
     new CustomResource(this, 'createAdminUserCustomResource', {
@@ -352,7 +443,6 @@ export class CognitoAuth extends Construct implements IAuth {
     });
 
     const region = cdk.Stack.of(this).region;
-    this.authorizationServer = `https://${userPoolDomain.domainName}.auth.${region}.amazoncognito.com`;
     this.userClientId = userPoolUserClient.userPoolClientId;
     this.machineClientId = userPoolMachineClient.userPoolClientId;
     this.machineClientSecret = userPoolMachineClient.userPoolClientSecret;
@@ -435,16 +525,7 @@ export class CognitoAuth extends Construct implements IAuth {
       role: userManagementExecRole,
       layers: [lambdaPowertoolsLayer],
       environment: {
-        IDP_NAME: idpName,
-        IDP_DETAILS: JSON.stringify({
-          idp: {
-            name: idpName,
-            userPoolId: userPool.userPoolId,
-            clientId: userPoolUserClient.userPoolClientId,
-            authorizationServer: this.authorizationServer,
-            wellKnownEndpointUrl: this.wellKnownEndpointUrl,
-          },
-        }),
+        USER_POOL_ID: userPool.userPoolId,
       },
     });
 

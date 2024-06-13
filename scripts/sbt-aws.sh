@@ -19,8 +19,8 @@ help() {
   echo "  delete-tenant <tenant_id>"
   echo "  update-tenant <tenant_id> <key> <value>"
   echo "  create-user"
-  echo "  get-user <user_name>"
-  echo "  delete-user <user_name>"
+  echo "  get-user <user_id>"
+  echo "  delete-user <user_id>"
   echo "  help"
 }
 
@@ -287,14 +287,14 @@ create_user() {
 
 get_user() {
   source_config
-  USER_NAME="$1"
+  USER_ID="$1"
 
   if $DEBUG; then
-    echo "Getting user with name: $USER_NAME"
+    echo "Getting user with id: $USER_ID"
   fi
 
   RESPONSE=$(curl --request GET \
-    --url "${CONTROL_PLANE_API_ENDPOINT}users/$USER_NAME" \
+    --url "${CONTROL_PLANE_API_ENDPOINT}users/$USER_ID" \
     --header "Authorization: Bearer $ACCESS_TOKEN" \
     --silent)
 
@@ -307,14 +307,14 @@ get_user() {
 
 delete_user() {
   source_config
-  USER_NAME="$1"
+  USER_ID="$1"
 
   if $DEBUG; then
-    echo "Deleting user with name: $USER_NAME"
+    echo "Deleting user with id: $USER_ID"
   fi
 
   RESPONSE=$(curl --request DELETE \
-    --url "${CONTROL_PLANE_API_ENDPOINT}users/$USER_NAME" \
+    --url "${CONTROL_PLANE_API_ENDPOINT}users/$USER_ID" \
     --header "Authorization: Bearer $ACCESS_TOKEN" \
     --silent)
 
@@ -414,7 +414,7 @@ case "$1" in
 
 "get-user")
   if [ $# -ne 2 ]; then
-    echo "Error: get-user requires user name"
+    echo "Error: get-user requires user id"
     exit 1
   fi
   get_user "$2"
@@ -422,7 +422,7 @@ case "$1" in
 
 "delete-user")
   if [ $# -ne 2 ]; then
-    echo "Error: delete-user requires user name"
+    echo "Error: delete-user requires user id"
     exit 1
   fi
   delete_user "$2"

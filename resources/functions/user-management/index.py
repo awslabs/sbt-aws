@@ -1,7 +1,6 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-import json
 import os
 from http import HTTPStatus
 from aws_lambda_powertools import Tracer
@@ -14,9 +13,13 @@ tracer = Tracer()
 logger = Logger()
 app = APIGatewayHttpResolver()
 
-idp_name = os.environ['IDP_NAME']
-idp_details=json.loads(os.environ['IDP_DETAILS'])
+idp_details = {
+    "idp": {
+        "userPoolId": os.environ['USER_POOL_ID'],
+    }
+}
 idp_user_mgmt_service = CognitoUserManagementService()
+
 
 @app.post("/users")
 @tracer.capture_method
@@ -24,8 +27,9 @@ def create_user():
     user_details = app.current_event.json_body
     user_details['idpDetails'] = idp_details
     response = idp_user_mgmt_service.create_user(user_details)
-    logger.info(response)    
+    logger.info(response)
     return {"response": "New user created"}, HTTPStatus.OK.value
+
 
 @app.get("/users")
 @tracer.capture_method
@@ -33,60 +37,65 @@ def get_users():
     user_details = {}
     user_details['idpDetails'] = idp_details
     users = idp_user_mgmt_service.get_users(user_details)
-    logger.info(users.serialize())    
+    logger.info(users.serialize())
     return users.serialize(), HTTPStatus.OK.value
 
-@app.get("/users/<username>")
+
+@app.get("/users/<userId>")
 @tracer.capture_method
-def get_user(username):
+def get_user(userId):
     user_details = {}
     user_details['idpDetails'] = idp_details
-    user_details['userName'] = username
+    user_details['userName'] = userId
     user = idp_user_mgmt_service.get_user(user_details)
     if (user == None):
-        logger.info("User not found")        
+        logger.info("User not found")
         return {"response": "User not found"}, HTTPStatus.NOT_FOUND.value
-    logger.info(user.serialize())    
+    logger.info(user.serialize())
     return user.serialize(), HTTPStatus.OK.value
 
-@app.put("/users/<username>")
+
+@app.put("/users/<userId>")
 @tracer.capture_method
-def update_user(username):
+def update_user(userId):
     user_details = app.current_event.json_body
     user_details['idpDetails'] = idp_details
-    user_details['userName'] = username
+    user_details['userName'] = userId
     response = idp_user_mgmt_service.update_user(user_details)
-    logger.info(response)    
+    logger.info(response)
     return {"response": "User updated"}, HTTPStatus.OK.value
 
-@app.delete("/users/<username>/disable")
+
+@app.delete("/users/<userId>/disable")
 @tracer.capture_method
-def disable_user(username):
+def disable_user(userId):
     user_details = {}
     user_details['idpDetails'] = idp_details
-    user_details['userName'] = username
+    user_details['userName'] = userId
     response = idp_user_mgmt_service.disable_user(user_details)
-    logger.info(response)    
+    logger.info(response)
     return {"response": "User disabled"}, HTTPStatus.OK.value
 
-@app.put("/users/<username>/enable")
+
+@app.put("/users/<userId>/enable")
 @tracer.capture_method
-def enable_user(username):
+def enable_user(userId):
     user_details = {}
     user_details['idpDetails'] = idp_details
-    user_details['userName'] = username
+    user_details['userName'] = userId
     response = idp_user_mgmt_service.enable_user(user_details)
-    logger.info(response)    
+    logger.info(response)
     return {"response": "User enabled"}, HTTPStatus.OK.value
 
-@app.delete("/users/<username>")
+
+@app.delete("/users/<userId>")
 @tracer.capture_method
-def delete_user(username):
+def delete_user(userId):
     user_details = {}
     user_details['idpDetails'] = idp_details
-    user_details['userName'] = username
+    user_details['userName'] = userId
     response = idp_user_mgmt_service.delete_user(user_details)
-    logger.info(response)    
+    logger.info(response)
     return {"response": "User deleted"}, HTTPStatus.OK.value
 
 
@@ -95,5 +104,3 @@ def delete_user(username):
 def lambda_handler(event, context):
     logger.debug(event)
     return app.resolve(event, context)
-
-
