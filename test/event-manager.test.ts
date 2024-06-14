@@ -101,11 +101,10 @@ describe('EventManager', () => {
     const app = new cdk.App();
     const controlPlaneStack = new cdk.Stack(app, 'ControlPlaneStack');
 
-    const cognitoAuth = new CognitoAuth(controlPlaneStack, 'CognitoAuth', {
-      systemAdminEmail: 'test@example.com',
-    });
+    const cognitoAuth = new CognitoAuth(controlPlaneStack, 'CognitoAuth');
 
     const controlPlane = new ControlPlane(controlPlaneStack, 'ControlPlane', {
+      systemAdminEmail: 'test@example.com',
       auth: cognitoAuth,
     });
 
@@ -133,11 +132,10 @@ describe('EventManager', () => {
 
     const eventManager = new EventManager(controlPlaneStack, 'EventManager');
 
-    const cognitoAuth = new CognitoAuth(controlPlaneStack, 'CognitoAuth', {
-      systemAdminEmail: 'test@example.com',
-    });
+    const cognitoAuth = new CognitoAuth(controlPlaneStack, 'CognitoAuth');
 
     new ControlPlane(controlPlaneStack, 'ControlPlane', {
+      systemAdminEmail: 'test@example.com',
       auth: cognitoAuth,
       eventManager: eventManager,
     });
@@ -166,11 +164,10 @@ describe('EventManager', () => {
     const eventManager = new EventManager(eventManagerStack, 'EventManager');
 
     const controlPlaneStack = new cdk.Stack(app, 'ControlPlaneStack');
-    const cognitoAuth = new CognitoAuth(controlPlaneStack, 'CognitoAuth', {
-      systemAdminEmail: 'test@example.com',
-    });
+    const cognitoAuth = new CognitoAuth(controlPlaneStack, 'CognitoAuth');
 
     new ControlPlane(controlPlaneStack, 'ControlPlane', {
+      systemAdminEmail: 'test@example.com',
       auth: cognitoAuth,
       eventManager: eventManager,
     });

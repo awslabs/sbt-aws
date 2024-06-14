@@ -554,7 +554,7 @@ Constructs for setting up Cognito authentication and user management.
 ```typescript
 import { CognitoAuth } from '@cdklabs/sbt-aws'
 
-new CognitoAuth(scope: Construct, id: string, props: CognitoAuthProps)
+new CognitoAuth(scope: Construct, id: string, props?: CognitoAuthProps)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -577,7 +577,7 @@ new CognitoAuth(scope: Construct, id: string, props: CognitoAuthProps)
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.CognitoAuth.Initializer.parameter.props"></a>
+##### `props`<sup>Optional</sup> <a name="props" id="@cdklabs/sbt-aws.CognitoAuth.Initializer.parameter.props"></a>
 
 - *Type:* <a href="#@cdklabs/sbt-aws.CognitoAuthProps">CognitoAuthProps</a>
 

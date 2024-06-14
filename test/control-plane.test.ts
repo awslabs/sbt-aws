@@ -15,11 +15,10 @@ describe('No unsuppressed cdk-nag Warnings or Errors', () => {
       super(scope, id, props);
       const systemAdminEmail = 'test@example.com';
       const eventManager = new EventManager(this, 'EventManager');
-      const cognitoAuth = new CognitoAuth(this, 'CognitoAuth', {
-        systemAdminEmail: systemAdminEmail,
-      });
+      const cognitoAuth = new CognitoAuth(this, 'CognitoAuth');
 
       new ControlPlane(this, 'ControlPlane', {
+        systemAdminEmail: systemAdminEmail,
         auth: cognitoAuth,
         eventManager: eventManager,
       });
@@ -57,13 +56,10 @@ class TestStack extends cdk.Stack {
     super(scope, id, props);
 
     const eventManager = new EventManager(this, 'EventManager');
-    const cognitoAuth = new CognitoAuth(this, 'CognitoAuth', {
-      systemAdminEmail: props.systemAdminEmail,
-      // optional parameter possibly populated by another construct or an argument
-      // controlPlaneCallbackURL: 'https://example.com',
-    });
+    const cognitoAuth = new CognitoAuth(this, 'CognitoAuth');
 
     new ControlPlane(this, 'ControlPlane', {
+      systemAdminEmail: props.systemAdminEmail,
       auth: cognitoAuth,
       eventManager: eventManager,
       disableAPILogging: props.disableAPILogging,

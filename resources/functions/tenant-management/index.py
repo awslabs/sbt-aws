@@ -9,10 +9,13 @@ import uuid
 import boto3
 from boto3.dynamodb.conditions import Attr
 import botocore
+from typing import Optional
 from aws_lambda_powertools import Logger, Tracer
 from aws_lambda_powertools.event_handler import (APIGatewayHttpResolver,
-                                                CORSConfig)
+                                                 CORSConfig)
 from aws_lambda_powertools.logging import correlation_paths
+from aws_lambda_powertools.event_handler.openapi.params import Query
+from aws_lambda_powertools.shared.types import Annotated
 from aws_lambda_powertools.event_handler.exceptions import (
     InternalServerError,
     NotFoundError,
@@ -22,7 +25,7 @@ tracer = Tracer()
 logger = Logger()
 # TODO Make sure we fill in an appropriate origin for this call (the CloudFront domain)
 cors_config = CORSConfig(allow_origin="*", max_age=300)
-app = APIGatewayHttpResolver(cors=cors_config)
+app = APIGatewayHttpResolver(cors=cors_config, enable_validation=True)
 
 event_bus = boto3.client('events')
 eventbus_name = os.environ['EVENTBUS_NAME']
@@ -62,22 +65,11 @@ def create_tenant():
 
 @app.get("/tenants")
 @tracer.capture_method
-def get_tenants():
+def get_tenants(limit: Annotated[Optional[int], Query(gt=0)] = 10,
+                start_key: Annotated[Optional[str], Query(min_length=0)] = None):
     logger.info("Request received to get all tenants")
     tenants = None
     last_evaluated_key = None
-
-    # Get the pagination parameters from the query string
-    limit_default = 10
-    if app.current_event.query_string_parameters:
-        try:
-            limit = int(app.current_event.query_string_parameters.get('limit', limit_default))
-        except ValueError:
-            limit = limit_default
-        start_key = app.current_event.query_string_parameters.get("start_key")
-    else:
-        limit = limit_default
-        start_key = None
 
     try:
         if start_key:

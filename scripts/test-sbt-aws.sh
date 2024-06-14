@@ -108,7 +108,7 @@ fi
 
 # Test get-all-tenants
 echo "Testing get-all-tenants..."
-tenants=$(./sbt-aws.sh get-all-tenants)
+tenants=$(./sbt-aws.sh get-all-tenants 30)
 if echo "$tenants" | grep -q "$tenant_id"; then
     log_test "pass" "Tenant found in get-all-tenants"
 else

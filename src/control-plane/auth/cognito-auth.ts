@@ -218,7 +218,7 @@ export class CognitoAuth extends Construct implements IAuth {
    */
   private readonly lambdaIdpExecRole: Role;
 
-  constructor(scope: Construct, id: string, props: CognitoAuthProps) {
+  constructor(scope: Construct, id: string, props?: CognitoAuthProps) {
     super(scope, id);
     addTemplateTag(this, 'CognitoAuth');
 
@@ -229,6 +229,8 @@ export class CognitoAuth extends Construct implements IAuth {
       `arn:aws:lambda:${Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV2:59`
     );
     const defaultControlPlaneCallbackURL = 'http://localhost';
+    const controlPlaneCallbackURL =
+      props?.controlPlaneCallbackURL || defaultControlPlaneCallbackURL;
 
     this.userPool = new cognito.UserPool(this, 'UserPool', {
       autoVerify: { email: true },
@@ -241,7 +243,7 @@ export class CognitoAuth extends Construct implements IAuth {
       },
       userInvitation: {
         emailSubject: 'Your temporary password for control plane UI',
-        emailBody: `Login into control plane UI at ${props.controlPlaneCallbackURL} with username {username} and temporary password {####}`,
+        emailBody: `Login into control plane UI at ${controlPlaneCallbackURL} with username {username} and temporary password {####}`,
       },
       accountRecovery: cognito.AccountRecovery.EMAIL_ONLY,
       standardAttributes: {
@@ -285,7 +287,7 @@ export class CognitoAuth extends Construct implements IAuth {
       writeUserScope
     );
 
-    if (props.setAPIGWScopes != false) {
+    if (props?.setAPIGWScopes != false) {
       this.fetchUserScope = userResourceServerReadScope.scopeName;
       this.fetchAllUsersScope = userResourceServerReadScope.scopeName;
       this.deleteUserScope = userResourceServerWriteScope.scopeName;
@@ -320,7 +322,7 @@ export class CognitoAuth extends Construct implements IAuth {
       writeTenantScope
     );
 
-    if (props.setAPIGWScopes != false) {
+    if (props?.setAPIGWScopes != false) {
       this.fetchTenantScope = tenantResourceServerReadScope.scopeName;
       this.fetchAllTenantsScope = tenantResourceServerReadScope.scopeName;
       this.deleteTenantScope = tenantResourceServerWriteScope.scopeName;
@@ -364,8 +366,8 @@ export class CognitoAuth extends Construct implements IAuth {
       },
       supportedIdentityProviders: [cognito.UserPoolClientIdentityProvider.COGNITO],
       oAuth: {
-        callbackUrls: [props.controlPlaneCallbackURL || defaultControlPlaneCallbackURL],
-        logoutUrls: [props.controlPlaneCallbackURL || defaultControlPlaneCallbackURL],
+        callbackUrls: [controlPlaneCallbackURL],
+        logoutUrls: [controlPlaneCallbackURL],
         flows: {
           authorizationCodeGrant: true,
           implicitCodeGrant: true,
