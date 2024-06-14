@@ -66,22 +66,21 @@ def create_tenant():
 @app.get("/tenants")
 @tracer.capture_method
 def get_tenants(limit: Annotated[Optional[int], Query(gt=0)] = 10,
-                start_key: Annotated[Optional[str], Query(min_length=0)] = None):
+                next_token: Annotated[Optional[str], Query(min_length=0)] = None):
     logger.info("Request received to get all tenants")
     tenants = None
     last_evaluated_key = None
 
-    try:
-        if start_key:
-            response = tenant_details_table.scan(
-                Limit=limit,
-                ExclusiveStartKey={
-                    'tenantId': start_key
-                }
-            )
-        else:
-            response = tenant_details_table.scan(Limit=limit)
+    kwargs = {
+        'Limit': limit
+    }
+    if next_token:
+        kwargs['ExclusiveStartKey'] = {
+            'tenantId': next_token
+        }
 
+    try:
+        response = tenant_details_table.scan(**kwargs)
         tenants = response["Items"]
         last_evaluated_key = response.get("LastEvaluatedKey")
 
@@ -93,11 +92,9 @@ def get_tenants(limit: Annotated[Optional[int], Query(gt=0)] = 10,
         return_response = {
             "data": tenants
         }
+
         if last_evaluated_key:
-            next_start_key = last_evaluated_key['tenantId']
-            return_response["next_start_key"] = next_start_key
-        else:
-            next_start_key = None
+            return_response["next_token"] = last_evaluated_key['tenantId']
 
         return return_response, HTTPStatus.OK
 

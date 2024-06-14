@@ -15,11 +15,12 @@ help() {
   echo "  refresh-tokens"
   echo "  create-tenant"
   echo "  get-tenant <tenant_id>"
-  echo "  get-all-tenants <limit> <start_key>"
+  echo "  get-all-tenants <limit> <next_token>"
   echo "  delete-tenant <tenant_id>"
   echo "  update-tenant <tenant_id> <key> <value>"
   echo "  create-user"
   echo "  get-user <user_id>"
+  echo "  get-all-users <limit> <next_token>"
   echo "  delete-user <user_id>"
   echo "  help"
 }
@@ -218,12 +219,12 @@ get_all_tenants() {
     echo "Getting all tenants"
   fi
 
-  # add default if limit is not specified
-  MY_LIMIT=$1
-  START_KEY=$2
+  MY_LIMIT="${1:-10}"
+  NEXT_TOKEN="${2:-}"
 
-  RESPONSE=$(curl --request GET \
-    --url "${CONTROL_PLANE_API_ENDPOINT}tenants?limit=${MY_LIMIT}&start_key=${START_KEY}" \
+  RESPONSE=$(curl -G --request GET \
+    --url "${CONTROL_PLANE_API_ENDPOINT}tenants?limit=${MY_LIMIT}" \
+    --data-urlencode "next_token=${NEXT_TOKEN}" \
     --header "Authorization: Bearer $ACCESS_TOKEN" \
     --silent)
 
@@ -280,6 +281,28 @@ create_user() {
     --header "Authorization: Bearer $ACCESS_TOKEN" \
     --header 'content-type: application/json' \
     --data "$DATA" \
+    --silent)
+
+  if $DEBUG; then
+    echo "Response: $RESPONSE"
+  else
+    echo "$RESPONSE"
+  fi
+}
+
+get_all_users() {
+  source_config
+  MY_LIMIT="${1:-10}"
+  NEXT_TOKEN="${2:-}"
+
+  if $DEBUG; then
+    echo "Getting all users"
+  fi
+
+  RESPONSE=$(curl -G --request GET \
+    --url "${CONTROL_PLANE_API_ENDPOINT}users?limit=${MY_LIMIT}" \
+    --data-urlencode "next_token=${NEXT_TOKEN}" \
+    --header "Authorization: Bearer $ACCESS_TOKEN" \
     --silent)
 
   if $DEBUG; then
@@ -414,6 +437,10 @@ case "$1" in
 
 "create-user")
   create_user
+  ;;
+
+"get-all-users")
+  get_all_users "$2" "$3"
   ;;
 
 "get-user")

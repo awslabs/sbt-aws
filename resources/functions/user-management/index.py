@@ -3,15 +3,18 @@
 
 import os
 from http import HTTPStatus
+from typing import Optional
 from aws_lambda_powertools import Tracer
 from aws_lambda_powertools import Logger
 from aws_lambda_powertools.logging import correlation_paths
+from aws_lambda_powertools.event_handler.openapi.params import Query
+from aws_lambda_powertools.shared.types import Annotated
 from aws_lambda_powertools.event_handler import APIGatewayHttpResolver
 from cognito_user_management_service import CognitoUserManagementService
 
 tracer = Tracer()
 logger = Logger()
-app = APIGatewayHttpResolver()
+app = APIGatewayHttpResolver(enable_validation=True)
 
 idp_details = {
     "idp": {
@@ -33,12 +36,22 @@ def create_user():
 
 @app.get("/users")
 @tracer.capture_method
-def get_users():
+def get_users(limit: Annotated[Optional[int], Query(gt=0, le=60)] = 10,
+              next_token: Annotated[Optional[str], Query(min_length=0)] = None):
     user_details = {}
     user_details['idpDetails'] = idp_details
-    users = idp_user_mgmt_service.get_users(user_details)
+    user_details['limit'] = limit
+    user_details['next_token'] = next_token
+    users, next_token = idp_user_mgmt_service.get_users(user_details)
     logger.info(users.serialize())
-    return users.serialize(), HTTPStatus.OK.value
+    return_response = {
+        "data": users.serialize()
+    }
+
+    if next_token:
+        return_response["next_token"] = next_token
+
+    return return_response, HTTPStatus.OK.value
 
 
 @app.get("/users/<userId>")

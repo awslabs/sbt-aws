@@ -24,11 +24,19 @@ class CognitoUserManagementService():
     def get_users(self, event):
         user_details = event
         user_pool_id = user_details['idpDetails']['idp']['userPoolId']
+        limit = user_details['limit']
+        next_token = user_details['next_token']
         users = UserInfoList()
-    
-        response = client.list_users(
-                UserPoolId=user_pool_id
-            )
+
+        kwargs = {
+            'UserPoolId': user_pool_id,
+            'Limit': limit
+        }
+
+        if next_token:
+            kwargs['PaginationToken'] = next_token
+
+        response = client.list_users(**kwargs)
         
         num_of_users = len(response['Users'])
     
@@ -48,7 +56,7 @@ class CognitoUserManagementService():
                     user_info.user_name = user["Username"]
                     users.add_user(user_info)                    
             
-        return users
+        return users, response.get('PaginationToken')
     
 
     def get_user(self, event):
