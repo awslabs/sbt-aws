@@ -39,7 +39,6 @@ function testForRulesInOtherStack(stack: cdk.Stack) {
   const eventRuleCapture = new Capture();
 
   const rules = template.findResources('AWS::Events::Rule', eventRuleCapture);
-  console.log(rules);
   if (Object.keys(rules).length === 0) {
     it('should not have rules for triggering runners in stacks that do not define them', () => {
       expect(true).toBe(true);
@@ -54,7 +53,6 @@ function testForRulesInOtherStack(stack: cdk.Stack) {
     eventRules.push(eventRuleCapture.asObject());
   } while (eventRuleCapture.next());
 
-  console.log(eventRules);
   const onboardingRequestEventRules = eventRules.filter(
     (eventRule: { EventPattern?: { 'detail-type': string[] } }) => {
       return (
