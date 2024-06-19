@@ -1,8 +1,9 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-import user_management_util as user_management_util
+import boto3
 from crhelper import CfnResource
+cognito = boto3.client('cognito-idp')
 helper = CfnResource()
 
 
@@ -17,29 +18,54 @@ def do_action(event, _):
             event ([type]): [description]
             _ ([type]): [description]
     """
+    user_name = event['ResourceProperties']['Name']
+    email = event['ResourceProperties']['Email']
+    user_role = event['ResourceProperties']['Role']
+    user_pool_id = event['ResourceProperties']['UserPoolId']
+
     try:
-        user_pool_id = event['ResourceProperties']['UserPoolId']
-        user_details = {
-            'email': event['ResourceProperties']['SystemAdminEmail'],
-            'userRole': event['ResourceProperties']['SystemAdminRoleName'],
-            'userName': 'admin',
-        }
-
-        tenant_user_group_response = user_management_util.create_user_group(
-            user_pool_id,
-            user_details['userRole']
+        create_group_response = cognito.create_group(
+            GroupName=user_role,
+            UserPoolId=user_pool_id,
+            Precedence=0
         )
+        print(f'create_group_response: {create_group_response}')
+    except cognito.exceptions.GroupExistsException:
+        print(f'group: {user_role} already exists!')
 
-        user_management_util.create_user(user_pool_id, user_details)
-
-        user_management_util.add_user_to_group(
-            user_pool_id,
-            user_details['userName'],
-            tenant_user_group_response['Group']['GroupName']
+    try:
+        create_user_response = cognito.admin_create_user(
+            Username=user_name,
+            UserPoolId=user_pool_id,
+            ForceAliasCreation=True,
+            UserAttributes=[
+                {
+                    'Name': 'email',
+                    'Value': email
+                },
+                {
+                    'Name': 'email_verified',
+                    'Value': 'true'
+                },
+                {
+                    'Name': 'custom:userRole',
+                    'Value': user_role
+                }
+            ]
         )
+        print(f'create_user_response: {create_user_response}')
+    except cognito.exceptions.UsernameExistsException:
+        print(f'user: {user_name} already exists!')
 
-    except Exception as e:
-        raise e
+    try:
+        add_user_to_group_response = cognito.admin_add_user_to_group(
+            UserPoolId=user_pool_id,
+            Username=user_name,
+            GroupName=user_role
+        )
+        print(f'add_user_to_group_response: {add_user_to_group_response}')
+    except cognito.exceptions as e:
+        print(f'failed to add user to group: {e}')
 
 
 @helper.delete

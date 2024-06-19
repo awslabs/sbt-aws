@@ -14,7 +14,7 @@ from aws_lambda_powertools import Logger, Tracer
 from aws_lambda_powertools.event_handler import (APIGatewayHttpResolver,
                                                  CORSConfig)
 from aws_lambda_powertools.logging import correlation_paths
-from aws_lambda_powertools.event_handler.openapi.params import Query
+from aws_lambda_powertools.event_handler.openapi.params import Query, Path
 from aws_lambda_powertools.shared.types import Annotated
 from aws_lambda_powertools.event_handler.exceptions import (
     InternalServerError,
@@ -54,11 +54,13 @@ def create_tenant():
         input_item['isActive'] = True
 
         response = tenant_details_table.put_item(Item=input_item)
+        logger.info(f"put_item response {response}")
         __create_control_plane_event(
             json.dumps(input_details), onboarding_detail_type)
 
-    except Exception as e:
-        raise Exception("Error creating a new tenant", e)
+    except botocore.exceptions.ClientError as error:
+        logger.error(error)
+        raise InternalServerError("Unknown error during processing!")
     else:
         return {'data': input_item}, HTTPStatus.CREATED
 
@@ -101,7 +103,7 @@ def get_tenants(limit: Annotated[Optional[int], Query(gt=0)] = 10,
 
 @app.get("/tenants/<tenantId>")
 @tracer.capture_method
-def get_tenant(tenantId):
+def get_tenant(tenantId: Annotated[str, Path(min_length=0)]):
     logger.info(f"Request received to get a tenant: {tenantId}")
     tenant = None
     try:
@@ -118,7 +120,7 @@ def get_tenant(tenantId):
 
 @app.put("/tenants/<tenantId>")
 @tracer.capture_method
-def update_tenant(tenantId):
+def update_tenant(tenantId: Annotated[str, Path(min_length=0)]):
     logger.info("Request received to update a tenant")
     input_details = app.current_event.json_body
     updated_tenant = None
@@ -137,7 +139,7 @@ def update_tenant(tenantId):
 
 @app.delete("/tenants/<tenantId>")
 @tracer.capture_method
-def delete_tenant(tenantId):
+def delete_tenant(tenantId: Annotated[str, Path(min_length=0)]):
     logger.info("Request received to delete a tenant")
 
     try:
@@ -182,7 +184,7 @@ def __update_tenant(tenantId, tenant):
 
 @app.put("/tenants/<tenantId>/deactivate")
 @tracer.capture_method
-def deactivate_tenant(tenantId):
+def deactivate_tenant(tenantId: Annotated[str, Path(min_length=0)]):
     logger.info("Request received to deactivate a tenant")
 
     try:
@@ -196,6 +198,7 @@ def deactivate_tenant(tenantId):
             },
             ReturnValues="ALL_NEW"
         )
+        logger.info(f"update_item response {response}")
 
         __create_control_plane_event(
             json.dumps({"tenantId": tenantId}), deactivate_detail_type)
@@ -209,7 +212,7 @@ def deactivate_tenant(tenantId):
 
 @app.put("/tenants/<tenantId>/activate")
 @tracer.capture_method
-def activate_tenant(tenantId):
+def activate_tenant(tenantId: Annotated[str, Path(min_length=0)]):
     logger.info("Request received to activate a tenant")
 
     try:
@@ -223,6 +226,7 @@ def activate_tenant(tenantId):
             },
             ReturnValues="ALL_NEW"
         )
+        logger.info(f"update_item response {response}")
 
         __create_control_plane_event(json.dumps(
             response['Attributes']), activate_detail_type)
