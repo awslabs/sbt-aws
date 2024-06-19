@@ -213,11 +213,6 @@ export class CognitoAuth extends Construct implements IAuth {
    */
   private readonly lambdaPowertoolsLayer: ILayerVersion;
 
-  /**
-   * The IAM Role for Lambda that enables creating admin users.
-   */
-  private readonly lambdaIdpExecRole: Role;
-
   constructor(scope: Construct, id: string, props?: CognitoAuthProps) {
     super(scope, id);
     addTemplateTag(this, 'CognitoAuth');
@@ -427,10 +422,7 @@ export class CognitoAuth extends Construct implements IAuth {
           'cognito-idp:AdminDeleteUser',
           'cognito-idp:AdminEnableUser',
           'cognito-idp:AdminCreateUser',
-          'cognito-idp:CreateGroup',
           'cognito-idp:AdminDisableUser',
-          'cognito-idp:AdminAddUserToGroup',
-          'cognito-idp:GetGroup',
           'cognito-idp:AdminUpdateUserAttributes',
           'cognito-idp:AdminGetUser',
           'cognito-idp:ListUsers',
@@ -503,55 +495,6 @@ export class CognitoAuth extends Construct implements IAuth {
         },
       ]
     );
-
-    this.lambdaIdpExecRole = new Role(this, 'lambdaIdpExecRole', {
-      assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
-    });
-
-    this.lambdaIdpExecRole.addManagedPolicy(
-      ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')
-    );
-    this.lambdaIdpExecRole.addManagedPolicy(
-      ManagedPolicy.fromAwsManagedPolicyName('CloudWatchLambdaInsightsExecutionRolePolicy')
-    );
-    this.lambdaIdpExecRole.addManagedPolicy(
-      ManagedPolicy.fromAwsManagedPolicyName('AWSXrayWriteOnlyAccess')
-    );
-
-    this.lambdaIdpExecRole.addToPolicy(
-      new PolicyStatement({
-        actions: [
-          'cognito-idp:AdminCreateUser',
-          'cognito-idp:CreateGroup',
-          'cognito-idp:AdminAddUserToGroup',
-          'cognito-idp:GetGroup',
-          'cognito-idp:DescribeUserPool',
-        ],
-        effect: Effect.ALLOW,
-        resources: ['*'],
-      })
-    );
-
-    NagSuppressions.addResourceSuppressions(
-      this.lambdaIdpExecRole,
-      [
-        {
-          id: 'AwsSolutions-IAM5',
-          reason: 'Auth resource name(s) not known beforehand.',
-        },
-        {
-          id: 'AwsSolutions-IAM4',
-          reason:
-            'Suppress usage of AWSLambdaBasicExecutionRole, CloudWatchLambdaInsightsExecutionRolePolicy, and AWSXrayWriteOnlyAccess.',
-          appliesTo: [
-            'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
-            'Policy::arn:<AWS::Partition>:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy',
-            'Policy::arn:<AWS::Partition>:iam::aws:policy/AWSXrayWriteOnlyAccess',
-          ],
-        },
-      ],
-      true // applyToChildren = true, so that it applies to policies created for the role.
-    );
   }
 
   createAdminUser(scope: Construct, id: string, props: CreateAdminUserProps) {
@@ -561,9 +504,24 @@ export class CognitoAuth extends Construct implements IAuth {
       index: 'index.py',
       handler: 'handler',
       timeout: Duration.seconds(60),
-      role: this.lambdaIdpExecRole,
       layers: [this.lambdaPowertoolsLayer],
     });
+    this.userPool.grant(createAdminUserFunction, 'cognito-idp:AdminCreateUser', 'cognito-idp:AdminDeleteUser')
+
+    NagSuppressions.addResourceSuppressions(
+      createAdminUserFunction.role!,
+      [
+        {
+          id: 'AwsSolutions-IAM4',
+          reason:
+            'Suppress usage of AWSLambdaBasicExecutionRole.',
+          appliesTo: [
+            'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
+          ],
+        },
+      ],
+      true // applyToChildren = true, so that it applies to policies created for the role.
+    );
 
     new CustomResource(scope, `createAdminUserCustomResource-${id}`, {
       serviceToken: createAdminUserFunction.functionArn,
