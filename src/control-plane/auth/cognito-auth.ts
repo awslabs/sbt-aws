@@ -569,8 +569,9 @@ export class CognitoAuth extends Construct implements IAuth {
       serviceToken: createAdminUserFunction.functionArn,
       properties: {
         UserPoolId: this.userPool.userPoolId,
-        SystemAdminEmail: props.email,
-        SystemAdminRoleName: props.role,
+        Name: props.name,
+        Email: props.email,
+        Role: props.role,
       },
     });
   }

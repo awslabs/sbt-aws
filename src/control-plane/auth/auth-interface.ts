@@ -13,6 +13,11 @@ export interface CreateAdminUserProps {
   /**
    * The email address of the new admin user.
    */
+  readonly name: string;
+
+  /**
+   * The email address of the new admin user.
+   */
   readonly email: string;
 
   /**
