@@ -19,9 +19,9 @@ export interface SampleRegistrationWebPageProps {
   /**
    * The API Gateway that serves the following endpoints:
    *
-   * - POST /redirectmarketplacetoken: redirects to a registration page.
+   * POST /redirectmarketplacetoken: redirects to a registration page.
    *
-   * - POST /subscriber: creates a new subscriber.
+   * POST /subscriber: creates a new subscriber.
    */
   readonly registrationAPI: RestApiBase;
 

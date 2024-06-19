@@ -22,7 +22,7 @@ export class IntegStack extends cdk.Stack {
 
     // for monitoring purposes
     const eventBusWatcherRule = new Rule(this, 'EventBusWatcherRule', {
-      eventBus: EventBus.fromEventBusArn(this, 'eventBus',controlPlane.eventManager.busArn),
+      eventBus: EventBus.fromEventBusArn(this, 'eventBus', controlPlane.eventManager.busArn),
       enabled: true,
       eventPattern: {
         source: [

@@ -1871,6 +1871,109 @@ The DynamoDB table containing the aggregated data.
 ---
 
 
+### SampleRegistrationWebPage <a name="SampleRegistrationWebPage" id="@cdklabs/sbt-aws.SampleRegistrationWebPage"></a>
+
+Constructs a sample registration web page hosted on Amazon S3 and fronted by Amazon CloudFront.
+
+The web page includes a form for users to register for the SaaS product.
+
+#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.Initializer"></a>
+
+```typescript
+import { SampleRegistrationWebPage } from '@cdklabs/sbt-aws'
+
+new SampleRegistrationWebPage(scope: Construct, id: string, props: SampleRegistrationWebPageProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPage.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPage.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPage.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPageProps">SampleRegistrationWebPageProps</a></code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@cdklabs/sbt-aws.SampleRegistrationWebPageProps">SampleRegistrationWebPageProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPage.toString">toString</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `toString` <a name="toString" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPage.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.isConstruct"></a>
+
+```typescript
+import { SampleRegistrationWebPage } from '@cdklabs/sbt-aws'
+
+SampleRegistrationWebPage.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPage.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+
 ### Services <a name="Services" id="@cdklabs/sbt-aws.Services"></a>
 
 #### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.Services.Initializer"></a>
@@ -3028,24 +3131,13 @@ const controlPlaneProps: ControlPlaneProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.auth">auth</a></code> | <code><a href="#@cdklabs/sbt-aws.IAuth">IAuth</a></code> | The authentication provider for the control plane. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminEmail">systemAdminEmail</a></code> | <code>string</code> | The email address of the system admin. |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.auth">auth</a></code> | <code><a href="#@cdklabs/sbt-aws.IAuth">IAuth</a></code> | The authentication provider for the control plane. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.billing">billing</a></code> | <code><a href="#@cdklabs/sbt-aws.IBilling">IBilling</a></code> | The billing provider configuration. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.disableAPILogging">disableAPILogging</a></code> | <code>boolean</code> | If true, the API Gateway will not log requests to the CloudWatch Logs. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | The event manager instance. |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminName">systemAdminName</a></code> | <code>string</code> | The name of the system admin user. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminRoleName">systemAdminRoleName</a></code> | <code>string</code> | The name of the system admin role. |
-
----
-
-##### `auth`<sup>Required</sup> <a name="auth" id="@cdklabs/sbt-aws.ControlPlaneProps.property.auth"></a>
-
-```typescript
-public readonly auth: IAuth;
-```
-
-- *Type:* <a href="#@cdklabs/sbt-aws.IAuth">IAuth</a>
-
-The authentication provider for the control plane.
 
 ---
 
@@ -3058,6 +3150,20 @@ public readonly systemAdminEmail: string;
 - *Type:* string
 
 The email address of the system admin.
+
+---
+
+##### `auth`<sup>Optional</sup> <a name="auth" id="@cdklabs/sbt-aws.ControlPlaneProps.property.auth"></a>
+
+```typescript
+public readonly auth: IAuth;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.IAuth">IAuth</a>
+
+The authentication provider for the control plane.
+
+If not provided, CognitoAuth will be used.
 
 ---
 
@@ -3097,6 +3203,19 @@ public readonly eventManager: IEventManager;
 The event manager instance.
 
 If not provided, a new instance will be created.
+
+---
+
+##### `systemAdminName`<sup>Optional</sup> <a name="systemAdminName" id="@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminName"></a>
+
+```typescript
+public readonly systemAdminName: string;
+```
+
+- *Type:* string
+- *Default:* 'admin'
+
+The name of the system admin user.
 
 ---
 
@@ -3343,6 +3462,7 @@ const createAdminUserProps: CreateAdminUserProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.CreateAdminUserProps.property.email">email</a></code> | <code>string</code> | The email address of the new admin user. |
+| <code><a href="#@cdklabs/sbt-aws.CreateAdminUserProps.property.name">name</a></code> | <code>string</code> | The email address of the new admin user. |
 | <code><a href="#@cdklabs/sbt-aws.CreateAdminUserProps.property.role">role</a></code> | <code>string</code> | The name of the role of the new admin user. |
 
 ---
@@ -3351,6 +3471,18 @@ const createAdminUserProps: CreateAdminUserProps = { ... }
 
 ```typescript
 public readonly email: string;
+```
+
+- *Type:* string
+
+The email address of the new admin user.
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="@cdklabs/sbt-aws.CreateAdminUserProps.property.name"></a>
+
+```typescript
+public readonly name: string;
 ```
 
 - *Type:* string
@@ -3512,6 +3644,91 @@ public readonly primaryKeyPath: string;
 - *Type:* string
 
 The JMESPath to find the primary key value in the incoming data stream.
+
+---
+
+### SampleRegistrationWebPageProps <a name="SampleRegistrationWebPageProps" id="@cdklabs/sbt-aws.SampleRegistrationWebPageProps"></a>
+
+Properties for the SampleRegistrationWebPage construct.
+
+#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.SampleRegistrationWebPageProps.Initializer"></a>
+
+```typescript
+import { SampleRegistrationWebPageProps } from '@cdklabs/sbt-aws'
+
+const sampleRegistrationWebPageProps: SampleRegistrationWebPageProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.registrationAPI">registrationAPI</a></code> | <code>aws-cdk-lib.aws_apigateway.RestApiBase</code> | The API Gateway that serves the following endpoints:. |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.userProvidedRequiredFieldsForRegistration">userProvidedRequiredFieldsForRegistration</a></code> | <code>string[]</code> | The list of required user-provided fields for registration. |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.autoDeleteBucketObjects">autoDeleteBucketObjects</a></code> | <code>boolean</code> | Whether to automatically delete objects from the S3 bucket when the stack is deleted. |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.imageLogoUrl">imageLogoUrl</a></code> | <code>string</code> | The URL of the image logo to display on the registration page. |
+
+---
+
+##### `registrationAPI`<sup>Required</sup> <a name="registrationAPI" id="@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.registrationAPI"></a>
+
+```typescript
+public readonly registrationAPI: RestApiBase;
+```
+
+- *Type:* aws-cdk-lib.aws_apigateway.RestApiBase
+
+The API Gateway that serves the following endpoints:.
+
+POST /redirectmarketplacetoken: redirects to a registration page.
+
+POST /subscriber: creates a new subscriber.
+
+---
+
+##### `userProvidedRequiredFieldsForRegistration`<sup>Required</sup> <a name="userProvidedRequiredFieldsForRegistration" id="@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.userProvidedRequiredFieldsForRegistration"></a>
+
+```typescript
+public readonly userProvidedRequiredFieldsForRegistration: string[];
+```
+
+- *Type:* string[]
+
+The list of required user-provided fields for registration.
+
+This contains the set of fields that must be provided by the user
+when registering a new customer.
+
+This is used to dynamically update the registration page to create a
+form that accepts each of the fields present in this list.
+
+ex. ['name', 'phone']
+
+---
+
+##### `autoDeleteBucketObjects`<sup>Optional</sup> <a name="autoDeleteBucketObjects" id="@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.autoDeleteBucketObjects"></a>
+
+```typescript
+public readonly autoDeleteBucketObjects: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+Whether to automatically delete objects from the S3 bucket when the stack is deleted.
+
+---
+
+##### `imageLogoUrl`<sup>Optional</sup> <a name="imageLogoUrl" id="@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.imageLogoUrl"></a>
+
+```typescript
+public readonly imageLogoUrl: string;
+```
+
+- *Type:* string
+- *Default:* Amazon logo
+
+The URL of the image logo to display on the registration page.
 
 ---
 
