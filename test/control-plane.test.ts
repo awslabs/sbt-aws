@@ -86,3 +86,37 @@ describe('ControlPlane Targets', () => {
     } while (targetsCapture.next());
   });
 });
+
+describe('ControlPlane API logging', () => {
+  it('should configure logging for the API by default', () => {
+    const stackWithLogging = new TestStack(new cdk.App(), 'stackWithLogging', {
+      systemAdminEmail: 'test@example.com',
+    });
+    const template = Template.fromStack(stackWithLogging);
+
+    template.hasResourceProperties(
+      'AWS::ApiGatewayV2::Stage',
+      Match.objectLike({
+        AccessLogSettings: {
+          DestinationArn: Match.anyValue(),
+          Format: Match.anyValue(),
+        },
+      })
+    );
+  });
+
+  it('should not configure logging if the disable logging flag is true', () => {
+    const stackWithoutLogging = new TestStack(new cdk.App(), 'stackWithoutLogging', {
+      systemAdminEmail: 'test@example.com',
+      disableAPILogging: true,
+    });
+    const templateWithoutLogging = Template.fromStack(stackWithoutLogging);
+
+    templateWithoutLogging.hasResourceProperties(
+      'AWS::ApiGatewayV2::Stage',
+      Match.objectLike({
+        AccessLogSettings: Match.absent(),
+      })
+    );
+  });
+});
