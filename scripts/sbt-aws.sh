@@ -21,6 +21,7 @@ help() {
   echo "  create-user"
   echo "  get-user <user_id>"
   echo "  get-all-users <limit> <next_token>"
+  echo "  update-user <user_id> <user_role> <user_email>"
   echo "  delete-user <user_id>"
   echo "  help"
 }
@@ -332,6 +333,38 @@ get_user() {
   fi
 }
 
+update_user() {
+  source_config
+  USER_ID="$1"
+  USER_ROLE="${2:-}"
+  USER_EMAIL="${3:-}"
+
+  DATA=$(jq --null-input \
+    --arg userRole "$USER_ROLE" \
+    --arg email "$USER_EMAIL" \
+    '{
+      userRole: $userRole,
+      email: $email
+    }' | jq 'with_entries(select(.value != null))')
+
+  if $DEBUG; then
+    echo "Updating user with ID: $USER_ID with DATA: $DATA"
+  fi
+
+  RESPONSE=$(curl --request PUT \
+    --url "${CONTROL_PLANE_API_ENDPOINT}users/$USER_ID" \
+    --header "Authorization: Bearer $ACCESS_TOKEN" \
+    --header 'content-type: application/json' \
+    --data "$DATA" \
+    --silent)
+
+  if $DEBUG; then
+    echo "Response: $RESPONSE"
+  else
+    echo "$RESPONSE"
+  fi
+}
+
 delete_user() {
   source_config
   USER_ID="$1"
@@ -449,6 +482,14 @@ case "$1" in
     exit 1
   fi
   get_user "$2"
+  ;;
+
+"update-user")
+  if [ $# -ne 4 ]; then
+    echo "Error: update-user requires user id and new (or same) user role and user email"
+    exit 1
+  fi
+  update_user "$2" "$3" "$4"
   ;;
 
 "delete-user")

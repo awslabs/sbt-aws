@@ -172,6 +172,64 @@ else
     log_test "fail" "Unexpected output when deleting non-existent tenant"
 fi
 
+# Test create-user
+echo "Testing create-user..."
+user_id=$(./sbt-aws.sh create-user | jq -r '.data.userName')
+if [ -n "$user_id" ] && [ "$user_id" != "null" ]; then
+    log_test "pass" "User created successfully with ID: $user_id"
+else
+    log_test "fail" "Failed to create user"
+fi
+
+# Test get-all-users
+echo "Testing get-all-users..."
+users=$(./sbt-aws.sh get-all-users 30)
+if echo "$users" | grep -q "$user_id"; then
+    log_test "pass" "User found in get-all-users"
+else
+    log_test "fail" "User not found in get-all-users"
+fi
+
+# Test get-user
+echo "Testing get-user..."
+user_details=$(./sbt-aws.sh get-user "$user_id")
+if [ -n "$user_details" ]; then
+    log_test "pass" "User details retrieved successfully"
+else
+    log_test "fail" "Failed to retrieve user details"
+fi
+
+# Test update-user
+new_user_role="advancedUser"
+new_user_email="newemail@example.com"
+./sbt-aws.sh update-user "$user_id" "$new_user_role" "$new_user_email" >/dev/null
+if [ $? -eq 0 ]; then
+    log_test "pass" "User update initiated successfully"
+
+    # Get the updated user details
+    updated_user_details=$(./sbt-aws.sh get-user "$user_id")
+    updated_user_role=$(echo "$updated_user_details" | jq -r '.data' | jq -r '.userRole')
+    updated_user_email=$(echo "$updated_user_details" | jq -r '.data' | jq -r '.email')
+
+    # Verify the updated user details
+    if [ "$updated_user_role" = "$new_user_role" ] && [ "$updated_user_email" = "$new_user_email" ]; then
+        log_test "pass" "User details updated successfully"
+    else
+        log_test "fail" "Failed to update user details"
+    fi
+else
+    log_test "fail" "Failed to update user"
+fi
+
+# Test delete-user
+echo "Testing delete-user..."
+./sbt-aws.sh delete-user "$user_id" >/dev/null
+if [ $? -eq 0 ]; then
+    log_test "pass" "User deletion initiated successfully"
+else
+    log_test "fail" "Failed to delete user"
+fi
+
 # Set the exit code based on the overall test status
 if [ "$TEST_PASSED" = true ]; then
     exit 0
