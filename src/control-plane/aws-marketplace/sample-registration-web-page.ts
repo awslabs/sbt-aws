@@ -18,7 +18,9 @@ import { addTemplateTag, generateAWSManagedRuleSet } from '../../utils';
 export interface SampleRegistrationWebPageProps {
   /**
    * The API Gateway that serves the following endpoints:
+   *
    * - POST /redirectmarketplacetoken: redirects to a registration page.
+   *
    * - POST /subscriber: creates a new subscriber.
    */
   readonly registrationAPI: RestApiBase;
@@ -56,6 +58,13 @@ export class SampleRegistrationWebPage extends Construct {
   constructor(scope: Construct, id: string, props: SampleRegistrationWebPageProps) {
     super(scope, id);
     addTemplateTag(this, 'SampleRegistrationWebPage');
+
+    const region = cdk.Stack.of(this).region;
+    if (cdk.Token.isUnresolved(region)) {
+      // region info helps to decide whether to create CloudFront WAF
+      // or NagSuppression for the result cdk-nag finding.
+      throw new Error('Region not specified. Use "env" to specify region.');
+    }
 
     const websiteBucket = new s3.Bucket(this, 'WebsiteS3Bucket', {
       enforceSSL: true,
@@ -103,7 +112,7 @@ export class SampleRegistrationWebPage extends Construct {
             'Action::s3:GetObject*',
             'Action::s3:GetBucket*',
             'Action::s3:List*',
-            `Resource::arn:<AWS::Partition>:s3:::cdk-${cdk.DefaultStackSynthesizer.DEFAULT_QUALIFIER}-assets-<AWS::AccountId>-<AWS::Region>/*`,
+            `Resource::arn:<AWS::Partition>:s3:::cdk-${cdk.DefaultStackSynthesizer.DEFAULT_QUALIFIER}-assets-<AWS::AccountId>-${region}/*`,
             'Action::s3:DeleteObject*',
             'Action::s3:Abort*',
             `Resource::<${cdk.Stack.of(this).getLogicalId(websiteBucket.node.defaultChild as s3.CfnBucket)}.Arn>/*`,
@@ -141,24 +150,29 @@ export class SampleRegistrationWebPage extends Construct {
       true // applyToChildren = true, so that it applies to policies created for the role.
     );
 
-    const cfnWAF = new cdk.aws_wafv2.CfnWebACL(this, 'WAF', {
-      defaultAction: { allow: {} },
-      scope: 'CLOUDFRONT',
-      visibilityConfig: {
-        cloudWatchMetricsEnabled: true,
-        sampledRequestsEnabled: true,
-        metricName: 'WAF-WebsiteS3CloudfrontDistribution',
-      },
-      rules: [
-        // generateAWSManagedRuleSet('AWSManagedRulesBotControlRuleSet', 0), // enable to block curl requests
-        generateAWSManagedRuleSet('AWSManagedRulesKnownBadInputsRuleSet', 1),
-        generateAWSManagedRuleSet('AWSManagedRulesCommonRuleSet', 2),
-        generateAWSManagedRuleSet('AWSManagedRulesAnonymousIpList', 3),
-        generateAWSManagedRuleSet('AWSManagedRulesAmazonIpReputationList', 4),
-        generateAWSManagedRuleSet('AWSManagedRulesAdminProtectionRuleSet', 5),
-        generateAWSManagedRuleSet('AWSManagedRulesSQLiRuleSet', 6),
-      ],
-    });
+    let cfnWAF;
+    if (cdk.Token.isUnresolved(region) == false && region == 'us-east-1') {
+      cfnWAF = new cdk.aws_wafv2.CfnWebACL(this, 'WAF', {
+        defaultAction: { allow: {} },
+        scope: 'CLOUDFRONT',
+        visibilityConfig: {
+          cloudWatchMetricsEnabled: true,
+          sampledRequestsEnabled: true,
+          metricName: 'WAF-WebsiteS3CloudfrontDistribution',
+        },
+        rules: [
+          generateAWSManagedRuleSet('AWSManagedRulesBotControlRuleSet', 0), // enable to block curl requests
+          generateAWSManagedRuleSet('AWSManagedRulesKnownBadInputsRuleSet', 1),
+          generateAWSManagedRuleSet('AWSManagedRulesCommonRuleSet', 2),
+          generateAWSManagedRuleSet('AWSManagedRulesAnonymousIpList', 3),
+          generateAWSManagedRuleSet('AWSManagedRulesAmazonIpReputationList', 4),
+          generateAWSManagedRuleSet('AWSManagedRulesAdminProtectionRuleSet', 5),
+          generateAWSManagedRuleSet('AWSManagedRulesSQLiRuleSet', 6),
+        ],
+      });
+    } else {
+      console.log('Only able to create CloudFront WAF in us-east-1 region.');
+    }
 
     const originAccessIdentity = new cloudfront.OriginAccessIdentity(
       this,
@@ -175,7 +189,7 @@ export class SampleRegistrationWebPage extends Construct {
       geoRestriction: cloudfront.GeoRestriction.allowlist('US', 'CA'),
       logFilePrefix: 'access-logs/',
       httpVersion: cloudfront.HttpVersion.HTTP2,
-      webAclId: cfnWAF.attrArn,
+      ...(cfnWAF != undefined ? { webAclId: cfnWAF.attrArn } : {}),
       defaultBehavior: {
         origin: new origins.S3Origin(websiteBucket, {
           originAccessIdentity,
@@ -199,6 +213,15 @@ export class SampleRegistrationWebPage extends Construct {
         },
       },
     });
+
+    if (cdk.Token.isUnresolved(region) == false && region != 'us-east-1') {
+      NagSuppressions.addResourceSuppressions(distribution, [
+        {
+          id: 'AwsSolutions-CFR2',
+          reason: 'Can only create WAFv2 for CloudFront distribution in us-east-1 region.',
+        },
+      ]);
+    }
 
     NagSuppressions.addResourceSuppressions(distribution, [
       {
