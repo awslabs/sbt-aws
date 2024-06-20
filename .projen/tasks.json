@@ -223,7 +223,7 @@
       "description": "Run tests",
       "steps": [
         {
-          "exec": "jest --passWithNoTests --updateSnapshot",
+          "exec": "jest --passWithNoTests --coverageProvider=v8 --updateSnapshot",
           "receiveArgs": true
         },
         {
@@ -264,7 +264,7 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/jest,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-header,eslint-plugin-import,eslint-plugin-prettier,jest,jsii-diff,jsii-docgen,jsii-pacmak,prettier,ts-jest,ts-node,typescript,@aws-cdk/aws-lambda-python-alpha,cdk-nag"
+          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@aws-cdk/aws-kinesisfirehose-alpha,@types/jest,aws-cdk,braces,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-header,eslint-plugin-import,eslint-plugin-prettier,jest,jsii-diff,jsii-docgen,jsii-pacmak,jsii-rosetta,jsii,prettier,projen,ts-jest,ts-node,typescript,@aws-cdk/aws-kinesisfirehose-destinations-alpha,@aws-cdk/aws-lambda-python-alpha,cdk-nag"
         },
         {
           "exec": "npm install"

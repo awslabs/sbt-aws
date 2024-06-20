@@ -177,7 +177,7 @@
       "description": "Run tests",
       "steps": [
         {
-          "exec": "jest --passWithNoTests --updateSnapshot",
+          "exec": "jest --passWithNoTests --coverageProvider=v8 --updateSnapshot",
           "receiveArgs": true
         },
         {
@@ -218,13 +218,13 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/jest,@types/uuid,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,jest,jsii-diff,jsii-docgen,jsii-pacmak,prettier,ts-jest,typescript,@aws-sdk/client-cognito-identity-provider,@aws-sdk/client-dynamodb,@aws-sdk/client-ssm,@aws-sdk/client-sts,@aws-sdk/credential-providers,@aws-sdk/types,@smithy/types,jsonwebtoken,jwks-rsa,uuid"
+          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/jest,@types/uuid,constructs,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,jest,jsii-diff,jsii-docgen,jsii-pacmak,jsii-rosetta,jsii,prettier,projen,ts-jest,typescript,@aws-sdk/client-cognito-identity-provider,@aws-sdk/client-dynamodb,@aws-sdk/client-ssm,@aws-sdk/client-sts,@aws-sdk/credential-providers,@aws-sdk/types,@smithy/types,jsonwebtoken,jwks-rsa,uuid,aws-cdk-lib"
         },
         {
           "exec": "npm install"
         },
         {
-          "exec": "npm update @types/jest @types/node @types/uuid @typescript-eslint/eslint-plugin @typescript-eslint/parser constructs eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii prettier standard-version ts-jest typescript @aws-sdk/client-cognito-identity-provider @aws-sdk/client-dynamodb @aws-sdk/client-ssm @aws-sdk/client-sts @aws-sdk/credential-providers @aws-sdk/types @smithy/types jsonwebtoken jwks-rsa uuid aws-cdk-lib"
+          "exec": "npm update @types/jest @types/node @types/uuid @typescript-eslint/eslint-plugin @typescript-eslint/parser constructs eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii prettier projen standard-version ts-jest typescript @aws-sdk/client-cognito-identity-provider @aws-sdk/client-dynamodb @aws-sdk/client-ssm @aws-sdk/client-sts @aws-sdk/credential-providers @aws-sdk/types @smithy/types jsonwebtoken jwks-rsa uuid aws-cdk-lib"
         },
         {
           "exec": "npx projen"
