@@ -115,6 +115,7 @@ class CognitoUserManagementService():
                 }
             ]
         )
+
         return response
 
     def disable_user(self, event):
