@@ -50,6 +50,7 @@ export class ControlPlaneAPI extends Construct {
     } else {
       const controlPlaneAPILogGroup = new LogGroup(this, 'controlPlaneAPILogGroup', {
         retention: RetentionDays.ONE_WEEK,
+        logGroupName: `/aws/vendedlogs/api/${this.node.id}-${this.node.addr}`,
       });
       const accessLogSettings = {
         destinationArn: controlPlaneAPILogGroup.logGroupArn,

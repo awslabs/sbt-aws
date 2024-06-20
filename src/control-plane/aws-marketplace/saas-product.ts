@@ -258,6 +258,7 @@ export class AWSMarketplaceSaaSProduct extends Construct {
       ]);
     } else {
       const registerCustomerAPILogGroup = new LogGroup(this, 'RegisterCustomerAPILogGroup', {
+        logGroupName: `/aws/vendedlogs/api/${this.node.id}-${this.node.addr}`,
         retention: RetentionDays.ONE_WEEK,
       });
       options.cloudWatchRole = true;
