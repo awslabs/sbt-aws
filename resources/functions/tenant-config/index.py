@@ -106,7 +106,7 @@ def get_tenant_config_via_param_or_header():
         name="tenantId", default_value="")
     tenant_name: str = ''
     logger.info(f"tenant_id: {tenant_id}")
-    if tenant_id is None:
+    if not tenant_id:
         logger.info(
             f"No tenantId query parameter found. Looking for tenantName.")
     else:
