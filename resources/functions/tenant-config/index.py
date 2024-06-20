@@ -41,6 +41,7 @@ def _get_tenant_config_by_name(name):
     tenant_config = response["Items"][0]
     return tenant_config.get(tenant_config_column, None)
 
+
 def _get_tenant_config_by_id(id):
     logger.info(f"id: {id}")
     response = tenant_details_table_handler.get_item(
@@ -69,6 +70,7 @@ def _get_tenant_config_for_tenant_name(name):
     except botocore.exceptions.ClientError as error:
         logger.error(error)
         raise InternalServerError("Unknown error during processing!")
+
 
 def _get_tenant_config_for_tenant_id(id):
     try:
@@ -100,31 +102,34 @@ def get_tenant_config_via_req_param(tenant_name):
 @app.get("/tenant-config")
 @tracer.capture_method
 def get_tenant_config_via_param_or_header():
-    tenant_id: str = app.current_event.get_query_string_value(name="tenantId", default_value="")
+    tenant_id: str = app.current_event.get_query_string_value(
+        name="tenantId", default_value="")
     tenant_name: str = ''
     logger.info(f"tenant_id: {tenant_id}")
     if tenant_id is None:
-        logger.info(f"No tenantId query parameter found. Looking for tenantName.")
+        logger.info(
+            f"No tenantId query parameter found. Looking for tenantName.")
     else:
         return _get_tenant_config_for_tenant_id(tenant_id)
 
-    tenant_name = app.current_event.get_query_string_value(name="tenantName", default_value="")
-    if tenant_name is None:
+    tenant_name = app.current_event.get_query_string_value(
+        name="tenantName", default_value="")
+    if not tenant_name:
         logger.info(f"No tenantName query parameter found. Looking at headers.")
+    else:
+        origin_header = app.current_event.get_header_value(name="Origin")
+        logger.info(f"origin_header: {origin_header}")
+        if not origin_header:
+            logger.error(f"Origin header missing!")
+            raise BadRequestError(f"Origin header missing!")
 
-    origin_header = app.current_event.get_header_value(name="Origin")
-    logger.info(f"origin_header: {origin_header}")
-    if origin_header is None:
-        logger.error(f"Origin header missing!")
-        raise BadRequestError(f"Origin header missing!")
-
-    hostname = origin_header.split("://")[1]
-    logger.info(f"hostname: {hostname}")
-    tenant_name = hostname.split(".")[0]
-    logger.info(f"tenant_name: {tenant_name}")
-    if tenant_name is None:
-        logger.error(f"Unable to parse tenant name!")
-        raise BadRequestError(f"Unable to parse tenant name!")
+        hostname = origin_header.split("://")[1]
+        logger.info(f"hostname: {hostname}")
+        tenant_name = hostname.split(".")[0]
+        logger.info(f"tenant_name: {tenant_name}")
+        if not tenant_name:
+            logger.error(f"Unable to parse tenant name!")
+            raise BadRequestError(f"Unable to parse tenant name!")
 
     return _get_tenant_config_for_tenant_name(tenant_name)
 
