@@ -506,15 +506,18 @@ export class CognitoAuth extends Construct implements IAuth {
       timeout: Duration.seconds(60),
       layers: [this.lambdaPowertoolsLayer],
     });
-    this.userPool.grant(createAdminUserFunction, 'cognito-idp:AdminCreateUser', 'cognito-idp:AdminDeleteUser')
+    this.userPool.grant(
+      createAdminUserFunction,
+      'cognito-idp:AdminCreateUser',
+      'cognito-idp:AdminDeleteUser'
+    );
 
     NagSuppressions.addResourceSuppressions(
       createAdminUserFunction.role!,
       [
         {
           id: 'AwsSolutions-IAM4',
-          reason:
-            'Suppress usage of AWSLambdaBasicExecutionRole.',
+          reason: 'Suppress usage of AWSLambdaBasicExecutionRole.',
           appliesTo: [
             'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
           ],
