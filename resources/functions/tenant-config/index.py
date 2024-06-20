@@ -116,7 +116,6 @@ def get_tenant_config_via_param_or_header():
         name="tenantName", default_value="")
     if not tenant_name:
         logger.info(f"No tenantName query parameter found. Looking at headers.")
-    else:
         origin_header = app.current_event.get_header_value(name="Origin")
         logger.info(f"origin_header: {origin_header}")
         if not origin_header:
