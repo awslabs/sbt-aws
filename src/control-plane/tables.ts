@@ -3,6 +3,7 @@
 
 import { Table, AttributeType, ProjectionType } from 'aws-cdk-lib/aws-dynamodb';
 import { Construct } from 'constructs';
+import { addTemplateTag } from '../utils';
 
 export class Tables extends Construct {
   public readonly tenantDetails: Table;
@@ -14,7 +15,7 @@ export class Tables extends Construct {
   public readonly tenantIdColumn: string = 'tenantId';
   constructor(scope: Construct, id: string) {
     super(scope, id);
-
+    addTemplateTag(this, 'Tables');
     this.tenantDetails = new Table(this, 'TenantDetails', {
       partitionKey: { name: this.tenantIdColumn, type: AttributeType.STRING },
       pointInTimeRecovery: true,

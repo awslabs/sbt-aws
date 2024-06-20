@@ -5,7 +5,7 @@ import * as cdk from 'aws-cdk-lib';
 import { CfnRule, EventBus, Rule } from 'aws-cdk-lib/aws-events';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { AwsSolutionsChecks } from 'cdk-nag';
-import { CognitoAuth, ControlPlane } from '.';
+import { ControlPlane } from '.';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
 
 export interface IntegStackProps extends cdk.StackProps {
@@ -16,29 +16,13 @@ export class IntegStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props: IntegStackProps) {
     super(scope, id, props);
 
-    // for event bridge communication
-    const idpName = 'COGNITO';
-    const systemAdminRoleName = 'SystemAdmin';
-
-    const cognitoAuth = new CognitoAuth(this, 'CognitoAuth', {
-      idpName: idpName,
-      systemAdminRoleName: systemAdminRoleName,
+    const controlPlane = new ControlPlane(this, 'ControlPlane', {
       systemAdminEmail: props.systemAdminEmail,
     });
 
-    const controlPlane = new ControlPlane(this, 'ControlPlane', {
-      auth: cognitoAuth,
-    });
-
-    const eventBus = EventBus.fromEventBusArn(
-      this,
-      'controlPlaneEventBus',
-      controlPlane.eventBusArn
-    );
-
     // for monitoring purposes
     const eventBusWatcherRule = new Rule(this, 'EventBusWatcherRule', {
-      eventBus: eventBus,
+      eventBus: EventBus.fromEventBusArn(this, 'eventBus', controlPlane.eventManager.busArn),
       enabled: true,
       eventPattern: {
         source: [

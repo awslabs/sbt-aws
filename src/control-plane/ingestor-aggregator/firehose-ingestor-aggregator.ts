@@ -13,6 +13,7 @@ import * as s3n from 'aws-cdk-lib/aws-s3-notifications';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IDataIngestorAggregator } from './ingestor-aggregator-interface';
+import { addTemplateTag } from '../../utils';
 
 /**
  * Encapsulates the list of properties for a FirehoseAggregator construct.
@@ -68,6 +69,7 @@ export class FirehoseAggregator extends Construct implements IDataIngestorAggreg
 
   constructor(scope: Construct, id: string, props: FirehoseAggregatorProps) {
     super(scope, id);
+    addTemplateTag(this, 'FirehoseAggregator');
 
     const serviceName = 'FirehoseAggregator';
 

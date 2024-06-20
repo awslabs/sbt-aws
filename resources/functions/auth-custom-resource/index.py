@@ -1,11 +1,10 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-import json
-from cognito_identity_provider_management import CognitoIdentityProviderManagement
+import boto3
 from crhelper import CfnResource
+cognito = boto3.client('cognito-idp')
 helper = CfnResource()
-idp_mgmt_service = CognitoIdentityProviderManagement()
 
 
 @helper.create
@@ -19,36 +18,48 @@ def do_action(event, _):
             event ([type]): [description]
             _ ([type]): [description]
     """
+    user_name = event['ResourceProperties']['Name']
+    email = event['ResourceProperties']['Email']
+    user_role = event['ResourceProperties']['Role']
+    user_pool_id = event['ResourceProperties']['UserPoolId']
+
     try:
-
-        idp_input = {}
-        idp_input['ControlPlaneCallbackURL'] = event['ResourceProperties']['ControlPlaneCallbackURL']
-        idp_input['SystemAdminRoleName'] = event['ResourceProperties']['SystemAdminRoleName']
-        idp_input['SystemAdminEmail'] = event['ResourceProperties']['SystemAdminEmail']
-        idp_input['UserPoolName'] = event['ResourceProperties']['UserPoolName']
-
-        idpDetails = idp_mgmt_service.create_control_plane_idp(idp_input)
-        response = json.dumps(idpDetails)
-        auth_server = idpDetails['idp']['authorizationServer']
-        client_id = idpDetails['idp']['clientId']
-        well_known_endpoint = idpDetails['idp']['wellKnownEndpointUrl']
-        helper.Data['IdpDetails'] = response
-        helper.Data['AuthorizationServer'] = auth_server
-        helper.Data['ClientId'] = client_id
-        helper.Data['WellKnownEndpointUrl'] = well_known_endpoint
-
-        return idpDetails['idp']['userPoolId']
-    except Exception as e:
-        raise e
+        create_user_response = cognito.admin_create_user(
+            Username=user_name,
+            UserPoolId=user_pool_id,
+            ForceAliasCreation=True,
+            UserAttributes=[
+                {
+                    'Name': 'email',
+                    'Value': email
+                },
+                {
+                    'Name': 'email_verified',
+                    'Value': 'true'
+                },
+                {
+                    'Name': 'custom:userRole',
+                    'Value': user_role
+                }
+            ]
+        )
+        print(f'create_user_response: {create_user_response}')
+    except cognito.exceptions.UsernameExistsException:
+        print(f'user: {user_name} already exists!')
+    return user_name
 
 
 @helper.delete
 def do_delete(event, _):
+    user_name = event["PhysicalResourceId"]
+    user_pool_id = event['ResourceProperties']['UserPoolId']
     try:
-        userPoolId = event['PhysicalResourceId']
-        idp_mgmt_service.delete_control_plane_idp(userPoolId)
-    except Exception as e:
-        raise e
+        cognito.admin_delete_user(
+            UserPoolId=user_pool_id,
+            Username=user_name
+        )
+    except cognito.exceptions as e:
+        print(f'failed to delete: {e}')
 
 
 def handler(event, context):

@@ -2,6 +2,155 @@
 
 ## Constructs <a name="Constructs" id="Constructs"></a>
 
+### AWSMarketplaceSaaSProduct <a name="AWSMarketplaceSaaSProduct" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct"></a>
+
+Construct for creating an AWS Marketplace SaaS product.
+
+#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.Initializer"></a>
+
+```typescript
+import { AWSMarketplaceSaaSProduct } from '@cdklabs/sbt-aws'
+
+new AWSMarketplaceSaaSProduct(scope: Construct, id: string, props: AWSMarketplaceSaaSProductProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | - The scope in which to define this construct. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.Initializer.parameter.id">id</a></code> | <code>string</code> | - The unique identifier for this construct. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps">AWSMarketplaceSaaSProductProps</a></code> | - The properties for configuring the AWS Marketplace SaaS product. |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+The scope in which to define this construct.
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+The unique identifier for this construct.
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps">AWSMarketplaceSaaSProductProps</a>
+
+The properties for configuring the AWS Marketplace SaaS product.
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.toString">toString</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `toString` <a name="toString" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.isConstruct"></a>
+
+```typescript
+import { AWSMarketplaceSaaSProduct } from '@cdklabs/sbt-aws'
+
+AWSMarketplaceSaaSProduct.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.registerCustomerAPI">registerCustomerAPI</a></code> | <code>aws-cdk-lib.aws_apigateway.RestApi</code> | The API Gateway REST API for registering customers. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.subscribersTable">subscribersTable</a></code> | <code>aws-cdk-lib.aws_dynamodb.Table</code> | The DynamoDB table for storing subscriber information. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.userProvidedRequiredFieldsForRegistration">userProvidedRequiredFieldsForRegistration</a></code> | <code>string[]</code> | The list of required user-provided fields for registration. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `registerCustomerAPI`<sup>Required</sup> <a name="registerCustomerAPI" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.registerCustomerAPI"></a>
+
+```typescript
+public readonly registerCustomerAPI: RestApi;
+```
+
+- *Type:* aws-cdk-lib.aws_apigateway.RestApi
+
+The API Gateway REST API for registering customers.
+
+---
+
+##### `subscribersTable`<sup>Required</sup> <a name="subscribersTable" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.subscribersTable"></a>
+
+```typescript
+public readonly subscribersTable: Table;
+```
+
+- *Type:* aws-cdk-lib.aws_dynamodb.Table
+
+The DynamoDB table for storing subscriber information.
+
+---
+
+##### `userProvidedRequiredFieldsForRegistration`<sup>Required</sup> <a name="userProvidedRequiredFieldsForRegistration" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProduct.property.userProvidedRequiredFieldsForRegistration"></a>
+
+```typescript
+public readonly userProvidedRequiredFieldsForRegistration: string[];
+```
+
+- *Type:* string[]
+
+The list of required user-provided fields for registration.
+
+This contains the set of fields that must be provided by the user
+when registering a new customer.
+
+---
+
+
 ### BashJobOrchestrator <a name="BashJobOrchestrator" id="@cdklabs/sbt-aws.BashJobOrchestrator"></a>
 
 Provides a BashJobOrchestrator to execute a BashJobRunner.
@@ -363,7 +512,7 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.BillingProvider.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.BillingProvider.property.controlPlaneAPIBillingWebhookResource">controlPlaneAPIBillingWebhookResource</a></code> | <code>aws-cdk-lib.aws_apigateway.IResource</code> | The API Gateway resource containing the billing webhook resource. |
+| <code><a href="#@cdklabs/sbt-aws.BillingProvider.property.controlPlaneAPIBillingWebhookResourcePath">controlPlaneAPIBillingWebhookResourcePath</a></code> | <code>string</code> | The API Gateway resource containing the billing webhook resource. |
 
 ---
 
@@ -379,13 +528,13 @@ The tree node.
 
 ---
 
-##### `controlPlaneAPIBillingWebhookResource`<sup>Optional</sup> <a name="controlPlaneAPIBillingWebhookResource" id="@cdklabs/sbt-aws.BillingProvider.property.controlPlaneAPIBillingWebhookResource"></a>
+##### `controlPlaneAPIBillingWebhookResourcePath`<sup>Optional</sup> <a name="controlPlaneAPIBillingWebhookResourcePath" id="@cdklabs/sbt-aws.BillingProvider.property.controlPlaneAPIBillingWebhookResourcePath"></a>
 
 ```typescript
-public readonly controlPlaneAPIBillingWebhookResource: IResource;
+public readonly controlPlaneAPIBillingWebhookResourcePath: string;
 ```
 
-- *Type:* aws-cdk-lib.aws_apigateway.IResource
+- *Type:* string
 
 The API Gateway resource containing the billing webhook resource.
 
@@ -405,7 +554,7 @@ Constructs for setting up Cognito authentication and user management.
 ```typescript
 import { CognitoAuth } from '@cdklabs/sbt-aws'
 
-new CognitoAuth(scope: Construct, id: string, props: CognitoAuthProps)
+new CognitoAuth(scope: Construct, id: string, props?: CognitoAuthProps)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -428,7 +577,7 @@ new CognitoAuth(scope: Construct, id: string, props: CognitoAuthProps)
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.CognitoAuth.Initializer.parameter.props"></a>
+##### `props`<sup>Optional</sup> <a name="props" id="@cdklabs/sbt-aws.CognitoAuth.Initializer.parameter.props"></a>
 
 - *Type:* <a href="#@cdklabs/sbt-aws.CognitoAuthProps">CognitoAuthProps</a>
 
@@ -439,6 +588,7 @@ new CognitoAuth(scope: Construct, id: string, props: CognitoAuthProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.createAdminUser">createAdminUser</a></code> | Function to create an admin user. |
 
 ---
 
@@ -449,6 +599,32 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
+
+##### `createAdminUser` <a name="createAdminUser" id="@cdklabs/sbt-aws.CognitoAuth.createAdminUser"></a>
+
+```typescript
+public createAdminUser(scope: Construct, id: string, props: CreateAdminUserProps): void
+```
+
+Function to create an admin user.
+
+###### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.CognitoAuth.createAdminUser.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+###### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.CognitoAuth.createAdminUser.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+###### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.CognitoAuth.createAdminUser.parameter.props"></a>
+
+- *Type:* <a href="#@cdklabs/sbt-aws.CreateAdminUserProps">CreateAdminUserProps</a>
+
+---
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -481,18 +657,34 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.authorizationServer">authorizationServer</a></code> | <code>string</code> | The authorization server for the control plane IdP. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.authorizer">authorizer</a></code> | <code>aws-cdk-lib.aws_apigateway.IAuthorizer</code> | The API Gateway authorizer for authenticating requests. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.clientId">clientId</a></code> | <code>string</code> | The client ID for the control plane IdP. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.controlPlaneIdpDetails">controlPlaneIdpDetails</a></code> | <code>any</code> | The details of the control plane Identity Provider (IdP). |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.createUserFunction">createUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for creating a user. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.deleteUserFunction">deleteUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for deleting a user. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.disableUserFunction">disableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for disabling a user. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.enableUserFunction">enableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for enabling a user. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchAllUsersFunction">fetchAllUsersFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for fetching all users. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchAllUsersFunction">fetchAllUsersFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for fetching all users -- GET /users. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchUserFunction">fetchUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for fetching a user. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.jwtAudience">jwtAudience</a></code> | <code>string[]</code> | The list of recipients (audience) for which the JWT is intended. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.jwtIssuer">jwtIssuer</a></code> | <code>string</code> | The JWT issuer domain for the identity provider. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.machineClientId">machineClientId</a></code> | <code>string</code> | The client ID enabled for machine-to-machine authorization flows, such as Client Credentials flow. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.machineClientSecret">machineClientSecret</a></code> | <code>aws-cdk-lib.SecretValue</code> | The client secret enabled for machine-to-machine authorization flows, such as Client Credentials flow. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.tokenEndpoint">tokenEndpoint</a></code> | <code>string</code> | The endpoint URL for granting OAuth tokens. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.updateUserFunction">updateUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for updating a user. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.wellKnownEndpointUrl">wellKnownEndpointUrl</a></code> | <code>string</code> | The well-known endpoint URL for the control plane IdP. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.userClientId">userClientId</a></code> | <code>string</code> | The client ID enabled for user-centric authentication flows, such as Authorization Code flow. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.wellKnownEndpointUrl">wellKnownEndpointUrl</a></code> | <code>string</code> | The well-known endpoint URL for the control plane identity provider. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.activateTenantScope">activateTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for activating a tenant. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.createTenantScope">createTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for creating a tenant. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.createUserScope">createUserScope</a></code> | <code>string</code> | The scope required to authorize requests for creating a user. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.deactivateTenantScope">deactivateTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for deactivating a tenant. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.deleteTenantScope">deleteTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for deleting a tenant. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.deleteUserScope">deleteUserScope</a></code> | <code>string</code> | The scope required to authorize requests for deleting a user. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.disableUserScope">disableUserScope</a></code> | <code>string</code> | The scope required to authorize requests for disabling a user. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.enableUserScope">enableUserScope</a></code> | <code>string</code> | The scope required to authorize requests for enabling a user. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchAllTenantsScope">fetchAllTenantsScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching all tenants. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchAllUsersScope">fetchAllUsersScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching all users. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchTenantScope">fetchTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching a single tenant. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchUserScope">fetchUserScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching a single user. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.updateTenantScope">updateTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for updating a tenant. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.updateUserScope">updateUserScope</a></code> | <code>string</code> | The scope required to authorize requests for updating a user. |
 
 ---
 
@@ -508,54 +700,6 @@ The tree node.
 
 ---
 
-##### `authorizationServer`<sup>Required</sup> <a name="authorizationServer" id="@cdklabs/sbt-aws.CognitoAuth.property.authorizationServer"></a>
-
-```typescript
-public readonly authorizationServer: string;
-```
-
-- *Type:* string
-
-The authorization server for the control plane IdP.
-
----
-
-##### `authorizer`<sup>Required</sup> <a name="authorizer" id="@cdklabs/sbt-aws.CognitoAuth.property.authorizer"></a>
-
-```typescript
-public readonly authorizer: IAuthorizer;
-```
-
-- *Type:* aws-cdk-lib.aws_apigateway.IAuthorizer
-
-The API Gateway authorizer for authenticating requests.
-
----
-
-##### `clientId`<sup>Required</sup> <a name="clientId" id="@cdklabs/sbt-aws.CognitoAuth.property.clientId"></a>
-
-```typescript
-public readonly clientId: string;
-```
-
-- *Type:* string
-
-The client ID for the control plane IdP.
-
----
-
-##### `controlPlaneIdpDetails`<sup>Required</sup> <a name="controlPlaneIdpDetails" id="@cdklabs/sbt-aws.CognitoAuth.property.controlPlaneIdpDetails"></a>
-
-```typescript
-public readonly controlPlaneIdpDetails: any;
-```
-
-- *Type:* any
-
-The details of the control plane Identity Provider (IdP).
-
----
-
 ##### `createUserFunction`<sup>Required</sup> <a name="createUserFunction" id="@cdklabs/sbt-aws.CognitoAuth.property.createUserFunction"></a>
 
 ```typescript
@@ -565,6 +709,8 @@ public readonly createUserFunction: IFunction;
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
 The Lambda function for creating a user.
+
+- POST /users
 
 ---
 
@@ -578,6 +724,8 @@ public readonly deleteUserFunction: IFunction;
 
 The Lambda function for deleting a user.
 
+- DELETE /user/{userId}
+
 ---
 
 ##### `disableUserFunction`<sup>Required</sup> <a name="disableUserFunction" id="@cdklabs/sbt-aws.CognitoAuth.property.disableUserFunction"></a>
@@ -589,6 +737,8 @@ public readonly disableUserFunction: IFunction;
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
 The Lambda function for disabling a user.
+
+- PUT /user/{userId}/disable
 
 ---
 
@@ -602,6 +752,8 @@ public readonly enableUserFunction: IFunction;
 
 The Lambda function for enabling a user.
 
+- PUT /user/{userId}/enable
+
 ---
 
 ##### `fetchAllUsersFunction`<sup>Required</sup> <a name="fetchAllUsersFunction" id="@cdklabs/sbt-aws.CognitoAuth.property.fetchAllUsersFunction"></a>
@@ -612,7 +764,7 @@ public readonly fetchAllUsersFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
-The Lambda function for fetching all users.
+The Lambda function for fetching all users -- GET /users.
 
 ---
 
@@ -626,6 +778,79 @@ public readonly fetchUserFunction: IFunction;
 
 The Lambda function for fetching a user.
 
+- GET /user/{userId}
+
+---
+
+##### `jwtAudience`<sup>Required</sup> <a name="jwtAudience" id="@cdklabs/sbt-aws.CognitoAuth.property.jwtAudience"></a>
+
+```typescript
+public readonly jwtAudience: string[];
+```
+
+- *Type:* string[]
+
+The list of recipients (audience) for which the JWT is intended.
+
+This will be checked by the API GW to ensure only authorized
+clients are provided access.
+
+---
+
+##### `jwtIssuer`<sup>Required</sup> <a name="jwtIssuer" id="@cdklabs/sbt-aws.CognitoAuth.property.jwtIssuer"></a>
+
+```typescript
+public readonly jwtIssuer: string;
+```
+
+- *Type:* string
+
+The JWT issuer domain for the identity provider.
+
+This is the domain where the JSON Web Tokens (JWTs) are issued from.
+
+---
+
+##### `machineClientId`<sup>Required</sup> <a name="machineClientId" id="@cdklabs/sbt-aws.CognitoAuth.property.machineClientId"></a>
+
+```typescript
+public readonly machineClientId: string;
+```
+
+- *Type:* string
+
+The client ID enabled for machine-to-machine authorization flows, such as Client Credentials flow.
+
+This client ID is used for authenticating applications or services.
+
+---
+
+##### `machineClientSecret`<sup>Required</sup> <a name="machineClientSecret" id="@cdklabs/sbt-aws.CognitoAuth.property.machineClientSecret"></a>
+
+```typescript
+public readonly machineClientSecret: SecretValue;
+```
+
+- *Type:* aws-cdk-lib.SecretValue
+
+The client secret enabled for machine-to-machine authorization flows, such as Client Credentials flow.
+
+This secret is used in combination with the machine client ID for authenticating applications or services.
+
+---
+
+##### `tokenEndpoint`<sup>Required</sup> <a name="tokenEndpoint" id="@cdklabs/sbt-aws.CognitoAuth.property.tokenEndpoint"></a>
+
+```typescript
+public readonly tokenEndpoint: string;
+```
+
+- *Type:* string
+
+The endpoint URL for granting OAuth tokens.
+
+This is the URL where OAuth tokens can be obtained from the authorization server.
+
 ---
 
 ##### `updateUserFunction`<sup>Required</sup> <a name="updateUserFunction" id="@cdklabs/sbt-aws.CognitoAuth.property.updateUserFunction"></a>
@@ -638,6 +863,22 @@ public readonly updateUserFunction: IFunction;
 
 The Lambda function for updating a user.
 
+- PUT /user/{userId}
+
+---
+
+##### `userClientId`<sup>Required</sup> <a name="userClientId" id="@cdklabs/sbt-aws.CognitoAuth.property.userClientId"></a>
+
+```typescript
+public readonly userClientId: string;
+```
+
+- *Type:* string
+
+The client ID enabled for user-centric authentication flows, such as Authorization Code flow.
+
+This client ID is used for authenticating end-users.
+
 ---
 
 ##### `wellKnownEndpointUrl`<sup>Required</sup> <a name="wellKnownEndpointUrl" id="@cdklabs/sbt-aws.CognitoAuth.property.wellKnownEndpointUrl"></a>
@@ -648,7 +889,205 @@ public readonly wellKnownEndpointUrl: string;
 
 - *Type:* string
 
-The well-known endpoint URL for the control plane IdP.
+The well-known endpoint URL for the control plane identity provider.
+
+This URL provides configuration information about the identity provider, such as issuer, authorization endpoint, and token endpoint.
+
+---
+
+##### `activateTenantScope`<sup>Optional</sup> <a name="activateTenantScope" id="@cdklabs/sbt-aws.CognitoAuth.property.activateTenantScope"></a>
+
+```typescript
+public readonly activateTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for activating a tenant.
+
+This scope grants permission to activate a specific tenant.
+
+---
+
+##### `createTenantScope`<sup>Optional</sup> <a name="createTenantScope" id="@cdklabs/sbt-aws.CognitoAuth.property.createTenantScope"></a>
+
+```typescript
+public readonly createTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for creating a tenant.
+
+This scope grants permission to create a new tenant.
+
+---
+
+##### `createUserScope`<sup>Optional</sup> <a name="createUserScope" id="@cdklabs/sbt-aws.CognitoAuth.property.createUserScope"></a>
+
+```typescript
+public readonly createUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for creating a user.
+
+This scope grants permission to create a new user.
+
+---
+
+##### `deactivateTenantScope`<sup>Optional</sup> <a name="deactivateTenantScope" id="@cdklabs/sbt-aws.CognitoAuth.property.deactivateTenantScope"></a>
+
+```typescript
+public readonly deactivateTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for deactivating a tenant.
+
+This scope grants permission to deactivate a specific tenant.
+
+---
+
+##### `deleteTenantScope`<sup>Optional</sup> <a name="deleteTenantScope" id="@cdklabs/sbt-aws.CognitoAuth.property.deleteTenantScope"></a>
+
+```typescript
+public readonly deleteTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for deleting a tenant.
+
+This scope grants permission to delete a specific tenant.
+
+---
+
+##### `deleteUserScope`<sup>Optional</sup> <a name="deleteUserScope" id="@cdklabs/sbt-aws.CognitoAuth.property.deleteUserScope"></a>
+
+```typescript
+public readonly deleteUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for deleting a user.
+
+This scope grants permission to delete a specific user.
+
+---
+
+##### `disableUserScope`<sup>Optional</sup> <a name="disableUserScope" id="@cdklabs/sbt-aws.CognitoAuth.property.disableUserScope"></a>
+
+```typescript
+public readonly disableUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for disabling a user.
+
+This scope grants permission to disable a specific user.
+
+---
+
+##### `enableUserScope`<sup>Optional</sup> <a name="enableUserScope" id="@cdklabs/sbt-aws.CognitoAuth.property.enableUserScope"></a>
+
+```typescript
+public readonly enableUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for enabling a user.
+
+This scope grants permission to enable a specific user.
+
+---
+
+##### `fetchAllTenantsScope`<sup>Optional</sup> <a name="fetchAllTenantsScope" id="@cdklabs/sbt-aws.CognitoAuth.property.fetchAllTenantsScope"></a>
+
+```typescript
+public readonly fetchAllTenantsScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for fetching all tenants.
+
+This scope grants permission to fetch the details of all tenants.
+
+---
+
+##### `fetchAllUsersScope`<sup>Optional</sup> <a name="fetchAllUsersScope" id="@cdklabs/sbt-aws.CognitoAuth.property.fetchAllUsersScope"></a>
+
+```typescript
+public readonly fetchAllUsersScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for fetching all users.
+
+This scope grants permission to fetch the details of all users.
+
+---
+
+##### `fetchTenantScope`<sup>Optional</sup> <a name="fetchTenantScope" id="@cdklabs/sbt-aws.CognitoAuth.property.fetchTenantScope"></a>
+
+```typescript
+public readonly fetchTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for fetching a single tenant.
+
+This scope grants permission to fetch the details of a specific tenant.
+
+---
+
+##### `fetchUserScope`<sup>Optional</sup> <a name="fetchUserScope" id="@cdklabs/sbt-aws.CognitoAuth.property.fetchUserScope"></a>
+
+```typescript
+public readonly fetchUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for fetching a single user.
+
+This scope grants permission to fetch the details of a specific user.
+
+---
+
+##### `updateTenantScope`<sup>Optional</sup> <a name="updateTenantScope" id="@cdklabs/sbt-aws.CognitoAuth.property.updateTenantScope"></a>
+
+```typescript
+public readonly updateTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for updating a tenant.
+
+This scope grants permission to update the details of a specific tenant.
+
+---
+
+##### `updateUserScope`<sup>Optional</sup> <a name="updateUserScope" id="@cdklabs/sbt-aws.CognitoAuth.property.updateUserScope"></a>
+
+```typescript
+public readonly updateUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for updating a user.
+
+This scope grants permission to update the details of a specific user.
 
 ---
 
@@ -736,10 +1175,9 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.controlPlaneAPIGatewayUrl">controlPlaneAPIGatewayUrl</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.eventBusArn">eventBusArn</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.tables">tables</a></code> | <code><a href="#@cdklabs/sbt-aws.Tables">Tables</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.controlPlaneAPIGatewayUrl">controlPlaneAPIGatewayUrl</a></code> | <code>string</code> | The URL of the control plane API Gateway. |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | The EventManager instance that allows connecting to events flowing between the Control Plane and other components. |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.tables">tables</a></code> | <code><a href="#@cdklabs/sbt-aws.Tables">Tables</a></code> | The Tables instance containing the DynamoDB tables for tenant data and configurations. |
 
 ---
 
@@ -763,25 +1201,19 @@ public readonly controlPlaneAPIGatewayUrl: string;
 
 - *Type:* string
 
----
-
-##### `eventBusArn`<sup>Required</sup> <a name="eventBusArn" id="@cdklabs/sbt-aws.ControlPlane.property.eventBusArn"></a>
-
-```typescript
-public readonly eventBusArn: string;
-```
-
-- *Type:* string
+The URL of the control plane API Gateway.
 
 ---
 
 ##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.ControlPlane.property.eventManager"></a>
 
 ```typescript
-public readonly eventManager: EventManager;
+public readonly eventManager: IEventManager;
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.EventManager">EventManager</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
+
+The EventManager instance that allows connecting to events flowing between the Control Plane and other components.
 
 ---
 
@@ -792,6 +1224,8 @@ public readonly tables: Tables;
 ```
 
 - *Type:* <a href="#@cdklabs/sbt-aws.Tables">Tables</a>
+
+The Tables instance containing the DynamoDB tables for tenant data and configurations.
 
 ---
 
@@ -879,8 +1313,8 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.billingResource">billingResource</a></code> | <code>aws-cdk-lib.aws_apigateway.Resource</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.tenantUpdateServiceTarget">tenantUpdateServiceTarget</a></code> | <code>aws-cdk-lib.aws_events_targets.ApiGateway</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.api">api</a></code> | <code>aws-cdk-lib.aws_apigatewayv2.HttpApi</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.tenantUpdateServiceTarget">tenantUpdateServiceTarget</a></code> | <code>aws-cdk-lib.aws_events.IRuleTarget</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.apiUrl">apiUrl</a></code> | <code>any</code> | *No description.* |
 
 ---
@@ -897,23 +1331,23 @@ The tree node.
 
 ---
 
-##### `billingResource`<sup>Required</sup> <a name="billingResource" id="@cdklabs/sbt-aws.ControlPlaneAPI.property.billingResource"></a>
+##### `api`<sup>Required</sup> <a name="api" id="@cdklabs/sbt-aws.ControlPlaneAPI.property.api"></a>
 
 ```typescript
-public readonly billingResource: Resource;
+public readonly api: HttpApi;
 ```
 
-- *Type:* aws-cdk-lib.aws_apigateway.Resource
+- *Type:* aws-cdk-lib.aws_apigatewayv2.HttpApi
 
 ---
 
 ##### `tenantUpdateServiceTarget`<sup>Required</sup> <a name="tenantUpdateServiceTarget" id="@cdklabs/sbt-aws.ControlPlaneAPI.property.tenantUpdateServiceTarget"></a>
 
 ```typescript
-public readonly tenantUpdateServiceTarget: ApiGateway;
+public readonly tenantUpdateServiceTarget: IRuleTarget;
 ```
 
-- *Type:* aws-cdk-lib.aws_events_targets.ApiGateway
+- *Type:* aws-cdk-lib.aws_events.IRuleTarget
 
 ---
 
@@ -1017,7 +1451,7 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlane.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlane.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlane.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | The EventManager instance that allows connecting to events flowing between the Control Plane and other components. |
 
 ---
 
@@ -1036,15 +1470,19 @@ The tree node.
 ##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.CoreApplicationPlane.property.eventManager"></a>
 
 ```typescript
-public readonly eventManager: EventManager;
+public readonly eventManager: IEventManager;
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.EventManager">EventManager</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
+
+The EventManager instance that allows connecting to events flowing between the Control Plane and other components.
 
 ---
 
 
 ### EventManager <a name="EventManager" id="@cdklabs/sbt-aws.EventManager"></a>
+
+- *Implements:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
 
 Provides an EventManager to interact with the EventBus shared with the SBT control plane.
 
@@ -1053,7 +1491,7 @@ Provides an EventManager to interact with the EventBus shared with the SBT contr
 ```typescript
 import { EventManager } from '@cdklabs/sbt-aws'
 
-new EventManager(scope: Construct, id: string, props: EventManagerProps)
+new EventManager(scope: Construct, id: string, props?: EventManagerProps)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -1076,7 +1514,7 @@ new EventManager(scope: Construct, id: string, props: EventManagerProps)
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.EventManager.Initializer.parameter.props"></a>
+##### `props`<sup>Optional</sup> <a name="props" id="@cdklabs/sbt-aws.EventManager.Initializer.parameter.props"></a>
 
 - *Type:* <a href="#@cdklabs/sbt-aws.EventManagerProps">EventManagerProps</a>
 
@@ -1088,6 +1526,7 @@ new EventManager(scope: Construct, id: string, props: EventManagerProps)
 | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.EventManager.toString">toString</a></code> | Returns a string representation of this construct. |
 | <code><a href="#@cdklabs/sbt-aws.EventManager.addTargetToEvent">addTargetToEvent</a></code> | Adds an IRuleTarget to an event. |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.grantPutEventsTo">grantPutEventsTo</a></code> | Provides grantee the permissions to place events on the EventManager bus. |
 
 ---
 
@@ -1102,10 +1541,18 @@ Returns a string representation of this construct.
 ##### `addTargetToEvent` <a name="addTargetToEvent" id="@cdklabs/sbt-aws.EventManager.addTargetToEvent"></a>
 
 ```typescript
-public addTargetToEvent(eventType: DetailType, target: IRuleTarget): void
+public addTargetToEvent(scope: Construct, eventType: DetailType, target: IRuleTarget): void
 ```
 
 Adds an IRuleTarget to an event.
+
+###### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.EventManager.addTargetToEvent.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+The scope in which to find (or create) the Rule.
+
+---
 
 ###### `eventType`<sup>Required</sup> <a name="eventType" id="@cdklabs/sbt-aws.EventManager.addTargetToEvent.parameter.eventType"></a>
 
@@ -1120,6 +1567,22 @@ The detail type of the event to add a target to.
 - *Type:* aws-cdk-lib.aws_events.IRuleTarget
 
 The target that will be added to the event.
+
+---
+
+##### `grantPutEventsTo` <a name="grantPutEventsTo" id="@cdklabs/sbt-aws.EventManager.grantPutEventsTo"></a>
+
+```typescript
+public grantPutEventsTo(grantee: IGrantable): void
+```
+
+Provides grantee the permissions to place events on the EventManager bus.
+
+###### `grantee`<sup>Required</sup> <a name="grantee" id="@cdklabs/sbt-aws.EventManager.grantPutEventsTo.parameter.grantee"></a>
+
+- *Type:* aws-cdk-lib.aws_iam.IGrantable
+
+The grantee resource that will be granted the permission(s).
 
 ---
 
@@ -1155,8 +1618,10 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.EventManager.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@cdklabs/sbt-aws.EventManager.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | The event source used for events emitted by the application plane. |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.property.busArn">busArn</a></code> | <code>string</code> | The ARN/ID of the bus that will be used to send and receive events. |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.property.busName">busName</a></code> | <code>string</code> | The name of the bus that will be used to send and receive events. |
 | <code><a href="#@cdklabs/sbt-aws.EventManager.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The event source used for events emitted by the control plane. |
-| <code><a href="#@cdklabs/sbt-aws.EventManager.property.eventBus">eventBus</a></code> | <code>aws-cdk-lib.aws_events.IEventBus</code> | The event bus to register new rules with. |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.property.eventBus">eventBus</a></code> | <code>aws-cdk-lib.aws_events.IEventBus</code> | The eventBus resource that will be used to send and receive events. |
 | <code><a href="#@cdklabs/sbt-aws.EventManager.property.supportedEvents">supportedEvents</a></code> | <code>{[ key: string ]: string}</code> | List of recognized events that are available as triggers. |
 
 ---
@@ -1185,6 +1650,30 @@ The event source used for events emitted by the application plane.
 
 ---
 
+##### `busArn`<sup>Required</sup> <a name="busArn" id="@cdklabs/sbt-aws.EventManager.property.busArn"></a>
+
+```typescript
+public readonly busArn: string;
+```
+
+- *Type:* string
+
+The ARN/ID of the bus that will be used to send and receive events.
+
+---
+
+##### `busName`<sup>Required</sup> <a name="busName" id="@cdklabs/sbt-aws.EventManager.property.busName"></a>
+
+```typescript
+public readonly busName: string;
+```
+
+- *Type:* string
+
+The name of the bus that will be used to send and receive events.
+
+---
+
 ##### `controlPlaneEventSource`<sup>Required</sup> <a name="controlPlaneEventSource" id="@cdklabs/sbt-aws.EventManager.property.controlPlaneEventSource"></a>
 
 ```typescript
@@ -1205,7 +1694,7 @@ public readonly eventBus: IEventBus;
 
 - *Type:* aws-cdk-lib.aws_events.IEventBus
 
-The event bus to register new rules with.
+The eventBus resource that will be used to send and receive events.
 
 ---
 
@@ -1382,32 +1871,43 @@ The DynamoDB table containing the aggregated data.
 ---
 
 
-### Messaging <a name="Messaging" id="@cdklabs/sbt-aws.Messaging"></a>
+### SampleRegistrationWebPage <a name="SampleRegistrationWebPage" id="@cdklabs/sbt-aws.SampleRegistrationWebPage"></a>
 
-#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.Messaging.Initializer"></a>
+Constructs a sample registration web page hosted on Amazon S3 and fronted by Amazon CloudFront.
+
+The web page includes a form for users to register for the SaaS product.
+
+#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.Initializer"></a>
 
 ```typescript
-import { Messaging } from '@cdklabs/sbt-aws'
+import { SampleRegistrationWebPage } from '@cdklabs/sbt-aws'
 
-new Messaging(scope: Construct, id: string)
+new SampleRegistrationWebPage(scope: Construct, id: string, props: SampleRegistrationWebPageProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.Messaging.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Messaging.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPage.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPage.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPage.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPageProps">SampleRegistrationWebPageProps</a></code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.Messaging.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.Messaging.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.Initializer.parameter.id"></a>
 
 - *Type:* string
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@cdklabs/sbt-aws.SampleRegistrationWebPageProps">SampleRegistrationWebPageProps</a>
 
 ---
 
@@ -1415,11 +1915,11 @@ new Messaging(scope: Construct, id: string)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.Messaging.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPage.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
 
-##### `toString` <a name="toString" id="@cdklabs/sbt-aws.Messaging.toString"></a>
+##### `toString` <a name="toString" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.toString"></a>
 
 ```typescript
 public toString(): string
@@ -1431,21 +1931,21 @@ Returns a string representation of this construct.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.Messaging.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPage.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.Messaging.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.isConstruct"></a>
 
 ```typescript
-import { Messaging } from '@cdklabs/sbt-aws'
+import { SampleRegistrationWebPage } from '@cdklabs/sbt-aws'
 
-Messaging.isConstruct(x: any)
+SampleRegistrationWebPage.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.Messaging.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -1457,12 +1957,11 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.Messaging.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.Messaging.property.eventBus">eventBus</a></code> | <code>aws-cdk-lib.aws_events.EventBus</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPage.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.Messaging.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -1471,16 +1970,6 @@ public readonly node: Node;
 - *Type:* constructs.Node
 
 The tree node.
-
----
-
-##### `eventBus`<sup>Required</sup> <a name="eventBus" id="@cdklabs/sbt-aws.Messaging.property.eventBus"></a>
-
-```typescript
-public readonly eventBus: EventBus;
-```
-
-- *Type:* aws-cdk-lib.aws_events.EventBus
 
 ---
 
@@ -1854,6 +2343,151 @@ public readonly tenantConfigServiceLambda: Function;
 
 ## Structs <a name="Structs" id="Structs"></a>
 
+### AWSMarketplaceSaaSProductProps <a name="AWSMarketplaceSaaSProductProps" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps"></a>
+
+Properties for configuring an AWS Marketplace SaaS product.
+
+#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.Initializer"></a>
+
+```typescript
+import { AWSMarketplaceSaaSProductProps } from '@cdklabs/sbt-aws'
+
+const aWSMarketplaceSaaSProductProps: AWSMarketplaceSaaSProductProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.entitlementSNSTopic">entitlementSNSTopic</a></code> | <code>string</code> | SNS topic ARN provided from AWS Marketplace. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.marketplaceTechAdminEmail">marketplaceTechAdminEmail</a></code> | <code>string</code> | Email to be notified on changes requiring action. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.pricingModel">pricingModel</a></code> | <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel">AWSMarketplaceSaaSPricingModel</a></code> | The pricing model for the AWS Marketplace SaaS product. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.productCode">productCode</a></code> | <code>string</code> | Product code provided from AWS Marketplace. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.subscriptionSNSTopic">subscriptionSNSTopic</a></code> | <code>string</code> | SNS topic ARN provided from AWS Marketplace. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.disableAPILogging">disableAPILogging</a></code> | <code>boolean</code> | Flag to disable API logging. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | The EventManager for the AWS Marketplace SaaS product. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.marketplaceSellerEmail">marketplaceSellerEmail</a></code> | <code>string</code> | Seller email address, verified in SES and in 'Production' mode. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.requiredFieldsForRegistration">requiredFieldsForRegistration</a></code> | <code>string[]</code> | List of required fields for registration. |
+
+---
+
+##### `entitlementSNSTopic`<sup>Required</sup> <a name="entitlementSNSTopic" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.entitlementSNSTopic"></a>
+
+```typescript
+public readonly entitlementSNSTopic: string;
+```
+
+- *Type:* string
+
+SNS topic ARN provided from AWS Marketplace.
+
+Must exist.
+
+---
+
+##### `marketplaceTechAdminEmail`<sup>Required</sup> <a name="marketplaceTechAdminEmail" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.marketplaceTechAdminEmail"></a>
+
+```typescript
+public readonly marketplaceTechAdminEmail: string;
+```
+
+- *Type:* string
+
+Email to be notified on changes requiring action.
+
+---
+
+##### `pricingModel`<sup>Required</sup> <a name="pricingModel" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.pricingModel"></a>
+
+```typescript
+public readonly pricingModel: AWSMarketplaceSaaSPricingModel;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel">AWSMarketplaceSaaSPricingModel</a>
+
+The pricing model for the AWS Marketplace SaaS product.
+
+---
+
+##### `productCode`<sup>Required</sup> <a name="productCode" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.productCode"></a>
+
+```typescript
+public readonly productCode: string;
+```
+
+- *Type:* string
+
+Product code provided from AWS Marketplace.
+
+---
+
+##### `subscriptionSNSTopic`<sup>Required</sup> <a name="subscriptionSNSTopic" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.subscriptionSNSTopic"></a>
+
+```typescript
+public readonly subscriptionSNSTopic: string;
+```
+
+- *Type:* string
+
+SNS topic ARN provided from AWS Marketplace.
+
+Must exist.
+
+---
+
+##### `disableAPILogging`<sup>Optional</sup> <a name="disableAPILogging" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.disableAPILogging"></a>
+
+```typescript
+public readonly disableAPILogging: boolean;
+```
+
+- *Type:* boolean
+
+Flag to disable API logging.
+
+---
+
+##### `eventManager`<sup>Optional</sup> <a name="eventManager" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.eventManager"></a>
+
+```typescript
+public readonly eventManager: IEventManager;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
+
+The EventManager for the AWS Marketplace SaaS product.
+
+This is used to enable integration with sbt-aws.
+
+---
+
+##### `marketplaceSellerEmail`<sup>Optional</sup> <a name="marketplaceSellerEmail" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.marketplaceSellerEmail"></a>
+
+```typescript
+public readonly marketplaceSellerEmail: string;
+```
+
+- *Type:* string
+
+Seller email address, verified in SES and in 'Production' mode.
+
+---
+
+##### `requiredFieldsForRegistration`<sup>Optional</sup> <a name="requiredFieldsForRegistration" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps.property.requiredFieldsForRegistration"></a>
+
+```typescript
+public readonly requiredFieldsForRegistration: string[];
+```
+
+- *Type:* string[]
+
+List of required fields for registration.
+
+The existence of these
+fields is checked when a new customer is registered.
+
+---
+
 ### BashJobOrchestratorProps <a name="BashJobOrchestratorProps" id="@cdklabs/sbt-aws.BashJobOrchestratorProps"></a>
 
 Encapsulates the list of properties for a BashJobOrchestrator.
@@ -1884,9 +2518,10 @@ const bashJobOrchestratorProps: BashJobOrchestratorProps = { ... }
 | <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.detailType">detailType</a></code> | <code>string</code> | The detail type to use when publishing event bridge events. |
 | <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.eventSource">eventSource</a></code> | <code>string</code> | The event source to use when publishing event bridge events. |
 | <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.targetEventBus">targetEventBus</a></code> | <code>aws-cdk-lib.aws_events.IEventBus</code> | The event bus to publish the outgoing event to. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentJSONVariablesFromIncomingEvent">environmentJSONVariablesFromIncomingEvent</a></code> | <code>string[]</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentStringVariablesFromIncomingEvent">environmentStringVariablesFromIncomingEvent</a></code> | <code>string[]</code> | Environment variables to import into the bash job from event details field. |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentJSONVariablesFromIncomingEvent">environmentJSONVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the CoreApplicationPlaneJobRunner from event details field. |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentStringVariablesFromIncomingEvent">environmentStringVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the CoreApplicationPlaneJobRunner from event details field. |
 | <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | Environment variables to export into the outgoing event once the bash job has finished. |
+| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.tenantIdentifierKeyInIncomingEvent">tenantIdentifierKeyInIncomingEvent</a></code> | <code>string</code> | The key where the tenant identifier is to be extracted from. |
 
 ---
 
@@ -2156,6 +2791,11 @@ public readonly environmentJSONVariablesFromIncomingEvent: string[];
 
 - *Type:* string[]
 
+The environment variables to import into the CoreApplicationPlaneJobRunner from event details field.
+
+This argument consists of the names of only JSON-formatted string type variables.
+Ex. '{"test": 2}'
+
 ---
 
 ##### `environmentStringVariablesFromIncomingEvent`<sup>Optional</sup> <a name="environmentStringVariablesFromIncomingEvent" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentStringVariablesFromIncomingEvent"></a>
@@ -2166,7 +2806,9 @@ public readonly environmentStringVariablesFromIncomingEvent: string[];
 
 - *Type:* string[]
 
-Environment variables to import into the bash job from event details field.
+The environment variables to import into the CoreApplicationPlaneJobRunner from event details field.
+
+This argument consists of the names of only string type variables. Ex. 'test'
 
 ---
 
@@ -2179,6 +2821,19 @@ public readonly environmentVariablesToOutgoingEvent: string[];
 - *Type:* string[]
 
 Environment variables to export into the outgoing event once the bash job has finished.
+
+---
+
+##### `tenantIdentifierKeyInIncomingEvent`<sup>Optional</sup> <a name="tenantIdentifierKeyInIncomingEvent" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.tenantIdentifierKeyInIncomingEvent"></a>
+
+```typescript
+public readonly tenantIdentifierKeyInIncomingEvent: string;
+```
+
+- *Type:* string
+- *Default:* 'tenantId'
+
+The key where the tenant identifier is to be extracted from.
 
 ---
 
@@ -2311,8 +2966,8 @@ const billingProviderProps: BillingProviderProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.billing">billing</a></code> | <code><a href="#@cdklabs/sbt-aws.IBilling">IBilling</a></code> | An implementation of the IBilling interface. |
-| <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.controlPlaneAPIBillingResource">controlPlaneAPIBillingResource</a></code> | <code>aws-cdk-lib.aws_apigateway.Resource</code> | An API Gateway Resource for the BillingProvider to use when setting up API endpoints. |
-| <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | An EventManager object to help coordinate events. |
+| <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.controlPlaneAPI">controlPlaneAPI</a></code> | <code>aws-cdk-lib.aws_apigatewayv2.HttpApi</code> | An API Gateway Resource for the BillingProvider to use when setting up API endpoints. |
+| <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | An IEventManager object to help coordinate events. |
 
 ---
 
@@ -2328,13 +2983,13 @@ An implementation of the IBilling interface.
 
 ---
 
-##### `controlPlaneAPIBillingResource`<sup>Required</sup> <a name="controlPlaneAPIBillingResource" id="@cdklabs/sbt-aws.BillingProviderProps.property.controlPlaneAPIBillingResource"></a>
+##### `controlPlaneAPI`<sup>Required</sup> <a name="controlPlaneAPI" id="@cdklabs/sbt-aws.BillingProviderProps.property.controlPlaneAPI"></a>
 
 ```typescript
-public readonly controlPlaneAPIBillingResource: Resource;
+public readonly controlPlaneAPI: HttpApi;
 ```
 
-- *Type:* aws-cdk-lib.aws_apigateway.Resource
+- *Type:* aws-cdk-lib.aws_apigatewayv2.HttpApi
 
 An API Gateway Resource for the BillingProvider to use when setting up API endpoints.
 
@@ -2343,12 +2998,12 @@ An API Gateway Resource for the BillingProvider to use when setting up API endpo
 ##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.BillingProviderProps.property.eventManager"></a>
 
 ```typescript
-public readonly eventManager: EventManager;
+public readonly eventManager: IEventManager;
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.EventManager">EventManager</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
 
-An EventManager object to help coordinate events.
+An IEventManager object to help coordinate events.
 
 ---
 
@@ -2368,46 +3023,8 @@ const cognitoAuthProps: CognitoAuthProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.idpName">idpName</a></code> | <code>string</code> | The name of the Identity Provider (IdP) for the control plane. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminEmail">systemAdminEmail</a></code> | <code>string</code> | The email address of the system admin. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminRoleName">systemAdminRoleName</a></code> | <code>string</code> | The name of the system admin role. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.controlPlaneCallbackURL">controlPlaneCallbackURL</a></code> | <code>string</code> | The callback URL for the control plane. |
-
----
-
-##### `idpName`<sup>Required</sup> <a name="idpName" id="@cdklabs/sbt-aws.CognitoAuthProps.property.idpName"></a>
-
-```typescript
-public readonly idpName: string;
-```
-
-- *Type:* string
-
-The name of the Identity Provider (IdP) for the control plane.
-
----
-
-##### `systemAdminEmail`<sup>Required</sup> <a name="systemAdminEmail" id="@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminEmail"></a>
-
-```typescript
-public readonly systemAdminEmail: string;
-```
-
-- *Type:* string
-
-The email address of the system admin.
-
----
-
-##### `systemAdminRoleName`<sup>Required</sup> <a name="systemAdminRoleName" id="@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminRoleName"></a>
-
-```typescript
-public readonly systemAdminRoleName: string;
-```
-
-- *Type:* string
-
-The name of the system admin role.
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.setAPIGWScopes">setAPIGWScopes</a></code> | <code>boolean</code> | Whether or not to specify scopes for validation at the API GW. |
 
 ---
 
@@ -2422,7 +3039,20 @@ public readonly controlPlaneCallbackURL: string;
 
 The callback URL for the control plane.
 
-If not provided, defaults to 'http://localhost'.
+---
+
+##### `setAPIGWScopes`<sup>Optional</sup> <a name="setAPIGWScopes" id="@cdklabs/sbt-aws.CognitoAuthProps.property.setAPIGWScopes"></a>
+
+```typescript
+public readonly setAPIGWScopes: boolean;
+```
+
+- *Type:* boolean
+- *Default:* true
+
+Whether or not to specify scopes for validation at the API GW.
+
+Can be used for testing purposes.
 
 ---
 
@@ -2501,16 +3131,29 @@ const controlPlaneProps: ControlPlaneProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.auth">auth</a></code> | <code><a href="#@cdklabs/sbt-aws.IAuth">IAuth</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | The source to use for outgoing events that will be placed on the EventBus. |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.billing">billing</a></code> | <code><a href="#@cdklabs/sbt-aws.IBilling">IBilling</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The source to use when listening for events coming from the SBT control plane. |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.disableAPILogging">disableAPILogging</a></code> | <code>boolean</code> | (Optional) If true, the API Gateway will not log requests to the CloudWatch Logs. |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.eventMetadata">eventMetadata</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminEmail">systemAdminEmail</a></code> | <code>string</code> | The email address of the system admin. |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.auth">auth</a></code> | <code><a href="#@cdklabs/sbt-aws.IAuth">IAuth</a></code> | The authentication provider for the control plane. |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.billing">billing</a></code> | <code><a href="#@cdklabs/sbt-aws.IBilling">IBilling</a></code> | The billing provider configuration. |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.disableAPILogging">disableAPILogging</a></code> | <code>boolean</code> | If true, the API Gateway will not log requests to the CloudWatch Logs. |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | The event manager instance. |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminName">systemAdminName</a></code> | <code>string</code> | The name of the system admin user. |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminRoleName">systemAdminRoleName</a></code> | <code>string</code> | The name of the system admin role. |
 
 ---
 
-##### `auth`<sup>Required</sup> <a name="auth" id="@cdklabs/sbt-aws.ControlPlaneProps.property.auth"></a>
+##### `systemAdminEmail`<sup>Required</sup> <a name="systemAdminEmail" id="@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminEmail"></a>
+
+```typescript
+public readonly systemAdminEmail: string;
+```
+
+- *Type:* string
+
+The email address of the system admin.
+
+---
+
+##### `auth`<sup>Optional</sup> <a name="auth" id="@cdklabs/sbt-aws.ControlPlaneProps.property.auth"></a>
 
 ```typescript
 public readonly auth: IAuth;
@@ -2518,19 +3161,9 @@ public readonly auth: IAuth;
 
 - *Type:* <a href="#@cdklabs/sbt-aws.IAuth">IAuth</a>
 
----
+The authentication provider for the control plane.
 
-##### `applicationPlaneEventSource`<sup>Optional</sup> <a name="applicationPlaneEventSource" id="@cdklabs/sbt-aws.ControlPlaneProps.property.applicationPlaneEventSource"></a>
-
-```typescript
-public readonly applicationPlaneEventSource: string;
-```
-
-- *Type:* string
-
-The source to use for outgoing events that will be placed on the EventBus.
-
-This is used as the default if the OutgoingEventMetadata source field is not set.
+If not provided, CognitoAuth will be used.
 
 ---
 
@@ -2542,19 +3175,7 @@ public readonly billing: IBilling;
 
 - *Type:* <a href="#@cdklabs/sbt-aws.IBilling">IBilling</a>
 
----
-
-##### `controlPlaneEventSource`<sup>Optional</sup> <a name="controlPlaneEventSource" id="@cdklabs/sbt-aws.ControlPlaneProps.property.controlPlaneEventSource"></a>
-
-```typescript
-public readonly controlPlaneEventSource: string;
-```
-
-- *Type:* string
-
-The source to use when listening for events coming from the SBT control plane.
-
-This is used as the default if the IncomingEventMetadata source field is not set.
+The billing provider configuration.
 
 ---
 
@@ -2565,20 +3186,49 @@ public readonly disableAPILogging: boolean;
 ```
 
 - *Type:* boolean
+- *Default:* false
 
-(Optional) If true, the API Gateway will not log requests to the CloudWatch Logs.
-
-(Default: false)
+If true, the API Gateway will not log requests to the CloudWatch Logs.
 
 ---
 
-##### `eventMetadata`<sup>Optional</sup> <a name="eventMetadata" id="@cdklabs/sbt-aws.ControlPlaneProps.property.eventMetadata"></a>
+##### `eventManager`<sup>Optional</sup> <a name="eventManager" id="@cdklabs/sbt-aws.ControlPlaneProps.property.eventManager"></a>
 
 ```typescript
-public readonly eventMetadata: {[ key: string ]: string};
+public readonly eventManager: IEventManager;
 ```
 
-- *Type:* {[ key: string ]: string}
+- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
+
+The event manager instance.
+
+If not provided, a new instance will be created.
+
+---
+
+##### `systemAdminName`<sup>Optional</sup> <a name="systemAdminName" id="@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminName"></a>
+
+```typescript
+public readonly systemAdminName: string;
+```
+
+- *Type:* string
+- *Default:* 'admin'
+
+The name of the system admin user.
+
+---
+
+##### `systemAdminRoleName`<sup>Optional</sup> <a name="systemAdminRoleName" id="@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminRoleName"></a>
+
+```typescript
+public readonly systemAdminRoleName: string;
+```
+
+- *Type:* string
+- *Default:* 'SystemAdmin'
+
+The name of the system admin role.
 
 ---
 
@@ -2608,6 +3258,7 @@ const coreApplicationPlaneJobRunnerProps: CoreApplicationPlaneJobRunnerProps = {
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | The environment variables to export into the outgoing event once the CoreApplicationPlaneJobRunner has finished. |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.postScript">postScript</a></code> | <code>string</code> | The bash script to run after the main script has completed. |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.scriptEnvironmentVariables">scriptEnvironmentVariables</a></code> | <code>{[ key: string ]: string}</code> | The variables to pass into the codebuild CoreApplicationPlaneJobRunner. |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.tenantIdentifierKeyInIncomingEvent">tenantIdentifierKeyInIncomingEvent</a></code> | <code>string</code> | The key where the tenant identifier is to be extracted from in the incoming event. |
 
 ---
 
@@ -2738,6 +3389,19 @@ The variables to pass into the codebuild CoreApplicationPlaneJobRunner.
 
 ---
 
+##### `tenantIdentifierKeyInIncomingEvent`<sup>Optional</sup> <a name="tenantIdentifierKeyInIncomingEvent" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.tenantIdentifierKeyInIncomingEvent"></a>
+
+```typescript
+public readonly tenantIdentifierKeyInIncomingEvent: string;
+```
+
+- *Type:* string
+- *Default:* 'tenantId'
+
+The key where the tenant identifier is to be extracted from in the incoming event.
+
+---
+
 ### CoreApplicationPlaneProps <a name="CoreApplicationPlaneProps" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps"></a>
 
 Encapsulates the list of properties for a CoreApplicationPlane.
@@ -2754,63 +3418,18 @@ const coreApplicationPlaneProps: CoreApplicationPlaneProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventBusArn">eventBusArn</a></code> | <code>string</code> | The arn belonging to the EventBus to listen for incoming messages. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | The source to use for outgoing events that will be placed on the EventBus. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The source to use when listening for events coming from the SBT control plane. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventMetadata">eventMetadata</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.jobRunnerPropsList">jobRunnerPropsList</a></code> | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps">CoreApplicationPlaneJobRunnerProps</a>[]</code> | The list of JobRunner definitions to create. |
 
 ---
 
-##### `eventBusArn`<sup>Required</sup> <a name="eventBusArn" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventBusArn"></a>
+##### `eventManager`<sup>Optional</sup> <a name="eventManager" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventManager"></a>
 
 ```typescript
-public readonly eventBusArn: string;
+public readonly eventManager: IEventManager;
 ```
 
-- *Type:* string
-
-The arn belonging to the EventBus to listen for incoming messages.
-
-This is also the EventBus on which the CoreApplicationPlane places outgoing messages on.
-
----
-
-##### `applicationPlaneEventSource`<sup>Optional</sup> <a name="applicationPlaneEventSource" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.applicationPlaneEventSource"></a>
-
-```typescript
-public readonly applicationPlaneEventSource: string;
-```
-
-- *Type:* string
-
-The source to use for outgoing events that will be placed on the EventBus.
-
-This is used as the default if the OutgoingEventMetadata source field is not set.
-
----
-
-##### `controlPlaneEventSource`<sup>Optional</sup> <a name="controlPlaneEventSource" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.controlPlaneEventSource"></a>
-
-```typescript
-public readonly controlPlaneEventSource: string;
-```
-
-- *Type:* string
-
-The source to use when listening for events coming from the SBT control plane.
-
-This is used as the default if the IncomingEventMetadata source field is not set.
-
----
-
-##### `eventMetadata`<sup>Optional</sup> <a name="eventMetadata" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventMetadata"></a>
-
-```typescript
-public readonly eventMetadata: {[ key: string ]: string};
-```
-
-- *Type:* {[ key: string ]: string}
+- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
 
 ---
 
@@ -2823,6 +3442,64 @@ public readonly jobRunnerPropsList: CoreApplicationPlaneJobRunnerProps[];
 - *Type:* <a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps">CoreApplicationPlaneJobRunnerProps</a>[]
 
 The list of JobRunner definitions to create.
+
+---
+
+### CreateAdminUserProps <a name="CreateAdminUserProps" id="@cdklabs/sbt-aws.CreateAdminUserProps"></a>
+
+Encapsulates the list of properties expected as inputs for creating new admin users.
+
+#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.CreateAdminUserProps.Initializer"></a>
+
+```typescript
+import { CreateAdminUserProps } from '@cdklabs/sbt-aws'
+
+const createAdminUserProps: CreateAdminUserProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.CreateAdminUserProps.property.email">email</a></code> | <code>string</code> | The email address of the new admin user. |
+| <code><a href="#@cdklabs/sbt-aws.CreateAdminUserProps.property.name">name</a></code> | <code>string</code> | The email address of the new admin user. |
+| <code><a href="#@cdklabs/sbt-aws.CreateAdminUserProps.property.role">role</a></code> | <code>string</code> | The name of the role of the new admin user. |
+
+---
+
+##### `email`<sup>Required</sup> <a name="email" id="@cdklabs/sbt-aws.CreateAdminUserProps.property.email"></a>
+
+```typescript
+public readonly email: string;
+```
+
+- *Type:* string
+
+The email address of the new admin user.
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="@cdklabs/sbt-aws.CreateAdminUserProps.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+
+The email address of the new admin user.
+
+---
+
+##### `role`<sup>Required</sup> <a name="role" id="@cdklabs/sbt-aws.CreateAdminUserProps.property.role"></a>
+
+```typescript
+public readonly role: string;
+```
+
+- *Type:* string
+
+The name of the role of the new admin user.
 
 ---
 
@@ -2842,22 +3519,10 @@ const eventManagerProps: EventManagerProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | The name of the event source for events coming from the SBT application plane. |
+| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The name of the event source for events coming from the SBT control plane. |
 | <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.eventBus">eventBus</a></code> | <code>aws-cdk-lib.aws_events.IEventBus</code> | The event bus to register new rules with. |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | The source to use for outgoing events that will be placed on the EventBus. |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The source to use when listening for events coming from the SBT control plane. |
 | <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.eventMetadata">eventMetadata</a></code> | <code>{[ key: string ]: string}</code> | The EventMetadata to use to update the event defaults. |
-
----
-
-##### `eventBus`<sup>Required</sup> <a name="eventBus" id="@cdklabs/sbt-aws.EventManagerProps.property.eventBus"></a>
-
-```typescript
-public readonly eventBus: IEventBus;
-```
-
-- *Type:* aws-cdk-lib.aws_events.IEventBus
-
-The event bus to register new rules with.
 
 ---
 
@@ -2869,7 +3534,7 @@ public readonly applicationPlaneEventSource: string;
 
 - *Type:* string
 
-The source to use for outgoing events that will be placed on the EventBus.
+The name of the event source for events coming from the SBT application plane.
 
 ---
 
@@ -2881,7 +3546,21 @@ public readonly controlPlaneEventSource: string;
 
 - *Type:* string
 
-The source to use when listening for events coming from the SBT control plane.
+The name of the event source for events coming from the SBT control plane.
+
+---
+
+##### `eventBus`<sup>Optional</sup> <a name="eventBus" id="@cdklabs/sbt-aws.EventManagerProps.property.eventBus"></a>
+
+```typescript
+public readonly eventBus: IEventBus;
+```
+
+- *Type:* aws-cdk-lib.aws_events.IEventBus
+
+The event bus to register new rules with.
+
+One will be created if not provided.
 
 ---
 
@@ -2968,95 +3647,88 @@ The JMESPath to find the primary key value in the incoming data stream.
 
 ---
 
-### IncomingEventMetadata <a name="IncomingEventMetadata" id="@cdklabs/sbt-aws.IncomingEventMetadata"></a>
+### SampleRegistrationWebPageProps <a name="SampleRegistrationWebPageProps" id="@cdklabs/sbt-aws.SampleRegistrationWebPageProps"></a>
 
-Provides metadata for incoming events.
+Properties for the SampleRegistrationWebPage construct.
 
-#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.IncomingEventMetadata.Initializer"></a>
+#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.SampleRegistrationWebPageProps.Initializer"></a>
 
 ```typescript
-import { IncomingEventMetadata } from '@cdklabs/sbt-aws'
+import { SampleRegistrationWebPageProps } from '@cdklabs/sbt-aws'
 
-const incomingEventMetadata: IncomingEventMetadata = { ... }
+const sampleRegistrationWebPageProps: SampleRegistrationWebPageProps = { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.IncomingEventMetadata.property.detailType">detailType</a></code> | <code>string[]</code> | The list of detailTypes to listen for in the incoming event. |
-| <code><a href="#@cdklabs/sbt-aws.IncomingEventMetadata.property.source">source</a></code> | <code>string[]</code> | The list of sources to listen for in the incoming event. |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.registrationAPI">registrationAPI</a></code> | <code>aws-cdk-lib.aws_apigateway.RestApiBase</code> | The API Gateway that serves the following endpoints:. |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.userProvidedRequiredFieldsForRegistration">userProvidedRequiredFieldsForRegistration</a></code> | <code>string[]</code> | The list of required user-provided fields for registration. |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.autoDeleteBucketObjects">autoDeleteBucketObjects</a></code> | <code>boolean</code> | Whether to automatically delete objects from the S3 bucket when the stack is deleted. |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.imageLogoUrl">imageLogoUrl</a></code> | <code>string</code> | The URL of the image logo to display on the registration page. |
 
 ---
 
-##### `detailType`<sup>Required</sup> <a name="detailType" id="@cdklabs/sbt-aws.IncomingEventMetadata.property.detailType"></a>
+##### `registrationAPI`<sup>Required</sup> <a name="registrationAPI" id="@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.registrationAPI"></a>
 
 ```typescript
-public readonly detailType: string[];
+public readonly registrationAPI: RestApiBase;
+```
+
+- *Type:* aws-cdk-lib.aws_apigateway.RestApiBase
+
+The API Gateway that serves the following endpoints:.
+
+POST /redirectmarketplacetoken: redirects to a registration page.
+
+POST /subscriber: creates a new subscriber.
+
+---
+
+##### `userProvidedRequiredFieldsForRegistration`<sup>Required</sup> <a name="userProvidedRequiredFieldsForRegistration" id="@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.userProvidedRequiredFieldsForRegistration"></a>
+
+```typescript
+public readonly userProvidedRequiredFieldsForRegistration: string[];
 ```
 
 - *Type:* string[]
 
-The list of detailTypes to listen for in the incoming event.
+The list of required user-provided fields for registration.
+
+This contains the set of fields that must be provided by the user
+when registering a new customer.
+
+This is used to dynamically update the registration page to create a
+form that accepts each of the fields present in this list.
+
+ex. ['name', 'phone']
 
 ---
 
-##### `source`<sup>Optional</sup> <a name="source" id="@cdklabs/sbt-aws.IncomingEventMetadata.property.source"></a>
+##### `autoDeleteBucketObjects`<sup>Optional</sup> <a name="autoDeleteBucketObjects" id="@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.autoDeleteBucketObjects"></a>
 
 ```typescript
-public readonly source: string[];
+public readonly autoDeleteBucketObjects: boolean;
 ```
 
-- *Type:* string[]
-- *Default:* CoreApplicationPlaneProps.controlPlaneEventSource
+- *Type:* boolean
+- *Default:* false
 
-The list of sources to listen for in the incoming event.
-
----
-
-### OutgoingEventMetadata <a name="OutgoingEventMetadata" id="@cdklabs/sbt-aws.OutgoingEventMetadata"></a>
-
-Provides metadata for outgoing events.
-
-#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.OutgoingEventMetadata.Initializer"></a>
-
-```typescript
-import { OutgoingEventMetadata } from '@cdklabs/sbt-aws'
-
-const outgoingEventMetadata: OutgoingEventMetadata = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.OutgoingEventMetadata.property.detailType">detailType</a></code> | <code>string</code> | The detailType to set in the outgoing event. |
-| <code><a href="#@cdklabs/sbt-aws.OutgoingEventMetadata.property.source">source</a></code> | <code>string</code> | The source to set in the outgoing event. |
+Whether to automatically delete objects from the S3 bucket when the stack is deleted.
 
 ---
 
-##### `detailType`<sup>Required</sup> <a name="detailType" id="@cdklabs/sbt-aws.OutgoingEventMetadata.property.detailType"></a>
+##### `imageLogoUrl`<sup>Optional</sup> <a name="imageLogoUrl" id="@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.imageLogoUrl"></a>
 
 ```typescript
-public readonly detailType: string;
+public readonly imageLogoUrl: string;
 ```
 
 - *Type:* string
+- *Default:* Amazon logo
 
-The detailType to set in the outgoing event.
-
----
-
-##### `source`<sup>Optional</sup> <a name="source" id="@cdklabs/sbt-aws.OutgoingEventMetadata.property.source"></a>
-
-```typescript
-public readonly source: string;
-```
-
-- *Type:* string
-- *Default:* CoreApplicationPlaneProps.applicationPlaneEventSource
-
-The source to set in the outgoing event.
+The URL of the image logo to display on the registration page.
 
 ---
 
@@ -3074,7 +3746,7 @@ const servicesProps: ServicesProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.ServicesProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.EventManager">EventManager</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ServicesProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.ServicesProps.property.tables">tables</a></code> | <code><a href="#@cdklabs/sbt-aws.Tables">Tables</a></code> | *No description.* |
 
 ---
@@ -3082,10 +3754,10 @@ const servicesProps: ServicesProps = { ... }
 ##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.ServicesProps.property.eventManager"></a>
 
 ```typescript
-public readonly eventManager: EventManager;
+public readonly eventManager: IEventManager;
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.EventManager">EventManager</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
 
 ---
 
@@ -3384,71 +4056,72 @@ public readonly tenantDetailsTenantNameColumn: string;
 
 Encapsulates the list of properties expected as outputs of Auth plugins.
 
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.createAdminUser">createAdminUser</a></code> | Function to create an admin user. |
+
+---
+
+##### `createAdminUser` <a name="createAdminUser" id="@cdklabs/sbt-aws.IAuth.createAdminUser"></a>
+
+```typescript
+public createAdminUser(scope: Construct, id: string, props: CreateAdminUserProps): void
+```
+
+Function to create an admin user.
+
+###### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.IAuth.createAdminUser.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+###### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.IAuth.createAdminUser.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+###### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.IAuth.createAdminUser.parameter.props"></a>
+
+- *Type:* <a href="#@cdklabs/sbt-aws.CreateAdminUserProps">CreateAdminUserProps</a>
+
+---
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.authorizationServer">authorizationServer</a></code> | <code>string</code> | Authorization server Url. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.authorizer">authorizer</a></code> | <code>aws-cdk-lib.aws_apigateway.IAuthorizer</code> | Authorizer referenced by the ControlPlaneAPI. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.clientId">clientId</a></code> | <code>string</code> | The OAuth clientId for the identity provider. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.controlPlaneIdpDetails">controlPlaneIdpDetails</a></code> | <code>any</code> | Contains any information relevant to the IDP implementation required by the Authorizer and User Function implementations. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.createUserFunction">createUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- POST /users. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.deleteUserFunction">deleteUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- DELETE /user/{username}. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.disableUserFunction">disableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- PUT /user/{username}/disable. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.enableUserFunction">enableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- PUT /user/{username}/enable. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchAllUsersFunction">fetchAllUsersFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- GET /users. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchUserFunction">fetchUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- GET /user/{username}. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.updateUserFunction">updateUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- PUT /user/{username}. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.wellKnownEndpointUrl">wellKnownEndpointUrl</a></code> | <code>string</code> | OpenID configuration Url. |
-
----
-
-##### `authorizationServer`<sup>Required</sup> <a name="authorizationServer" id="@cdklabs/sbt-aws.IAuth.property.authorizationServer"></a>
-
-```typescript
-public readonly authorizationServer: string;
-```
-
-- *Type:* string
-
-Authorization server Url.
-
----
-
-##### `authorizer`<sup>Required</sup> <a name="authorizer" id="@cdklabs/sbt-aws.IAuth.property.authorizer"></a>
-
-```typescript
-public readonly authorizer: IAuthorizer;
-```
-
-- *Type:* aws-cdk-lib.aws_apigateway.IAuthorizer
-
-Authorizer referenced by the ControlPlaneAPI.
-
----
-
-##### `clientId`<sup>Required</sup> <a name="clientId" id="@cdklabs/sbt-aws.IAuth.property.clientId"></a>
-
-```typescript
-public readonly clientId: string;
-```
-
-- *Type:* string
-
-The OAuth clientId for the identity provider.
-
----
-
-##### `controlPlaneIdpDetails`<sup>Required</sup> <a name="controlPlaneIdpDetails" id="@cdklabs/sbt-aws.IAuth.property.controlPlaneIdpDetails"></a>
-
-```typescript
-public readonly controlPlaneIdpDetails: any;
-```
-
-- *Type:* any
-
-Contains any information relevant to the IDP implementation required by the Authorizer and User Function implementations.
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.createUserFunction">createUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for creating a user. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.deleteUserFunction">deleteUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for deleting a user. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.disableUserFunction">disableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for disabling a user. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.enableUserFunction">enableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for enabling a user. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchAllUsersFunction">fetchAllUsersFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for fetching all users -- GET /users. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchUserFunction">fetchUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for fetching a user. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.jwtAudience">jwtAudience</a></code> | <code>string[]</code> | The list of recipients (audience) for which the JWT is intended. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.jwtIssuer">jwtIssuer</a></code> | <code>string</code> | The JWT issuer domain for the identity provider. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.machineClientId">machineClientId</a></code> | <code>string</code> | The client ID enabled for machine-to-machine authorization flows, such as Client Credentials flow. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.machineClientSecret">machineClientSecret</a></code> | <code>aws-cdk-lib.SecretValue</code> | The client secret enabled for machine-to-machine authorization flows, such as Client Credentials flow. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.tokenEndpoint">tokenEndpoint</a></code> | <code>string</code> | The endpoint URL for granting OAuth tokens. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.updateUserFunction">updateUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for updating a user. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.userClientId">userClientId</a></code> | <code>string</code> | The client ID enabled for user-centric authentication flows, such as Authorization Code flow. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.wellKnownEndpointUrl">wellKnownEndpointUrl</a></code> | <code>string</code> | The well-known endpoint URL for the control plane identity provider. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.activateTenantScope">activateTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for activating a tenant. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.createTenantScope">createTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for creating a tenant. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.createUserScope">createUserScope</a></code> | <code>string</code> | The scope required to authorize requests for creating a user. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.deactivateTenantScope">deactivateTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for deactivating a tenant. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.deleteTenantScope">deleteTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for deleting a tenant. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.deleteUserScope">deleteUserScope</a></code> | <code>string</code> | The scope required to authorize requests for deleting a user. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.disableUserScope">disableUserScope</a></code> | <code>string</code> | The scope required to authorize requests for disabling a user. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.enableUserScope">enableUserScope</a></code> | <code>string</code> | The scope required to authorize requests for enabling a user. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchAllTenantsScope">fetchAllTenantsScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching all tenants. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchAllUsersScope">fetchAllUsersScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching all users. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchTenantScope">fetchTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching a single tenant. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchUserScope">fetchUserScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching a single user. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.updateTenantScope">updateTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for updating a tenant. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.updateUserScope">updateUserScope</a></code> | <code>string</code> | The scope required to authorize requests for updating a user. |
 
 ---
 
@@ -3460,7 +4133,9 @@ public readonly createUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
-Function referenced by the ControlPlaneAPI -- POST /users.
+The Lambda function for creating a user.
+
+- POST /users
 
 ---
 
@@ -3472,7 +4147,9 @@ public readonly deleteUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
-Function referenced by the ControlPlaneAPI -- DELETE /user/{username}.
+The Lambda function for deleting a user.
+
+- DELETE /user/{userId}
 
 ---
 
@@ -3484,7 +4161,9 @@ public readonly disableUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
-Function referenced by the ControlPlaneAPI -- PUT /user/{username}/disable.
+The Lambda function for disabling a user.
+
+- PUT /user/{userId}/disable
 
 ---
 
@@ -3496,7 +4175,9 @@ public readonly enableUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
-Function referenced by the ControlPlaneAPI -- PUT /user/{username}/enable.
+The Lambda function for enabling a user.
+
+- PUT /user/{userId}/enable
 
 ---
 
@@ -3508,7 +4189,7 @@ public readonly fetchAllUsersFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
-Function referenced by the ControlPlaneAPI -- GET /users.
+The Lambda function for fetching all users -- GET /users.
 
 ---
 
@@ -3520,7 +4201,80 @@ public readonly fetchUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
-Function referenced by the ControlPlaneAPI -- GET /user/{username}.
+The Lambda function for fetching a user.
+
+- GET /user/{userId}
+
+---
+
+##### `jwtAudience`<sup>Required</sup> <a name="jwtAudience" id="@cdklabs/sbt-aws.IAuth.property.jwtAudience"></a>
+
+```typescript
+public readonly jwtAudience: string[];
+```
+
+- *Type:* string[]
+
+The list of recipients (audience) for which the JWT is intended.
+
+This will be checked by the API GW to ensure only authorized
+clients are provided access.
+
+---
+
+##### `jwtIssuer`<sup>Required</sup> <a name="jwtIssuer" id="@cdklabs/sbt-aws.IAuth.property.jwtIssuer"></a>
+
+```typescript
+public readonly jwtIssuer: string;
+```
+
+- *Type:* string
+
+The JWT issuer domain for the identity provider.
+
+This is the domain where the JSON Web Tokens (JWTs) are issued from.
+
+---
+
+##### `machineClientId`<sup>Required</sup> <a name="machineClientId" id="@cdklabs/sbt-aws.IAuth.property.machineClientId"></a>
+
+```typescript
+public readonly machineClientId: string;
+```
+
+- *Type:* string
+
+The client ID enabled for machine-to-machine authorization flows, such as Client Credentials flow.
+
+This client ID is used for authenticating applications or services.
+
+---
+
+##### `machineClientSecret`<sup>Required</sup> <a name="machineClientSecret" id="@cdklabs/sbt-aws.IAuth.property.machineClientSecret"></a>
+
+```typescript
+public readonly machineClientSecret: SecretValue;
+```
+
+- *Type:* aws-cdk-lib.SecretValue
+
+The client secret enabled for machine-to-machine authorization flows, such as Client Credentials flow.
+
+This secret is used in combination with the machine client ID for authenticating applications or services.
+
+---
+
+##### `tokenEndpoint`<sup>Required</sup> <a name="tokenEndpoint" id="@cdklabs/sbt-aws.IAuth.property.tokenEndpoint"></a>
+
+```typescript
+public readonly tokenEndpoint: string;
+```
+
+- *Type:* string
+
+The endpoint URL for granting OAuth tokens.
+
+This is the URL where OAuth tokens can be obtained from the authorization server.
 
 ---
 
@@ -3532,7 +4286,23 @@ public readonly updateUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
-Function referenced by the ControlPlaneAPI -- PUT /user/{username}.
+The Lambda function for updating a user.
+
+- PUT /user/{userId}
+
+---
+
+##### `userClientId`<sup>Required</sup> <a name="userClientId" id="@cdklabs/sbt-aws.IAuth.property.userClientId"></a>
+
+```typescript
+public readonly userClientId: string;
+```
+
+- *Type:* string
+
+The client ID enabled for user-centric authentication flows, such as Authorization Code flow.
+
+This client ID is used for authenticating end-users.
 
 ---
 
@@ -3544,7 +4314,205 @@ public readonly wellKnownEndpointUrl: string;
 
 - *Type:* string
 
-OpenID configuration Url.
+The well-known endpoint URL for the control plane identity provider.
+
+This URL provides configuration information about the identity provider, such as issuer, authorization endpoint, and token endpoint.
+
+---
+
+##### `activateTenantScope`<sup>Optional</sup> <a name="activateTenantScope" id="@cdklabs/sbt-aws.IAuth.property.activateTenantScope"></a>
+
+```typescript
+public readonly activateTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for activating a tenant.
+
+This scope grants permission to activate a specific tenant.
+
+---
+
+##### `createTenantScope`<sup>Optional</sup> <a name="createTenantScope" id="@cdklabs/sbt-aws.IAuth.property.createTenantScope"></a>
+
+```typescript
+public readonly createTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for creating a tenant.
+
+This scope grants permission to create a new tenant.
+
+---
+
+##### `createUserScope`<sup>Optional</sup> <a name="createUserScope" id="@cdklabs/sbt-aws.IAuth.property.createUserScope"></a>
+
+```typescript
+public readonly createUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for creating a user.
+
+This scope grants permission to create a new user.
+
+---
+
+##### `deactivateTenantScope`<sup>Optional</sup> <a name="deactivateTenantScope" id="@cdklabs/sbt-aws.IAuth.property.deactivateTenantScope"></a>
+
+```typescript
+public readonly deactivateTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for deactivating a tenant.
+
+This scope grants permission to deactivate a specific tenant.
+
+---
+
+##### `deleteTenantScope`<sup>Optional</sup> <a name="deleteTenantScope" id="@cdklabs/sbt-aws.IAuth.property.deleteTenantScope"></a>
+
+```typescript
+public readonly deleteTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for deleting a tenant.
+
+This scope grants permission to delete a specific tenant.
+
+---
+
+##### `deleteUserScope`<sup>Optional</sup> <a name="deleteUserScope" id="@cdklabs/sbt-aws.IAuth.property.deleteUserScope"></a>
+
+```typescript
+public readonly deleteUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for deleting a user.
+
+This scope grants permission to delete a specific user.
+
+---
+
+##### `disableUserScope`<sup>Optional</sup> <a name="disableUserScope" id="@cdklabs/sbt-aws.IAuth.property.disableUserScope"></a>
+
+```typescript
+public readonly disableUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for disabling a user.
+
+This scope grants permission to disable a specific user.
+
+---
+
+##### `enableUserScope`<sup>Optional</sup> <a name="enableUserScope" id="@cdklabs/sbt-aws.IAuth.property.enableUserScope"></a>
+
+```typescript
+public readonly enableUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for enabling a user.
+
+This scope grants permission to enable a specific user.
+
+---
+
+##### `fetchAllTenantsScope`<sup>Optional</sup> <a name="fetchAllTenantsScope" id="@cdklabs/sbt-aws.IAuth.property.fetchAllTenantsScope"></a>
+
+```typescript
+public readonly fetchAllTenantsScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for fetching all tenants.
+
+This scope grants permission to fetch the details of all tenants.
+
+---
+
+##### `fetchAllUsersScope`<sup>Optional</sup> <a name="fetchAllUsersScope" id="@cdklabs/sbt-aws.IAuth.property.fetchAllUsersScope"></a>
+
+```typescript
+public readonly fetchAllUsersScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for fetching all users.
+
+This scope grants permission to fetch the details of all users.
+
+---
+
+##### `fetchTenantScope`<sup>Optional</sup> <a name="fetchTenantScope" id="@cdklabs/sbt-aws.IAuth.property.fetchTenantScope"></a>
+
+```typescript
+public readonly fetchTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for fetching a single tenant.
+
+This scope grants permission to fetch the details of a specific tenant.
+
+---
+
+##### `fetchUserScope`<sup>Optional</sup> <a name="fetchUserScope" id="@cdklabs/sbt-aws.IAuth.property.fetchUserScope"></a>
+
+```typescript
+public readonly fetchUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for fetching a single user.
+
+This scope grants permission to fetch the details of a specific user.
+
+---
+
+##### `updateTenantScope`<sup>Optional</sup> <a name="updateTenantScope" id="@cdklabs/sbt-aws.IAuth.property.updateTenantScope"></a>
+
+```typescript
+public readonly updateTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for updating a tenant.
+
+This scope grants permission to update the details of a specific tenant.
+
+---
+
+##### `updateUserScope`<sup>Optional</sup> <a name="updateUserScope" id="@cdklabs/sbt-aws.IAuth.property.updateUserScope"></a>
+
+```typescript
+public readonly updateUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for updating a user.
+
+This scope grants permission to update the details of a specific user.
 
 ---
 
@@ -3727,6 +4695,137 @@ The table containing the aggregated data.
 
 ---
 
+### IEventManager <a name="IEventManager" id="@cdklabs/sbt-aws.IEventManager"></a>
+
+- *Implemented By:* <a href="#@cdklabs/sbt-aws.EventManager">EventManager</a>, <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.IEventManager.addTargetToEvent">addTargetToEvent</a></code> | Adds an IRuleTarget to an event. |
+| <code><a href="#@cdklabs/sbt-aws.IEventManager.grantPutEventsTo">grantPutEventsTo</a></code> | Provides grantee the permissions to place events on the EventManager bus. |
+
+---
+
+##### `addTargetToEvent` <a name="addTargetToEvent" id="@cdklabs/sbt-aws.IEventManager.addTargetToEvent"></a>
+
+```typescript
+public addTargetToEvent(scope: Construct, eventType: DetailType, target: IRuleTarget): void
+```
+
+Adds an IRuleTarget to an event.
+
+###### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.IEventManager.addTargetToEvent.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+###### `eventType`<sup>Required</sup> <a name="eventType" id="@cdklabs/sbt-aws.IEventManager.addTargetToEvent.parameter.eventType"></a>
+
+- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+
+The detail type of the event to add a target to.
+
+---
+
+###### `target`<sup>Required</sup> <a name="target" id="@cdklabs/sbt-aws.IEventManager.addTargetToEvent.parameter.target"></a>
+
+- *Type:* aws-cdk-lib.aws_events.IRuleTarget
+
+The target that will be added to the event.
+
+---
+
+##### `grantPutEventsTo` <a name="grantPutEventsTo" id="@cdklabs/sbt-aws.IEventManager.grantPutEventsTo"></a>
+
+```typescript
+public grantPutEventsTo(grantee: IGrantable): void
+```
+
+Provides grantee the permissions to place events on the EventManager bus.
+
+###### `grantee`<sup>Required</sup> <a name="grantee" id="@cdklabs/sbt-aws.IEventManager.grantPutEventsTo.parameter.grantee"></a>
+
+- *Type:* aws-cdk-lib.aws_iam.IGrantable
+
+The grantee resource that will be granted the permission(s).
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.IEventManager.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | The event source used for events emitted by the application plane. |
+| <code><a href="#@cdklabs/sbt-aws.IEventManager.property.busArn">busArn</a></code> | <code>string</code> | The ARN/ID of the bus that will be used to send and receive events. |
+| <code><a href="#@cdklabs/sbt-aws.IEventManager.property.busName">busName</a></code> | <code>string</code> | The name of the bus that will be used to send and receive events. |
+| <code><a href="#@cdklabs/sbt-aws.IEventManager.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The event source used for events emitted by the control plane. |
+| <code><a href="#@cdklabs/sbt-aws.IEventManager.property.supportedEvents">supportedEvents</a></code> | <code>{[ key: string ]: string}</code> | List of recognized events that are available as triggers. |
+
+---
+
+##### `applicationPlaneEventSource`<sup>Required</sup> <a name="applicationPlaneEventSource" id="@cdklabs/sbt-aws.IEventManager.property.applicationPlaneEventSource"></a>
+
+```typescript
+public readonly applicationPlaneEventSource: string;
+```
+
+- *Type:* string
+
+The event source used for events emitted by the application plane.
+
+---
+
+##### `busArn`<sup>Required</sup> <a name="busArn" id="@cdklabs/sbt-aws.IEventManager.property.busArn"></a>
+
+```typescript
+public readonly busArn: string;
+```
+
+- *Type:* string
+
+The ARN/ID of the bus that will be used to send and receive events.
+
+---
+
+##### `busName`<sup>Required</sup> <a name="busName" id="@cdklabs/sbt-aws.IEventManager.property.busName"></a>
+
+```typescript
+public readonly busName: string;
+```
+
+- *Type:* string
+
+The name of the bus that will be used to send and receive events.
+
+---
+
+##### `controlPlaneEventSource`<sup>Required</sup> <a name="controlPlaneEventSource" id="@cdklabs/sbt-aws.IEventManager.property.controlPlaneEventSource"></a>
+
+```typescript
+public readonly controlPlaneEventSource: string;
+```
+
+- *Type:* string
+
+The event source used for events emitted by the control plane.
+
+---
+
+##### `supportedEvents`<sup>Required</sup> <a name="supportedEvents" id="@cdklabs/sbt-aws.IEventManager.property.supportedEvents"></a>
+
+```typescript
+public readonly supportedEvents: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+
+List of recognized events that are available as triggers.
+
+---
+
 ### IFunctionSchedule <a name="IFunctionSchedule" id="@cdklabs/sbt-aws.IFunctionSchedule"></a>
 
 - *Implemented By:* <a href="#@cdklabs/sbt-aws.IFunctionSchedule">IFunctionSchedule</a>
@@ -3808,6 +4907,41 @@ The detail-type that will trigger the handler function.
 ---
 
 ## Enums <a name="Enums" id="Enums"></a>
+
+### AWSMarketplaceSaaSPricingModel <a name="AWSMarketplaceSaaSPricingModel" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel"></a>
+
+Enum representing the pricing models for an AWS Marketplace SaaS product.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel.CONTRACTS">CONTRACTS</a></code> | Contracts pricing model. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel.SUBSCRIPTIONS">SUBSCRIPTIONS</a></code> | Subscriptions pricing model. |
+| <code><a href="#@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel.CONTRACTS_WITH_SUBSCRIPTION">CONTRACTS_WITH_SUBSCRIPTION</a></code> | Contracts with subscription pricing model. |
+
+---
+
+##### `CONTRACTS` <a name="CONTRACTS" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel.CONTRACTS"></a>
+
+Contracts pricing model.
+
+---
+
+
+##### `SUBSCRIPTIONS` <a name="SUBSCRIPTIONS" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel.SUBSCRIPTIONS"></a>
+
+Subscriptions pricing model.
+
+---
+
+
+##### `CONTRACTS_WITH_SUBSCRIPTION` <a name="CONTRACTS_WITH_SUBSCRIPTION" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel.CONTRACTS_WITH_SUBSCRIPTION"></a>
+
+Contracts with subscription pricing model.
+
+---
+
 
 ### DetailType <a name="DetailType" id="@cdklabs/sbt-aws.DetailType"></a>
 

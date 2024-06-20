@@ -32,7 +32,7 @@
         "CHANGELOG": "dist/changelog.md",
         "BUMPFILE": "dist/version.txt",
         "RELEASETAG": "dist/releasetag.txt",
-        "RELEASE_TAG_PREFIX": ""
+        "RELEASE_TAG_PREFIX": "@cdklabs/sbt-aws-"
       },
       "steps": [
         {
@@ -197,7 +197,8 @@
       "name": "release",
       "description": "Prepare a release from \"main\" branch",
       "env": {
-        "RELEASE": "true"
+        "RELEASE": "true",
+        "RELEASE_TAG_PREFIX": "@cdklabs/sbt-aws-"
       },
       "steps": [
         {
@@ -247,7 +248,7 @@
         "CHANGELOG": "dist/changelog.md",
         "BUMPFILE": "dist/version.txt",
         "RELEASETAG": "dist/releasetag.txt",
-        "RELEASE_TAG_PREFIX": ""
+        "RELEASE_TAG_PREFIX": "@cdklabs/sbt-aws-"
       },
       "steps": [
         {
@@ -263,13 +264,13 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@aws-cdk/aws-kinesisfirehose-alpha,@types/jest,aws-cdk,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-header,eslint-plugin-import,eslint-plugin-prettier,jest,jsii-diff,jsii-docgen,jsii-pacmak,jsii-rosetta,jsii,prettier,projen,ts-jest,ts-node,typescript,@aws-cdk/aws-kinesisfirehose-destinations-alpha,@aws-cdk/aws-lambda-python-alpha,cdk-nag"
+          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@aws-cdk/aws-kinesisfirehose-alpha,@types/jest,aws-cdk,braces,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-header,eslint-plugin-import,eslint-plugin-prettier,jest,jsii-diff,jsii-docgen,jsii-pacmak,jsii-rosetta,jsii,prettier,projen,ts-jest,ts-node,typescript,@aws-cdk/aws-kinesisfirehose-destinations-alpha,@aws-cdk/aws-lambda-python-alpha,cdk-nag"
         },
         {
           "exec": "npm install"
         },
         {
-          "exec": "npm update @aws-cdk/aws-kinesisfirehose-alpha @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-header eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii prettier projen standard-version ts-jest ts-node typescript aws-cdk-lib constructs @aws-cdk/aws-kinesisfirehose-destinations-alpha @aws-cdk/aws-lambda-python-alpha cdk-nag"
+          "exec": "npm update @aws-cdk/aws-kinesisfirehose-alpha @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk braces eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-header eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii prettier projen standard-version ts-jest ts-node typescript aws-cdk-lib constructs @aws-cdk/aws-kinesisfirehose-destinations-alpha @aws-cdk/aws-lambda-python-alpha cdk-nag"
         },
         {
           "exec": "npx projen"

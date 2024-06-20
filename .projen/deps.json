@@ -2,7 +2,7 @@
   "dependencies": [
     {
       "name": "@aws-cdk/aws-kinesisfirehose-alpha",
-      "version": "2.123.0-alpha.0",
+      "version": "2.140.0-alpha.0",
       "type": "build"
     },
     {
@@ -26,7 +26,12 @@
     },
     {
       "name": "aws-cdk",
-      "version": "2.123.0",
+      "version": "2.140.0",
+      "type": "build"
+    },
+    {
+      "name": "braces",
+      "version": ">=3.0.3",
       "type": "build"
     },
     {
@@ -77,12 +82,12 @@
     },
     {
       "name": "jsii-rosetta",
-      "version": "~5.2.0",
+      "version": "~5.3.0",
       "type": "build"
     },
     {
       "name": "jsii",
-      "version": "~5.2.0",
+      "version": "~5.3.0",
       "type": "build"
     },
     {
@@ -113,11 +118,12 @@
     },
     {
       "name": "@aws-cdk/aws-kinesisfirehose-alpha",
+      "version": "2.140.0-alpha.0",
       "type": "peer"
     },
     {
       "name": "aws-cdk-lib",
-      "version": "^2.123.0",
+      "version": "^2.140.0",
       "type": "peer"
     },
     {
@@ -127,10 +133,12 @@
     },
     {
       "name": "@aws-cdk/aws-kinesisfirehose-alpha",
+      "version": "2.140.0-alpha.0",
       "type": "runtime"
     },
     {
       "name": "@aws-cdk/aws-kinesisfirehose-destinations-alpha",
+      "version": "2.140.0-alpha.0",
       "type": "runtime"
     },
     {
