@@ -39,7 +39,6 @@ function testForRulesInOtherStack(stack: cdk.Stack) {
   const eventRuleCapture = new Capture();
 
   const rules = template.findResources('AWS::Events::Rule', eventRuleCapture);
-  console.log(rules);
   if (Object.keys(rules).length === 0) {
     it('should not have rules for triggering runners in stacks that do not define them', () => {
       expect(true).toBe(true);
@@ -54,7 +53,6 @@ function testForRulesInOtherStack(stack: cdk.Stack) {
     eventRules.push(eventRuleCapture.asObject());
   } while (eventRuleCapture.next());
 
-  console.log(eventRules);
   const onboardingRequestEventRules = eventRules.filter(
     (eventRule: { EventPattern?: { 'detail-type': string[] } }) => {
       return (
@@ -101,11 +99,10 @@ describe('EventManager', () => {
     const app = new cdk.App();
     const controlPlaneStack = new cdk.Stack(app, 'ControlPlaneStack');
 
-    const cognitoAuth = new CognitoAuth(controlPlaneStack, 'CognitoAuth', {
-      systemAdminEmail: 'test@example.com',
-    });
+    const cognitoAuth = new CognitoAuth(controlPlaneStack, 'CognitoAuth');
 
     const controlPlane = new ControlPlane(controlPlaneStack, 'ControlPlane', {
+      systemAdminEmail: 'test@example.com',
       auth: cognitoAuth,
     });
 
@@ -133,11 +130,10 @@ describe('EventManager', () => {
 
     const eventManager = new EventManager(controlPlaneStack, 'EventManager');
 
-    const cognitoAuth = new CognitoAuth(controlPlaneStack, 'CognitoAuth', {
-      systemAdminEmail: 'test@example.com',
-    });
+    const cognitoAuth = new CognitoAuth(controlPlaneStack, 'CognitoAuth');
 
     new ControlPlane(controlPlaneStack, 'ControlPlane', {
+      systemAdminEmail: 'test@example.com',
       auth: cognitoAuth,
       eventManager: eventManager,
     });
@@ -166,11 +162,10 @@ describe('EventManager', () => {
     const eventManager = new EventManager(eventManagerStack, 'EventManager');
 
     const controlPlaneStack = new cdk.Stack(app, 'ControlPlaneStack');
-    const cognitoAuth = new CognitoAuth(controlPlaneStack, 'CognitoAuth', {
-      systemAdminEmail: 'test@example.com',
-    });
+    const cognitoAuth = new CognitoAuth(controlPlaneStack, 'CognitoAuth');
 
     new ControlPlane(controlPlaneStack, 'ControlPlane', {
+      systemAdminEmail: 'test@example.com',
       auth: cognitoAuth,
       eventManager: eventManager,
     });

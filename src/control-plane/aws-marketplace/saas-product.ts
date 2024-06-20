@@ -102,6 +102,14 @@ export class AWSMarketplaceSaaSProduct extends Construct {
     super(scope, id);
     addTemplateTag(this, 'AWSMarketplaceSaaSProduct');
 
+    const region = cdk.Stack.of(this).region;
+    if (cdk.Token.isUnresolved(region) || region != 'us-east-1') {
+      // must use us-east-1 as quickstartBucket is located in us-east-1 region.
+      throw new Error(
+        'Region not specified. Use "env" to specify region. Note that region must be set to us-east-1 in order to use this construct.'
+      );
+    }
+
     const quickstartBucket = s3.Bucket.fromBucketName(this, 'CodeBucket', 'aws-quickstart');
 
     const createEntitlementLogic =

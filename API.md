@@ -512,7 +512,7 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.BillingProvider.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.BillingProvider.property.controlPlaneAPIBillingWebhookResource">controlPlaneAPIBillingWebhookResource</a></code> | <code>aws-cdk-lib.aws_apigateway.IResource</code> | The API Gateway resource containing the billing webhook resource. |
+| <code><a href="#@cdklabs/sbt-aws.BillingProvider.property.controlPlaneAPIBillingWebhookResourcePath">controlPlaneAPIBillingWebhookResourcePath</a></code> | <code>string</code> | The API Gateway resource containing the billing webhook resource. |
 
 ---
 
@@ -528,13 +528,13 @@ The tree node.
 
 ---
 
-##### `controlPlaneAPIBillingWebhookResource`<sup>Optional</sup> <a name="controlPlaneAPIBillingWebhookResource" id="@cdklabs/sbt-aws.BillingProvider.property.controlPlaneAPIBillingWebhookResource"></a>
+##### `controlPlaneAPIBillingWebhookResourcePath`<sup>Optional</sup> <a name="controlPlaneAPIBillingWebhookResourcePath" id="@cdklabs/sbt-aws.BillingProvider.property.controlPlaneAPIBillingWebhookResourcePath"></a>
 
 ```typescript
-public readonly controlPlaneAPIBillingWebhookResource: IResource;
+public readonly controlPlaneAPIBillingWebhookResourcePath: string;
 ```
 
-- *Type:* aws-cdk-lib.aws_apigateway.IResource
+- *Type:* string
 
 The API Gateway resource containing the billing webhook resource.
 
@@ -554,7 +554,7 @@ Constructs for setting up Cognito authentication and user management.
 ```typescript
 import { CognitoAuth } from '@cdklabs/sbt-aws'
 
-new CognitoAuth(scope: Construct, id: string, props: CognitoAuthProps)
+new CognitoAuth(scope: Construct, id: string, props?: CognitoAuthProps)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -577,7 +577,7 @@ new CognitoAuth(scope: Construct, id: string, props: CognitoAuthProps)
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.CognitoAuth.Initializer.parameter.props"></a>
+##### `props`<sup>Optional</sup> <a name="props" id="@cdklabs/sbt-aws.CognitoAuth.Initializer.parameter.props"></a>
 
 - *Type:* <a href="#@cdklabs/sbt-aws.CognitoAuthProps">CognitoAuthProps</a>
 
@@ -588,6 +588,7 @@ new CognitoAuth(scope: Construct, id: string, props: CognitoAuthProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.createAdminUser">createAdminUser</a></code> | Function to create an admin user. |
 
 ---
 
@@ -598,6 +599,32 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
+
+##### `createAdminUser` <a name="createAdminUser" id="@cdklabs/sbt-aws.CognitoAuth.createAdminUser"></a>
+
+```typescript
+public createAdminUser(scope: Construct, id: string, props: CreateAdminUserProps): void
+```
+
+Function to create an admin user.
+
+###### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.CognitoAuth.createAdminUser.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+###### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.CognitoAuth.createAdminUser.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+###### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.CognitoAuth.createAdminUser.parameter.props"></a>
+
+- *Type:* <a href="#@cdklabs/sbt-aws.CreateAdminUserProps">CreateAdminUserProps</a>
+
+---
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -630,18 +657,34 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.authorizationServer">authorizationServer</a></code> | <code>string</code> | The authorization server for the control plane IdP. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.authorizer">authorizer</a></code> | <code>aws-cdk-lib.aws_apigateway.IAuthorizer</code> | The API Gateway authorizer for authenticating requests. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.clientId">clientId</a></code> | <code>string</code> | The client ID for the control plane IdP. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.controlPlaneIdpDetails">controlPlaneIdpDetails</a></code> | <code>any</code> | The details of the control plane Identity Provider (IdP). |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.createUserFunction">createUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for creating a user. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.deleteUserFunction">deleteUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for deleting a user. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.disableUserFunction">disableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for disabling a user. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.enableUserFunction">enableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for enabling a user. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchAllUsersFunction">fetchAllUsersFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for fetching all users. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchAllUsersFunction">fetchAllUsersFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for fetching all users -- GET /users. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchUserFunction">fetchUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for fetching a user. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.jwtAudience">jwtAudience</a></code> | <code>string[]</code> | The list of recipients (audience) for which the JWT is intended. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.jwtIssuer">jwtIssuer</a></code> | <code>string</code> | The JWT issuer domain for the identity provider. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.machineClientId">machineClientId</a></code> | <code>string</code> | The client ID enabled for machine-to-machine authorization flows, such as Client Credentials flow. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.machineClientSecret">machineClientSecret</a></code> | <code>aws-cdk-lib.SecretValue</code> | The client secret enabled for machine-to-machine authorization flows, such as Client Credentials flow. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.tokenEndpoint">tokenEndpoint</a></code> | <code>string</code> | The endpoint URL for granting OAuth tokens. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.updateUserFunction">updateUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for updating a user. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.wellKnownEndpointUrl">wellKnownEndpointUrl</a></code> | <code>string</code> | The well-known endpoint URL for the control plane IdP. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.userClientId">userClientId</a></code> | <code>string</code> | The client ID enabled for user-centric authentication flows, such as Authorization Code flow. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.wellKnownEndpointUrl">wellKnownEndpointUrl</a></code> | <code>string</code> | The well-known endpoint URL for the control plane identity provider. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.activateTenantScope">activateTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for activating a tenant. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.createTenantScope">createTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for creating a tenant. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.createUserScope">createUserScope</a></code> | <code>string</code> | The scope required to authorize requests for creating a user. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.deactivateTenantScope">deactivateTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for deactivating a tenant. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.deleteTenantScope">deleteTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for deleting a tenant. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.deleteUserScope">deleteUserScope</a></code> | <code>string</code> | The scope required to authorize requests for deleting a user. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.disableUserScope">disableUserScope</a></code> | <code>string</code> | The scope required to authorize requests for disabling a user. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.enableUserScope">enableUserScope</a></code> | <code>string</code> | The scope required to authorize requests for enabling a user. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchAllTenantsScope">fetchAllTenantsScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching all tenants. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchAllUsersScope">fetchAllUsersScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching all users. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchTenantScope">fetchTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching a single tenant. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.fetchUserScope">fetchUserScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching a single user. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.updateTenantScope">updateTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for updating a tenant. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.updateUserScope">updateUserScope</a></code> | <code>string</code> | The scope required to authorize requests for updating a user. |
 
 ---
 
@@ -657,54 +700,6 @@ The tree node.
 
 ---
 
-##### `authorizationServer`<sup>Required</sup> <a name="authorizationServer" id="@cdklabs/sbt-aws.CognitoAuth.property.authorizationServer"></a>
-
-```typescript
-public readonly authorizationServer: string;
-```
-
-- *Type:* string
-
-The authorization server for the control plane IdP.
-
----
-
-##### `authorizer`<sup>Required</sup> <a name="authorizer" id="@cdklabs/sbt-aws.CognitoAuth.property.authorizer"></a>
-
-```typescript
-public readonly authorizer: IAuthorizer;
-```
-
-- *Type:* aws-cdk-lib.aws_apigateway.IAuthorizer
-
-The API Gateway authorizer for authenticating requests.
-
----
-
-##### `clientId`<sup>Required</sup> <a name="clientId" id="@cdklabs/sbt-aws.CognitoAuth.property.clientId"></a>
-
-```typescript
-public readonly clientId: string;
-```
-
-- *Type:* string
-
-The client ID for the control plane IdP.
-
----
-
-##### `controlPlaneIdpDetails`<sup>Required</sup> <a name="controlPlaneIdpDetails" id="@cdklabs/sbt-aws.CognitoAuth.property.controlPlaneIdpDetails"></a>
-
-```typescript
-public readonly controlPlaneIdpDetails: any;
-```
-
-- *Type:* any
-
-The details of the control plane Identity Provider (IdP).
-
----
-
 ##### `createUserFunction`<sup>Required</sup> <a name="createUserFunction" id="@cdklabs/sbt-aws.CognitoAuth.property.createUserFunction"></a>
 
 ```typescript
@@ -714,6 +709,8 @@ public readonly createUserFunction: IFunction;
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
 The Lambda function for creating a user.
+
+- POST /users
 
 ---
 
@@ -727,6 +724,8 @@ public readonly deleteUserFunction: IFunction;
 
 The Lambda function for deleting a user.
 
+- DELETE /user/{userId}
+
 ---
 
 ##### `disableUserFunction`<sup>Required</sup> <a name="disableUserFunction" id="@cdklabs/sbt-aws.CognitoAuth.property.disableUserFunction"></a>
@@ -738,6 +737,8 @@ public readonly disableUserFunction: IFunction;
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
 The Lambda function for disabling a user.
+
+- PUT /user/{userId}/disable
 
 ---
 
@@ -751,6 +752,8 @@ public readonly enableUserFunction: IFunction;
 
 The Lambda function for enabling a user.
 
+- PUT /user/{userId}/enable
+
 ---
 
 ##### `fetchAllUsersFunction`<sup>Required</sup> <a name="fetchAllUsersFunction" id="@cdklabs/sbt-aws.CognitoAuth.property.fetchAllUsersFunction"></a>
@@ -761,7 +764,7 @@ public readonly fetchAllUsersFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
-The Lambda function for fetching all users.
+The Lambda function for fetching all users -- GET /users.
 
 ---
 
@@ -775,6 +778,79 @@ public readonly fetchUserFunction: IFunction;
 
 The Lambda function for fetching a user.
 
+- GET /user/{userId}
+
+---
+
+##### `jwtAudience`<sup>Required</sup> <a name="jwtAudience" id="@cdklabs/sbt-aws.CognitoAuth.property.jwtAudience"></a>
+
+```typescript
+public readonly jwtAudience: string[];
+```
+
+- *Type:* string[]
+
+The list of recipients (audience) for which the JWT is intended.
+
+This will be checked by the API GW to ensure only authorized
+clients are provided access.
+
+---
+
+##### `jwtIssuer`<sup>Required</sup> <a name="jwtIssuer" id="@cdklabs/sbt-aws.CognitoAuth.property.jwtIssuer"></a>
+
+```typescript
+public readonly jwtIssuer: string;
+```
+
+- *Type:* string
+
+The JWT issuer domain for the identity provider.
+
+This is the domain where the JSON Web Tokens (JWTs) are issued from.
+
+---
+
+##### `machineClientId`<sup>Required</sup> <a name="machineClientId" id="@cdklabs/sbt-aws.CognitoAuth.property.machineClientId"></a>
+
+```typescript
+public readonly machineClientId: string;
+```
+
+- *Type:* string
+
+The client ID enabled for machine-to-machine authorization flows, such as Client Credentials flow.
+
+This client ID is used for authenticating applications or services.
+
+---
+
+##### `machineClientSecret`<sup>Required</sup> <a name="machineClientSecret" id="@cdklabs/sbt-aws.CognitoAuth.property.machineClientSecret"></a>
+
+```typescript
+public readonly machineClientSecret: SecretValue;
+```
+
+- *Type:* aws-cdk-lib.SecretValue
+
+The client secret enabled for machine-to-machine authorization flows, such as Client Credentials flow.
+
+This secret is used in combination with the machine client ID for authenticating applications or services.
+
+---
+
+##### `tokenEndpoint`<sup>Required</sup> <a name="tokenEndpoint" id="@cdklabs/sbt-aws.CognitoAuth.property.tokenEndpoint"></a>
+
+```typescript
+public readonly tokenEndpoint: string;
+```
+
+- *Type:* string
+
+The endpoint URL for granting OAuth tokens.
+
+This is the URL where OAuth tokens can be obtained from the authorization server.
+
 ---
 
 ##### `updateUserFunction`<sup>Required</sup> <a name="updateUserFunction" id="@cdklabs/sbt-aws.CognitoAuth.property.updateUserFunction"></a>
@@ -787,6 +863,22 @@ public readonly updateUserFunction: IFunction;
 
 The Lambda function for updating a user.
 
+- PUT /user/{userId}
+
+---
+
+##### `userClientId`<sup>Required</sup> <a name="userClientId" id="@cdklabs/sbt-aws.CognitoAuth.property.userClientId"></a>
+
+```typescript
+public readonly userClientId: string;
+```
+
+- *Type:* string
+
+The client ID enabled for user-centric authentication flows, such as Authorization Code flow.
+
+This client ID is used for authenticating end-users.
+
 ---
 
 ##### `wellKnownEndpointUrl`<sup>Required</sup> <a name="wellKnownEndpointUrl" id="@cdklabs/sbt-aws.CognitoAuth.property.wellKnownEndpointUrl"></a>
@@ -797,7 +889,205 @@ public readonly wellKnownEndpointUrl: string;
 
 - *Type:* string
 
-The well-known endpoint URL for the control plane IdP.
+The well-known endpoint URL for the control plane identity provider.
+
+This URL provides configuration information about the identity provider, such as issuer, authorization endpoint, and token endpoint.
+
+---
+
+##### `activateTenantScope`<sup>Optional</sup> <a name="activateTenantScope" id="@cdklabs/sbt-aws.CognitoAuth.property.activateTenantScope"></a>
+
+```typescript
+public readonly activateTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for activating a tenant.
+
+This scope grants permission to activate a specific tenant.
+
+---
+
+##### `createTenantScope`<sup>Optional</sup> <a name="createTenantScope" id="@cdklabs/sbt-aws.CognitoAuth.property.createTenantScope"></a>
+
+```typescript
+public readonly createTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for creating a tenant.
+
+This scope grants permission to create a new tenant.
+
+---
+
+##### `createUserScope`<sup>Optional</sup> <a name="createUserScope" id="@cdklabs/sbt-aws.CognitoAuth.property.createUserScope"></a>
+
+```typescript
+public readonly createUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for creating a user.
+
+This scope grants permission to create a new user.
+
+---
+
+##### `deactivateTenantScope`<sup>Optional</sup> <a name="deactivateTenantScope" id="@cdklabs/sbt-aws.CognitoAuth.property.deactivateTenantScope"></a>
+
+```typescript
+public readonly deactivateTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for deactivating a tenant.
+
+This scope grants permission to deactivate a specific tenant.
+
+---
+
+##### `deleteTenantScope`<sup>Optional</sup> <a name="deleteTenantScope" id="@cdklabs/sbt-aws.CognitoAuth.property.deleteTenantScope"></a>
+
+```typescript
+public readonly deleteTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for deleting a tenant.
+
+This scope grants permission to delete a specific tenant.
+
+---
+
+##### `deleteUserScope`<sup>Optional</sup> <a name="deleteUserScope" id="@cdklabs/sbt-aws.CognitoAuth.property.deleteUserScope"></a>
+
+```typescript
+public readonly deleteUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for deleting a user.
+
+This scope grants permission to delete a specific user.
+
+---
+
+##### `disableUserScope`<sup>Optional</sup> <a name="disableUserScope" id="@cdklabs/sbt-aws.CognitoAuth.property.disableUserScope"></a>
+
+```typescript
+public readonly disableUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for disabling a user.
+
+This scope grants permission to disable a specific user.
+
+---
+
+##### `enableUserScope`<sup>Optional</sup> <a name="enableUserScope" id="@cdklabs/sbt-aws.CognitoAuth.property.enableUserScope"></a>
+
+```typescript
+public readonly enableUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for enabling a user.
+
+This scope grants permission to enable a specific user.
+
+---
+
+##### `fetchAllTenantsScope`<sup>Optional</sup> <a name="fetchAllTenantsScope" id="@cdklabs/sbt-aws.CognitoAuth.property.fetchAllTenantsScope"></a>
+
+```typescript
+public readonly fetchAllTenantsScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for fetching all tenants.
+
+This scope grants permission to fetch the details of all tenants.
+
+---
+
+##### `fetchAllUsersScope`<sup>Optional</sup> <a name="fetchAllUsersScope" id="@cdklabs/sbt-aws.CognitoAuth.property.fetchAllUsersScope"></a>
+
+```typescript
+public readonly fetchAllUsersScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for fetching all users.
+
+This scope grants permission to fetch the details of all users.
+
+---
+
+##### `fetchTenantScope`<sup>Optional</sup> <a name="fetchTenantScope" id="@cdklabs/sbt-aws.CognitoAuth.property.fetchTenantScope"></a>
+
+```typescript
+public readonly fetchTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for fetching a single tenant.
+
+This scope grants permission to fetch the details of a specific tenant.
+
+---
+
+##### `fetchUserScope`<sup>Optional</sup> <a name="fetchUserScope" id="@cdklabs/sbt-aws.CognitoAuth.property.fetchUserScope"></a>
+
+```typescript
+public readonly fetchUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for fetching a single user.
+
+This scope grants permission to fetch the details of a specific user.
+
+---
+
+##### `updateTenantScope`<sup>Optional</sup> <a name="updateTenantScope" id="@cdklabs/sbt-aws.CognitoAuth.property.updateTenantScope"></a>
+
+```typescript
+public readonly updateTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for updating a tenant.
+
+This scope grants permission to update the details of a specific tenant.
+
+---
+
+##### `updateUserScope`<sup>Optional</sup> <a name="updateUserScope" id="@cdklabs/sbt-aws.CognitoAuth.property.updateUserScope"></a>
+
+```typescript
+public readonly updateUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for updating a user.
+
+This scope grants permission to update the details of a specific user.
 
 ---
 
@@ -1023,8 +1313,8 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.billingResource">billingResource</a></code> | <code>aws-cdk-lib.aws_apigateway.Resource</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.tenantUpdateServiceTarget">tenantUpdateServiceTarget</a></code> | <code>aws-cdk-lib.aws_events_targets.ApiGateway</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.api">api</a></code> | <code>aws-cdk-lib.aws_apigatewayv2.HttpApi</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.tenantUpdateServiceTarget">tenantUpdateServiceTarget</a></code> | <code>aws-cdk-lib.aws_events.IRuleTarget</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.apiUrl">apiUrl</a></code> | <code>any</code> | *No description.* |
 
 ---
@@ -1041,23 +1331,23 @@ The tree node.
 
 ---
 
-##### `billingResource`<sup>Required</sup> <a name="billingResource" id="@cdklabs/sbt-aws.ControlPlaneAPI.property.billingResource"></a>
+##### `api`<sup>Required</sup> <a name="api" id="@cdklabs/sbt-aws.ControlPlaneAPI.property.api"></a>
 
 ```typescript
-public readonly billingResource: Resource;
+public readonly api: HttpApi;
 ```
 
-- *Type:* aws-cdk-lib.aws_apigateway.Resource
+- *Type:* aws-cdk-lib.aws_apigatewayv2.HttpApi
 
 ---
 
 ##### `tenantUpdateServiceTarget`<sup>Required</sup> <a name="tenantUpdateServiceTarget" id="@cdklabs/sbt-aws.ControlPlaneAPI.property.tenantUpdateServiceTarget"></a>
 
 ```typescript
-public readonly tenantUpdateServiceTarget: ApiGateway;
+public readonly tenantUpdateServiceTarget: IRuleTarget;
 ```
 
-- *Type:* aws-cdk-lib.aws_events_targets.ApiGateway
+- *Type:* aws-cdk-lib.aws_events.IRuleTarget
 
 ---
 
@@ -1577,6 +1867,109 @@ public readonly dataRepository: ITable;
 - *Type:* aws-cdk-lib.aws_dynamodb.ITable
 
 The DynamoDB table containing the aggregated data.
+
+---
+
+
+### SampleRegistrationWebPage <a name="SampleRegistrationWebPage" id="@cdklabs/sbt-aws.SampleRegistrationWebPage"></a>
+
+Constructs a sample registration web page hosted on Amazon S3 and fronted by Amazon CloudFront.
+
+The web page includes a form for users to register for the SaaS product.
+
+#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.Initializer"></a>
+
+```typescript
+import { SampleRegistrationWebPage } from '@cdklabs/sbt-aws'
+
+new SampleRegistrationWebPage(scope: Construct, id: string, props: SampleRegistrationWebPageProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPage.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPage.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPage.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPageProps">SampleRegistrationWebPageProps</a></code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@cdklabs/sbt-aws.SampleRegistrationWebPageProps">SampleRegistrationWebPageProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPage.toString">toString</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `toString` <a name="toString" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPage.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.isConstruct"></a>
+
+```typescript
+import { SampleRegistrationWebPage } from '@cdklabs/sbt-aws'
+
+SampleRegistrationWebPage.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPage.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.SampleRegistrationWebPage.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
 
 ---
 
@@ -2573,7 +2966,7 @@ const billingProviderProps: BillingProviderProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.billing">billing</a></code> | <code><a href="#@cdklabs/sbt-aws.IBilling">IBilling</a></code> | An implementation of the IBilling interface. |
-| <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.controlPlaneAPIBillingResource">controlPlaneAPIBillingResource</a></code> | <code>aws-cdk-lib.aws_apigateway.IResource</code> | An API Gateway Resource for the BillingProvider to use when setting up API endpoints. |
+| <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.controlPlaneAPI">controlPlaneAPI</a></code> | <code>aws-cdk-lib.aws_apigatewayv2.HttpApi</code> | An API Gateway Resource for the BillingProvider to use when setting up API endpoints. |
 | <code><a href="#@cdklabs/sbt-aws.BillingProviderProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | An IEventManager object to help coordinate events. |
 
 ---
@@ -2590,13 +2983,13 @@ An implementation of the IBilling interface.
 
 ---
 
-##### `controlPlaneAPIBillingResource`<sup>Required</sup> <a name="controlPlaneAPIBillingResource" id="@cdklabs/sbt-aws.BillingProviderProps.property.controlPlaneAPIBillingResource"></a>
+##### `controlPlaneAPI`<sup>Required</sup> <a name="controlPlaneAPI" id="@cdklabs/sbt-aws.BillingProviderProps.property.controlPlaneAPI"></a>
 
 ```typescript
-public readonly controlPlaneAPIBillingResource: IResource;
+public readonly controlPlaneAPI: HttpApi;
 ```
 
-- *Type:* aws-cdk-lib.aws_apigateway.IResource
+- *Type:* aws-cdk-lib.aws_apigatewayv2.HttpApi
 
 An API Gateway Resource for the BillingProvider to use when setting up API endpoints.
 
@@ -2630,21 +3023,8 @@ const cognitoAuthProps: CognitoAuthProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminEmail">systemAdminEmail</a></code> | <code>string</code> | The email address of the system admin. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.controlPlaneCallbackURL">controlPlaneCallbackURL</a></code> | <code>string</code> | The callback URL for the control plane. |
-| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminRoleName">systemAdminRoleName</a></code> | <code>string</code> | The name of the system admin role. |
-
----
-
-##### `systemAdminEmail`<sup>Required</sup> <a name="systemAdminEmail" id="@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminEmail"></a>
-
-```typescript
-public readonly systemAdminEmail: string;
-```
-
-- *Type:* string
-
-The email address of the system admin.
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.setAPIGWScopes">setAPIGWScopes</a></code> | <code>boolean</code> | Whether or not to specify scopes for validation at the API GW. |
 
 ---
 
@@ -2661,16 +3041,18 @@ The callback URL for the control plane.
 
 ---
 
-##### `systemAdminRoleName`<sup>Optional</sup> <a name="systemAdminRoleName" id="@cdklabs/sbt-aws.CognitoAuthProps.property.systemAdminRoleName"></a>
+##### `setAPIGWScopes`<sup>Optional</sup> <a name="setAPIGWScopes" id="@cdklabs/sbt-aws.CognitoAuthProps.property.setAPIGWScopes"></a>
 
 ```typescript
-public readonly systemAdminRoleName: string;
+public readonly setAPIGWScopes: boolean;
 ```
 
-- *Type:* string
-- *Default:* 'SystemAdmin'
+- *Type:* boolean
+- *Default:* true
 
-The name of the system admin role.
+Whether or not to specify scopes for validation at the API GW.
+
+Can be used for testing purposes.
 
 ---
 
@@ -2749,14 +3131,29 @@ const controlPlaneProps: ControlPlaneProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminEmail">systemAdminEmail</a></code> | <code>string</code> | The email address of the system admin. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.auth">auth</a></code> | <code><a href="#@cdklabs/sbt-aws.IAuth">IAuth</a></code> | The authentication provider for the control plane. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.billing">billing</a></code> | <code><a href="#@cdklabs/sbt-aws.IBilling">IBilling</a></code> | The billing provider configuration. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.disableAPILogging">disableAPILogging</a></code> | <code>boolean</code> | If true, the API Gateway will not log requests to the CloudWatch Logs. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | The event manager instance. |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminName">systemAdminName</a></code> | <code>string</code> | The name of the system admin user. |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminRoleName">systemAdminRoleName</a></code> | <code>string</code> | The name of the system admin role. |
 
 ---
 
-##### `auth`<sup>Required</sup> <a name="auth" id="@cdklabs/sbt-aws.ControlPlaneProps.property.auth"></a>
+##### `systemAdminEmail`<sup>Required</sup> <a name="systemAdminEmail" id="@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminEmail"></a>
+
+```typescript
+public readonly systemAdminEmail: string;
+```
+
+- *Type:* string
+
+The email address of the system admin.
+
+---
+
+##### `auth`<sup>Optional</sup> <a name="auth" id="@cdklabs/sbt-aws.ControlPlaneProps.property.auth"></a>
 
 ```typescript
 public readonly auth: IAuth;
@@ -2765,6 +3162,8 @@ public readonly auth: IAuth;
 - *Type:* <a href="#@cdklabs/sbt-aws.IAuth">IAuth</a>
 
 The authentication provider for the control plane.
+
+If not provided, CognitoAuth will be used.
 
 ---
 
@@ -2804,6 +3203,32 @@ public readonly eventManager: IEventManager;
 The event manager instance.
 
 If not provided, a new instance will be created.
+
+---
+
+##### `systemAdminName`<sup>Optional</sup> <a name="systemAdminName" id="@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminName"></a>
+
+```typescript
+public readonly systemAdminName: string;
+```
+
+- *Type:* string
+- *Default:* 'admin'
+
+The name of the system admin user.
+
+---
+
+##### `systemAdminRoleName`<sup>Optional</sup> <a name="systemAdminRoleName" id="@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminRoleName"></a>
+
+```typescript
+public readonly systemAdminRoleName: string;
+```
+
+- *Type:* string
+- *Default:* 'SystemAdmin'
+
+The name of the system admin role.
 
 ---
 
@@ -3020,6 +3445,64 @@ The list of JobRunner definitions to create.
 
 ---
 
+### CreateAdminUserProps <a name="CreateAdminUserProps" id="@cdklabs/sbt-aws.CreateAdminUserProps"></a>
+
+Encapsulates the list of properties expected as inputs for creating new admin users.
+
+#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.CreateAdminUserProps.Initializer"></a>
+
+```typescript
+import { CreateAdminUserProps } from '@cdklabs/sbt-aws'
+
+const createAdminUserProps: CreateAdminUserProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.CreateAdminUserProps.property.email">email</a></code> | <code>string</code> | The email address of the new admin user. |
+| <code><a href="#@cdklabs/sbt-aws.CreateAdminUserProps.property.name">name</a></code> | <code>string</code> | The email address of the new admin user. |
+| <code><a href="#@cdklabs/sbt-aws.CreateAdminUserProps.property.role">role</a></code> | <code>string</code> | The name of the role of the new admin user. |
+
+---
+
+##### `email`<sup>Required</sup> <a name="email" id="@cdklabs/sbt-aws.CreateAdminUserProps.property.email"></a>
+
+```typescript
+public readonly email: string;
+```
+
+- *Type:* string
+
+The email address of the new admin user.
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="@cdklabs/sbt-aws.CreateAdminUserProps.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+
+The email address of the new admin user.
+
+---
+
+##### `role`<sup>Required</sup> <a name="role" id="@cdklabs/sbt-aws.CreateAdminUserProps.property.role"></a>
+
+```typescript
+public readonly role: string;
+```
+
+- *Type:* string
+
+The name of the role of the new admin user.
+
+---
+
 ### EventManagerProps <a name="EventManagerProps" id="@cdklabs/sbt-aws.EventManagerProps"></a>
 
 Encapsulates the properties for an EventManager.
@@ -3161,6 +3644,91 @@ public readonly primaryKeyPath: string;
 - *Type:* string
 
 The JMESPath to find the primary key value in the incoming data stream.
+
+---
+
+### SampleRegistrationWebPageProps <a name="SampleRegistrationWebPageProps" id="@cdklabs/sbt-aws.SampleRegistrationWebPageProps"></a>
+
+Properties for the SampleRegistrationWebPage construct.
+
+#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.SampleRegistrationWebPageProps.Initializer"></a>
+
+```typescript
+import { SampleRegistrationWebPageProps } from '@cdklabs/sbt-aws'
+
+const sampleRegistrationWebPageProps: SampleRegistrationWebPageProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.registrationAPI">registrationAPI</a></code> | <code>aws-cdk-lib.aws_apigateway.RestApiBase</code> | The API Gateway that serves the following endpoints:. |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.userProvidedRequiredFieldsForRegistration">userProvidedRequiredFieldsForRegistration</a></code> | <code>string[]</code> | The list of required user-provided fields for registration. |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.autoDeleteBucketObjects">autoDeleteBucketObjects</a></code> | <code>boolean</code> | Whether to automatically delete objects from the S3 bucket when the stack is deleted. |
+| <code><a href="#@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.imageLogoUrl">imageLogoUrl</a></code> | <code>string</code> | The URL of the image logo to display on the registration page. |
+
+---
+
+##### `registrationAPI`<sup>Required</sup> <a name="registrationAPI" id="@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.registrationAPI"></a>
+
+```typescript
+public readonly registrationAPI: RestApiBase;
+```
+
+- *Type:* aws-cdk-lib.aws_apigateway.RestApiBase
+
+The API Gateway that serves the following endpoints:.
+
+POST /redirectmarketplacetoken: redirects to a registration page.
+
+POST /subscriber: creates a new subscriber.
+
+---
+
+##### `userProvidedRequiredFieldsForRegistration`<sup>Required</sup> <a name="userProvidedRequiredFieldsForRegistration" id="@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.userProvidedRequiredFieldsForRegistration"></a>
+
+```typescript
+public readonly userProvidedRequiredFieldsForRegistration: string[];
+```
+
+- *Type:* string[]
+
+The list of required user-provided fields for registration.
+
+This contains the set of fields that must be provided by the user
+when registering a new customer.
+
+This is used to dynamically update the registration page to create a
+form that accepts each of the fields present in this list.
+
+ex. ['name', 'phone']
+
+---
+
+##### `autoDeleteBucketObjects`<sup>Optional</sup> <a name="autoDeleteBucketObjects" id="@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.autoDeleteBucketObjects"></a>
+
+```typescript
+public readonly autoDeleteBucketObjects: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+Whether to automatically delete objects from the S3 bucket when the stack is deleted.
+
+---
+
+##### `imageLogoUrl`<sup>Optional</sup> <a name="imageLogoUrl" id="@cdklabs/sbt-aws.SampleRegistrationWebPageProps.property.imageLogoUrl"></a>
+
+```typescript
+public readonly imageLogoUrl: string;
+```
+
+- *Type:* string
+- *Default:* Amazon logo
+
+The URL of the image logo to display on the registration page.
 
 ---
 
@@ -3488,71 +4056,72 @@ public readonly tenantDetailsTenantNameColumn: string;
 
 Encapsulates the list of properties expected as outputs of Auth plugins.
 
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.createAdminUser">createAdminUser</a></code> | Function to create an admin user. |
+
+---
+
+##### `createAdminUser` <a name="createAdminUser" id="@cdklabs/sbt-aws.IAuth.createAdminUser"></a>
+
+```typescript
+public createAdminUser(scope: Construct, id: string, props: CreateAdminUserProps): void
+```
+
+Function to create an admin user.
+
+###### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.IAuth.createAdminUser.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+###### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.IAuth.createAdminUser.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+###### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.IAuth.createAdminUser.parameter.props"></a>
+
+- *Type:* <a href="#@cdklabs/sbt-aws.CreateAdminUserProps">CreateAdminUserProps</a>
+
+---
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.authorizationServer">authorizationServer</a></code> | <code>string</code> | Authorization server Url. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.authorizer">authorizer</a></code> | <code>aws-cdk-lib.aws_apigateway.IAuthorizer</code> | Authorizer referenced by the ControlPlaneAPI. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.clientId">clientId</a></code> | <code>string</code> | The OAuth clientId for the identity provider. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.controlPlaneIdpDetails">controlPlaneIdpDetails</a></code> | <code>any</code> | Contains any information relevant to the IDP implementation required by the Authorizer and User Function implementations. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.createUserFunction">createUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- POST /users. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.deleteUserFunction">deleteUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- DELETE /user/{username}. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.disableUserFunction">disableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- PUT /user/{username}/disable. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.enableUserFunction">enableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- PUT /user/{username}/enable. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchAllUsersFunction">fetchAllUsersFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- GET /users. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchUserFunction">fetchUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- GET /user/{username}. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.updateUserFunction">updateUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | Function referenced by the ControlPlaneAPI -- PUT /user/{username}. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.wellKnownEndpointUrl">wellKnownEndpointUrl</a></code> | <code>string</code> | OpenID configuration Url. |
-
----
-
-##### `authorizationServer`<sup>Required</sup> <a name="authorizationServer" id="@cdklabs/sbt-aws.IAuth.property.authorizationServer"></a>
-
-```typescript
-public readonly authorizationServer: string;
-```
-
-- *Type:* string
-
-Authorization server Url.
-
----
-
-##### `authorizer`<sup>Required</sup> <a name="authorizer" id="@cdklabs/sbt-aws.IAuth.property.authorizer"></a>
-
-```typescript
-public readonly authorizer: IAuthorizer;
-```
-
-- *Type:* aws-cdk-lib.aws_apigateway.IAuthorizer
-
-Authorizer referenced by the ControlPlaneAPI.
-
----
-
-##### `clientId`<sup>Required</sup> <a name="clientId" id="@cdklabs/sbt-aws.IAuth.property.clientId"></a>
-
-```typescript
-public readonly clientId: string;
-```
-
-- *Type:* string
-
-The OAuth clientId for the identity provider.
-
----
-
-##### `controlPlaneIdpDetails`<sup>Required</sup> <a name="controlPlaneIdpDetails" id="@cdklabs/sbt-aws.IAuth.property.controlPlaneIdpDetails"></a>
-
-```typescript
-public readonly controlPlaneIdpDetails: any;
-```
-
-- *Type:* any
-
-Contains any information relevant to the IDP implementation required by the Authorizer and User Function implementations.
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.createUserFunction">createUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for creating a user. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.deleteUserFunction">deleteUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for deleting a user. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.disableUserFunction">disableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for disabling a user. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.enableUserFunction">enableUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for enabling a user. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchAllUsersFunction">fetchAllUsersFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for fetching all users -- GET /users. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchUserFunction">fetchUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for fetching a user. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.jwtAudience">jwtAudience</a></code> | <code>string[]</code> | The list of recipients (audience) for which the JWT is intended. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.jwtIssuer">jwtIssuer</a></code> | <code>string</code> | The JWT issuer domain for the identity provider. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.machineClientId">machineClientId</a></code> | <code>string</code> | The client ID enabled for machine-to-machine authorization flows, such as Client Credentials flow. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.machineClientSecret">machineClientSecret</a></code> | <code>aws-cdk-lib.SecretValue</code> | The client secret enabled for machine-to-machine authorization flows, such as Client Credentials flow. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.tokenEndpoint">tokenEndpoint</a></code> | <code>string</code> | The endpoint URL for granting OAuth tokens. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.updateUserFunction">updateUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for updating a user. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.userClientId">userClientId</a></code> | <code>string</code> | The client ID enabled for user-centric authentication flows, such as Authorization Code flow. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.wellKnownEndpointUrl">wellKnownEndpointUrl</a></code> | <code>string</code> | The well-known endpoint URL for the control plane identity provider. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.activateTenantScope">activateTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for activating a tenant. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.createTenantScope">createTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for creating a tenant. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.createUserScope">createUserScope</a></code> | <code>string</code> | The scope required to authorize requests for creating a user. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.deactivateTenantScope">deactivateTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for deactivating a tenant. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.deleteTenantScope">deleteTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for deleting a tenant. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.deleteUserScope">deleteUserScope</a></code> | <code>string</code> | The scope required to authorize requests for deleting a user. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.disableUserScope">disableUserScope</a></code> | <code>string</code> | The scope required to authorize requests for disabling a user. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.enableUserScope">enableUserScope</a></code> | <code>string</code> | The scope required to authorize requests for enabling a user. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchAllTenantsScope">fetchAllTenantsScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching all tenants. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchAllUsersScope">fetchAllUsersScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching all users. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchTenantScope">fetchTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching a single tenant. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchUserScope">fetchUserScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching a single user. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.updateTenantScope">updateTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for updating a tenant. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.updateUserScope">updateUserScope</a></code> | <code>string</code> | The scope required to authorize requests for updating a user. |
 
 ---
 
@@ -3564,7 +4133,9 @@ public readonly createUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
-Function referenced by the ControlPlaneAPI -- POST /users.
+The Lambda function for creating a user.
+
+- POST /users
 
 ---
 
@@ -3576,7 +4147,9 @@ public readonly deleteUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
-Function referenced by the ControlPlaneAPI -- DELETE /user/{username}.
+The Lambda function for deleting a user.
+
+- DELETE /user/{userId}
 
 ---
 
@@ -3588,7 +4161,9 @@ public readonly disableUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
-Function referenced by the ControlPlaneAPI -- PUT /user/{username}/disable.
+The Lambda function for disabling a user.
+
+- PUT /user/{userId}/disable
 
 ---
 
@@ -3600,7 +4175,9 @@ public readonly enableUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
-Function referenced by the ControlPlaneAPI -- PUT /user/{username}/enable.
+The Lambda function for enabling a user.
+
+- PUT /user/{userId}/enable
 
 ---
 
@@ -3612,7 +4189,7 @@ public readonly fetchAllUsersFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
-Function referenced by the ControlPlaneAPI -- GET /users.
+The Lambda function for fetching all users -- GET /users.
 
 ---
 
@@ -3624,7 +4201,80 @@ public readonly fetchUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
-Function referenced by the ControlPlaneAPI -- GET /user/{username}.
+The Lambda function for fetching a user.
+
+- GET /user/{userId}
+
+---
+
+##### `jwtAudience`<sup>Required</sup> <a name="jwtAudience" id="@cdklabs/sbt-aws.IAuth.property.jwtAudience"></a>
+
+```typescript
+public readonly jwtAudience: string[];
+```
+
+- *Type:* string[]
+
+The list of recipients (audience) for which the JWT is intended.
+
+This will be checked by the API GW to ensure only authorized
+clients are provided access.
+
+---
+
+##### `jwtIssuer`<sup>Required</sup> <a name="jwtIssuer" id="@cdklabs/sbt-aws.IAuth.property.jwtIssuer"></a>
+
+```typescript
+public readonly jwtIssuer: string;
+```
+
+- *Type:* string
+
+The JWT issuer domain for the identity provider.
+
+This is the domain where the JSON Web Tokens (JWTs) are issued from.
+
+---
+
+##### `machineClientId`<sup>Required</sup> <a name="machineClientId" id="@cdklabs/sbt-aws.IAuth.property.machineClientId"></a>
+
+```typescript
+public readonly machineClientId: string;
+```
+
+- *Type:* string
+
+The client ID enabled for machine-to-machine authorization flows, such as Client Credentials flow.
+
+This client ID is used for authenticating applications or services.
+
+---
+
+##### `machineClientSecret`<sup>Required</sup> <a name="machineClientSecret" id="@cdklabs/sbt-aws.IAuth.property.machineClientSecret"></a>
+
+```typescript
+public readonly machineClientSecret: SecretValue;
+```
+
+- *Type:* aws-cdk-lib.SecretValue
+
+The client secret enabled for machine-to-machine authorization flows, such as Client Credentials flow.
+
+This secret is used in combination with the machine client ID for authenticating applications or services.
+
+---
+
+##### `tokenEndpoint`<sup>Required</sup> <a name="tokenEndpoint" id="@cdklabs/sbt-aws.IAuth.property.tokenEndpoint"></a>
+
+```typescript
+public readonly tokenEndpoint: string;
+```
+
+- *Type:* string
+
+The endpoint URL for granting OAuth tokens.
+
+This is the URL where OAuth tokens can be obtained from the authorization server.
 
 ---
 
@@ -3636,7 +4286,23 @@ public readonly updateUserFunction: IFunction;
 
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
-Function referenced by the ControlPlaneAPI -- PUT /user/{username}.
+The Lambda function for updating a user.
+
+- PUT /user/{userId}
+
+---
+
+##### `userClientId`<sup>Required</sup> <a name="userClientId" id="@cdklabs/sbt-aws.IAuth.property.userClientId"></a>
+
+```typescript
+public readonly userClientId: string;
+```
+
+- *Type:* string
+
+The client ID enabled for user-centric authentication flows, such as Authorization Code flow.
+
+This client ID is used for authenticating end-users.
 
 ---
 
@@ -3648,7 +4314,205 @@ public readonly wellKnownEndpointUrl: string;
 
 - *Type:* string
 
-OpenID configuration Url.
+The well-known endpoint URL for the control plane identity provider.
+
+This URL provides configuration information about the identity provider, such as issuer, authorization endpoint, and token endpoint.
+
+---
+
+##### `activateTenantScope`<sup>Optional</sup> <a name="activateTenantScope" id="@cdklabs/sbt-aws.IAuth.property.activateTenantScope"></a>
+
+```typescript
+public readonly activateTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for activating a tenant.
+
+This scope grants permission to activate a specific tenant.
+
+---
+
+##### `createTenantScope`<sup>Optional</sup> <a name="createTenantScope" id="@cdklabs/sbt-aws.IAuth.property.createTenantScope"></a>
+
+```typescript
+public readonly createTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for creating a tenant.
+
+This scope grants permission to create a new tenant.
+
+---
+
+##### `createUserScope`<sup>Optional</sup> <a name="createUserScope" id="@cdklabs/sbt-aws.IAuth.property.createUserScope"></a>
+
+```typescript
+public readonly createUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for creating a user.
+
+This scope grants permission to create a new user.
+
+---
+
+##### `deactivateTenantScope`<sup>Optional</sup> <a name="deactivateTenantScope" id="@cdklabs/sbt-aws.IAuth.property.deactivateTenantScope"></a>
+
+```typescript
+public readonly deactivateTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for deactivating a tenant.
+
+This scope grants permission to deactivate a specific tenant.
+
+---
+
+##### `deleteTenantScope`<sup>Optional</sup> <a name="deleteTenantScope" id="@cdklabs/sbt-aws.IAuth.property.deleteTenantScope"></a>
+
+```typescript
+public readonly deleteTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for deleting a tenant.
+
+This scope grants permission to delete a specific tenant.
+
+---
+
+##### `deleteUserScope`<sup>Optional</sup> <a name="deleteUserScope" id="@cdklabs/sbt-aws.IAuth.property.deleteUserScope"></a>
+
+```typescript
+public readonly deleteUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for deleting a user.
+
+This scope grants permission to delete a specific user.
+
+---
+
+##### `disableUserScope`<sup>Optional</sup> <a name="disableUserScope" id="@cdklabs/sbt-aws.IAuth.property.disableUserScope"></a>
+
+```typescript
+public readonly disableUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for disabling a user.
+
+This scope grants permission to disable a specific user.
+
+---
+
+##### `enableUserScope`<sup>Optional</sup> <a name="enableUserScope" id="@cdklabs/sbt-aws.IAuth.property.enableUserScope"></a>
+
+```typescript
+public readonly enableUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for enabling a user.
+
+This scope grants permission to enable a specific user.
+
+---
+
+##### `fetchAllTenantsScope`<sup>Optional</sup> <a name="fetchAllTenantsScope" id="@cdklabs/sbt-aws.IAuth.property.fetchAllTenantsScope"></a>
+
+```typescript
+public readonly fetchAllTenantsScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for fetching all tenants.
+
+This scope grants permission to fetch the details of all tenants.
+
+---
+
+##### `fetchAllUsersScope`<sup>Optional</sup> <a name="fetchAllUsersScope" id="@cdklabs/sbt-aws.IAuth.property.fetchAllUsersScope"></a>
+
+```typescript
+public readonly fetchAllUsersScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for fetching all users.
+
+This scope grants permission to fetch the details of all users.
+
+---
+
+##### `fetchTenantScope`<sup>Optional</sup> <a name="fetchTenantScope" id="@cdklabs/sbt-aws.IAuth.property.fetchTenantScope"></a>
+
+```typescript
+public readonly fetchTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for fetching a single tenant.
+
+This scope grants permission to fetch the details of a specific tenant.
+
+---
+
+##### `fetchUserScope`<sup>Optional</sup> <a name="fetchUserScope" id="@cdklabs/sbt-aws.IAuth.property.fetchUserScope"></a>
+
+```typescript
+public readonly fetchUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for fetching a single user.
+
+This scope grants permission to fetch the details of a specific user.
+
+---
+
+##### `updateTenantScope`<sup>Optional</sup> <a name="updateTenantScope" id="@cdklabs/sbt-aws.IAuth.property.updateTenantScope"></a>
+
+```typescript
+public readonly updateTenantScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for updating a tenant.
+
+This scope grants permission to update the details of a specific tenant.
+
+---
+
+##### `updateUserScope`<sup>Optional</sup> <a name="updateUserScope" id="@cdklabs/sbt-aws.IAuth.property.updateUserScope"></a>
+
+```typescript
+public readonly updateUserScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for updating a user.
+
+This scope grants permission to update the details of a specific user.
 
 ---
 

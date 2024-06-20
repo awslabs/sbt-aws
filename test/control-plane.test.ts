@@ -15,11 +15,10 @@ describe('No unsuppressed cdk-nag Warnings or Errors', () => {
       super(scope, id, props);
       const systemAdminEmail = 'test@example.com';
       const eventManager = new EventManager(this, 'EventManager');
-      const cognitoAuth = new CognitoAuth(this, 'CognitoAuth', {
-        systemAdminEmail: systemAdminEmail,
-      });
+      const cognitoAuth = new CognitoAuth(this, 'CognitoAuth');
 
       new ControlPlane(this, 'ControlPlane', {
+        systemAdminEmail: systemAdminEmail,
         auth: cognitoAuth,
         eventManager: eventManager,
       });
@@ -57,13 +56,10 @@ class TestStack extends cdk.Stack {
     super(scope, id, props);
 
     const eventManager = new EventManager(this, 'EventManager');
-    const cognitoAuth = new CognitoAuth(this, 'CognitoAuth', {
-      systemAdminEmail: props.systemAdminEmail,
-      // optional parameter possibly populated by another construct or an argument
-      // controlPlaneCallbackURL: 'https://example.com',
-    });
+    const cognitoAuth = new CognitoAuth(this, 'CognitoAuth');
 
     new ControlPlane(this, 'ControlPlane', {
+      systemAdminEmail: props.systemAdminEmail,
       auth: cognitoAuth,
       eventManager: eventManager,
       disableAPILogging: props.disableAPILogging,
@@ -91,68 +87,36 @@ describe('ControlPlane Targets', () => {
   });
 });
 
-describe('ControlPlane cloudwatch roles', () => {
-  it('should create the cloudwatch IAM apigw push to cw role by default', () => {
+describe('ControlPlane API logging', () => {
+  it('should configure logging for the API by default', () => {
     const stackWithLogging = new TestStack(new cdk.App(), 'stackWithLogging', {
       systemAdminEmail: 'test@example.com',
     });
     const template = Template.fromStack(stackWithLogging);
+
     template.hasResourceProperties(
-      'AWS::IAM::Role',
+      'AWS::ApiGatewayV2::Stage',
       Match.objectLike({
-        AssumeRolePolicyDocument: {
-          Statement: [
-            {
-              Action: 'sts:AssumeRole',
-              Effect: 'Allow',
-              Principal: {
-                Service: 'apigateway.amazonaws.com',
-              },
-            },
-          ],
-          Version: '2012-10-17',
+        AccessLogSettings: {
+          DestinationArn: Match.anyValue(),
+          Format: Match.anyValue(),
         },
-        ManagedPolicyArns: [
-          {
-            'Fn::Join': [
-              '',
-              [
-                'arn:',
-                {
-                  Ref: 'AWS::Partition',
-                },
-                ':iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs',
-              ],
-            ],
-          },
-        ],
       })
     );
   });
 
-  it('should not create the cloudwatch IAM publishing role if the disable logging flag is true', () => {
+  it('should not configure logging if the disable logging flag is true', () => {
     const stackWithoutLogging = new TestStack(new cdk.App(), 'stackWithoutLogging', {
       systemAdminEmail: 'test@example.com',
       disableAPILogging: true,
     });
     const templateWithoutLogging = Template.fromStack(stackWithoutLogging);
-    templateWithoutLogging.resourcePropertiesCountIs(
-      'AWS::IAM::Role',
-      {
-        AssumeRolePolicyDocument: {
-          Statement: [
-            {
-              Action: 'sts:AssumeRole',
-              Effect: 'Allow',
-              Principal: {
-                Service: 'apigateway.amazonaws.com',
-              },
-            },
-          ],
-          Version: '2012-10-17',
-        },
-      },
-      0
+
+    templateWithoutLogging.hasResourceProperties(
+      'AWS::ApiGatewayV2::Stage',
+      Match.objectLike({
+        AccessLogSettings: Match.absent(),
+      })
     );
   });
 });

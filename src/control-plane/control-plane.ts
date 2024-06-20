@@ -5,6 +5,7 @@ import * as cdk from 'aws-cdk-lib';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IAuth } from './auth/auth-interface';
+import { CognitoAuth } from './auth/cognito-auth';
 import { IBilling, BillingProvider } from './billing';
 import { ControlPlaneAPI } from './control-plane-api';
 import { Services } from './services';
@@ -16,8 +17,26 @@ import { addTemplateTag, DetailType, EventManager, IEventManager } from '../util
 export interface ControlPlaneProps {
   /**
    * The authentication provider for the control plane.
+   * If not provided, CognitoAuth will be used.
    */
-  readonly auth: IAuth;
+  readonly auth?: IAuth;
+
+  /**
+   * The name of the system admin user.
+   * @default 'admin'
+   */
+  readonly systemAdminName?: string;
+
+  /**
+   * The email address of the system admin.
+   */
+  readonly systemAdminEmail: string;
+
+  /**
+   * The name of the system admin role.
+   * @default 'SystemAdmin'
+   */
+  readonly systemAdminRoleName?: string;
 
   /**
    * The billing provider configuration.
@@ -57,7 +76,22 @@ export class ControlPlane extends Construct {
     super(scope, id);
     addTemplateTag(this, 'ControlPlane');
 
+    const systemAdminName = props.systemAdminName || 'admin';
+    const systemAdminRoleName = props.systemAdminRoleName || 'SystemAdmin';
+
     cdk.Aspects.of(this).add(new DestroyPolicySetter());
+
+    const auth =
+      props.auth ||
+      new CognitoAuth(this, 'CognitoAuth', {
+        setAPIGWScopes: false,
+      });
+
+    auth.createAdminUser(this, 'adminUser', {
+      name: systemAdminName,
+      email: props.systemAdminEmail,
+      role: systemAdminRoleName,
+    });
 
     // todo: decompose 'Tables' into purpose-specific constructs (ex. TenantManagement)
     this.tables = new Tables(this, 'tables-stack');
@@ -79,7 +113,7 @@ export class ControlPlane extends Construct {
 
     // todo: decompose 'ControlPlaneAPI' into purpose-specific constructs (ex. TenantManagement)
     const controlPlaneAPI = new ControlPlaneAPI(this, 'controlplane-api-stack', {
-      auth: props.auth,
+      auth: auth,
       disableAPILogging: props.disableAPILogging,
       services: services,
       tenantConfigServiceLambda: tenantConfigService.tenantConfigServiceLambda,
@@ -113,14 +147,12 @@ export class ControlPlane extends Construct {
       const billingTemplate = new BillingProvider(this, 'Billing', {
         billing: props.billing,
         eventManager: this.eventManager,
-        controlPlaneAPIBillingResource: controlPlaneAPI.billingResource,
+        controlPlaneAPI: controlPlaneAPI.api,
       });
 
-      if (billingTemplate.controlPlaneAPIBillingWebhookResource) {
+      if (billingTemplate.controlPlaneAPIBillingWebhookResourcePath) {
         new cdk.CfnOutput(this, 'billingWebhookURL', {
-          value: `${
-            controlPlaneAPI.apiUrl
-          }${billingTemplate.controlPlaneAPIBillingWebhookResource.path.substring(1)}`,
+          value: `${controlPlaneAPI.apiUrl}${billingTemplate.controlPlaneAPIBillingWebhookResourcePath}`,
           key: 'billingWebhookURL',
         });
       }

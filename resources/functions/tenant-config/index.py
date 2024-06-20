@@ -10,7 +10,7 @@ from aws_lambda_powertools import Logger
 from aws_lambda_powertools import Tracer
 from aws_lambda_powertools.logging import correlation_paths
 from aws_lambda_powertools.event_handler import (
-    APIGatewayRestResolver, CORSConfig
+    APIGatewayHttpResolver, CORSConfig
 )
 from aws_lambda_powertools.event_handler.exceptions import (
     BadRequestError,
@@ -19,7 +19,7 @@ from aws_lambda_powertools.event_handler.exceptions import (
 )
 
 cors_config = CORSConfig(allow_origin="*", max_age=300)
-app = APIGatewayRestResolver(cors=cors_config)
+app = APIGatewayHttpResolver(cors=cors_config)
 tracer = Tracer()
 logger = Logger(service="tenant-config-service")
 dynamodb = boto3.resource("dynamodb")
@@ -90,7 +90,7 @@ def get_tenant_config_via_header():
 
 
 @logger.inject_lambda_context(
-    correlation_id_path=correlation_paths.API_GATEWAY_REST, log_event=True
+    correlation_id_path=correlation_paths.API_GATEWAY_HTTP, log_event=True
 )
 @tracer.capture_lambda_handler
 def handler(event, context):

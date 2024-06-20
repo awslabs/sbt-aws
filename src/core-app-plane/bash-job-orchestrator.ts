@@ -112,16 +112,12 @@ export class BashJobOrchestrator extends Construct {
       logGroupName: `/aws/vendedlogs/states/${this.node.id}-${this.node.addr}`,
     });
 
-    const startProvisioningCodeBuild = new tasks.CodeBuildStartBuild(
-      this,
-      'startProvisioningCodeBuild',
-      {
-        project: props.bashJobRunner.codebuildProject,
-        integrationPattern: sfn.IntegrationPattern.RUN_JOB,
-        environmentVariablesOverride: environmentVariablesOverride,
-        resultPath: '$.startProvisioningCodeBuild',
-      }
-    );
+    const startCodeBuild = new tasks.CodeBuildStartBuild(this, 'startCodeBuild', {
+      project: props.bashJobRunner.codebuildProject,
+      integrationPattern: sfn.IntegrationPattern.RUN_JOB,
+      environmentVariablesOverride: environmentVariablesOverride,
+      resultPath: '$.startCodeBuild',
+    });
 
     const exportedVarObj: { [key: string]: any } = {
       tenantId: sfn.JsonPath.stringAt(`$.detail.${tenantIdentifierKeyInIncomingEvent}`),
@@ -130,7 +126,7 @@ export class BashJobOrchestrator extends Construct {
     props.environmentVariablesToOutgoingEvent?.forEach((exportedVar: string) => {
       exportedVarObj.tenantOutput[exportedVar] = sfn.JsonPath.arrayGetItem(
         sfn.JsonPath.listAt(
-          `$.startProvisioningCodeBuild.Build.ExportedEnvironmentVariables[?(@.Name==${exportedVar})].Value`
+          `$.startCodeBuild.Build.ExportedEnvironmentVariables[?(@.Name==${exportedVar})].Value`
         ),
         0
       );
@@ -149,7 +145,7 @@ export class BashJobOrchestrator extends Construct {
     });
 
     const definitionBody = sfn.DefinitionBody.fromChainable(
-      startProvisioningCodeBuild.next(notifyEventBridgeTask)
+      startCodeBuild.next(notifyEventBridgeTask)
     );
 
     this.provisioningStateMachine = new sfn.StateMachine(this, 'provisioningStateMachine', {
