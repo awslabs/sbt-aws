@@ -119,7 +119,7 @@ export class ControlPlaneStack extends Stack {
 }
 ```
 
-Notice here we're creating a new [CDK Stack](https://docs.aws.amazon.com/cdk/v2/guide/stacks.html) called "ControlPlaneStack". In that stack, we're creating a single `ControlPlane` construct which we imported from the `@cdklabs/sbt-aws` package.
+Notice here we're creating a new [CDK Stack](https://docs.aws.amazon.com/cdk/v2/guide/stacks.html) called "ControlPlaneStack". In that stack, we're creating a `ControlPlane` construct which we imported from the `@cdklabs/sbt-aws` package.
 
 Another important concept worth pointing out here is the plug-ability of this approach. Notice we're creating an "auth" component, called "CognitoAuth". This component implements the [`IAuth`](/API.md#iauth-) interface defined in the SBT core package. We currently have a Cognito implementation of `IAuth`, but we could technically implement that interface with any identity provider.
 
