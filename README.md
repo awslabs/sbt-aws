@@ -38,6 +38,12 @@ For a detailed walkthrough, see the [tutorial](https://github.com/awslabs/sbt-aw
 
 ### At a glance
 
+Install or update the [AWS CDK CLI](https://docs.aws.amazon.com/cdk/latest/guide/tools.html) from NPM (requires [Node.js ≥ 14.15.0](https://nodejs.org/download/release/latest-v14.x/)). We recommend using a version in [Active LTS](https://nodejs.org/en/about/previous-releases)
+
+```sh
+npm i -g aws-cdk
+```
+
 Initialize a CDK project:
 
 ```sh
@@ -49,12 +55,12 @@ cdk init sample-app --language=typescript
 This creates a sample project looking like this:
 
 ```ts
-export class HelloCdkStack extends cdk.Stack {
-  constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
+export class HelloCdkStack extends Stack {
+  constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     const queue = new sqs.Queue(this, 'HelloCdkQueue', {
-      visibilityTimeout: cdk.Duration.seconds(300)
+      visibilityTimeout: Duration.seconds(300)
     });
 
     const topic = new sns.Topic(this, 'HelloCdkTopic');
@@ -64,25 +70,31 @@ export class HelloCdkStack extends cdk.Stack {
 }
 ```
 
-Install or update SBT from npm (requires [Node.js ≥ 14.15.0](https://nodejs.org/download/release/latest-v14.x/)). We recommend using a version in [Active LTS](https://nodejs.org/en/about/previous-releases)
+Install or update SBT from NPM.
 
 ```sh
-npm install @cdklabs/sbt-aws@0.0.16
+npm install @cdklabs/sbt-aws
 ```
 
 Add a sample control plane to your application. In the `HelloCdkStack` add the following:
 
 ```typescript
-const cp = new sbt.ControlPlane(this, 'control-plane', {
-  idpName: 'COGNITO',
-  systemAdminRoleName: 'SystemAdmin',
-  systemAdminEmail: 'admin@example.com',
-  applicationPlaneEventSource: 'sbt-application-plane-api',
-  provisioningDetailType: 'Onboarding',
-  controlPlaneEventSource: 'sbt-control-plane-api',
-  onboardingDetailType: 'Onboarding',
-  offboardingDetailType: 'Offboarding',
-});
+// ...
+import * as sbt from '@cdklabs/sbt-aws';
+// ...
+
+export class HelloCdkStack extends Stack {
+  constructor(scope: Construct, id: string, props?: StackProps) {
+    super(scope, id, props);
+
+    // ...
+
+    const controlPlane = new sbt.ControlPlane(this, 'ControlPlane', {
+      systemAdminEmail: 'admin@example.com',
+    });
+  }
+}
+
 ```
 
 Deploy this to your account:
