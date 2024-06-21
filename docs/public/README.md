@@ -160,7 +160,7 @@ Feel free to open your AWS Console and take a look at the following (ensure you'
 - [Amazon Cognito](https://console.aws.amazon.com/cognito/v2/idp/user-pools)
 - [API Gateway](https://console.aws.amazon.com/apigateway/main/apis)
 
-Once done, we now have the left side of our conceptual [diagram](#high-level-design) deployed, and we did it with a single construct. It deployed not only the API surface of our control plane, but also wired it up to EventBridge. Next, we'll start deploy the application plane, and connect it to the same EventBridge bus, so we can act upon those control plane messages.
+Once done, we now have the left side of our conceptual [diagram](#high-level-design) deployed, and we did it with just a few constructs. It deployed not only the API surface of our control plane, but also wired it up to EventBridge. Next, we'll start deploy the application plane, and connect it to the same EventBridge bus, so we can act upon those control plane messages.
 
 #### Application Plane
 
@@ -443,7 +443,7 @@ echo "done!"
 }
 ```
 
-Although this looks like a lot of code, it's still a single construct, with a lot of configuration sent to it. Now that we've defined our app plane, let's again open up the `hello-cdk.ts` file in the `bin` directory of your CDK app. Once open, uncomment each commented line. The final file should look like this:
+Although this looks like a lot of code, it's still very few constructs. Now that we've defined our app plane, let's again open up the `hello-cdk.ts` file in the `bin` directory of your CDK app. Once open, uncomment each commented line. The final file should look like this:
 
 ```typescript
 #!/usr/bin/env node
