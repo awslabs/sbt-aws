@@ -52,7 +52,7 @@ export class HelloCdkStack extends Stack {
       productCode: 'abcdef01234567890',
       entitlementSNSTopic: 'arn:aws:sns:us-east-1:111122223333:aws-mp-entitlement-notification-1234567890abcdef0',
       subscriptionSNSTopic: 'arn:aws:sns:us-east-1:111122223333:aws-mp-subscription-notification-021345abcdef6789',
-      pricingModel: AWSMarketplaceSaaSPricingModel.CONTRACTS_WITH_SUBSCRIPTION,
+      pricingModel: sbt.AWSMarketplaceSaaSPricingModel.CONTRACTS_WITH_SUBSCRIPTION,
       eventManager: myControlPlane.eventManager,
       requiredFieldsForRegistration: ['name', 'address', 'phone'],
     });
@@ -69,9 +69,9 @@ export class HelloCdkStack extends Stack {
 const app = new cdk.App();
 new HelloCdkStack(app, 'HelloCdkStack', {
   env: {
-    // region must be specified via environments at template synthesis
+    // To use the Marketplace constructs, the region must be specified via environments at template synthesis
     // see here: https://docs.aws.amazon.com/cdk/v2/guide/configure-env.html#configure-env-when
-    region: 'us-east-1', // marketplace construct currently only supports the us-east-1 region
+    region: 'us-east-1', // Marketplace construct currently only supports the us-east-1 region
   }
 });
 ```
