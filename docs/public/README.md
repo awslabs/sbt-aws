@@ -85,7 +85,7 @@ As mentioned before, SBT is built on top of CDK. To illustrate its use, please f
 Now that you've initialized a new CDK app, let's install the SBT components. From within the `hello-cdk` directory, please run the following command:
 
 ```sh
-npm install @cdklabs/sbt-aws@0.0.26
+npm install @cdklabs/sbt-aws
 ```
 
 #### Control Plane
@@ -93,7 +93,7 @@ npm install @cdklabs/sbt-aws@0.0.26
 Now that we have SBT installed, let's create a new SBT control plane. Create a new file under `/lib/control-plane.ts` with the following contents. Please be sure to replace the email address with a real email as this is where you'll get the temporary admin password.
 
 ```typescript
-import { CognitoAuth, ControlPlane } from '@cdklabs/sbt-aws';
+import * as sbt from '@cdklabs/sbt-aws';
 import { Stack } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 
@@ -101,29 +101,27 @@ export class ControlPlaneStack extends Stack {
   public readonly regApiGatewayUrl: string;
   public readonly eventBusArn: string;
 
-  constructor(scope: Construct, id: string, props: any) {
+  constructor(scope: Construct, id: string, props?: any) {
     super(scope, id, props);
-    const cognitoAuth = new CognitoAuth(this, 'CognitoAuth', {
-      idpName: 'COGNITO',
-      systemAdminRoleName: 'SystemAdmin',
+    const cognitoAuth = new sbt.CognitoAuth(this, 'CognitoAuth', {
+      // Avoid checking scopes for API endpoints. Done only for testing purposes.
+      setAPIGWScopes: false,
+    });
+
+    const controlPlane = new sbt.ControlPlane(this, 'ControlPlane', {
+      auth: cognitoAuth,
       systemAdminEmail: 'ENTER YOUR EMAIL HERE',
     });
 
-    // NOTE: To explicitly disable cloudwatch logging (and potentially save costs on CloudWatch),
-    // pass the disableAPILogging flag as true
-    const controlPlane = new ControlPlane(this, 'ControlPlane', {
-      auth: cognitoAuth,
-      //disableAPILogging: true
-    });
-    this.eventBusArn = controlPlane.eventBusArn;
+    this.eventBusArn = controlPlane.eventManager.busArn;
     this.regApiGatewayUrl = controlPlane.controlPlaneAPIGatewayUrl;
   }
 }
 ```
 
-Notice here we're creating a new [CDK Stack](https://docs.aws.amazon.com/cdk/v2/guide/stacks.html) called "ControlPlaneStack". In that stack, we're creating a single `ControlPlane` construct which we imported from the `@cdklabs/sbt-aws` package. The `ControlPlane` construct is created with a number of different properties, most of which are used to configure Amazon EventBridge communication.
+Notice here we're creating a new [CDK Stack](https://docs.aws.amazon.com/cdk/v2/guide/stacks.html) called "ControlPlaneStack". In that stack, we're creating a `ControlPlane` construct which we imported from the `@cdklabs/sbt-aws` package.
 
-Another important concept worth pointing out here is the pluggability of this approach. Notice we're creating an "auth" component, called "CognitoAuth". This component implements the [`IAuth`](/API.md#iauth-) interface defined in the SBT core package. We currently have a Cognito implementation of `IAuth`, but we could technically implement that interface with any identity provider.
+Another important concept worth pointing out here is the plug-ability of this approach. Notice we're creating an "auth" component, called "CognitoAuth". This component implements the [`IAuth`](/API.md#iauth-) interface defined in the SBT core package. We currently have a Cognito implementation of `IAuth`, but we could technically implement that interface with any identity provider.
 
 ##### Build it
 
@@ -137,21 +135,21 @@ import { ControlPlaneStack } from '../lib/control-plane';
 // import { AppPlaneStack } from '../lib/app-plane';
 
 const app = new cdk.App();
-const cp = new ControlPlaneStack(app, 'ControlPlaneStack', {});
-// const ap = new AppPlaneStack(app, 'AppPlaneStack', {
-//   eventBusArn: cp.eventBusArn,
+const controlPlaneStack = new ControlPlaneStack(app, 'ControlPlaneStack');
+// const appPlaneStack = new AppPlaneStack(app, 'AppPlaneStack', {
+//   eventBusArn: controlPlaneStack.eventBusArn,
 // });
 ```
 
 Notice we're leaving a few lines commented out here, we'll come back to those later when we discuss the application plane. Ensure everything is saved, then from the root of your `hello-cdk` project, run the following:
 
 > [!WARNING]  
-> Because our ControlPlane deploys a Lambda function, you'll need Docker installed to build and deploy this CDK stack
+> Because our control plane deploys Lambda functions, you'll need Docker installed to build and deploy this CDK stack
 
 ```sh
 npm run build
 cdk bootstrap
-cdk deploy ControlPlaneStack --require-approval never
+cdk deploy ControlPlaneStack
 ```
 
 This will kick of the synthesis of your CDK application to AWS CloudFormation, then deploy that CloudFormation. Behind the scenes, a lot is getting created. This construct not only stands up the surface of our control plane API, using a new API Gateway component, it also deploys several services as AWS Lambda functions used for tenant provisioning and management.
@@ -162,28 +160,34 @@ Feel free to open your AWS Console and take a look at the following (ensure you'
 - [Amazon Cognito](https://console.aws.amazon.com/cognito/v2/idp/user-pools)
 - [API Gateway](https://console.aws.amazon.com/apigateway/main/apis)
 
-Once done, we now have the left side of our conceptual [diagram](#high-level-design) deployed, and we did it with a single construct. It deployed not only the API surface of our control plane, but also wired it up to EventBridge. Next, we'll start deploy the application plane, and connect it to the same EventBridge bus, so we can act upon those control plane messages.
+Once done, we now have the left side of our conceptual [diagram](#high-level-design) deployed, and we did it with just a few constructs. It deployed not only the API surface of our control plane, but also wired it up to EventBridge. Next, we'll start deploy the application plane, and connect it to the same EventBridge bus, so we can act upon those control plane messages.
 
 #### Application Plane
 
 As mentioned before, SBT is unopinionated about the application in which it's deployed. As a result, we expect you to create the `ApplicationPlane` construct as just another part of the CDK constructs that you'd use to define your application. Take this simple (non-functional) example:
 
 ```typescript
+export interface AppPlaneProps extends cdk.StackProps {
+  eventBusArn: string;
+}
+
 export class ApplicationPlaneStack extends Stack {
-  constructor(scope: Construct, id: string, props: any) {
+  constructor(scope: Construct, id: string, props: AppPlaneProps) {
     super(scope, id, props);
 
-    new CoreApplicationPlane(this, 'AppPlane', {
-      eventBusArn: props.eventBusArn,
-      controlPlaneSource: 'testControlPlaneEventSource',
-      applicationNamePlaneSource: 'testApplicationPlaneEventSource',
+    const eventBus = EventBus.fromEventBusArn(this, 'EventBus', props.eventBusArn);
+    const eventManager = new sbt.EventManager(this, 'EventManager', {
+      eventBus: eventBus,
+    });
+    new sbt.CoreApplicationPlane(this, 'CoreApplicationPlane', {
+      eventManager: eventManager,
       jobRunnerPropsList: [],
     });
   }
 }
 ```
 
-In this example we're creating the application plane of SBT, and passing in the same source names that we used in our control plane. This will ensure that both planes are wired to the same events in Amazon EventBridge.
+In this example we're creating the application plane of SBT, and passing in an EventManager created using the same EventBus that we used in our control plane. This will ensure that both planes are wired to the same events in Amazon EventBridge.
 
 What's missing in this example is the subscription to EventBridge events, and the acting upon those subscriptions. As an application plane developer, a builder could hook up listeners to the various events published by the control plane, and do what's asked in the event. For example, the onboarding event is sent by the control plane with the expectation that the application plane provisions new tenant resources. The event's payload should carry enough information for the application to complete its job. Once done, it's expected that the app plane sends back a status event indicating success or failure.
 
@@ -202,20 +206,13 @@ const provisioningJobRunnerProps = {
   name: 'provisioning',
   permissions: PolicyDocument.fromJson(/*See below*/),
   script: '' /*See below*/,
-  postScript: '',
-  importedVariables: ['tenantId', 'tier'],
-  exportedVariables: ['tenantS3Bucket', 'someOtherVariable', 'tenantConfig'],
+  environmentStringVariablesFromIncomingEvent: ['tenantId', 'tier'],
+  environmentVariablesToOutgoingEvent: ['tenantS3Bucket', 'someOtherVariable', 'tenantConfig'],
   scriptEnvironmentVariables: {
     TEST: 'test',
   },
-  outgoingEvent: {
-    source: applicationNamePlaneSource,
-    detailType: provisioningDetailType,
-  },
-  incomingEvent: {
-    source: [controlPlaneSource],
-    detailType: [onboardingDetailType],
-  },
+  outgoingEvent: sbt.DetailType.PROVISION_SUCCESS,
+  incomingEvent: sbt.DetailType.ONBOARDING_REQUEST,
 };
 ```
 
@@ -223,17 +220,16 @@ const provisioningJobRunnerProps = {
 
 Let's take a moment and dissect this object.
 
-| Key                            | Type                                                                                                  | Purpose                                                                                               |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| **name**                       | string                                                                                                | The **name** key is just a name for this job.                                                         |
-| **script**                     | string                                                                                                | A string in bash script format that represents the job to be run (example below)                      |
-| **permissions**                | [PolicyDocument](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_iam.PolicyDocument.html) | An IAM policy document giving this job the IAM permisisons it needs to do what it's being asked to do |
-| **postScript**                 | string                                                                                                | The bash script to run after the main script has completed.                                           |
-| **importedVariables**          | string[]                                                                                              | The environment variables to import into the BashJobRunner from event details field.                  |
-| **exportedVariables**          | string[]                                                                                              | The environment variables to export into the outgoing event once the BashJobRunner has finished.      |
-| **scriptEnvironmentVariables** | `{ [key: string]: string }`                                                                           | The variables to pass into the codebuild BashJobRunner.                                               |
-| **outgoingEvent**              | any                                                                                                   | Outgoing EventBridge wiring details                                                                   |
-| **incomingEvent**              | any                                                                                                   | Incoming EventBridge wiring details                                                                   |
+| Key                                             | Type                                                                                                  | Purpose                                                                                               |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| **name**                                        | string                                                                                                | The **name** key is just a name for this job.                                                         |
+| **script**                                      | string                                                                                                | A string in bash script format that represents the job to be run (example below)                      |
+| **permissions**                                 | [PolicyDocument](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_iam.PolicyDocument.html) | An IAM policy document giving this job the IAM permisisons it needs to do what it's being asked to do |
+| **environmentStringVariablesFromIncomingEvent** | string[]                                                                                              | The environment variables to import into the BashJobRunner from event details field.                  |
+| **environmentVariablesToOutgoingEvent**         | string[]                                                                                              | The environment variables to export into the outgoing event once the BashJobRunner has finished.      |
+| **scriptEnvironmentVariables**                  | `{ [key: string]: string }`                                                                           | The variables to pass into the codebuild BashJobRunner.                                               |
+| **outgoingEvent**                               | any                                                                                                   | Outgoing EventBridge wiring details                                                                   |
+| **incomingEvent**                               | any                                                                                                   | Incoming EventBridge wiring details                                                                   |
 
 The heavy lifting of the `JobRunner` happens with the value of the `script` key. Recall, that this particular example is for provisioning. Also remember that the "SaaS application" we're illustrating here is only provisioning a new S3 bucket for each tenant. Let's take a look at that example provisioning script now:
 
@@ -266,6 +262,7 @@ export tenantConfig=$(jq --arg SAAS_APP_USERPOOL_ID "MY_SAAS_APP_USERPOOL_ID" \
 -n '{"userPoolId":$SAAS_APP_USERPOOL_ID,"appClientId":$SAAS_APP_CLIENT_ID,"apiGatewayUrl":$API_GATEWAY_URL}')
 
 echo $tenantConfig
+export tenantStatus="created"
 
 echo "done!"
 ```
@@ -296,23 +293,23 @@ Next we're echoing the value of the `tenantId` and `tier` environment variables 
 
 ---
 
-###### Imported variables
+###### Imported variables ('environmentStringVariablesFromIncomingEvent')
 
 ```sh
 echo "tenantId: $tenantId"
 echo "tier: $tier"
 ```
 
-Let's examine how exactly those variables get populated. Remember that the `JobRunner` creates an [AWS CodeBuild](https://docs.aws.amazon.com/codebuild/latest/userguide/welcome.html) project internally. When the `JobRunner` creates the CodeBuild project, it can specify what environment variables to provide. Also recall that the `JobRunner` utility is activated with an EventBridge message matching the criteria specified in the `incomingEvent` parameter of the `jobRunnerProps`. The message that arrives via EventBridge has a `detail` JSON Object (see [docs here](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-events-structure.html)) that carries with it contextual information included by the sender, in our case, the control plane. For each key in the `importedVariables` key, the `JobRunner` extracts the value of a matching key found in the EventBridge message's detail JSON object, and provides that value to the CodeBuild project as an environment variable.
+Let's examine how exactly those variables get populated. Remember that the `JobRunner` creates an [AWS CodeBuild](https://docs.aws.amazon.com/codebuild/latest/userguide/welcome.html) project internally. When the `JobRunner` creates the CodeBuild project, it can specify what environment variables to provide. Also recall that the `JobRunner` utility is activated with an EventBridge message matching the criteria specified in the `incomingEvent` parameter of the `jobRunnerProps`. The message that arrives via EventBridge has a `detail` JSON Object (see [docs here](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-events-structure.html)) that carries with it contextual information included by the sender, in our case, the control plane. For each key in the `environmentStringVariablesFromIncomingEvent` key, the `JobRunner` extracts the value of a matching key found in the EventBridge message's detail JSON object, and provides that value to the CodeBuild project as an environment variable.
 
-So, take for example, this sample EventBridge provisioning message sent by our control plane:
+So, take for example, this sample EventBridge provisioning message sent by a control plane:
 
 ```json
 {
   "version": "0",
   "id": "6a7e8feb-b491-4cf7-a9f1-bf3703467718",
-  "detail-type": "onboarding",
-  "source": "application-plane-source",
+  "detail-type": "onboardingRequest",
+  "source": "controlPlaneEventSource",
   "account": "111122223333",
   "time": "2017-12-22T18:43:48Z",
   "region": "us-west-1",
@@ -338,9 +335,9 @@ aws cloudformation wait stack-create-complete --stack-name "tenantTemplateStack-
 
 ---
 
-###### Exported variables
+###### Exported variables ('environmentVariablesToOutgoingEvent')
 
-The final portion of script exports environment variables containing information to return to the control plane via the outgoing EventBridge message.
+The final portion of the script exports environment variables containing information to return to the control plane via the outgoing EventBridge message.
 
 ```sh
 export tenantS3Bucket=$(aws cloudformation describe-stacks --stack-name "tenantTemplateStack-\${tenantId}" | jq -r '.Stacks[0].Outputs[0].OutputValue')
@@ -351,18 +348,20 @@ export tenantConfig=$(jq --arg SAAS_APP_USERPOOL_ID "MY_SAAS_APP_USERPOOL_ID" \
 --arg API_GATEWAY_URL "MY_API_GATEWAY_URL" \
 -n '{"userPoolId":$SAAS_APP_USERPOOL_ID,"appClientId":$SAAS_APP_CLIENT_ID,"apiGatewayUrl":$API_GATEWAY_URL}')
 echo $tenantConfig
+export tenantStatus="created"
 ```
 
-Similar to how it mapped incoming EventBridge message detail variables to environment variables, the `JobRunner` does almost the same thing but in reverse. The variables specified in the `outgoingVariable` section of `jobRunnerProps` will be extracted from the environment, and sent back in the EventBridge message's detail section.
+Similar to how it mapped incoming EventBridge message detail variables to environment variables, the `JobRunner` does almost the same thing but in reverse. The variables specified in the `environmentVariablesToOutgoingEvent` section of `jobRunnerProps` will be extracted from the environment, and sent back in the EventBridge message's detail section.
 
 #### Putting it all together
 
 Now that we've seen the various parts of the application plane in isolation, let's put it all together. Please create the following file in the `/lib` directory of your CDK app and name it `app-plane.ts`. Now open that file and paste the following contents into it:
 
 ```typescript
-import { CoreApplicationPlane, DetailType, EventManager } from '@cdklabs/sbt-aws';
+import * as sbt from '@cdklabs/sbt-aws';
 import * as cdk from 'aws-cdk-lib';
-import { PolicyDocument } from 'aws-cdk-lib/aws-iam';
+import { EventBus } from 'aws-cdk-lib/aws-events';
+import { PolicyDocument, PolicyStatement, Effect } from 'aws-cdk-lib/aws-iam';
 
 export interface AppPlaneProps extends cdk.StackProps {
   eventBusArn: string;
@@ -372,24 +371,19 @@ export class AppPlaneStack extends cdk.Stack {
     super(scope, id, props);
     const provisioningJobRunnerProps = {
       name: 'provisioning',
-      permissions: PolicyDocument.fromJson(
-        JSON.parse(`
-{
-  "Version":"2012-10-17",
-  "Statement":[
-      {
-        "Action":[
-            "cloudformation:CreateStack",
-            "cloudformation:DescribeStacks",
-            "s3:CreateBucket"
+      permissions: new PolicyDocument({
+        statements: [
+          new PolicyStatement({
+            actions: [
+              'cloudformation:CreateStack',
+              'cloudformation:DescribeStacks',
+              's3:CreateBucket',
+            ],
+            resources: ['*'],
+            effect: Effect.ALLOW,
+          }),
         ],
-        "Resource":"*",
-        "Effect":"Allow"
-      }
-  ]
-}
-`)
-      ),
+      }),
       script: `
 echo "starting..."
 
@@ -418,28 +412,38 @@ export tenantConfig=$(jq --arg SAAS_APP_USERPOOL_ID "MY_SAAS_APP_USERPOOL_ID" \
 -n '{"userPoolId":$SAAS_APP_USERPOOL_ID,"appClientId":$SAAS_APP_CLIENT_ID,"apiGatewayUrl":$API_GATEWAY_URL}')
 
 echo $tenantConfig
+export tenantStatus="created"
 
 echo "done!"
 `,
-      postScript: '',
-      importedVariables: ['tenantId', 'tier'],
-      exportedVariables: ['tenantS3Bucket', 'someOtherVariable', 'tenantConfig'],
+      environmentStringVariablesFromIncomingEvent: ['tenantId', 'tier'],
+      environmentVariablesToOutgoingEvent: [
+        'tenantS3Bucket',
+        'someOtherVariable',
+        'tenantConfig',
+        'tenantStatus',
+      ],
       scriptEnvironmentVariables: {
         TEST: 'test',
       },
-      outgoingEvent: DetailType.PROVISION_SUCCESS,
-      incomingEvent: DetailType.ONBOARDING_REQUEST,
+      outgoingEvent: sbt.DetailType.PROVISION_SUCCESS,
+      incomingEvent: sbt.DetailType.ONBOARDING_REQUEST,
     };
 
-    new CoreApplicationPlane(this, 'CoreApplicationPlane', {
-      eventBusArn: props.eventBusArn,
+    const eventBus = EventBus.fromEventBusArn(this, 'EventBus', props.eventBusArn);
+    const eventManager = new sbt.EventManager(this, 'EventManager', {
+      eventBus: eventBus,
+    });
+
+    new sbt.CoreApplicationPlane(this, 'CoreApplicationPlane', {
+      eventManager: eventManager,
       jobRunnerPropsList: [provisioningJobRunnerProps],
     });
   }
 }
 ```
 
-Although this looks like a lot of code, it's still a single construct, with a lot of configuration sent to it. Now that we've defined our app plane, let's again open up the `hello-cdk.ts` file in the `bin` directory of your CDK app. Once open, uncomment each commented line. The final file should look like this:
+Although this looks like a lot of code, it's still very few constructs. Now that we've defined our app plane, let's again open up the `hello-cdk.ts` file in the `bin` directory of your CDK app. Once open, uncomment each commented line. The final file should look like this:
 
 ```typescript
 #!/usr/bin/env node
@@ -449,9 +453,9 @@ import { ControlPlaneStack } from '../lib/control-plane';
 import { AppPlaneStack } from '../lib/app-plane';
 
 const app = new cdk.App();
-const cp = new ControlPlaneStack(app, 'ControlPlaneStack', {});
-const ap = new AppPlaneStack(app, 'AppPlaneStack', {
-  eventBusArn: cp.eventBusArn,
+const controlPlaneStack = new ControlPlaneStack(app, 'ControlPlaneStack');
+const appPlaneStack = new AppPlaneStack(app, 'AppPlaneStack', {
+  eventBusArn: controlPlaneStack.eventBusArn,
 });
 ```
 
@@ -459,7 +463,7 @@ Once done, ensure all files are saved, and let's deploy the solution again, but 
 
 ```sh
 npm run build
-cdk deploy --all --require-approval never
+cdk deploy ControlPlaneStack AppPlaneStack
 ```
 
 ##### Test the deployment
@@ -473,8 +477,16 @@ TENANT_EMAIL="tenant@example.com"
 CONTROL_PLANE_STACK_NAME="ControlPlaneStack"
 TENANT_NAME="tenant$RANDOM"
 
-CLIENT_ID=$(aws cloudformation describe-stacks --stack-name ControlPlaneStack --query "Stacks[0].Outputs[?OutputKey=='ControlPlaneIdpDetails'].OutputValue" | jq -r '.[0]' | jq -r '.idp.clientId')
-USER_POOL_ID=$(aws cloudformation describe-stacks --stack-name ControlPlaneStack --query "Stacks[0].Outputs[?OutputKey=='ControlPlaneIdpDetails'].OutputValue" | jq -r '.[0]' | jq -r '.idp.userPoolId')
+CLIENT_ID=$(aws cloudformation describe-stacks \
+  --stack-name "$CONTROL_PLANE_STACK_NAME" \
+  --query "Stacks[0].Outputs[?OutputKey=='ControlPlaneIdpClientId'].OutputValue" \
+  --output text)
+
+USER_POOL_ID=$(aws cloudformation describe-stacks \
+  --stack-name "$CONTROL_PLANE_STACK_NAME" \
+  --query "Stacks[0].Outputs[?OutputKey=='ControlPlaneIdpUserPoolId'].OutputValue" \
+  --output text)
+
 USER="admin"
 
 # required in order to initiate-auth
@@ -492,12 +504,12 @@ aws cognito-idp admin-set-user-password \
 
 # get credentials for user
 AUTHENTICATION_RESULT=$(aws cognito-idp initiate-auth \
-    --auth-flow USER_PASSWORD_AUTH \
-    --client-id "${CLIENT_ID}" \
-    --auth-parameters "USERNAME=${USER},PASSWORD='${PASSWORD}'" \
-    --query 'AuthenticationResult')
+  --auth-flow USER_PASSWORD_AUTH \
+  --client-id "${CLIENT_ID}" \
+  --auth-parameters "USERNAME='${USER}',PASSWORD='${PASSWORD}'" \
+  --query 'AuthenticationResult')
 
-ID_TOKEN=$(echo "$AUTHENTICATION_RESULT" | jq -r '.IdToken')
+ACCESS_TOKEN=$(echo "$AUTHENTICATION_RESULT" | jq -r '.AccessToken')
 
 CONTROL_PLANE_API_ENDPOINT=$(aws cloudformation describe-stacks \
     --stack-name "$CONTROL_PLANE_STACK_NAME" \
@@ -517,17 +529,16 @@ DATA=$(jq --null-input \
 echo "creating tenant..."
 curl --request POST \
     --url "${CONTROL_PLANE_API_ENDPOINT}tenants" \
-    --header "Authorization: Bearer ${ID_TOKEN}" \
+    --header "Authorization: Bearer ${ACCESS_TOKEN}" \
     --header 'content-type: application/json' \
-    --data "$DATA"
+    --data "$DATA" | jq
 echo "" # add newline
 
 echo "retrieving tenants..."
 curl --request GET \
     --url "${CONTROL_PLANE_API_ENDPOINT}tenants" \
-    --header "Authorization: Bearer ${ID_TOKEN}" \
+    --header "Authorization: Bearer ${ACCESS_TOKEN}" \
     --silent | jq
-
 ```
 
 Now that we've onboarded a tenant, let's take a look at the console to see what got deployed.
@@ -544,99 +555,84 @@ In this section we detail the EventBridge messages that pass between the two pla
 
 ### Overview of events
 
-#### Tenant Onboarding
+#### Tenant Onboarding Request
 
-The control plane emits this event any time it onboards a new tenant. This event should contain all information necessary for the application plane to provision tenant resources. This includes a tenant name, email address and possibly tier.
+The control plane emits this event any time it onboards a new tenant. This event contains all information present in the create tenant request (POST /tenants) along with some fields added by the tenant management service. In the case above, an onboarding event would look something like this:
 
-##### Sample onboarding event
+##### Sample onboarding request event
 
 ```json
 {
-  "source": "sbt-control-plane-api",
-  "detail-type": "Onboarding",
+  "source": "controlPlaneEventSource",
+  "detail-type": "onboardingRequest",
   "detail": {
     "tenantId": "guid string",
-    "tenantStatus": "see notes",
-    "tenantName": "tenant name",
-    "email": "admin@saas.com",
-    "isActive": "boolean"
+    "tenantName": "tenant$RANDOM",
+    "email": "tenant@example.com",
+    "tier": "basic",
+    "tenantStatus": "In progress"
   }
 }
 ```
 
-#### Onboarding status
+#### Tenant Provision Success
 
-The application plan emits this event upon completion of onboarding. Note this does not necessarily mean the onboarding request was successful, just that it ran to completion, either successfully, unsuccessfully, or as a result of a timeout. This event contains the status of the onboarding request at the time of event emission.
+As per our configuration, the application plane emits this event upon completion of onboarding. It contains the `tenantId` and a `tenantOutput` object containing the environment variables (key/value pairs) whose keys have been identified in the `environmentVariablesToOutgoingEvent` parameter. In the example above, a provision success event would look something like this:
 
-Note the returned `tenantConfig` object is an escaped JSON string containing whatever information is appropriate for the application's plane onboarding event. In the Serverless SaaS Reference Architecture's implementation of SBT, this payload includes the tenant's Cognito userpool ID, application client ID, and API Gateway URL.
-
-Upon successful tenant provisioning, the Serverless SaaS reference architecture returns 'Complete'.
-
-##### Sample onboarding status event
+##### Sample provision success event
 
 ```json
 {
-  "source": "sbt-application-plane-api",
-  "detail-type": "Onboarding",
+  "source": "applicationPlaneEventSource",
+  "detail-type": "provisionSuccess",
   "detail": {
-    "tenantConfig": "json string - see notes",
-    "tenantStatus": "Complete"
+    "tenantOutput": {
+      "tenantStatus": "created",
+      "tenantConfig": "{\n  \"userPoolId\": \"MY_SAAS_APP_USERPOOL_ID\",\n  \"appClientId\": \"MY_SAAS_APP_CLIENT_ID\",\n  \"apiGatewayUrl\": \"MY_API_GATEWAY_URL\"\n}",
+      "tenantName": "tenant$RANDOM",
+      "tenantS3Bucket": "mybucket",
+      "someOtherVariable": "this is a test",
+      "email": "tenant@example.com"
+    },
+    "tenantId": "guid string"
   }
 }
 ```
 
-#### Offboarding
+#### Tenant Offboarding Request
 
-The control plane emits this event any time it offboards a tenant. At a minimum this event should contain the tenant ID and possibly tier. Offboarding not only prohibits a tenant user's ability to log into the system, it also deletes tenant infrastructure from SBT.
+The control plane emits this event any time it offboards a tenant. The detail of this event will contain the entire tenant object (i.e., the fields defined in the create tenant request along with fields like `tenantId`). Similar to the onboarding job defined above, offboarding can be whatever your application requires including, but not limited to, the deletion of the tenant's dedicated infrastructure.
 
-##### Sample offboarding event
+##### Sample offboarding request event
 
 ```json
 {
-  "source": "sbt-control-plane-api",
-  "detail-type": "Offboarding",
+  "source": "controlPlaneEventSource",
+  "detail-type": "offboardingRequest",
   "detail": {
-    "tenantId": "string",
-    "tier": "string"
+    // <entire tenant object>
   }
 }
 ```
 
-#### Offboarding status
+#### Tenant Deprovision Success
 
-The application plane emits this event upon completion of offboarding. Similar to onboarding, this event does not necessarily indicate success, though the status should be indicated in the event.
+The application plane emits this event upon completion of offboarding. Similar to provision success event, its contents are determined by the environment variables identified by their key in the `environmentVariablesToOutgoingEvent` parameter.
 
-##### Sample offboarding status event
+##### Sample deprovision success event
 
 ```json
 {
-  "source": "sbt-application-plane-api",
-  "detail-type": "Offboarding",
+  "source": "applicationPlaneEventSource",
+  "detail-type": "deprovisionSuccess",
   "detail": {
-    "tenantStatus": "Deleted"
+    "tenantOutput": {
+      // defined in the deprovisioning job configuration
+    },
+    "tenantId": "guid string"
   }
 }
 ```
-
-#### Deactivate tenant
-
-The control plane emits this event when it deactivates a tenant. In the SBT context, deactivation prohibits users of a tenant from logging into the tenant application, but does not (necessarily) delete any tenant infrastructure.
-
-##### Sample tenant deactivation event
-
-#### Deactivation status
-
-The application plane emits this event upon completion of tenant deactivation. Again, this event does not necessarily indicate successful deactivation, but the status is present in the event payload.
-
-##### Sample deactivation status event
-
-#### Activate tenant
-
-##### Sample activate tenant event
-
-#### Activate status event
-
-##### Sample activate status event
 
 ## Design tenets
 
@@ -649,33 +645,33 @@ The application plane emits this event upon completion of tenant deactivation. A
 
 ## Additional documentation and resources
 
-#### Tenant management
+### Tenant management
 
-Currently this service simply records the result of an successful onboarding request sent to the application plane, and for now that proves efficient. As we continue to build out additional reference architectures in the SBT model we may identify the need for additional features, perhaps tenant configuration, routing or identity.
+Currently, this service simply records the result of a successful onboarding request sent to the application plane, and for now that proves efficient. As we continue to build out additional reference architectures in the SBT model we may identify the need for additional features, perhaps tenant configuration, routing or identity.
 
-#### System user management
+### System user management
 
 System users represent the administrative users that manage your SaaS environment. These users must have their own identity mechanism that is used to authenticate and manage the different system users that will be managing your SaaS environment. The nature and lifecycle of these users is much simpler than the tenant users. These users will only live and be used through the experience provided by the control plane. As such, they’ll require less customization and will be access through the tooling/console that’s native to the control plane.
 
-#### Tenant user management
+### Tenant user management
 
 Every SaaS system needs some way to manage the users of that system. These users could be managed entirely within the scope of the application plane. However, these same users must also be connected to tenants as part of the onboarding and authentication experience. This need to have tenants be connected to identity makes it necessary to have tenant users stored and managed within the scope of the control plane. This allows for a much greater level of automation within the control plane, enabling all the mechanics of connecting users to tenants, authenticating users with tenant context, and injecting tenant context into the application plane. However, with tenant user management hosted in the control, this service must take on the added responsibility of managing the additional attributes that are associated with tenant users in different environments. This is where the control plane as a service will need to enable greater flexibility and customization to allow builders to have greater control over the configuration of tenant users. In fact, there may be scenarios where the application plane will include the user experience that integrates with this tenant management service to manage/configure tenant users.
 
-#### Onboarding
+### Onboarding
 
 Managing the full lifecycle of tenant onboarding is one of the most essential roles of the control plane. This service owns responsibility for orchestrating all the configuration and downstream events associated with the introduction of a new tenant. So, here you’ll see interaction with both tenant management and tenant user management. Now, where onboarding gets more interesting is when we look at how onboarding also relies on integration with the application plane. As each new tenant is onboarded via the control plane, this service must also send events to the application plane to trigger the creation of any application plane resources/infrastructure that may be needed on a per-tenant basis. The boarding service must publish this application provisioning event and listen for various events that represent the progress of the application plane’s tenant provisioning lifecycle.
 
-#### Billing
+### Billing
 
 Many SaaS providers rely on integration with a billing service that allows them to created the billing plans that are mapped to their tiering and monetization strategy. Generally, the approach here is to provide an API within the control plane that will provide a universal mechanism for creating billing accounts (onboarding) and publishing billing/consumption events for individual tenants. This service will also include integration with tenant management, enabling tenant state events to be conveyed to/from the billing service. For example, a tenant being disabled could be triggered from billing to tenant management. A change in tiers could also be part of this integration.
 
-#### Metrics
+### Metrics
 
 Multi-tenant operations teams often need tenant-aware insights into the activity and consumption profiles of their tenants and tiers. This data is used in a variety contexts, allowing teams to make operational, business, and design decisions based on the tenant-aware patterns they can observe through metrics that are published by the application tier. The control plane will provide standardized metrics API that will be used to ingest these metrics events. It will also enable builders to define custom events with some standardization around how tenant and tier context is conveyed via these events. These metrics will all be aggregated by the control plane and surfaced through dashboards in the control plan admin console. There may also be support for ingesting the metrics data into other analytics tools
 
-#### Tiering
+### Tiering
 
-Tiering is a very basic construct in the control plane. However it needs to exist to provider a universal, centralized home to the tiering configuration of a SaaS environment. This provides a point of alignment between the application plane and the control plane, that allows for a clear mapping of tenants to tiers that are used across a number of experiences insides and outside of the control plane.
+Tiering is a very basic construct in the control plane. However, it needs to exist to provider a universal, centralized home to the tiering configuration of a SaaS environment. This provides a point of alignment between the application plane and the control plane, that allows for a clear mapping of tenants to tiers that are used across a number of experiences insides and outside of the control plane.
 
 ### AWS Marketplace Integration
 

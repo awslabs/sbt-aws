@@ -26,40 +26,57 @@ Based on the `pricingModel` selected, a different combination of the following r
 2. **Entitlement Logic**: A set of resources that handle the entitlement notifications from AWS Marketplace. It includes an SQS queue, an SNS topic subscription, and a Lambda function that processes the entitlement notifications and stores the subscriber information in the Subscribers Table.
 3. **Subscription Logic**: A set of resources that handle subscription-related events from AWS Marketplace. It includes a DynamoDB table for storing metering records, an SQS queue, and Lambda functions for processing metering data and sending it to AWS Marketplace.
 4. **Registration API**: An API Gateway REST API that exposes endpoints for redirecting buyers to the registration page and creating new subscribers in the Subscribers Table.
-5. **Registration Web Page**: An optional S3-hosted static website that provides a customizable registration page for buyers to submit their information. This page is fronted by a CloudFront distribution for improved performance and security.
+5. **Registration Web Page**: An optional S3-hosted static website that provides a customizable registration page for buyers to submit their information. It is fronted by a CloudFront distribution for improved performance and security.
 
 ## Creating the Marketplace Constructs
 
 The following CDK code shows how you can deploy the Marketplace integration along with SBT:
 
 ```typescript
-const myCognitoAuth = new CognitoAuth(this, 'myCognitoAuth', {
-  systemAdminEmail: 'jane_doe@example.com',
-});
+// ...
+import * as sbt from '@cdklabs/sbt-aws';
+// ...
 
-const myControlPlane = new ControlPlane(this, 'myControlPlane', {
-  auth: cognitoAuth,
-});
+export class HelloCdkStack extends Stack {
+  constructor(scope: Construct, id: string, props?: StackProps) {
+    super(scope, id, props);
 
-...
+    const myControlPlane = new sbt.ControlPlane(this, 'myControlPlane', {
+      systemAdminEmail: 'jane_doe@example.com',
+    });
 
-const myProduct = new AWSMarketplaceSaaSProduct(this, 'myProduct', {
-  marketplaceTechAdminEmail: 'jane_doe@example.com',
-  productCode: 'abcdef01234567890',
-  entitlementSNSTopic: 'arn:aws:sns:us-east-1:111122223333:aws-mp-entitlement-notification-1234567890abcdef0',
-  subscriptionSNSTopic: 'arn:aws:sns:us-east-1:111122223333:aws-mp-subscription-notification-021345abcdef6789',
-  pricingModel: AWSMarketplaceSaaSPricingModel.CONTRACTS_WITH_SUBSCRIPTION,
-  eventManager: myControlPlane.eventManager,
-  requiredFieldsForRegistration: ['name', 'address', 'phone'],
-});
+    // ...
 
-new SampleRegistrationWebPage(this, 'S3BucketProductRegistrationWebPage', {
-  registrationAPI: myProduct.registerCustomerAPI,
-  userProvidedRequiredFieldsForRegistration: myProduct.userProvidedRequiredFieldsForRegistration,
+    const myProduct = new sbt.AWSMarketplaceSaaSProduct(this, 'myProduct', {
+      marketplaceTechAdminEmail: 'jane_doe@example.com',
+      productCode: 'abcdef01234567890',
+      entitlementSNSTopic: 'arn:aws:sns:us-east-1:111122223333:aws-mp-entitlement-notification-1234567890abcdef0',
+      subscriptionSNSTopic: 'arn:aws:sns:us-east-1:111122223333:aws-mp-subscription-notification-021345abcdef6789',
+      pricingModel: sbt.AWSMarketplaceSaaSPricingModel.CONTRACTS_WITH_SUBSCRIPTION,
+      eventManager: myControlPlane.eventManager,
+      requiredFieldsForRegistration: ['name', 'address', 'phone'],
+    });
+
+    new sbt.SampleRegistrationWebPage(this, 'S3BucketProductRegistrationWebPage', {
+      registrationAPI: myProduct.registerCustomerAPI,
+      userProvidedRequiredFieldsForRegistration: myProduct.userProvidedRequiredFieldsForRegistration,
+    });
+  }
+}
+
+// ...
+
+const app = new cdk.App();
+new HelloCdkStack(app, 'HelloCdkStack', {
+  env: {
+    // To use the Marketplace constructs, the region must be specified via environments at template synthesis
+    // see here: https://docs.aws.amazon.com/cdk/v2/guide/configure-env.html#configure-env-when
+    region: 'us-east-1', // Marketplace construct currently only supports the us-east-1 region
+  }
 });
 ```
 
-Note that the following variables need to be sourced from the SaaS listing created in the AWS Marketplace:
+Note: The following variables must be obtained from the SaaS listing created in the AWS Marketplace:
 
 - `productCode`
 - `entitlementSNSTopic`
@@ -109,7 +126,7 @@ where,
 - `customerIdentifier` is the customer identifier provided by the AWS Marketplace. (This is stored in the Marketplace Subscribers table.)
 - `dimension_usage` is a list of dimensions and the corresponding usage that you want Marketplace to record.
 
-Once this data has been inserted, you can either trigger the hourly Lambda Function that pushes this data to Marketplace or wait until it is automatically invoked, as per the schedule. You can find this lambda by searching for a lambda with the keyword "Hourly" present in the name.
+After inserting this data, you can either manually trigger the hourly Lambda function that sends the data to AWS Marketplace or wait for its automatic scheduled invocation. You can find this lambda by searching for a lambda with the keyword "Hourly" present in the name.
 
 Once invoked, the lambda will flush that data to Marketplace. To see the result, go back to the entry you created in the Metering Records table. Once there, you should see that it has been updated to include the response from Marketplace as the metering record was submitted.
 
@@ -119,7 +136,7 @@ The AWS Marketplace integration constructs provide several customization options
 
 ### Registration Page
 
-You can specify the following when creating the `SampleRegistrationWebPage` construct:
+When creating the `SampleRegistrationWebPage` construct, you can specify the following:
 
 - `imageLogoUrl`: The URL of the image logo to display on the registration page.
 - `userProvidedRequiredFieldsForRegistration`: Additional fields that buyers must provide during the registration process. These fields will be added to the registration form dynamically.

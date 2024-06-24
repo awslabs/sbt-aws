@@ -87,7 +87,6 @@ generate_credentials() {
   fi
 
   export ACCESS_TOKEN
-  export ACCESS_TOKEN
 }
 
 configure() {

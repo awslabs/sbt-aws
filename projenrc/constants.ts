@@ -24,6 +24,7 @@ export const PULL_REQUEST_TEMPLATE: string[] = [
   '### Checklist',
   '',
   '- [ ] My code adheres to the [CONTRIBUTING GUIDE](https://github.com/awslabs/sbt-aws/blob/main/CONTRIBUTING.md)',
+  '- [ ] I have updated the relevant documentation (if applicable).',
 ];
 
 export const GIT_IGNORE_PATTERNS: string[] = [

@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import boto3
+import botocore
 from crhelper import CfnResource
 cognito = boto3.client('cognito-idp')
 helper = CfnResource()
@@ -58,7 +59,7 @@ def do_delete(event, _):
             UserPoolId=user_pool_id,
             Username=user_name
         )
-    except cognito.exceptions as e:
+    except botocore.exceptions.ClientError as e:
         print(f'failed to delete: {e}')
 
 

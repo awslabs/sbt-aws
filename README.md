@@ -36,61 +36,6 @@ SBT is built on top of the AWS Cloud Development Kit (CDK). It offers a number o
 
 For a detailed walkthrough, see the [tutorial](https://github.com/awslabs/sbt-aws/blob/main/docs/public/README.md#tutorial) in the [developer guide](https://github.com/awslabs/sbt-aws/blob/main/docs/public/README.md).
 
-### At a glance
-
-Initialize a CDK project:
-
-```sh
-mkdir hello-cdk
-cd hello-cdk
-cdk init sample-app --language=typescript
-```
-
-This creates a sample project looking like this:
-
-```ts
-export class HelloCdkStack extends cdk.Stack {
-  constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
-
-    const queue = new sqs.Queue(this, 'HelloCdkQueue', {
-      visibilityTimeout: cdk.Duration.seconds(300)
-    });
-
-    const topic = new sns.Topic(this, 'HelloCdkTopic');
-
-    topic.addSubscription(new subs.SqsSubscription(queue));
-  }
-}
-```
-
-Install or update SBT from npm (requires [Node.js ≥ 14.15.0](https://nodejs.org/download/release/latest-v14.x/)). We recommend using a version in [Active LTS](https://nodejs.org/en/about/previous-releases)
-
-```sh
-npm install @cdklabs/sbt-aws@0.0.16
-```
-
-Add a sample control plane to your application. In the `HelloCdkStack` add the following:
-
-```typescript
-const cp = new sbt.ControlPlane(this, 'control-plane', {
-  idpName: 'COGNITO',
-  systemAdminRoleName: 'SystemAdmin',
-  systemAdminEmail: 'admin@example.com',
-  applicationPlaneEventSource: 'sbt-application-plane-api',
-  provisioningDetailType: 'Onboarding',
-  controlPlaneEventSource: 'sbt-control-plane-api',
-  onboardingDetailType: 'Onboarding',
-  offboardingDetailType: 'Offboarding',
-});
-```
-
-Deploy this to your account:
-
-```sh
-cdk deploy
-```
-
 ## Examples
 
 Interested in seeing SBT used in a comprehensive SaaS reference architecture? Take a look at the following:
