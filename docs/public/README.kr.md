@@ -680,4 +680,4 @@ Toolkit에는 Amazon S3에서 호스팅되고 Amazon CloudFront가 앞에 있는
 
 이러한 Construct 및 유틸리티를 활용하면 SaaS 애플리케이션을 AWS Marketplace와 통합하는 프로세스를 간소화하여 Marketplace 요구 사항을 준수하고 고객에게 원활한 등록 및 구독 경험을 제공할 수 있습니다.
 
-자세한 내용은 [AWS Marketplace 통합](/docs/public/marketplace-integration.md)에서 찾을 수 있습니다.
+자세한 내용은 [AWS Marketplace Integration](/docs/public/marketplace-integration.md)에서 찾을 수 있습니다.
