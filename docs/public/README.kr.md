@@ -674,7 +674,7 @@ Tier는 Control Plane의 완전히 기본이 되는 구조입니다. 하지만, 
 
 SaaS Builder Toolkit은 SaaS 애플리케이션과 AWS Marketplace의 통합을 단순화하기 위한 Construct을 제공합니다. `AWSMarketplaceSaaSProduct` Construct을 사용하면 등록 API, 구독자 정보 저장을 위한 DynamoDB 테이블, 구독 및 자격 부여 이벤트 처리에 필요한 AWS Lambda 함수 및 이벤트 소스를 포함하여 AWS Marketplace SaaS 제품을 생성할 수 있습니다.
 
-Toolkit에는 Amazon S3에서 호스팅되고 Amazon CloudFront가 앞에 있는 샘플 등록 웹 페이지를 생성하는 `SampleRegistrationWebPage` Construt도 포함되어 있습니다. 웹 페이지에는 사용자가 SaaS 제품에 등록할 수 있는 동적 양식이 포함되어 있으며 등록에 필요한 필수 필드가 Construct에 대한 소품으로 지정되어 있습니다.
+Toolkit에는 Amazon S3에서 호스팅되고 Amazon CloudFront가 앞에 있는 샘플 등록 웹 페이지를 생성하는 `SampleRegistrationWebPage` Construct도 포함되어 있습니다. 웹 페이지에는 사용자가 SaaS 제품에 등록할 수 있는 동적 양식이 포함되어 있으며 등록에 필요한 필수 필드가 Construct에 대한 소품으로 지정되어 있습니다.
 
 또한 이 Toolkit에는 AWS Marketplace의 구독 이벤트 처리, 사용량 측정, 구독 상태에 따라 제품에 대한 액세스 권한 부여 또는 취소 등 권한 및 구독 로직을 관리하기 위한 유틸리티를 제공합니다.
 
