@@ -13,7 +13,7 @@ import {
   ServicePrincipal,
   Effect,
 } from 'aws-cdk-lib/aws-iam';
-import { Runtime, IFunction, LayerVersion, ILayerVersion } from 'aws-cdk-lib/aws-lambda';
+import { Runtime, IFunction, LayerVersion } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { CreateAdminUserProps, IAuth } from './auth-interface';
@@ -209,16 +209,17 @@ export class CognitoAuth extends Construct implements IAuth {
   private readonly userPool: cognito.UserPool;
 
   /**
-   * The Lambda Layer containing the Powertools library.
+   * The Lambda function for creating a new Admin User. This is used as part of a
+   * custom resource in CloudFormation to create an admin user.
    */
-  private readonly lambdaPowertoolsLayer: ILayerVersion;
+  private readonly createAdminUserFunction: IFunction;
 
   constructor(scope: Construct, id: string, props?: CognitoAuthProps) {
     super(scope, id);
     addTemplateTag(this, 'CognitoAuth');
 
     // https://docs.powertools.aws.dev/lambda/python/2.31.0/#lambda-layer
-    this.lambdaPowertoolsLayer = LayerVersion.fromLayerVersionArn(
+    const lambdaPowertoolsLayer = LayerVersion.fromLayerVersionArn(
       this,
       'LambdaPowerTools',
       `arn:aws:lambda:${Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV2:59`
@@ -460,7 +461,7 @@ export class CognitoAuth extends Construct implements IAuth {
       handler: 'lambda_handler',
       timeout: Duration.seconds(60),
       role: userManagementExecRole,
-      layers: [this.lambdaPowertoolsLayer],
+      layers: [lambdaPowertoolsLayer],
       environment: {
         USER_POOL_ID: this.userPool.userPoolId,
       },
@@ -495,25 +496,23 @@ export class CognitoAuth extends Construct implements IAuth {
         },
       ]
     );
-  }
 
-  createAdminUser(scope: Construct, id: string, props: CreateAdminUserProps) {
-    const createAdminUserFunction = new PythonFunction(scope, `createAdminUserFunction-${id}`, {
+    this.createAdminUserFunction = new PythonFunction(scope, 'createAdminUserFunction', {
       entry: path.join(__dirname, '../../../resources/functions/auth-custom-resource'),
       runtime: Runtime.PYTHON_3_12,
       index: 'index.py',
       handler: 'handler',
       timeout: Duration.seconds(60),
-      layers: [this.lambdaPowertoolsLayer],
+      layers: [lambdaPowertoolsLayer],
     });
     this.userPool.grant(
-      createAdminUserFunction,
+      this.createAdminUserFunction,
       'cognito-idp:AdminCreateUser',
       'cognito-idp:AdminDeleteUser'
     );
 
     NagSuppressions.addResourceSuppressions(
-      createAdminUserFunction.role!,
+      this.createAdminUserFunction.role!,
       [
         {
           id: 'AwsSolutions-IAM4',
@@ -525,9 +524,11 @@ export class CognitoAuth extends Construct implements IAuth {
       ],
       true // applyToChildren = true, so that it applies to policies created for the role.
     );
+  }
 
+  createAdminUser(scope: Construct, id: string, props: CreateAdminUserProps) {
     new CustomResource(scope, `createAdminUserCustomResource-${id}`, {
-      serviceToken: createAdminUserFunction.functionArn,
+      serviceToken: this.createAdminUserFunction.functionArn,
       properties: {
         UserPoolId: this.userPool.userPoolId,
         Name: props.name,
