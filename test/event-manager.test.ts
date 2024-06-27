@@ -187,4 +187,21 @@ describe('EventManager', () => {
     testForRulesInOtherStack(controlPlaneStack);
     testForRulesInOtherStack(eventManagerStack);
   });
+
+  describe('supportedEvents in event-manager', () => {
+    const app = new cdk.App();
+    const eventManagerStack = new cdk.Stack(app, 'EventManagerStack');
+    const eventManager = new EventManager(eventManagerStack, 'EventManager');
+
+    // This ensures that when we try and use supportedEvents to create a rule,
+    // and key-in using a DetailType, a value exists for the source,
+    // which is used in the getOrCreateRule(...) function to create
+    // a new event-manager rule.
+    // (ex. "source: [this.supportedEvents[eventType]]")
+    it('should have values for all DetailType enum entries', () => {
+      Object.values(DetailType).forEach((detailTypeValues) => {
+        expect(eventManager.supportedEvents[detailTypeValues]).toBeDefined();
+      });
+    });
+  });
 });
