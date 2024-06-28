@@ -26,7 +26,6 @@ export interface TenantManagementLambdaProps {
 }
 
 /**
-
 Represents the Tenant Management Lambda construct.
 
 @class TenantManagementLambda
