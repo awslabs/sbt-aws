@@ -10,10 +10,35 @@ import { TenantConfigLambdas } from './tenant-config-funcs';
 import { IRoute, generateRoutes } from '../../utils';
 import { TenantManagementTable } from '../tenant-management/tenant-management.table';
 
+/**
+
+Represents the properties required for the Tenant Config Service.
+
+@interface TenantConfigServiceProps
+
+@property {apigatewayV2.HttpApi} api - The HTTP API used by the Tenant Config Service.
+
+@property {TenantManagementTable} tenantManagementTable - The table used for Tenant Management. */
 export interface TenantConfigServiceProps {
   readonly api: apigatewayV2.HttpApi;
   readonly tenantManagementTable: TenantManagementTable;
 }
+
+/**
+
+Represents the Tenant Config Service construct.
+
+@class TenantConfigService
+
+@extends {Construct}
+
+@param {Construct} scope - The scope in which this construct is defined.
+
+@param {string} id - The construct's identifier.
+
+@param {TenantConfigServiceProps} props - The properties required for the Tenant Config Service.
+
+*/
 export class TenantConfigService extends Construct {
   constructor(scope: Construct, id: string, props: TenantConfigServiceProps) {
     super(scope, id);

@@ -11,6 +11,15 @@ import { TenantManagementTable } from './tenant-management.table';
 import { DetailType, IEventManager, IRoute, generateRoutes } from '../../utils';
 import { IAuth } from '../auth/auth-interface';
 
+/**
+ * Represents the properties required to initialize the TenantManagementService.
+ *
+ * @interface TenantManagementServiceProps
+ * @property {apigatewayV2.HttpApi} api - The HTTP API Gateway instance.
+ * @property {IAuth} auth - The authentication mechanism for the service.
+ * @property {apigatewayV2.IHttpRouteAuthorizer} authorizer - The HTTP route authorizer for the service.
+ * @property {IEventManager} eventManager - The event manager for handling tenant-related events.
+ */
 export interface TenantManagementServiceProps {
   readonly api: apigatewayV2.HttpApi;
   readonly auth: IAuth;
@@ -18,8 +27,27 @@ export interface TenantManagementServiceProps {
   readonly eventManager: IEventManager;
 }
 
+/**
+ * Represents a service for managing tenants in the application.
+ *
+ * @class TenantManagementService
+ * @extends Construct
+ */
 export class TenantManagementService extends Construct {
+  /**
+   * The tenant management table instance.
+   *
+   * @type {TenantManagementTable}
+   */
   table: TenantManagementTable;
+
+  /**
+   * Constructs a new instance of the TenantManagementService.
+   *
+   * @param {Construct} scope - The parent construct.
+   * @param {string} id - The ID of the construct.
+   * @param {TenantManagementServiceProps} props - The properties required to initialize the service.
+   */
   constructor(scope: Construct, id: string, props: TenantManagementServiceProps) {
     super(scope, id);
 

@@ -11,17 +11,50 @@ import { Construct } from 'constructs';
 import { TenantManagementTable } from './tenant-management.table';
 import { DetailType, IEventManager } from '../../utils';
 
-export interface ServicesProps {
+/**
+
+Represents the properties required for the Tenant Management Lambda function.
+
+@interface TenantManagementLambdaProps
+
+@property {TenantManagementTable} table - The table used for Tenant Management.
+
+@property {IEventManager} eventManager - The event manager used for handling events in Tenant Management. */
+export interface TenantManagementLambdaProps {
   readonly table: TenantManagementTable;
   readonly eventManager: IEventManager;
 }
 
+/**
+
+Represents the Tenant Management Lambda construct.
+
+@class TenantManagementLambda
+
+@extends {Construct}
+
+@property {Function} tenantManagementFunc - The Tenant Management Lambda function.
+
+@param {Construct} scope - The scope in which this construct is defined.
+
+@param {string} id - The construct's identifier.
+
+@param {TenantManagementLambdaProps} props - The properties required for the Tenant Management Lambda.
+*/
 export class TenantManagementLambda extends Construct {
   tenantManagementFunc: Function;
 
-  constructor(scope: Construct, id: string, props: ServicesProps) {
+  constructor(scope: Construct, id: string, props: TenantManagementLambdaProps) {
     super(scope, id);
 
+    /**
+     * Creates an IAM role for the Tenant Management Lambda function.
+     * The role is granted read and write access to the Tenant Details table,
+     * and the ability to put events to the Event Manager.
+     * The role is also assigned the AWSLambdaBasicExecutionRole,
+     * CloudWatchLambdaInsightsExecutionRolePolicy, and AWSXrayWriteOnlyAccess
+     * managed policies.
+     */
     const tenantManagementExecRole = new Role(this, 'tenantManagementExecRole', {
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
     });
@@ -68,6 +101,11 @@ export class TenantManagementLambda extends Construct {
       Stack.of(this).region
     }:017000801446:layer:AWSLambdaPowertoolsPythonV2:59`;
 
+    /**
+     * Creates the Tenant Management Lambda function.
+     * The function is configured with the necessary environment variables,
+     * the Tenant Management execution role, and the AWS Lambda Powertools layer.
+     */
     const tenantManagementFunc = new PythonFunction(this, 'TenantManagementServices', {
       entry: path.join(__dirname, '../../../resources/functions/tenant-management'),
       runtime: Runtime.PYTHON_3_12,

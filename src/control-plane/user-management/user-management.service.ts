@@ -7,13 +7,34 @@ import { Construct } from 'constructs';
 import { IAuth } from '..';
 import { IRoute, generateRoutes } from '../../utils';
 
+/**
+ * Represents the properties required to initialize the UserManagementService.
+ *
+ * @interface UserManagementServiceProps
+ * @property {apigatewayV2.HttpApi} api - The HTTP API Gateway instance.
+ * @property {IAuth} auth - The authentication mechanism for the service.
+ * @property {apigatewayV2.IHttpRouteAuthorizer} jwtAuthorizer - The JWT authorizer for the service.
+ */
 export interface UserManagementServiceProps {
   readonly api: apigatewayV2.HttpApi;
   readonly auth: IAuth;
   readonly jwtAuthorizer: apigatewayV2.IHttpRouteAuthorizer;
 }
 
+/**
+ * Represents a service for managing users in the application.
+ *
+ * @class UserManagementService
+ * @extends Construct
+ */
 export class UserManagementService extends Construct {
+  /**
+   * Constructs a new instance of the UserManagementService.
+   *
+   * @param {Construct} scope - The parent construct.
+   * @param {string} id - The ID of the construct.
+   * @param {UserManagementServiceProps} props - The properties required to initialize the service.
+   */
   constructor(scope: Construct, id: string, props: UserManagementServiceProps) {
     super(scope, id);
 
