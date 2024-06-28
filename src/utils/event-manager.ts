@@ -250,6 +250,8 @@ export class EventManager extends Construct implements IEventManager {
       deactivateRequest: this.controlPlaneEventSource,
       deactivateSuccess: this.applicationPlaneEventSource,
       deactivateFailure: this.applicationPlaneEventSource,
+      tenantUserCreated: this.controlPlaneEventSource,
+      tenantUserDeleted: this.controlPlaneEventSource,
     };
 
     for (const key in this.supportedEvents) {

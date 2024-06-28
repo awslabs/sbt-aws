@@ -81,11 +81,7 @@ export class ControlPlane extends Construct {
 
     cdk.Aspects.of(this).add(new DestroyPolicySetter());
 
-    const auth =
-      props.auth ||
-      new CognitoAuth(this, 'CognitoAuth', {
-        setAPIGWScopes: false,
-      });
+    const auth = props.auth || new CognitoAuth(this, 'CognitoAuth');
 
     auth.createAdminUser(this, 'adminUser', {
       name: systemAdminName,
