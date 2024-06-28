@@ -1,13 +1,16 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
+
+import * as apigatewayV2 from 'aws-cdk-lib/aws-apigatewayv2';
+import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
 import { Construct } from 'constructs';
 import { IAuth } from '..';
-import * as apigatewayV2 from 'aws-cdk-lib/aws-apigatewayv2';
-import { Route, generateRoutes } from '../../utils';
-import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
+import { IRoute, generateRoutes } from '../../utils';
 
 export interface UserManagementServiceProps {
-  api: apigatewayV2.HttpApi;
-  auth: IAuth;
-  jwtAuthorizer: apigatewayV2.IHttpRouteAuthorizer;
+  readonly api: apigatewayV2.HttpApi;
+  readonly auth: IAuth;
+  readonly jwtAuthorizer: apigatewayV2.IHttpRouteAuthorizer;
 }
 
 export class UserManagementService extends Construct {
@@ -16,7 +19,7 @@ export class UserManagementService extends Construct {
 
     const usersPath = '/users';
     const userIdPath = `${usersPath}/{userId}`;
-    const routes: Route[] = [
+    const routes: IRoute[] = [
       {
         method: apigatewayV2.HttpMethod.POST,
         scope: props.auth.createUserScope,
@@ -36,7 +39,7 @@ export class UserManagementService extends Construct {
         ),
       },
       {
-        method: apigatewayV2.HttpMethod.POST,
+        method: apigatewayV2.HttpMethod.GET,
         scope: props.auth.fetchUserScope,
         path: userIdPath,
         integration: new HttpLambdaIntegration(
@@ -45,7 +48,7 @@ export class UserManagementService extends Construct {
         ),
       },
       {
-        method: apigatewayV2.HttpMethod.POST,
+        method: apigatewayV2.HttpMethod.PUT,
         scope: props.auth.updateUserScope,
         path: userIdPath,
         integration: new HttpLambdaIntegration(
@@ -54,7 +57,7 @@ export class UserManagementService extends Construct {
         ),
       },
       {
-        method: apigatewayV2.HttpMethod.POST,
+        method: apigatewayV2.HttpMethod.DELETE,
         scope: props.auth.deleteUserScope,
         path: userIdPath,
         integration: new HttpLambdaIntegration(

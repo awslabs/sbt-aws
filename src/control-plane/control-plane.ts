@@ -6,15 +6,12 @@ import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IAuth } from './auth/auth-interface';
 import { CognitoAuth } from './auth/cognito-auth';
-import { IBilling, BillingProvider } from './billing';
+import { BillingProvider, IBilling } from './billing';
 import { ControlPlaneAPI } from './control-plane-api';
-// import { Services } from './services';
-// import { Tables } from './tables';
-// import { TenantConfigLambdas } from './tenant-config/tenant-config-service';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
 import { addTemplateTag, EventManager, IEventManager } from '../utils';
-import { TenantManagementService } from './tenant-management/tenant-management.service';
 import { TenantConfigService } from './tenant-config/tenant-config.service';
+import { TenantManagementService } from './tenant-management/tenant-management.service';
 import { UserManagementService } from './user-management/user-management.service';
 
 export interface ControlPlaneProps {
@@ -125,23 +122,6 @@ export class ControlPlane extends Construct {
     });
 
     this.controlPlaneAPIGatewayUrl = api.apiUrl;
-
-    // eventManager.addTargetToEvent(
-    //   this,
-    //   DetailType.PROVISION_SUCCESS,
-    //   api.tenantUpdateServiceTarget
-    // );
-
-    // eventManager.addTargetToEvent(
-    //   this,
-    //   DetailType.DEPROVISION_SUCCESS,
-    //   controlPlaneAPI.tenantUpdateServiceTarget
-    // );
-
-    // new cdk.CfnOutput(this, 'controlPlaneAPIGatewayUrl', {
-    //   value: controlPlaneAPI.apiUrl,
-    //   key: 'controlPlaneAPIGatewayUrl',
-    // });
 
     new cdk.CfnOutput(this, 'eventBridgeArn', {
       value: eventManager.busArn,

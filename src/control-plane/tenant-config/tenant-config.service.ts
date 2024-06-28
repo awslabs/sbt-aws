@@ -1,15 +1,18 @@
-import { Construct } from 'constructs';
-import * as apigatewayV2 from 'aws-cdk-lib/aws-apigatewayv2';
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as cdk from 'aws-cdk-lib';
-import { Route, generateRoutes } from '../../utils';
+import * as apigatewayV2 from 'aws-cdk-lib/aws-apigatewayv2';
 import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
-import { TenantConfigLambdas } from './tenant-config.lambda';
-import { TenantManagementTable } from '../tenant-management/tenant-management.table';
 import { NagSuppressions } from 'cdk-nag';
+import { Construct } from 'constructs';
+import { IRoute, generateRoutes } from '../../utils';
+import { TenantManagementTable } from '../tenant-management/tenant-management.table';
+import { TenantConfigLambdas } from './tenant-config-funcs';
 
 export interface TenantConfigServiceProps {
-  api: apigatewayV2.HttpApi;
-  tenantManagementTable: TenantManagementTable;
+  readonly api: apigatewayV2.HttpApi;
+  readonly tenantManagementTable: TenantManagementTable;
 }
 export class TenantConfigService extends Construct {
   constructor(scope: Construct, id: string, props: TenantConfigServiceProps) {
@@ -27,7 +30,7 @@ export class TenantConfigService extends Construct {
       'tenantConfigServiceHttpLambdaIntegration',
       tenantConfigLambda.tenantConfigFunction
     );
-    const routes: Route[] = [
+    const routes: IRoute[] = [
       {
         path: tenantConfigPath,
         integration: tenantConfigServiceHttpLambdaIntegration,

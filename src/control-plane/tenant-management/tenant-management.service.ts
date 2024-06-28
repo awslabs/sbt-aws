@@ -1,16 +1,21 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as apigatewayV2 from 'aws-cdk-lib/aws-apigatewayv2';
-import { Construct } from 'constructs';
-import { IEventManager, Route, generateRoutes } from '../../utils';
-import { TenantManagementLambda } from './tenant-management.lambda';
-import { TenantManagementTable } from './tenant-management.table';
+import * as events from 'aws-cdk-lib/aws-events';
 import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
+import { Construct } from 'constructs';
+import { DetailType, IEventManager, IRoute, generateRoutes } from '../../utils';
 import { IAuth } from '../auth/auth-interface';
+import { TenantManagementLambda } from './tenant-management-funcs';
+import { TenantManagementTable } from './tenant-management.table';
+import { ApiDestination } from 'aws-cdk-lib/aws-events-targets';
 
 export interface TenantManagementServiceProps {
-  api: apigatewayV2.HttpApi;
-  auth: IAuth;
-  authorizer: apigatewayV2.IHttpRouteAuthorizer;
-  eventManager: IEventManager;
+  readonly api: apigatewayV2.HttpApi;
+  readonly auth: IAuth;
+  readonly authorizer: apigatewayV2.IHttpRouteAuthorizer;
+  readonly eventManager: IEventManager;
 }
 
 export class TenantManagementService extends Construct {
@@ -26,12 +31,12 @@ export class TenantManagementService extends Construct {
 
     const tenantsHttpLambdaIntegration = new HttpLambdaIntegration(
       'tenantsHttpLambdaIntegration',
-      lambda.tenantManagementFunction
+      lambda.tenantManagementFunc
     );
     const tenantsPath = '/tenants';
     const tenantIdPath = `${tenantsPath}/{tenantId}`;
 
-    const routes: Route[] = [
+    const routes: IRoute[] = [
       {
         method: apigatewayV2.HttpMethod.GET,
         scope: props.auth.fetchAllTenantsScope,
@@ -75,8 +80,50 @@ export class TenantManagementService extends Construct {
         integration: tenantsHttpLambdaIntegration,
       },
     ];
-
     generateRoutes(props.api, routes, props.authorizer);
+
+    const connection = new events.Connection(this, 'connection', {
+      authorization: events.Authorization.oauth({
+        authorizationEndpoint: props.auth.tokenEndpoint,
+        clientId: props.auth.machineClientId,
+        clientSecret: props.auth.machineClientSecret,
+        httpMethod: events.HttpMethod.POST,
+        bodyParameters: {
+          grant_type: events.HttpParameter.fromString('client_credentials'),
+          ...(props.auth.updateTenantScope && {
+            scope: events.HttpParameter.fromString(props.auth.updateTenantScope),
+          }),
+        },
+      }),
+    });
+
+    const putTenantAPIDestination = new events.ApiDestination(this, 'destination', {
+      connection: connection,
+      httpMethod: events.HttpMethod.PUT,
+      endpoint: `${props.api.url}${tenantsPath.substring(1)}/*`, // skip the first '/' in tenantIdPath
+    });
+
+    const tenantUpdateServiceTarget = new ApiDestination(putTenantAPIDestination, {
+      pathParameterValues: ['$.detail.tenantId'],
+      event: events.RuleTargetInput.fromEventPath('$.detail.tenantOutput'),
+    });
+
+    props.eventManager.addTargetToEvent(
+      this,
+      DetailType.PROVISION_SUCCESS,
+      tenantUpdateServiceTarget
+    );
+
+    props.eventManager.addTargetToEvent(
+      this,
+      DetailType.DEPROVISION_SUCCESS,
+      tenantUpdateServiceTarget
+    );
+
+    // new cdk.CfnOutput(this, 'controlPlaneAPIGatewayUrl', {
+    //   value: controlPlaneAPI.apiUrl,
+    //   key: 'controlPlaneAPIGatewayUrl',
+    // });
     this.table = table;
   }
 }

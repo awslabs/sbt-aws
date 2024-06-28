@@ -5,12 +5,11 @@ import * as cdk from 'aws-cdk-lib';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as apigatewayV2 from 'aws-cdk-lib/aws-apigatewayv2';
 import * as apigatewayV2Authorizers from 'aws-cdk-lib/aws-apigatewayv2-authorizers';
-import { Function } from 'aws-cdk-lib/aws-lambda';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
-import { IAuth } from './auth/auth-interface';
 import { addTemplateTag } from '../utils';
+import { IAuth } from './auth/auth-interface';
 
 export interface ControlPlaneAPIProps {
   readonly auth: IAuth;
@@ -78,31 +77,5 @@ export class ControlPlaneAPI extends Construct {
         jwtAudience: props.auth.jwtAudience,
       }
     );
-
-    // const connection = new events.Connection(this, 'connection', {
-    //   authorization: events.Authorization.oauth({
-    //     authorizationEndpoint: props.auth.tokenEndpoint,
-    //     clientId: props.auth.machineClientId,
-    //     clientSecret: props.auth.machineClientSecret,
-    //     httpMethod: events.HttpMethod.POST,
-    //     bodyParameters: {
-    //       grant_type: events.HttpParameter.fromString('client_credentials'),
-    //       ...(props.auth.updateTenantScope && {
-    //         scope: events.HttpParameter.fromString(props.auth.updateTenantScope),
-    //       }),
-    //     },
-    //   }),
-    // });
-
-    // const putTenantAPIDestination = new events.ApiDestination(this, 'destination', {
-    //   connection: connection,
-    //   httpMethod: events.HttpMethod.PUT,
-    //   endpoint: `${this.api.url}${tenantsPath.substring(1)}/*`, // skip the first '/' in tenantIdPath
-    // });
-
-    // this.tenantUpdateServiceTarget = new targets.ApiDestination(putTenantAPIDestination, {
-    //   pathParameterValues: ['$.detail.tenantId'],
-    //   event: events.RuleTargetInput.fromEventPath('$.detail.tenantOutput'),
-    // });
   }
 }

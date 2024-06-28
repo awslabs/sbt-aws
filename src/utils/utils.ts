@@ -75,15 +75,15 @@ export const conditionallyAddScope = (unknownScope?: string) => {
   return [];
 };
 
-export interface Route {
-  method: apigatewayV2.HttpMethod;
-  scope?: string;
-  path: string;
-  integration: apigatewayV2.HttpRouteIntegration;
+export interface IRoute {
+  readonly method: apigatewayV2.HttpMethod;
+  readonly scope?: string;
+  readonly path: string;
+  readonly integration: apigatewayV2.HttpRouteIntegration;
 }
 export const generateRoutes = (
   api: apigatewayV2.HttpApi,
-  routes: Route[],
+  routes: IRoute[],
   authorizer?: apigatewayV2.IHttpRouteAuthorizer
 ) => {
   let allRoutes: apigatewayV2.HttpRoute[] = [];
