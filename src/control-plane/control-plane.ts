@@ -7,12 +7,12 @@ import { Construct } from 'constructs';
 import { IAuth } from './auth/auth-interface';
 import { CognitoAuth } from './auth/cognito-auth';
 import { BillingProvider, IBilling } from './billing';
-import { ControlPlaneAPI } from './control-plane-api';
-import { TenantConfigService } from './tenant-config/tenant-config.service';
 import { TenantManagementService } from './tenant-management/tenant-management.service';
 import { UserManagementService } from './user-management/user-management.service';
+import { APICorsConfig, ControlPlaneAPI } from './control-plane-api';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
 import { addTemplateTag, EventManager, IEventManager } from '../utils';
+import { TenantConfigService } from './tenant-config';
 
 export interface ControlPlaneProps {
   /**
@@ -53,6 +53,11 @@ export interface ControlPlaneProps {
    * @default false
    */
   readonly disableAPILogging?: boolean;
+
+  /**
+   * Settings for the Cors Configuration for the ControlPlane API.
+   */
+  readonly apiCorsConfig?: APICorsConfig;
 }
 
 export class ControlPlane extends Construct {
@@ -87,6 +92,7 @@ export class ControlPlane extends Construct {
     const api = new ControlPlaneAPI(this, 'controlPlaneApi', {
       auth,
       disableAPILogging: props.disableAPILogging,
+      apiCorsConfig: props.apiCorsConfig,
     });
 
     const eventManager = props.eventManager ?? new EventManager(this, 'EventManager');

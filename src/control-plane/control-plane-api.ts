@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as cdk from 'aws-cdk-lib';
-import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as apigatewayV2 from 'aws-cdk-lib/aws-apigatewayv2';
 import * as apigatewayV2Authorizers from 'aws-cdk-lib/aws-apigatewayv2-authorizers';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
@@ -11,9 +10,19 @@ import { Construct } from 'constructs';
 import { IAuth } from './auth/auth-interface';
 import { addTemplateTag } from '../utils';
 
+export interface APICorsConfig {
+  readonly allowOrigins?: string[];
+  readonly allowCredentials?: boolean;
+  readonly allowHeaders?: string[];
+  readonly allowMethods?: apigatewayV2.CorsHttpMethod[];
+  readonly maxAge?: cdk.Duration;
+  readonly exposeHeaders?: string[];
+}
+
 export interface ControlPlaneAPIProps {
   readonly auth: IAuth;
   readonly disableAPILogging?: boolean;
+  readonly apiCorsConfig?: APICorsConfig;
 }
 
 export class ControlPlaneAPI extends Construct {
@@ -24,9 +33,7 @@ export class ControlPlaneAPI extends Construct {
     super(scope, id);
     addTemplateTag(this, 'ControlPlaneAPI');
     this.api = new apigatewayV2.HttpApi(this, 'controlPlaneAPI', {
-      corsPreflight: {
-        allowOrigins: apigateway.Cors.ALL_ORIGINS,
-      },
+      corsPreflight: props.apiCorsConfig,
     });
 
     if (props.disableAPILogging) {
