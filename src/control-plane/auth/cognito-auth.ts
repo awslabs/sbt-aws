@@ -394,6 +394,7 @@ export class CognitoAuth extends Construct implements IAuth {
     ];
     this.tokenEndpoint = `https://${userPoolDomain.domainName}.auth.${region}.amazoncognito.com/oauth2/token`;
 
+    // TODO: The caller should be surfacing these, not the implementor
     new cdk.CfnOutput(this, 'ControlPlaneIdpUserPoolId', {
       value: this.userPool.userPoolId,
       key: 'ControlPlaneIdpUserPoolId',

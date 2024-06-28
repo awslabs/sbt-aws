@@ -3,6 +3,7 @@
 
 import { Stack } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
+import * as apigatewayV2 from 'aws-cdk-lib/aws-apigatewayv2';
 
 export const addTemplateTag = (construct: Construct, tag: string) => {
   const stackDesc = Stack.of(construct).templateOptions.description;
@@ -72,4 +73,31 @@ export const conditionallyAddScope = (unknownScope?: string) => {
     return [unknownScope];
   }
   return [];
+};
+
+export interface Route {
+  method: apigatewayV2.HttpMethod;
+  scope?: string;
+  path: string;
+  integration: apigatewayV2.HttpRouteIntegration;
+}
+export const generateRoutes = (
+  api: apigatewayV2.HttpApi,
+  routes: Route[],
+  authorizer?: apigatewayV2.IHttpRouteAuthorizer
+) => {
+  let allRoutes: apigatewayV2.HttpRoute[] = [];
+  routes.forEach((route) => {
+    allRoutes = [
+      ...api.addRoutes({
+        path: route.path,
+        methods: [route.method],
+        integration: route.integration,
+        authorizer: authorizer,
+        authorizationScopes: conditionallyAddScope(route.scope),
+      }),
+      ...allRoutes,
+    ];
+  });
+  return allRoutes;
 };

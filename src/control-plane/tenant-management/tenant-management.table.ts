@@ -3,9 +3,9 @@
 
 import { Table, AttributeType, ProjectionType } from 'aws-cdk-lib/aws-dynamodb';
 import { Construct } from 'constructs';
-import { addTemplateTag } from '../utils';
+import { addTemplateTag } from '../../utils';
 
-export class Tables extends Construct {
+export class TenantManagementTable extends Construct {
   public readonly tenantDetails: Table;
   public readonly tenantConfigIndexName: string = 'tenantConfigIndex';
 

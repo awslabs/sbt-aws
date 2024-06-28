@@ -17,8 +17,8 @@ export interface TenantConfigServiceProps {
   readonly tenantDetailsTenantConfigColumn: string;
 }
 
-export class TenantConfigService extends Construct {
-  public readonly tenantConfigServiceLambda: lambda.Function;
+export class TenantConfigLambdas extends Construct {
+  public readonly tenantConfigFunction: lambda.Function;
   constructor(scope: Construct, id: string, props: TenantConfigServiceProps) {
     super(scope, id);
     addTemplateTag(this, 'TenantConfigService');
@@ -28,7 +28,7 @@ export class TenantConfigService extends Construct {
       cdk.Stack.of(this).region
     }:017000801446:layer:AWSLambdaPowertoolsPythonV2:59`;
 
-    this.tenantConfigServiceLambda = new lambda_python.PythonFunction(
+    this.tenantConfigFunction = new lambda_python.PythonFunction(
       this,
       'TenantConfigServiceLambda',
       {
@@ -56,10 +56,10 @@ export class TenantConfigService extends Construct {
       }
     );
 
-    props.tenantDetails.grantReadData(this.tenantConfigServiceLambda);
+    props.tenantDetails.grantReadData(this.tenantConfigFunction);
 
     NagSuppressions.addResourceSuppressions(
-      this.tenantConfigServiceLambda.role!,
+      this.tenantConfigFunction.role!,
       [
         {
           id: 'AwsSolutions-IAM4',

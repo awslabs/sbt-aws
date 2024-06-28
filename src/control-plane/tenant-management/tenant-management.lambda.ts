@@ -8,16 +8,16 @@ import { Role, ServicePrincipal, ManagedPolicy } from 'aws-cdk-lib/aws-iam';
 import { Runtime, LayerVersion, Function } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
-import { Tables } from './tables';
-import { DetailType, IEventManager } from '../utils';
+import { DetailType, IEventManager } from '../../utils';
+import { TenantManagementTable } from './tenant-management.table';
 
 export interface ServicesProps {
-  readonly tables: Tables;
+  readonly table: TenantManagementTable;
   readonly eventManager: IEventManager;
 }
 
-export class Services extends Construct {
-  tenantManagementServices: Function;
+export class TenantManagementLambda extends Construct {
+  tenantManagementFunction: Function;
 
   constructor(scope: Construct, id: string, props: ServicesProps) {
     super(scope, id);
@@ -26,7 +26,7 @@ export class Services extends Construct {
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
     });
 
-    props.tables.tenantDetails.grantReadWriteData(tenantManagementExecRole);
+    props.table.tenantDetails.grantReadWriteData(tenantManagementExecRole);
     props.eventManager.grantPutEventsTo(tenantManagementExecRole);
 
     tenantManagementExecRole.addManagedPolicy(
@@ -66,7 +66,7 @@ export class Services extends Construct {
       Stack.of(this).region
     }:017000801446:layer:AWSLambdaPowertoolsPythonV2:59`;
 
-    const tenantManagementServices = new PythonFunction(this, 'TenantManagementServices', {
+    const tenantManagementFunc = new PythonFunction(this, 'TenantManagementServices', {
       entry: path.join(__dirname, '../../resources/functions/tenant-management'),
       runtime: Runtime.PYTHON_3_12,
       index: 'index.py',
@@ -79,7 +79,7 @@ export class Services extends Construct {
       environment: {
         EVENTBUS_NAME: props.eventManager.busName,
         EVENT_SOURCE: props.eventManager.controlPlaneEventSource,
-        TENANT_DETAILS_TABLE: props.tables.tenantDetails.tableName,
+        TENANT_DETAILS_TABLE: props.table.tenantDetails.tableName,
         ONBOARDING_DETAIL_TYPE: DetailType.ONBOARDING_REQUEST,
         OFFBOARDING_DETAIL_TYPE: DetailType.OFFBOARDING_REQUEST,
         ACTIVATE_DETAIL_TYPE: DetailType.ACTIVATE_REQUEST,
@@ -87,6 +87,6 @@ export class Services extends Construct {
       },
     });
 
-    this.tenantManagementServices = tenantManagementServices;
+    this.tenantManagementFunction = tenantManagementFunc;
   }
 }
