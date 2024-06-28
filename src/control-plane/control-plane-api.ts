@@ -245,7 +245,7 @@ export class ControlPlaneAPI extends Construct {
       path: `${tenantIdPath}/enable`,
       methods: [apigatewayV2.HttpMethod.PUT],
       integration: new apigatewayV2Integrations.HttpLambdaIntegration(
-        'tenableUserFunctionLambdaIntegration',
+        'enableUserFunctionLambdaIntegration',
         props.auth.enableUserFunction
       ),
       authorizer: jwtAuthorizer,
