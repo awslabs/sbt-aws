@@ -6,9 +6,9 @@ import * as apigatewayV2 from 'aws-cdk-lib/aws-apigatewayv2';
 import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
+import { TenantConfigLambdas } from './tenant-config-funcs';
 import { IRoute, generateRoutes } from '../../utils';
 import { TenantManagementTable } from '../tenant-management/tenant-management.table';
-import { TenantConfigLambdas } from './tenant-config-funcs';
 
 export interface TenantConfigServiceProps {
   readonly api: apigatewayV2.HttpApi;

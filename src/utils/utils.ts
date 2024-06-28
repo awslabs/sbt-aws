@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Stack } from 'aws-cdk-lib';
-import { Construct } from 'constructs';
 import * as apigatewayV2 from 'aws-cdk-lib/aws-apigatewayv2';
+import { Construct } from 'constructs';
 
 export const addTemplateTag = (construct: Construct, tag: string) => {
   const stackDesc = Stack.of(construct).templateOptions.description;

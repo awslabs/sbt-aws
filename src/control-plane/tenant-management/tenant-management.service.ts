@@ -2,14 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as apigatewayV2 from 'aws-cdk-lib/aws-apigatewayv2';
-import * as events from 'aws-cdk-lib/aws-events';
 import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
+import * as events from 'aws-cdk-lib/aws-events';
+import { ApiDestination } from 'aws-cdk-lib/aws-events-targets';
 import { Construct } from 'constructs';
-import { DetailType, IEventManager, IRoute, generateRoutes } from '../../utils';
-import { IAuth } from '../auth/auth-interface';
 import { TenantManagementLambda } from './tenant-management-funcs';
 import { TenantManagementTable } from './tenant-management.table';
-import { ApiDestination } from 'aws-cdk-lib/aws-events-targets';
+import { DetailType, IEventManager, IRoute, generateRoutes } from '../../utils';
+import { IAuth } from '../auth/auth-interface';
 
 export interface TenantManagementServiceProps {
   readonly api: apigatewayV2.HttpApi;

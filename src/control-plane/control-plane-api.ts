@@ -8,8 +8,8 @@ import * as apigatewayV2Authorizers from 'aws-cdk-lib/aws-apigatewayv2-authorize
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
-import { addTemplateTag } from '../utils';
 import { IAuth } from './auth/auth-interface';
+import { addTemplateTag } from '../utils';
 
 export interface ControlPlaneAPIProps {
   readonly auth: IAuth;
