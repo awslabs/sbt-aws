@@ -1177,7 +1177,6 @@ Any object.
 | <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.controlPlaneAPIGatewayUrl">controlPlaneAPIGatewayUrl</a></code> | <code>string</code> | The URL of the control plane API Gateway. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | The EventManager instance that allows connecting to events flowing between the Control Plane and other components. |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlane.property.tables">tables</a></code> | <code><a href="#@cdklabs/sbt-aws.Tables">Tables</a></code> | The Tables instance containing the DynamoDB tables for tenant data and configurations. |
 
 ---
 
@@ -1214,18 +1213,6 @@ public readonly eventManager: IEventManager;
 - *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
 
 The EventManager instance that allows connecting to events flowing between the Control Plane and other components.
-
----
-
-##### `tables`<sup>Required</sup> <a name="tables" id="@cdklabs/sbt-aws.ControlPlane.property.tables"></a>
-
-```typescript
-public readonly tables: Tables;
-```
-
-- *Type:* <a href="#@cdklabs/sbt-aws.Tables">Tables</a>
-
-The Tables instance containing the DynamoDB tables for tenant data and configurations.
 
 ---
 
@@ -1314,8 +1301,8 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.api">api</a></code> | <code>aws-cdk-lib.aws_apigatewayv2.HttpApi</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.tenantUpdateServiceTarget">tenantUpdateServiceTarget</a></code> | <code>aws-cdk-lib.aws_events.IRuleTarget</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.apiUrl">apiUrl</a></code> | <code>any</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI.property.jwtAuthorizer">jwtAuthorizer</a></code> | <code>aws-cdk-lib.aws_apigatewayv2.IHttpRouteAuthorizer</code> | *No description.* |
 
 ---
 
@@ -1341,16 +1328,6 @@ public readonly api: HttpApi;
 
 ---
 
-##### `tenantUpdateServiceTarget`<sup>Required</sup> <a name="tenantUpdateServiceTarget" id="@cdklabs/sbt-aws.ControlPlaneAPI.property.tenantUpdateServiceTarget"></a>
-
-```typescript
-public readonly tenantUpdateServiceTarget: IRuleTarget;
-```
-
-- *Type:* aws-cdk-lib.aws_events.IRuleTarget
-
----
-
 ##### `apiUrl`<sup>Required</sup> <a name="apiUrl" id="@cdklabs/sbt-aws.ControlPlaneAPI.property.apiUrl"></a>
 
 ```typescript
@@ -1358,6 +1335,16 @@ public readonly apiUrl: any;
 ```
 
 - *Type:* any
+
+---
+
+##### `jwtAuthorizer`<sup>Required</sup> <a name="jwtAuthorizer" id="@cdklabs/sbt-aws.ControlPlaneAPI.property.jwtAuthorizer"></a>
+
+```typescript
+public readonly jwtAuthorizer: IHttpRouteAuthorizer;
+```
+
+- *Type:* aws-cdk-lib.aws_apigatewayv2.IHttpRouteAuthorizer
 
 ---
 
@@ -1974,39 +1961,47 @@ The tree node.
 ---
 
 
-### Services <a name="Services" id="@cdklabs/sbt-aws.Services"></a>
+### TenantConfigLambdas <a name="TenantConfigLambdas" id="@cdklabs/sbt-aws.TenantConfigLambdas"></a>
 
-#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.Services.Initializer"></a>
+Represents a set of Lambda functions for managing tenant configurations.
+
+#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.TenantConfigLambdas.Initializer"></a>
 
 ```typescript
-import { Services } from '@cdklabs/sbt-aws'
+import { TenantConfigLambdas } from '@cdklabs/sbt-aws'
 
-new Services(scope: Construct, id: string, props: ServicesProps)
+new TenantConfigLambdas(scope: Construct, id: string, props: TenantConfigLambdasProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.Services.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Services.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Services.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.ServicesProps">ServicesProps</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantConfigLambdas.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | - The parent construct. |
+| <code><a href="#@cdklabs/sbt-aws.TenantConfigLambdas.Initializer.parameter.id">id</a></code> | <code>string</code> | - The ID of the construct. |
+| <code><a href="#@cdklabs/sbt-aws.TenantConfigLambdas.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.TenantConfigLambdasProps">TenantConfigLambdasProps</a></code> | - The properties required to initialize the TenantConfigLambdas. |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.Services.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.TenantConfigLambdas.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
+The parent construct.
+
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.Services.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.TenantConfigLambdas.Initializer.parameter.id"></a>
 
 - *Type:* string
 
+The ID of the construct.
+
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.Services.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.TenantConfigLambdas.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#@cdklabs/sbt-aws.ServicesProps">ServicesProps</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.TenantConfigLambdasProps">TenantConfigLambdasProps</a>
+
+The properties required to initialize the TenantConfigLambdas.
 
 ---
 
@@ -2014,11 +2009,11 @@ new Services(scope: Construct, id: string, props: ServicesProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.Services.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@cdklabs/sbt-aws.TenantConfigLambdas.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
 
-##### `toString` <a name="toString" id="@cdklabs/sbt-aws.Services.toString"></a>
+##### `toString` <a name="toString" id="@cdklabs/sbt-aws.TenantConfigLambdas.toString"></a>
 
 ```typescript
 public toString(): string
@@ -2030,21 +2025,21 @@ Returns a string representation of this construct.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.Services.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@cdklabs/sbt-aws.TenantConfigLambdas.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.Services.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.TenantConfigLambdas.isConstruct"></a>
 
 ```typescript
-import { Services } from '@cdklabs/sbt-aws'
+import { TenantConfigLambdas } from '@cdklabs/sbt-aws'
 
-Services.isConstruct(x: any)
+TenantConfigLambdas.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.Services.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.TenantConfigLambdas.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -2056,12 +2051,12 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.Services.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.Services.property.tenantManagementServices">tenantManagementServices</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantConfigLambdas.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@cdklabs/sbt-aws.TenantConfigLambdas.property.tenantConfigFunction">tenantConfigFunction</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | The Lambda function responsible for managing tenant configurations. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.Services.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.TenantConfigLambdas.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -2073,165 +2068,22 @@ The tree node.
 
 ---
 
-##### `tenantManagementServices`<sup>Required</sup> <a name="tenantManagementServices" id="@cdklabs/sbt-aws.Services.property.tenantManagementServices"></a>
+##### `tenantConfigFunction`<sup>Required</sup> <a name="tenantConfigFunction" id="@cdklabs/sbt-aws.TenantConfigLambdas.property.tenantConfigFunction"></a>
 
 ```typescript
-public readonly tenantManagementServices: Function;
+public readonly tenantConfigFunction: Function;
 ```
 
 - *Type:* aws-cdk-lib.aws_lambda.Function
 
----
-
-
-### Tables <a name="Tables" id="@cdklabs/sbt-aws.Tables"></a>
-
-#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.Tables.Initializer"></a>
-
-```typescript
-import { Tables } from '@cdklabs/sbt-aws'
-
-new Tables(scope: Construct, id: string)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.Tables.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tables.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-
----
-
-##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.Tables.Initializer.parameter.scope"></a>
-
-- *Type:* constructs.Construct
-
----
-
-##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.Tables.Initializer.parameter.id"></a>
-
-- *Type:* string
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.Tables.toString">toString</a></code> | Returns a string representation of this construct. |
-
----
-
-##### `toString` <a name="toString" id="@cdklabs/sbt-aws.Tables.toString"></a>
-
-```typescript
-public toString(): string
-```
-
-Returns a string representation of this construct.
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.Tables.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
-
----
-
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.Tables.isConstruct"></a>
-
-```typescript
-import { Tables } from '@cdklabs/sbt-aws'
-
-Tables.isConstruct(x: any)
-```
-
-Checks if `x` is a construct.
-
-###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.Tables.isConstruct.parameter.x"></a>
-
-- *Type:* any
-
-Any object.
-
----
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.Tables.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.Tables.property.tenantConfigColumn">tenantConfigColumn</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tables.property.tenantConfigIndexName">tenantConfigIndexName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tables.property.tenantDetails">tenantDetails</a></code> | <code>aws-cdk-lib.aws_dynamodb.Table</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tables.property.tenantIdColumn">tenantIdColumn</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tables.property.tenantNameColumn">tenantNameColumn</a></code> | <code>string</code> | *No description.* |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.Tables.property.node"></a>
-
-```typescript
-public readonly node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `tenantConfigColumn`<sup>Required</sup> <a name="tenantConfigColumn" id="@cdklabs/sbt-aws.Tables.property.tenantConfigColumn"></a>
-
-```typescript
-public readonly tenantConfigColumn: string;
-```
-
-- *Type:* string
-
----
-
-##### `tenantConfigIndexName`<sup>Required</sup> <a name="tenantConfigIndexName" id="@cdklabs/sbt-aws.Tables.property.tenantConfigIndexName"></a>
-
-```typescript
-public readonly tenantConfigIndexName: string;
-```
-
-- *Type:* string
-
----
-
-##### `tenantDetails`<sup>Required</sup> <a name="tenantDetails" id="@cdklabs/sbt-aws.Tables.property.tenantDetails"></a>
-
-```typescript
-public readonly tenantDetails: Table;
-```
-
-- *Type:* aws-cdk-lib.aws_dynamodb.Table
-
----
-
-##### `tenantIdColumn`<sup>Required</sup> <a name="tenantIdColumn" id="@cdklabs/sbt-aws.Tables.property.tenantIdColumn"></a>
-
-```typescript
-public readonly tenantIdColumn: string;
-```
-
-- *Type:* string
-
----
-
-##### `tenantNameColumn`<sup>Required</sup> <a name="tenantNameColumn" id="@cdklabs/sbt-aws.Tables.property.tenantNameColumn"></a>
-
-```typescript
-public readonly tenantNameColumn: string;
-```
-
-- *Type:* string
+The Lambda function responsible for managing tenant configurations.
 
 ---
 
 
 ### TenantConfigService <a name="TenantConfigService" id="@cdklabs/sbt-aws.TenantConfigService"></a>
+
+Represents the Tenant Config Service construct.
 
 #### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.TenantConfigService.Initializer"></a>
 
@@ -2314,7 +2166,6 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.TenantConfigService.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.TenantConfigService.property.tenantConfigServiceLambda">tenantConfigServiceLambda</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
 
 ---
 
@@ -2330,13 +2181,505 @@ The tree node.
 
 ---
 
-##### `tenantConfigServiceLambda`<sup>Required</sup> <a name="tenantConfigServiceLambda" id="@cdklabs/sbt-aws.TenantConfigService.property.tenantConfigServiceLambda"></a>
+
+### TenantManagementLambda <a name="TenantManagementLambda" id="@cdklabs/sbt-aws.TenantManagementLambda"></a>
+
+Represents the Tenant Management Lambda construct.
+
+#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.TenantManagementLambda.Initializer"></a>
 
 ```typescript
-public readonly tenantConfigServiceLambda: Function;
+import { TenantManagementLambda } from '@cdklabs/sbt-aws'
+
+new TenantManagementLambda(scope: Construct, id: string, props: TenantManagementLambdaProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementLambda.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementLambda.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementLambda.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.TenantManagementLambdaProps">TenantManagementLambdaProps</a></code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.TenantManagementLambda.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.TenantManagementLambda.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.TenantManagementLambda.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@cdklabs/sbt-aws.TenantManagementLambdaProps">TenantManagementLambdaProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementLambda.toString">toString</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `toString` <a name="toString" id="@cdklabs/sbt-aws.TenantManagementLambda.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementLambda.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.TenantManagementLambda.isConstruct"></a>
+
+```typescript
+import { TenantManagementLambda } from '@cdklabs/sbt-aws'
+
+TenantManagementLambda.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.TenantManagementLambda.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementLambda.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementLambda.property.tenantManagementFunc">tenantManagementFunc</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.TenantManagementLambda.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `tenantManagementFunc`<sup>Required</sup> <a name="tenantManagementFunc" id="@cdklabs/sbt-aws.TenantManagementLambda.property.tenantManagementFunc"></a>
+
+```typescript
+public readonly tenantManagementFunc: Function;
 ```
 
 - *Type:* aws-cdk-lib.aws_lambda.Function
+
+---
+
+
+### TenantManagementService <a name="TenantManagementService" id="@cdklabs/sbt-aws.TenantManagementService"></a>
+
+Represents a service for managing tenants in the application.
+
+#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.TenantManagementService.Initializer"></a>
+
+```typescript
+import { TenantManagementService } from '@cdklabs/sbt-aws'
+
+new TenantManagementService(scope: Construct, id: string, props: TenantManagementServiceProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementService.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | - The parent construct. |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementService.Initializer.parameter.id">id</a></code> | <code>string</code> | - The ID of the construct. |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementService.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.TenantManagementServiceProps">TenantManagementServiceProps</a></code> | - The properties required to initialize the service. |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.TenantManagementService.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+The parent construct.
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.TenantManagementService.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+The ID of the construct.
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.TenantManagementService.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@cdklabs/sbt-aws.TenantManagementServiceProps">TenantManagementServiceProps</a>
+
+The properties required to initialize the service.
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementService.toString">toString</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `toString` <a name="toString" id="@cdklabs/sbt-aws.TenantManagementService.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementService.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.TenantManagementService.isConstruct"></a>
+
+```typescript
+import { TenantManagementService } from '@cdklabs/sbt-aws'
+
+TenantManagementService.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.TenantManagementService.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementService.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementService.property.table">table</a></code> | <code><a href="#@cdklabs/sbt-aws.TenantManagementTable">TenantManagementTable</a></code> | The tenant management table instance. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.TenantManagementService.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `table`<sup>Required</sup> <a name="table" id="@cdklabs/sbt-aws.TenantManagementService.property.table"></a>
+
+```typescript
+public readonly table: TenantManagementTable;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.TenantManagementTable">TenantManagementTable</a>
+
+The tenant management table instance.
+
+---
+
+
+### TenantManagementTable <a name="TenantManagementTable" id="@cdklabs/sbt-aws.TenantManagementTable"></a>
+
+Represents a table for managing tenant details in the application.
+
+#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.TenantManagementTable.Initializer"></a>
+
+```typescript
+import { TenantManagementTable } from '@cdklabs/sbt-aws'
+
+new TenantManagementTable(scope: Construct, id: string)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | - The parent construct. |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.Initializer.parameter.id">id</a></code> | <code>string</code> | - The ID of the construct. |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.TenantManagementTable.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+The parent construct.
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.TenantManagementTable.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+The ID of the construct.
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.toString">toString</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `toString` <a name="toString" id="@cdklabs/sbt-aws.TenantManagementTable.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.TenantManagementTable.isConstruct"></a>
+
+```typescript
+import { TenantManagementTable } from '@cdklabs/sbt-aws'
+
+TenantManagementTable.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.TenantManagementTable.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.property.tenantConfigColumn">tenantConfigColumn</a></code> | <code>string</code> | The name of the column that stores the tenant configuration. |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.property.tenantConfigIndexName">tenantConfigIndexName</a></code> | <code>string</code> | The name of the global secondary index for the tenant configuration. |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.property.tenantDetails">tenantDetails</a></code> | <code>aws-cdk-lib.aws_dynamodb.Table</code> | The table that stores the tenant details. |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.property.tenantIdColumn">tenantIdColumn</a></code> | <code>string</code> | The name of the column that stores the tenant ID. |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.property.tenantNameColumn">tenantNameColumn</a></code> | <code>string</code> | The name of the column that stores the tenant name. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.TenantManagementTable.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `tenantConfigColumn`<sup>Required</sup> <a name="tenantConfigColumn" id="@cdklabs/sbt-aws.TenantManagementTable.property.tenantConfigColumn"></a>
+
+```typescript
+public readonly tenantConfigColumn: string;
+```
+
+- *Type:* string
+
+The name of the column that stores the tenant configuration.
+
+---
+
+##### `tenantConfigIndexName`<sup>Required</sup> <a name="tenantConfigIndexName" id="@cdklabs/sbt-aws.TenantManagementTable.property.tenantConfigIndexName"></a>
+
+```typescript
+public readonly tenantConfigIndexName: string;
+```
+
+- *Type:* string
+
+The name of the global secondary index for the tenant configuration.
+
+---
+
+##### `tenantDetails`<sup>Required</sup> <a name="tenantDetails" id="@cdklabs/sbt-aws.TenantManagementTable.property.tenantDetails"></a>
+
+```typescript
+public readonly tenantDetails: Table;
+```
+
+- *Type:* aws-cdk-lib.aws_dynamodb.Table
+
+The table that stores the tenant details.
+
+---
+
+##### `tenantIdColumn`<sup>Required</sup> <a name="tenantIdColumn" id="@cdklabs/sbt-aws.TenantManagementTable.property.tenantIdColumn"></a>
+
+```typescript
+public readonly tenantIdColumn: string;
+```
+
+- *Type:* string
+
+The name of the column that stores the tenant ID.
+
+---
+
+##### `tenantNameColumn`<sup>Required</sup> <a name="tenantNameColumn" id="@cdklabs/sbt-aws.TenantManagementTable.property.tenantNameColumn"></a>
+
+```typescript
+public readonly tenantNameColumn: string;
+```
+
+- *Type:* string
+
+The name of the column that stores the tenant name.
+
+---
+
+
+### UserManagementService <a name="UserManagementService" id="@cdklabs/sbt-aws.UserManagementService"></a>
+
+Represents a service for managing users in the application.
+
+#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.UserManagementService.Initializer"></a>
+
+```typescript
+import { UserManagementService } from '@cdklabs/sbt-aws'
+
+new UserManagementService(scope: Construct, id: string, props: UserManagementServiceProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.UserManagementService.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | - The parent construct. |
+| <code><a href="#@cdklabs/sbt-aws.UserManagementService.Initializer.parameter.id">id</a></code> | <code>string</code> | - The ID of the construct. |
+| <code><a href="#@cdklabs/sbt-aws.UserManagementService.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.UserManagementServiceProps">UserManagementServiceProps</a></code> | - The properties required to initialize the service. |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.UserManagementService.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+The parent construct.
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.UserManagementService.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+The ID of the construct.
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.UserManagementService.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@cdklabs/sbt-aws.UserManagementServiceProps">UserManagementServiceProps</a>
+
+The properties required to initialize the service.
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.UserManagementService.toString">toString</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `toString` <a name="toString" id="@cdklabs/sbt-aws.UserManagementService.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.UserManagementService.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.UserManagementService.isConstruct"></a>
+
+```typescript
+import { UserManagementService } from '@cdklabs/sbt-aws'
+
+UserManagementService.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.UserManagementService.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.UserManagementService.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.UserManagementService.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
 
 ---
 
@@ -3071,8 +3414,6 @@ const controlPlaneAPIProps: ControlPlaneAPIProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.auth">auth</a></code> | <code><a href="#@cdklabs/sbt-aws.IAuth">IAuth</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.services">services</a></code> | <code><a href="#@cdklabs/sbt-aws.Services">Services</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.tenantConfigServiceLambda">tenantConfigServiceLambda</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.disableAPILogging">disableAPILogging</a></code> | <code>boolean</code> | *No description.* |
 
 ---
@@ -3084,26 +3425,6 @@ public readonly auth: IAuth;
 ```
 
 - *Type:* <a href="#@cdklabs/sbt-aws.IAuth">IAuth</a>
-
----
-
-##### `services`<sup>Required</sup> <a name="services" id="@cdklabs/sbt-aws.ControlPlaneAPIProps.property.services"></a>
-
-```typescript
-public readonly services: Services;
-```
-
-- *Type:* <a href="#@cdklabs/sbt-aws.Services">Services</a>
-
----
-
-##### `tenantConfigServiceLambda`<sup>Required</sup> <a name="tenantConfigServiceLambda" id="@cdklabs/sbt-aws.ControlPlaneAPIProps.property.tenantConfigServiceLambda"></a>
-
-```typescript
-public readonly tenantConfigServiceLambda: Function;
-```
-
-- *Type:* aws-cdk-lib.aws_lambda.Function
 
 ---
 
@@ -3732,254 +4053,63 @@ The URL of the image logo to display on the registration page.
 
 ---
 
-### ServicesProps <a name="ServicesProps" id="@cdklabs/sbt-aws.ServicesProps"></a>
+### TenantConfigLambdasProps <a name="TenantConfigLambdasProps" id="@cdklabs/sbt-aws.TenantConfigLambdasProps"></a>
 
-#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.ServicesProps.Initializer"></a>
+Represents the properties required to initialize the TenantConfigLambdas.
+
+#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.TenantConfigLambdasProps.Initializer"></a>
 
 ```typescript
-import { ServicesProps } from '@cdklabs/sbt-aws'
+import { TenantConfigLambdasProps } from '@cdklabs/sbt-aws'
 
-const servicesProps: ServicesProps = { ... }
+const tenantConfigLambdasProps: TenantConfigLambdasProps = { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.ServicesProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ServicesProps.property.tables">tables</a></code> | <code><a href="#@cdklabs/sbt-aws.Tables">Tables</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantConfigLambdasProps.property.tenantConfigIndexName">tenantConfigIndexName</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantConfigLambdasProps.property.tenantDetails">tenantDetails</a></code> | <code>aws-cdk-lib.aws_dynamodb.Table</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantConfigLambdasProps.property.tenantDetailsTenantConfigColumn">tenantDetailsTenantConfigColumn</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantConfigLambdasProps.property.tenantDetailsTenantNameColumn">tenantDetailsTenantNameColumn</a></code> | <code>string</code> | *No description.* |
 
 ---
 
-##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.ServicesProps.property.eventManager"></a>
+##### `tenantConfigIndexName`<sup>Required</sup> <a name="tenantConfigIndexName" id="@cdklabs/sbt-aws.TenantConfigLambdasProps.property.tenantConfigIndexName"></a>
 
 ```typescript
-public readonly eventManager: IEventManager;
-```
-
-- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
-
----
-
-##### `tables`<sup>Required</sup> <a name="tables" id="@cdklabs/sbt-aws.ServicesProps.property.tables"></a>
-
-```typescript
-public readonly tables: Tables;
-```
-
-- *Type:* <a href="#@cdklabs/sbt-aws.Tables">Tables</a>
-
----
-
-### Tenant <a name="Tenant" id="@cdklabs/sbt-aws.Tenant"></a>
-
-#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.Tenant.Initializer"></a>
-
-```typescript
-import { Tenant } from '@cdklabs/sbt-aws'
-
-const tenant: Tenant = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.adminEmail">adminEmail</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.adminUserName">adminUserName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.callbackUrls">callbackUrls</a></code> | <code>string[]</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.clientId">clientId</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.clientName">clientName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.customDomainName">customDomainName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.groupName">groupName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.idpDetails">idpDetails</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.name">name</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.oidcClientId">oidcClientId</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.oidcClientSecret">oidcClientSecret</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.oidcIssuer">oidcIssuer</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.providerName">providerName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.supportedIdentityProviders">supportedIdentityProviders</a></code> | <code>string[]</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.tenantDomain">tenantDomain</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.tier">tier</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.uniqueName">uniqueName</a></code> | <code>string</code> | *No description.* |
-
----
-
-##### `adminEmail`<sup>Optional</sup> <a name="adminEmail" id="@cdklabs/sbt-aws.Tenant.property.adminEmail"></a>
-
-```typescript
-public readonly adminEmail: string;
+public readonly tenantConfigIndexName: string;
 ```
 
 - *Type:* string
 
 ---
 
-##### `adminUserName`<sup>Optional</sup> <a name="adminUserName" id="@cdklabs/sbt-aws.Tenant.property.adminUserName"></a>
+##### `tenantDetails`<sup>Required</sup> <a name="tenantDetails" id="@cdklabs/sbt-aws.TenantConfigLambdasProps.property.tenantDetails"></a>
 
 ```typescript
-public readonly adminUserName: string;
+public readonly tenantDetails: Table;
+```
+
+- *Type:* aws-cdk-lib.aws_dynamodb.Table
+
+---
+
+##### `tenantDetailsTenantConfigColumn`<sup>Required</sup> <a name="tenantDetailsTenantConfigColumn" id="@cdklabs/sbt-aws.TenantConfigLambdasProps.property.tenantDetailsTenantConfigColumn"></a>
+
+```typescript
+public readonly tenantDetailsTenantConfigColumn: string;
 ```
 
 - *Type:* string
 
 ---
 
-##### `callbackUrls`<sup>Optional</sup> <a name="callbackUrls" id="@cdklabs/sbt-aws.Tenant.property.callbackUrls"></a>
+##### `tenantDetailsTenantNameColumn`<sup>Required</sup> <a name="tenantDetailsTenantNameColumn" id="@cdklabs/sbt-aws.TenantConfigLambdasProps.property.tenantDetailsTenantNameColumn"></a>
 
 ```typescript
-public readonly callbackUrls: string[];
-```
-
-- *Type:* string[]
-
----
-
-##### `clientId`<sup>Optional</sup> <a name="clientId" id="@cdklabs/sbt-aws.Tenant.property.clientId"></a>
-
-```typescript
-public readonly clientId: string;
-```
-
-- *Type:* string
-
----
-
-##### `clientName`<sup>Optional</sup> <a name="clientName" id="@cdklabs/sbt-aws.Tenant.property.clientName"></a>
-
-```typescript
-public readonly clientName: string;
-```
-
-- *Type:* string
-
----
-
-##### `customDomainName`<sup>Optional</sup> <a name="customDomainName" id="@cdklabs/sbt-aws.Tenant.property.customDomainName"></a>
-
-```typescript
-public readonly customDomainName: string;
-```
-
-- *Type:* string
-
----
-
-##### `groupName`<sup>Optional</sup> <a name="groupName" id="@cdklabs/sbt-aws.Tenant.property.groupName"></a>
-
-```typescript
-public readonly groupName: string;
-```
-
-- *Type:* string
-
----
-
-##### `id`<sup>Optional</sup> <a name="id" id="@cdklabs/sbt-aws.Tenant.property.id"></a>
-
-```typescript
-public readonly id: string;
-```
-
-- *Type:* string
-
----
-
-##### `idpDetails`<sup>Optional</sup> <a name="idpDetails" id="@cdklabs/sbt-aws.Tenant.property.idpDetails"></a>
-
-```typescript
-public readonly idpDetails: string;
-```
-
-- *Type:* string
-
----
-
-##### `name`<sup>Optional</sup> <a name="name" id="@cdklabs/sbt-aws.Tenant.property.name"></a>
-
-```typescript
-public readonly name: string;
-```
-
-- *Type:* string
-
----
-
-##### `oidcClientId`<sup>Optional</sup> <a name="oidcClientId" id="@cdklabs/sbt-aws.Tenant.property.oidcClientId"></a>
-
-```typescript
-public readonly oidcClientId: string;
-```
-
-- *Type:* string
-
----
-
-##### `oidcClientSecret`<sup>Optional</sup> <a name="oidcClientSecret" id="@cdklabs/sbt-aws.Tenant.property.oidcClientSecret"></a>
-
-```typescript
-public readonly oidcClientSecret: string;
-```
-
-- *Type:* string
-
----
-
-##### `oidcIssuer`<sup>Optional</sup> <a name="oidcIssuer" id="@cdklabs/sbt-aws.Tenant.property.oidcIssuer"></a>
-
-```typescript
-public readonly oidcIssuer: string;
-```
-
-- *Type:* string
-
----
-
-##### `providerName`<sup>Optional</sup> <a name="providerName" id="@cdklabs/sbt-aws.Tenant.property.providerName"></a>
-
-```typescript
-public readonly providerName: string;
-```
-
-- *Type:* string
-
----
-
-##### `supportedIdentityProviders`<sup>Optional</sup> <a name="supportedIdentityProviders" id="@cdklabs/sbt-aws.Tenant.property.supportedIdentityProviders"></a>
-
-```typescript
-public readonly supportedIdentityProviders: string[];
-```
-
-- *Type:* string[]
-
----
-
-##### `tenantDomain`<sup>Optional</sup> <a name="tenantDomain" id="@cdklabs/sbt-aws.Tenant.property.tenantDomain"></a>
-
-```typescript
-public readonly tenantDomain: string;
-```
-
-- *Type:* string
-
----
-
-##### `tier`<sup>Optional</sup> <a name="tier" id="@cdklabs/sbt-aws.Tenant.property.tier"></a>
-
-```typescript
-public readonly tier: string;
-```
-
-- *Type:* string
-
----
-
-##### `uniqueName`<sup>Optional</sup> <a name="uniqueName" id="@cdklabs/sbt-aws.Tenant.property.uniqueName"></a>
-
-```typescript
-public readonly uniqueName: string;
+public readonly tenantDetailsTenantNameColumn: string;
 ```
 
 - *Type:* string
@@ -3987,6 +4117,8 @@ public readonly uniqueName: string;
 ---
 
 ### TenantConfigServiceProps <a name="TenantConfigServiceProps" id="@cdklabs/sbt-aws.TenantConfigServiceProps"></a>
+
+Represents the properties required for the Tenant Config Service.
 
 #### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.TenantConfigServiceProps.Initializer"></a>
 
@@ -4000,50 +4132,184 @@ const tenantConfigServiceProps: TenantConfigServiceProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.TenantConfigServiceProps.property.tenantConfigIndexName">tenantConfigIndexName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.TenantConfigServiceProps.property.tenantDetails">tenantDetails</a></code> | <code>aws-cdk-lib.aws_dynamodb.Table</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.TenantConfigServiceProps.property.tenantDetailsTenantConfigColumn">tenantDetailsTenantConfigColumn</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.TenantConfigServiceProps.property.tenantDetailsTenantNameColumn">tenantDetailsTenantNameColumn</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantConfigServiceProps.property.api">api</a></code> | <code>aws-cdk-lib.aws_apigatewayv2.HttpApi</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantConfigServiceProps.property.tenantManagementTable">tenantManagementTable</a></code> | <code><a href="#@cdklabs/sbt-aws.TenantManagementTable">TenantManagementTable</a></code> | *No description.* |
 
 ---
 
-##### `tenantConfigIndexName`<sup>Required</sup> <a name="tenantConfigIndexName" id="@cdklabs/sbt-aws.TenantConfigServiceProps.property.tenantConfigIndexName"></a>
+##### `api`<sup>Required</sup> <a name="api" id="@cdklabs/sbt-aws.TenantConfigServiceProps.property.api"></a>
 
 ```typescript
-public readonly tenantConfigIndexName: string;
+public readonly api: HttpApi;
 ```
 
-- *Type:* string
+- *Type:* aws-cdk-lib.aws_apigatewayv2.HttpApi
 
 ---
 
-##### `tenantDetails`<sup>Required</sup> <a name="tenantDetails" id="@cdklabs/sbt-aws.TenantConfigServiceProps.property.tenantDetails"></a>
+##### `tenantManagementTable`<sup>Required</sup> <a name="tenantManagementTable" id="@cdklabs/sbt-aws.TenantConfigServiceProps.property.tenantManagementTable"></a>
 
 ```typescript
-public readonly tenantDetails: Table;
+public readonly tenantManagementTable: TenantManagementTable;
 ```
 
-- *Type:* aws-cdk-lib.aws_dynamodb.Table
+- *Type:* <a href="#@cdklabs/sbt-aws.TenantManagementTable">TenantManagementTable</a>
 
 ---
 
-##### `tenantDetailsTenantConfigColumn`<sup>Required</sup> <a name="tenantDetailsTenantConfigColumn" id="@cdklabs/sbt-aws.TenantConfigServiceProps.property.tenantDetailsTenantConfigColumn"></a>
+### TenantManagementLambdaProps <a name="TenantManagementLambdaProps" id="@cdklabs/sbt-aws.TenantManagementLambdaProps"></a>
+
+Represents the properties required for the Tenant Management Lambda function.
+
+#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.TenantManagementLambdaProps.Initializer"></a>
 
 ```typescript
-public readonly tenantDetailsTenantConfigColumn: string;
+import { TenantManagementLambdaProps } from '@cdklabs/sbt-aws'
+
+const tenantManagementLambdaProps: TenantManagementLambdaProps = { ... }
 ```
 
-- *Type:* string
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementLambdaProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementLambdaProps.property.table">table</a></code> | <code><a href="#@cdklabs/sbt-aws.TenantManagementTable">TenantManagementTable</a></code> | *No description.* |
 
 ---
 
-##### `tenantDetailsTenantNameColumn`<sup>Required</sup> <a name="tenantDetailsTenantNameColumn" id="@cdklabs/sbt-aws.TenantConfigServiceProps.property.tenantDetailsTenantNameColumn"></a>
+##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.TenantManagementLambdaProps.property.eventManager"></a>
 
 ```typescript
-public readonly tenantDetailsTenantNameColumn: string;
+public readonly eventManager: IEventManager;
 ```
 
-- *Type:* string
+- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
+
+---
+
+##### `table`<sup>Required</sup> <a name="table" id="@cdklabs/sbt-aws.TenantManagementLambdaProps.property.table"></a>
+
+```typescript
+public readonly table: TenantManagementTable;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.TenantManagementTable">TenantManagementTable</a>
+
+---
+
+### TenantManagementServiceProps <a name="TenantManagementServiceProps" id="@cdklabs/sbt-aws.TenantManagementServiceProps"></a>
+
+Represents the properties required to initialize the TenantManagementService.
+
+#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.TenantManagementServiceProps.Initializer"></a>
+
+```typescript
+import { TenantManagementServiceProps } from '@cdklabs/sbt-aws'
+
+const tenantManagementServiceProps: TenantManagementServiceProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementServiceProps.property.api">api</a></code> | <code>aws-cdk-lib.aws_apigatewayv2.HttpApi</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementServiceProps.property.auth">auth</a></code> | <code><a href="#@cdklabs/sbt-aws.IAuth">IAuth</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementServiceProps.property.authorizer">authorizer</a></code> | <code>aws-cdk-lib.aws_apigatewayv2.IHttpRouteAuthorizer</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementServiceProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | *No description.* |
+
+---
+
+##### `api`<sup>Required</sup> <a name="api" id="@cdklabs/sbt-aws.TenantManagementServiceProps.property.api"></a>
+
+```typescript
+public readonly api: HttpApi;
+```
+
+- *Type:* aws-cdk-lib.aws_apigatewayv2.HttpApi
+
+---
+
+##### `auth`<sup>Required</sup> <a name="auth" id="@cdklabs/sbt-aws.TenantManagementServiceProps.property.auth"></a>
+
+```typescript
+public readonly auth: IAuth;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.IAuth">IAuth</a>
+
+---
+
+##### `authorizer`<sup>Required</sup> <a name="authorizer" id="@cdklabs/sbt-aws.TenantManagementServiceProps.property.authorizer"></a>
+
+```typescript
+public readonly authorizer: IHttpRouteAuthorizer;
+```
+
+- *Type:* aws-cdk-lib.aws_apigatewayv2.IHttpRouteAuthorizer
+
+---
+
+##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.TenantManagementServiceProps.property.eventManager"></a>
+
+```typescript
+public readonly eventManager: IEventManager;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
+
+---
+
+### UserManagementServiceProps <a name="UserManagementServiceProps" id="@cdklabs/sbt-aws.UserManagementServiceProps"></a>
+
+Represents the properties required to initialize the UserManagementService.
+
+#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.UserManagementServiceProps.Initializer"></a>
+
+```typescript
+import { UserManagementServiceProps } from '@cdklabs/sbt-aws'
+
+const userManagementServiceProps: UserManagementServiceProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.UserManagementServiceProps.property.api">api</a></code> | <code>aws-cdk-lib.aws_apigatewayv2.HttpApi</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.UserManagementServiceProps.property.auth">auth</a></code> | <code><a href="#@cdklabs/sbt-aws.IAuth">IAuth</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.UserManagementServiceProps.property.jwtAuthorizer">jwtAuthorizer</a></code> | <code>aws-cdk-lib.aws_apigatewayv2.IHttpRouteAuthorizer</code> | *No description.* |
+
+---
+
+##### `api`<sup>Required</sup> <a name="api" id="@cdklabs/sbt-aws.UserManagementServiceProps.property.api"></a>
+
+```typescript
+public readonly api: HttpApi;
+```
+
+- *Type:* aws-cdk-lib.aws_apigatewayv2.HttpApi
+
+---
+
+##### `auth`<sup>Required</sup> <a name="auth" id="@cdklabs/sbt-aws.UserManagementServiceProps.property.auth"></a>
+
+```typescript
+public readonly auth: IAuth;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.IAuth">IAuth</a>
+
+---
+
+##### `jwtAuthorizer`<sup>Required</sup> <a name="jwtAuthorizer" id="@cdklabs/sbt-aws.UserManagementServiceProps.property.jwtAuthorizer"></a>
+
+```typescript
+public readonly jwtAuthorizer: IHttpRouteAuthorizer;
+```
+
+- *Type:* aws-cdk-lib.aws_apigatewayv2.IHttpRouteAuthorizer
 
 ---
 
@@ -4903,6 +5169,62 @@ public readonly trigger: DetailType;
 - *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
 
 The detail-type that will trigger the handler function.
+
+---
+
+### IRoute <a name="IRoute" id="@cdklabs/sbt-aws.IRoute"></a>
+
+- *Implemented By:* <a href="#@cdklabs/sbt-aws.IRoute">IRoute</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.IRoute.property.integration">integration</a></code> | <code>aws-cdk-lib.aws_apigatewayv2.HttpRouteIntegration</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.IRoute.property.method">method</a></code> | <code>aws-cdk-lib.aws_apigatewayv2.HttpMethod</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.IRoute.property.path">path</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.IRoute.property.scope">scope</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `integration`<sup>Required</sup> <a name="integration" id="@cdklabs/sbt-aws.IRoute.property.integration"></a>
+
+```typescript
+public readonly integration: HttpRouteIntegration;
+```
+
+- *Type:* aws-cdk-lib.aws_apigatewayv2.HttpRouteIntegration
+
+---
+
+##### `method`<sup>Required</sup> <a name="method" id="@cdklabs/sbt-aws.IRoute.property.method"></a>
+
+```typescript
+public readonly method: HttpMethod;
+```
+
+- *Type:* aws-cdk-lib.aws_apigatewayv2.HttpMethod
+
+---
+
+##### `path`<sup>Required</sup> <a name="path" id="@cdklabs/sbt-aws.IRoute.property.path"></a>
+
+```typescript
+public readonly path: string;
+```
+
+- *Type:* string
+
+---
+
+##### `scope`<sup>Optional</sup> <a name="scope" id="@cdklabs/sbt-aws.IRoute.property.scope"></a>
+
+```typescript
+public readonly scope: string;
+```
+
+- *Type:* string
 
 ---
 
