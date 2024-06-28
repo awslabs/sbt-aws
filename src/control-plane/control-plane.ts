@@ -55,7 +55,7 @@ export interface ControlPlaneProps {
   readonly disableAPILogging?: boolean;
 
   /**
-   * Settings for the Cors Configuration for the ControlPlane API.
+   * Settings for Cors Configuration for the ControlPlane API.
    */
   readonly apiCorsConfig?: APICorsConfig;
 }
