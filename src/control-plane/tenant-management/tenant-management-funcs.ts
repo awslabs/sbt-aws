@@ -12,13 +12,9 @@ import { TenantManagementTable } from './tenant-management.table';
 import { DetailType, IEventManager } from '../../utils';
 
 /**
-
 Represents the properties required for the Tenant Management Lambda function.
-
 @interface TenantManagementLambdaProps
-
 @property {TenantManagementTable} table - The table used for Tenant Management.
-
 @property {IEventManager} eventManager - The event manager used for handling events in Tenant Management. */
 export interface TenantManagementLambdaProps {
   readonly table: TenantManagementTable;
@@ -27,17 +23,11 @@ export interface TenantManagementLambdaProps {
 
 /**
 Represents the Tenant Management Lambda construct.
-
 @class TenantManagementLambda
-
 @extends {Construct}
-
 @property {Function} tenantManagementFunc - The Tenant Management Lambda function.
-
 @param {Construct} scope - The scope in which this construct is defined.
-
 @param {string} id - The construct's identifier.
-
 @param {TenantManagementLambdaProps} props - The properties required for the Tenant Management Lambda.
 */
 export class TenantManagementLambda extends Construct {
