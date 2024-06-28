@@ -1,16 +1,15 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
+import * as path from 'path';
 import { PythonFunction } from '@aws-cdk/aws-lambda-python-alpha';
 import { Duration, Stack } from 'aws-cdk-lib';
-import { CfnTable } from 'aws-cdk-lib/aws-dynamodb';
 import { ManagedPolicy, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { Function, LayerVersion, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
-import * as path from 'path';
-import { DetailType, IEventManager } from '../../utils';
 import { TenantManagementTable } from './tenant-management.table';
+import { DetailType, IEventManager } from '../../utils';
 
 /**
 
@@ -80,7 +79,7 @@ export class TenantManagementLambda extends Construct {
           id: 'AwsSolutions-IAM5',
           reason: 'Index name(s) not known beforehand.',
           appliesTo: [
-            `Resource::<${Stack.of(this).getLogicalId(props.table.node.defaultChild as CfnTable)}.Arn>/index/*`,
+            `Resource::<ControlPlanetenantManagementServicvestenantManagementTableTenantDetails974E95B8.Arn>/index/*`,
           ],
         },
         {

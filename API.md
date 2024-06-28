@@ -2073,6 +2073,8 @@ public readonly tenantConfigFunction: Function;
 
 ### TenantConfigService <a name="TenantConfigService" id="@cdklabs/sbt-aws.TenantConfigService"></a>
 
+Represents the Tenant Config Service construct.
+
 #### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.TenantConfigService.Initializer"></a>
 
 ```typescript
@@ -2172,19 +2174,21 @@ The tree node.
 
 ### TenantManagementLambda <a name="TenantManagementLambda" id="@cdklabs/sbt-aws.TenantManagementLambda"></a>
 
+Represents the Tenant Management Lambda construct.
+
 #### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.TenantManagementLambda.Initializer"></a>
 
 ```typescript
 import { TenantManagementLambda } from '@cdklabs/sbt-aws'
 
-new TenantManagementLambda(scope: Construct, id: string, props: ServicesProps)
+new TenantManagementLambda(scope: Construct, id: string, props: TenantManagementLambdaProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.TenantManagementLambda.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.TenantManagementLambda.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.TenantManagementLambda.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.ServicesProps">ServicesProps</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementLambda.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.TenantManagementLambdaProps">TenantManagementLambdaProps</a></code> | *No description.* |
 
 ---
 
@@ -2202,7 +2206,7 @@ new TenantManagementLambda(scope: Construct, id: string, props: ServicesProps)
 
 ##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.TenantManagementLambda.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#@cdklabs/sbt-aws.ServicesProps">ServicesProps</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.TenantManagementLambdaProps">TenantManagementLambdaProps</a>
 
 ---
 
@@ -2282,6 +2286,8 @@ public readonly tenantManagementFunc: Function;
 
 ### TenantManagementService <a name="TenantManagementService" id="@cdklabs/sbt-aws.TenantManagementService"></a>
 
+Represents a service for managing tenants in the application.
+
 #### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.TenantManagementService.Initializer"></a>
 
 ```typescript
@@ -2292,9 +2298,9 @@ new TenantManagementService(scope: Construct, id: string, props: TenantManagemen
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.TenantManagementService.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.TenantManagementService.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.TenantManagementService.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.TenantManagementServiceProps">TenantManagementServiceProps</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementService.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | - The parent construct. |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementService.Initializer.parameter.id">id</a></code> | <code>string</code> | - The ID of the construct. |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementService.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.TenantManagementServiceProps">TenantManagementServiceProps</a></code> | - The properties required to initialize the service. |
 
 ---
 
@@ -2302,17 +2308,23 @@ new TenantManagementService(scope: Construct, id: string, props: TenantManagemen
 
 - *Type:* constructs.Construct
 
+The parent construct.
+
 ---
 
 ##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.TenantManagementService.Initializer.parameter.id"></a>
 
 - *Type:* string
 
+The ID of the construct.
+
 ---
 
 ##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.TenantManagementService.Initializer.parameter.props"></a>
 
 - *Type:* <a href="#@cdklabs/sbt-aws.TenantManagementServiceProps">TenantManagementServiceProps</a>
+
+The properties required to initialize the service.
 
 ---
 
@@ -2363,7 +2375,7 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.TenantManagementService.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.TenantManagementService.property.table">table</a></code> | <code><a href="#@cdklabs/sbt-aws.TenantManagementTable">TenantManagementTable</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementService.property.table">table</a></code> | <code><a href="#@cdklabs/sbt-aws.TenantManagementTable">TenantManagementTable</a></code> | The tenant management table instance. |
 
 ---
 
@@ -2387,10 +2399,14 @@ public readonly table: TenantManagementTable;
 
 - *Type:* <a href="#@cdklabs/sbt-aws.TenantManagementTable">TenantManagementTable</a>
 
+The tenant management table instance.
+
 ---
 
 
 ### TenantManagementTable <a name="TenantManagementTable" id="@cdklabs/sbt-aws.TenantManagementTable"></a>
+
+Represents a table for managing tenant details in the application.
 
 #### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.TenantManagementTable.Initializer"></a>
 
@@ -2402,8 +2418,8 @@ new TenantManagementTable(scope: Construct, id: string)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | - The parent construct. |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.Initializer.parameter.id">id</a></code> | <code>string</code> | - The ID of the construct. |
 
 ---
 
@@ -2411,11 +2427,15 @@ new TenantManagementTable(scope: Construct, id: string)
 
 - *Type:* constructs.Construct
 
+The parent construct.
+
 ---
 
 ##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.TenantManagementTable.Initializer.parameter.id"></a>
 
 - *Type:* string
+
+The ID of the construct.
 
 ---
 
@@ -2466,11 +2486,11 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.property.tenantConfigColumn">tenantConfigColumn</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.property.tenantConfigIndexName">tenantConfigIndexName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.property.tenantDetails">tenantDetails</a></code> | <code>aws-cdk-lib.aws_dynamodb.Table</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.property.tenantIdColumn">tenantIdColumn</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.property.tenantNameColumn">tenantNameColumn</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.property.tenantConfigColumn">tenantConfigColumn</a></code> | <code>string</code> | The name of the column that stores the tenant configuration. |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.property.tenantConfigIndexName">tenantConfigIndexName</a></code> | <code>string</code> | The name of the global secondary index for the tenant configuration. |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.property.tenantDetails">tenantDetails</a></code> | <code>aws-cdk-lib.aws_dynamodb.Table</code> | The table that stores the tenant details. |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.property.tenantIdColumn">tenantIdColumn</a></code> | <code>string</code> | The name of the column that stores the tenant ID. |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementTable.property.tenantNameColumn">tenantNameColumn</a></code> | <code>string</code> | The name of the column that stores the tenant name. |
 
 ---
 
@@ -2494,6 +2514,8 @@ public readonly tenantConfigColumn: string;
 
 - *Type:* string
 
+The name of the column that stores the tenant configuration.
+
 ---
 
 ##### `tenantConfigIndexName`<sup>Required</sup> <a name="tenantConfigIndexName" id="@cdklabs/sbt-aws.TenantManagementTable.property.tenantConfigIndexName"></a>
@@ -2503,6 +2525,8 @@ public readonly tenantConfigIndexName: string;
 ```
 
 - *Type:* string
+
+The name of the global secondary index for the tenant configuration.
 
 ---
 
@@ -2514,6 +2538,8 @@ public readonly tenantDetails: Table;
 
 - *Type:* aws-cdk-lib.aws_dynamodb.Table
 
+The table that stores the tenant details.
+
 ---
 
 ##### `tenantIdColumn`<sup>Required</sup> <a name="tenantIdColumn" id="@cdklabs/sbt-aws.TenantManagementTable.property.tenantIdColumn"></a>
@@ -2523,6 +2549,8 @@ public readonly tenantIdColumn: string;
 ```
 
 - *Type:* string
+
+The name of the column that stores the tenant ID.
 
 ---
 
@@ -2534,10 +2562,14 @@ public readonly tenantNameColumn: string;
 
 - *Type:* string
 
+The name of the column that stores the tenant name.
+
 ---
 
 
 ### UserManagementService <a name="UserManagementService" id="@cdklabs/sbt-aws.UserManagementService"></a>
+
+Represents a service for managing users in the application.
 
 #### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.UserManagementService.Initializer"></a>
 
@@ -2549,9 +2581,9 @@ new UserManagementService(scope: Construct, id: string, props: UserManagementSer
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.UserManagementService.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.UserManagementService.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.UserManagementService.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.UserManagementServiceProps">UserManagementServiceProps</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.UserManagementService.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | - The parent construct. |
+| <code><a href="#@cdklabs/sbt-aws.UserManagementService.Initializer.parameter.id">id</a></code> | <code>string</code> | - The ID of the construct. |
+| <code><a href="#@cdklabs/sbt-aws.UserManagementService.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.UserManagementServiceProps">UserManagementServiceProps</a></code> | - The properties required to initialize the service. |
 
 ---
 
@@ -2559,17 +2591,23 @@ new UserManagementService(scope: Construct, id: string, props: UserManagementSer
 
 - *Type:* constructs.Construct
 
+The parent construct.
+
 ---
 
 ##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.UserManagementService.Initializer.parameter.id"></a>
 
 - *Type:* string
 
+The ID of the construct.
+
 ---
 
 ##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.UserManagementService.Initializer.parameter.props"></a>
 
 - *Type:* <a href="#@cdklabs/sbt-aws.UserManagementServiceProps">UserManagementServiceProps</a>
+
+The properties required to initialize the service.
 
 ---
 
@@ -4005,260 +4043,6 @@ The URL of the image logo to display on the registration page.
 
 ---
 
-### ServicesProps <a name="ServicesProps" id="@cdklabs/sbt-aws.ServicesProps"></a>
-
-#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.ServicesProps.Initializer"></a>
-
-```typescript
-import { ServicesProps } from '@cdklabs/sbt-aws'
-
-const servicesProps: ServicesProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.ServicesProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.ServicesProps.property.table">table</a></code> | <code><a href="#@cdklabs/sbt-aws.TenantManagementTable">TenantManagementTable</a></code> | *No description.* |
-
----
-
-##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.ServicesProps.property.eventManager"></a>
-
-```typescript
-public readonly eventManager: IEventManager;
-```
-
-- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
-
----
-
-##### `table`<sup>Required</sup> <a name="table" id="@cdklabs/sbt-aws.ServicesProps.property.table"></a>
-
-```typescript
-public readonly table: TenantManagementTable;
-```
-
-- *Type:* <a href="#@cdklabs/sbt-aws.TenantManagementTable">TenantManagementTable</a>
-
----
-
-### Tenant <a name="Tenant" id="@cdklabs/sbt-aws.Tenant"></a>
-
-#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.Tenant.Initializer"></a>
-
-```typescript
-import { Tenant } from '@cdklabs/sbt-aws'
-
-const tenant: Tenant = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.adminEmail">adminEmail</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.adminUserName">adminUserName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.callbackUrls">callbackUrls</a></code> | <code>string[]</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.clientId">clientId</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.clientName">clientName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.customDomainName">customDomainName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.groupName">groupName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.idpDetails">idpDetails</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.name">name</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.oidcClientId">oidcClientId</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.oidcClientSecret">oidcClientSecret</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.oidcIssuer">oidcIssuer</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.providerName">providerName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.supportedIdentityProviders">supportedIdentityProviders</a></code> | <code>string[]</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.tenantDomain">tenantDomain</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.tier">tier</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.Tenant.property.uniqueName">uniqueName</a></code> | <code>string</code> | *No description.* |
-
----
-
-##### `adminEmail`<sup>Optional</sup> <a name="adminEmail" id="@cdklabs/sbt-aws.Tenant.property.adminEmail"></a>
-
-```typescript
-public readonly adminEmail: string;
-```
-
-- *Type:* string
-
----
-
-##### `adminUserName`<sup>Optional</sup> <a name="adminUserName" id="@cdklabs/sbt-aws.Tenant.property.adminUserName"></a>
-
-```typescript
-public readonly adminUserName: string;
-```
-
-- *Type:* string
-
----
-
-##### `callbackUrls`<sup>Optional</sup> <a name="callbackUrls" id="@cdklabs/sbt-aws.Tenant.property.callbackUrls"></a>
-
-```typescript
-public readonly callbackUrls: string[];
-```
-
-- *Type:* string[]
-
----
-
-##### `clientId`<sup>Optional</sup> <a name="clientId" id="@cdklabs/sbt-aws.Tenant.property.clientId"></a>
-
-```typescript
-public readonly clientId: string;
-```
-
-- *Type:* string
-
----
-
-##### `clientName`<sup>Optional</sup> <a name="clientName" id="@cdklabs/sbt-aws.Tenant.property.clientName"></a>
-
-```typescript
-public readonly clientName: string;
-```
-
-- *Type:* string
-
----
-
-##### `customDomainName`<sup>Optional</sup> <a name="customDomainName" id="@cdklabs/sbt-aws.Tenant.property.customDomainName"></a>
-
-```typescript
-public readonly customDomainName: string;
-```
-
-- *Type:* string
-
----
-
-##### `groupName`<sup>Optional</sup> <a name="groupName" id="@cdklabs/sbt-aws.Tenant.property.groupName"></a>
-
-```typescript
-public readonly groupName: string;
-```
-
-- *Type:* string
-
----
-
-##### `id`<sup>Optional</sup> <a name="id" id="@cdklabs/sbt-aws.Tenant.property.id"></a>
-
-```typescript
-public readonly id: string;
-```
-
-- *Type:* string
-
----
-
-##### `idpDetails`<sup>Optional</sup> <a name="idpDetails" id="@cdklabs/sbt-aws.Tenant.property.idpDetails"></a>
-
-```typescript
-public readonly idpDetails: string;
-```
-
-- *Type:* string
-
----
-
-##### `name`<sup>Optional</sup> <a name="name" id="@cdklabs/sbt-aws.Tenant.property.name"></a>
-
-```typescript
-public readonly name: string;
-```
-
-- *Type:* string
-
----
-
-##### `oidcClientId`<sup>Optional</sup> <a name="oidcClientId" id="@cdklabs/sbt-aws.Tenant.property.oidcClientId"></a>
-
-```typescript
-public readonly oidcClientId: string;
-```
-
-- *Type:* string
-
----
-
-##### `oidcClientSecret`<sup>Optional</sup> <a name="oidcClientSecret" id="@cdklabs/sbt-aws.Tenant.property.oidcClientSecret"></a>
-
-```typescript
-public readonly oidcClientSecret: string;
-```
-
-- *Type:* string
-
----
-
-##### `oidcIssuer`<sup>Optional</sup> <a name="oidcIssuer" id="@cdklabs/sbt-aws.Tenant.property.oidcIssuer"></a>
-
-```typescript
-public readonly oidcIssuer: string;
-```
-
-- *Type:* string
-
----
-
-##### `providerName`<sup>Optional</sup> <a name="providerName" id="@cdklabs/sbt-aws.Tenant.property.providerName"></a>
-
-```typescript
-public readonly providerName: string;
-```
-
-- *Type:* string
-
----
-
-##### `supportedIdentityProviders`<sup>Optional</sup> <a name="supportedIdentityProviders" id="@cdklabs/sbt-aws.Tenant.property.supportedIdentityProviders"></a>
-
-```typescript
-public readonly supportedIdentityProviders: string[];
-```
-
-- *Type:* string[]
-
----
-
-##### `tenantDomain`<sup>Optional</sup> <a name="tenantDomain" id="@cdklabs/sbt-aws.Tenant.property.tenantDomain"></a>
-
-```typescript
-public readonly tenantDomain: string;
-```
-
-- *Type:* string
-
----
-
-##### `tier`<sup>Optional</sup> <a name="tier" id="@cdklabs/sbt-aws.Tenant.property.tier"></a>
-
-```typescript
-public readonly tier: string;
-```
-
-- *Type:* string
-
----
-
-##### `uniqueName`<sup>Optional</sup> <a name="uniqueName" id="@cdklabs/sbt-aws.Tenant.property.uniqueName"></a>
-
-```typescript
-public readonly uniqueName: string;
-```
-
-- *Type:* string
-
----
-
 ### TenantConfigLambdasProps <a name="TenantConfigLambdasProps" id="@cdklabs/sbt-aws.TenantConfigLambdasProps"></a>
 
 #### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.TenantConfigLambdasProps.Initializer"></a>
@@ -4322,6 +4106,8 @@ public readonly tenantDetailsTenantNameColumn: string;
 
 ### TenantConfigServiceProps <a name="TenantConfigServiceProps" id="@cdklabs/sbt-aws.TenantConfigServiceProps"></a>
 
+Represents the properties required for the Tenant Config Service.
+
 #### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.TenantConfigServiceProps.Initializer"></a>
 
 ```typescript
@@ -4359,7 +4145,50 @@ public readonly tenantManagementTable: TenantManagementTable;
 
 ---
 
+### TenantManagementLambdaProps <a name="TenantManagementLambdaProps" id="@cdklabs/sbt-aws.TenantManagementLambdaProps"></a>
+
+Represents the properties required for the Tenant Management Lambda function.
+
+#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.TenantManagementLambdaProps.Initializer"></a>
+
+```typescript
+import { TenantManagementLambdaProps } from '@cdklabs/sbt-aws'
+
+const tenantManagementLambdaProps: TenantManagementLambdaProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementLambdaProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementLambdaProps.property.table">table</a></code> | <code><a href="#@cdklabs/sbt-aws.TenantManagementTable">TenantManagementTable</a></code> | *No description.* |
+
+---
+
+##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.TenantManagementLambdaProps.property.eventManager"></a>
+
+```typescript
+public readonly eventManager: IEventManager;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
+
+---
+
+##### `table`<sup>Required</sup> <a name="table" id="@cdklabs/sbt-aws.TenantManagementLambdaProps.property.table"></a>
+
+```typescript
+public readonly table: TenantManagementTable;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.TenantManagementTable">TenantManagementTable</a>
+
+---
+
 ### TenantManagementServiceProps <a name="TenantManagementServiceProps" id="@cdklabs/sbt-aws.TenantManagementServiceProps"></a>
+
+Represents the properties required to initialize the TenantManagementService.
 
 #### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.TenantManagementServiceProps.Initializer"></a>
 
@@ -4421,6 +4250,8 @@ public readonly eventManager: IEventManager;
 ---
 
 ### UserManagementServiceProps <a name="UserManagementServiceProps" id="@cdklabs/sbt-aws.UserManagementServiceProps"></a>
+
+Represents the properties required to initialize the UserManagementService.
 
 #### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.UserManagementServiceProps.Initializer"></a>
 
