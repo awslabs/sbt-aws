@@ -58,7 +58,6 @@ export class ControlPlaneAPI extends Construct {
           responseLength: '$context.responseLength',
         }),
       };
-
       const stage = this.api.defaultStage?.node.defaultChild as apigatewayV2.CfnStage;
       stage.accessLogSettings = accessLogSettings;
     }
