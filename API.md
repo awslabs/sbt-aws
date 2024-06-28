@@ -2343,6 +2343,89 @@ public readonly tenantConfigServiceLambda: Function;
 
 ## Structs <a name="Structs" id="Structs"></a>
 
+### APICorsConfig <a name="APICorsConfig" id="@cdklabs/sbt-aws.APICorsConfig"></a>
+
+#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.APICorsConfig.Initializer"></a>
+
+```typescript
+import { APICorsConfig } from '@cdklabs/sbt-aws'
+
+const aPICorsConfig: APICorsConfig = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.APICorsConfig.property.allowCredentials">allowCredentials</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.APICorsConfig.property.allowHeaders">allowHeaders</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.APICorsConfig.property.allowMethods">allowMethods</a></code> | <code>aws-cdk-lib.aws_apigatewayv2.CorsHttpMethod[]</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.APICorsConfig.property.allowOrigins">allowOrigins</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.APICorsConfig.property.exposeHeaders">exposeHeaders</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.APICorsConfig.property.maxAge">maxAge</a></code> | <code>aws-cdk-lib.Duration</code> | *No description.* |
+
+---
+
+##### `allowCredentials`<sup>Optional</sup> <a name="allowCredentials" id="@cdklabs/sbt-aws.APICorsConfig.property.allowCredentials"></a>
+
+```typescript
+public readonly allowCredentials: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+##### `allowHeaders`<sup>Optional</sup> <a name="allowHeaders" id="@cdklabs/sbt-aws.APICorsConfig.property.allowHeaders"></a>
+
+```typescript
+public readonly allowHeaders: string[];
+```
+
+- *Type:* string[]
+
+---
+
+##### `allowMethods`<sup>Optional</sup> <a name="allowMethods" id="@cdklabs/sbt-aws.APICorsConfig.property.allowMethods"></a>
+
+```typescript
+public readonly allowMethods: CorsHttpMethod[];
+```
+
+- *Type:* aws-cdk-lib.aws_apigatewayv2.CorsHttpMethod[]
+
+---
+
+##### `allowOrigins`<sup>Optional</sup> <a name="allowOrigins" id="@cdklabs/sbt-aws.APICorsConfig.property.allowOrigins"></a>
+
+```typescript
+public readonly allowOrigins: string[];
+```
+
+- *Type:* string[]
+
+---
+
+##### `exposeHeaders`<sup>Optional</sup> <a name="exposeHeaders" id="@cdklabs/sbt-aws.APICorsConfig.property.exposeHeaders"></a>
+
+```typescript
+public readonly exposeHeaders: string[];
+```
+
+- *Type:* string[]
+
+---
+
+##### `maxAge`<sup>Optional</sup> <a name="maxAge" id="@cdklabs/sbt-aws.APICorsConfig.property.maxAge"></a>
+
+```typescript
+public readonly maxAge: Duration;
+```
+
+- *Type:* aws-cdk-lib.Duration
+
+---
+
 ### AWSMarketplaceSaaSProductProps <a name="AWSMarketplaceSaaSProductProps" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSProductProps"></a>
 
 Properties for configuring an AWS Marketplace SaaS product.
@@ -3073,6 +3156,7 @@ const controlPlaneAPIProps: ControlPlaneAPIProps = { ... }
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.auth">auth</a></code> | <code><a href="#@cdklabs/sbt-aws.IAuth">IAuth</a></code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.services">services</a></code> | <code><a href="#@cdklabs/sbt-aws.Services">Services</a></code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.tenantConfigServiceLambda">tenantConfigServiceLambda</a></code> | <code>aws-cdk-lib.aws_lambda.Function</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.apiCorsConfig">apiCorsConfig</a></code> | <code><a href="#@cdklabs/sbt-aws.APICorsConfig">APICorsConfig</a></code> | Settings for Cors Configuration for the ControlPlane API. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.disableAPILogging">disableAPILogging</a></code> | <code>boolean</code> | *No description.* |
 
 ---
@@ -3107,6 +3191,18 @@ public readonly tenantConfigServiceLambda: Function;
 
 ---
 
+##### `apiCorsConfig`<sup>Optional</sup> <a name="apiCorsConfig" id="@cdklabs/sbt-aws.ControlPlaneAPIProps.property.apiCorsConfig"></a>
+
+```typescript
+public readonly apiCorsConfig: APICorsConfig;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.APICorsConfig">APICorsConfig</a>
+
+Settings for Cors Configuration for the ControlPlane API.
+
+---
+
 ##### `disableAPILogging`<sup>Optional</sup> <a name="disableAPILogging" id="@cdklabs/sbt-aws.ControlPlaneAPIProps.property.disableAPILogging"></a>
 
 ```typescript
@@ -3132,6 +3228,7 @@ const controlPlaneProps: ControlPlaneProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminEmail">systemAdminEmail</a></code> | <code>string</code> | The email address of the system admin. |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.apiCorsConfig">apiCorsConfig</a></code> | <code><a href="#@cdklabs/sbt-aws.APICorsConfig">APICorsConfig</a></code> | Settings for Cors Configuration for the ControlPlane API. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.auth">auth</a></code> | <code><a href="#@cdklabs/sbt-aws.IAuth">IAuth</a></code> | The authentication provider for the control plane. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.billing">billing</a></code> | <code><a href="#@cdklabs/sbt-aws.IBilling">IBilling</a></code> | The billing provider configuration. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.disableAPILogging">disableAPILogging</a></code> | <code>boolean</code> | If true, the API Gateway will not log requests to the CloudWatch Logs. |
@@ -3150,6 +3247,18 @@ public readonly systemAdminEmail: string;
 - *Type:* string
 
 The email address of the system admin.
+
+---
+
+##### `apiCorsConfig`<sup>Optional</sup> <a name="apiCorsConfig" id="@cdklabs/sbt-aws.ControlPlaneProps.property.apiCorsConfig"></a>
+
+```typescript
+public readonly apiCorsConfig: APICorsConfig;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.APICorsConfig">APICorsConfig</a>
+
+Settings for Cors Configuration for the ControlPlane API.
 
 ---
 

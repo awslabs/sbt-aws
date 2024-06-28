@@ -7,7 +7,7 @@ import { Construct } from 'constructs';
 import { IAuth } from './auth/auth-interface';
 import { CognitoAuth } from './auth/cognito-auth';
 import { IBilling, BillingProvider } from './billing';
-import { ControlPlaneAPI } from './control-plane-api';
+import { APICorsConfig, ControlPlaneAPI } from './control-plane-api';
 import { Services } from './services';
 import { Tables } from './tables';
 import { TenantConfigService } from './tenant-config/tenant-config-service';
@@ -53,6 +53,11 @@ export interface ControlPlaneProps {
    * @default false
    */
   readonly disableAPILogging?: boolean;
+
+  /**
+   * Settings for Cors Configuration for the ControlPlane API.
+   */
+  readonly apiCorsConfig?: APICorsConfig;
 }
 
 export class ControlPlane extends Construct {
@@ -113,6 +118,7 @@ export class ControlPlane extends Construct {
       disableAPILogging: props.disableAPILogging,
       services: services,
       tenantConfigServiceLambda: tenantConfigService.tenantConfigServiceLambda,
+      apiCorsConfig: props.apiCorsConfig,
     });
 
     this.controlPlaneAPIGatewayUrl = controlPlaneAPI.apiUrl;

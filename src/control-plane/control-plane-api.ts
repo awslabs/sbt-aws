@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as cdk from 'aws-cdk-lib';
-import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as apigatewayV2 from 'aws-cdk-lib/aws-apigatewayv2';
 import * as apigatewayV2Authorizers from 'aws-cdk-lib/aws-apigatewayv2-authorizers';
 import * as apigatewayV2Integrations from 'aws-cdk-lib/aws-apigatewayv2-integrations';
@@ -16,11 +15,25 @@ import { IAuth } from './auth/auth-interface';
 import { Services } from './services';
 import { addTemplateTag, conditionallyAddScope } from '../utils';
 
+export interface APICorsConfig {
+  readonly allowOrigins?: string[];
+  readonly allowCredentials?: boolean;
+  readonly allowHeaders?: string[];
+  readonly allowMethods?: apigatewayV2.CorsHttpMethod[];
+  readonly maxAge?: cdk.Duration;
+  readonly exposeHeaders?: string[];
+}
+
 export interface ControlPlaneAPIProps {
   readonly services: Services;
   readonly auth: IAuth;
   readonly tenantConfigServiceLambda: Function;
   readonly disableAPILogging?: boolean;
+
+  /**
+   * Settings for Cors Configuration for the ControlPlane API.
+   */
+  readonly apiCorsConfig?: APICorsConfig;
 }
 
 export class ControlPlaneAPI extends Construct {
@@ -31,9 +44,7 @@ export class ControlPlaneAPI extends Construct {
     super(scope, id);
     addTemplateTag(this, 'ControlPlaneAPI');
     this.api = new apigatewayV2.HttpApi(this, 'controlPlaneAPI', {
-      corsPreflight: {
-        allowOrigins: apigateway.Cors.ALL_ORIGINS,
-      },
+      corsPreflight: props.apiCorsConfig,
     });
 
     if (props.disableAPILogging) {
@@ -85,7 +96,7 @@ export class ControlPlaneAPI extends Construct {
     );
 
     const tenantsHttpLambdaIntegration = new apigatewayV2Integrations.HttpLambdaIntegration(
-      'tenantsHttpLambdaIntegration',
+      'tenantManagementServicesLambdaIntegration',
       props.services.tenantManagementServices
     );
     const tenantsPath = '/tenants';
@@ -174,7 +185,7 @@ export class ControlPlaneAPI extends Construct {
       path: usersPath,
       methods: [apigatewayV2.HttpMethod.POST],
       integration: new apigatewayV2Integrations.HttpLambdaIntegration(
-        'tenantsHttpLambdaIntegration',
+        'createUserFunctionLambdaIntegration',
         props.auth.createUserFunction
       ),
       authorizer: jwtAuthorizer,
@@ -184,7 +195,7 @@ export class ControlPlaneAPI extends Construct {
       path: usersPath,
       methods: [apigatewayV2.HttpMethod.GET],
       integration: new apigatewayV2Integrations.HttpLambdaIntegration(
-        'tenantsHttpLambdaIntegration',
+        'fetchAllUsersFunctionLambdaIntegration',
         props.auth.fetchAllUsersFunction
       ),
       authorizer: jwtAuthorizer,
@@ -196,7 +207,7 @@ export class ControlPlaneAPI extends Construct {
       path: userIdPath,
       methods: [apigatewayV2.HttpMethod.GET],
       integration: new apigatewayV2Integrations.HttpLambdaIntegration(
-        'tenantsHttpLambdaIntegration',
+        'fetchUserFunctionLambdaIntegration',
         props.auth.fetchUserFunction
       ),
       authorizer: jwtAuthorizer,
@@ -206,7 +217,7 @@ export class ControlPlaneAPI extends Construct {
       path: userIdPath,
       methods: [apigatewayV2.HttpMethod.PUT],
       integration: new apigatewayV2Integrations.HttpLambdaIntegration(
-        'tenantsHttpLambdaIntegration',
+        'updateUserFunctionLambdaIntegration',
         props.auth.updateUserFunction
       ),
       authorizer: jwtAuthorizer,
@@ -217,7 +228,7 @@ export class ControlPlaneAPI extends Construct {
       path: userIdPath,
       methods: [apigatewayV2.HttpMethod.DELETE],
       integration: new apigatewayV2Integrations.HttpLambdaIntegration(
-        'tenantsHttpLambdaIntegration',
+        'deleteUserFunctionLambdaIntegration',
         props.auth.deleteUserFunction
       ),
       authorizer: jwtAuthorizer,
@@ -228,7 +239,7 @@ export class ControlPlaneAPI extends Construct {
       path: `${tenantIdPath}/disable`,
       methods: [apigatewayV2.HttpMethod.PUT],
       integration: new apigatewayV2Integrations.HttpLambdaIntegration(
-        'tenantsHttpLambdaIntegration',
+        'disableUserFunctionLambdaIntegration',
         props.auth.disableUserFunction
       ),
       authorizer: jwtAuthorizer,
@@ -238,7 +249,7 @@ export class ControlPlaneAPI extends Construct {
       path: `${tenantIdPath}/enable`,
       methods: [apigatewayV2.HttpMethod.PUT],
       integration: new apigatewayV2Integrations.HttpLambdaIntegration(
-        'tenantsHttpLambdaIntegration',
+        'enableUserFunctionLambdaIntegration',
         props.auth.enableUserFunction
       ),
       authorizer: jwtAuthorizer,
