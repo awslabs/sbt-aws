@@ -29,6 +29,10 @@ export interface ControlPlaneAPIProps {
   readonly auth: IAuth;
   readonly tenantConfigServiceLambda: Function;
   readonly disableAPILogging?: boolean;
+
+  /**
+   * Settings for Cors Configuration for the ControlPlane API.
+   */
   readonly apiCorsConfig?: APICorsConfig;
 }
 
