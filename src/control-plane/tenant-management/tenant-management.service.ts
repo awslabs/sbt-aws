@@ -148,10 +148,6 @@ export class TenantManagementService extends Construct {
       tenantUpdateServiceTarget
     );
 
-    // new cdk.CfnOutput(this, 'controlPlaneAPIGatewayUrl', {
-    //   value: controlPlaneAPI.apiUrl,
-    //   key: 'controlPlaneAPIGatewayUrl',
-    // });
     this.table = table;
   }
 }

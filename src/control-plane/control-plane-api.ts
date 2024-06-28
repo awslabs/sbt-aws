@@ -20,7 +20,6 @@ export class ControlPlaneAPI extends Construct {
   apiUrl: any;
   jwtAuthorizer: apigatewayV2.IHttpRouteAuthorizer;
   public readonly api: apigatewayV2.HttpApi;
-  // public readonly tenantUpdateServiceTarget: events.IRuleTarget;
   constructor(scope: Construct, id: string, props: ControlPlaneAPIProps) {
     super(scope, id);
     addTemplateTag(this, 'ControlPlaneAPI');

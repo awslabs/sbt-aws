@@ -61,11 +61,6 @@ export class ControlPlane extends Construct {
    */
   readonly controlPlaneAPIGatewayUrl: string;
 
-  // /**
-  //  * The Tables instance containing the DynamoDB tables for tenant data and configurations.
-  //  */
-  // readonly tables: Tables;
-
   /**
    * The EventManager instance that allows connecting to events flowing between
    * the Control Plane and other components.
