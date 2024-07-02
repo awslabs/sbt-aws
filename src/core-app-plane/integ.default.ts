@@ -6,7 +6,8 @@ import { CfnRule, EventBus, Rule } from 'aws-cdk-lib/aws-events';
 import { Effect, PolicyDocument, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { AwsSolutionsChecks, NagSuppressions } from 'cdk-nag';
-import { CoreApplicationPlane, CoreApplicationPlaneJobRunnerProps } from '.';
+import { CoreApplicationPlane } from '.';
+import { BashJobRunner, BashJobRunnerProps } from './bash-job-runner';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
 import { DetailType, EventManager } from '../utils';
 
@@ -29,7 +30,7 @@ export class IntegStack extends cdk.Stack {
       eventManager = new EventManager(this, 'EventManager');
     }
 
-    const provisioningJobRunnerProps: CoreApplicationPlaneJobRunnerProps = {
+    const provisioningJobRunnerProps: BashJobRunnerProps = {
       name: 'provisioning',
       permissions: new PolicyDocument({
         statements: [
@@ -103,9 +104,10 @@ echo "done!"
       },
       outgoingEvent: DetailType.PROVISION_SUCCESS,
       incomingEvent: DetailType.ONBOARDING_REQUEST,
+      eventManager: eventManager,
     };
 
-    const deprovisioningJobRunnerProps: CoreApplicationPlaneJobRunnerProps = {
+    const deprovisioningJobRunnerProps: BashJobRunnerProps = {
       name: 'deprovisioning',
       permissions: new PolicyDocument({
         statements: [
@@ -135,11 +137,23 @@ echo "done!"
       environmentVariablesToOutgoingEvent: ['tenantStatus'],
       outgoingEvent: DetailType.DEPROVISION_SUCCESS,
       incomingEvent: DetailType.OFFBOARDING_REQUEST,
+      eventManager: eventManager,
     };
+
+    const provisioningJobRunner: BashJobRunner = new BashJobRunner(
+      this,
+      'provisioningJobRunner',
+      provisioningJobRunnerProps
+    );
+    const deprovisioningJobRunner: BashJobRunner = new BashJobRunner(
+      this,
+      'deprovisioningJobRunner',
+      deprovisioningJobRunnerProps
+    );
 
     new CoreApplicationPlane(this, 'CoreApplicationPlane', {
       eventManager: eventManager,
-      jobRunnerPropsList: [provisioningJobRunnerProps, deprovisioningJobRunnerProps],
+      jobRunnersList: [provisioningJobRunner, deprovisioningJobRunner],
     });
 
     const eventBusWatcherRule = new Rule(this, 'EventBusWatcherRule', {

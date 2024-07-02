@@ -6,7 +6,7 @@ import { Capture, Template } from 'aws-cdk-lib/assertions';
 import { Effect, PolicyDocument, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { AwsSolutionsChecks } from 'cdk-nag';
 import { CognitoAuth, ControlPlane } from '../src/control-plane';
-import { CoreApplicationPlane } from '../src/core-app-plane';
+import { CoreApplicationPlane, BashJobRunner } from '../src/core-app-plane';
 import { DetailType, EventManager } from '../src/utils';
 
 function testForDuplicateRulesInCoreAppPlaneStack(stack: cdk.Stack) {
@@ -77,23 +77,6 @@ const samplePolicyDocument = new PolicyDocument({
   ],
 });
 
-const jobsUsingTheSameIncomingEvent = [
-  {
-    name: 'provisioning-1',
-    outgoingEvent: DetailType.PROVISION_SUCCESS,
-    incomingEvent: DetailType.ONBOARDING_REQUEST,
-    permissions: samplePolicyDocument,
-    script: '',
-  },
-  {
-    name: 'provisioning-2',
-    outgoingEvent: DetailType.PROVISION_SUCCESS,
-    incomingEvent: DetailType.ONBOARDING_REQUEST,
-    permissions: samplePolicyDocument,
-    script: '',
-  },
-];
-
 describe('EventManager', () => {
   describe('using default event-manager created by control plane', () => {
     const app = new cdk.App();
@@ -107,9 +90,33 @@ describe('EventManager', () => {
     });
 
     const coreAppPlaneStack = new cdk.Stack(app, 'CoreApplicationPlaneStack');
+    const firstProvisioningJobRunner: BashJobRunner = new BashJobRunner(
+      coreAppPlaneStack,
+      'firstProvisioningJobRunner',
+      {
+        name: 'provisioning-1',
+        outgoingEvent: DetailType.PROVISION_SUCCESS,
+        incomingEvent: DetailType.ONBOARDING_REQUEST,
+        permissions: samplePolicyDocument,
+        script: '',
+        eventManager: controlPlane.eventManager,
+      }
+    );
+    const secondProvisioningJobRunner: BashJobRunner = new BashJobRunner(
+      coreAppPlaneStack,
+      'secondProvisioningJobRunner',
+      {
+        name: 'provisioning-2',
+        outgoingEvent: DetailType.PROVISION_SUCCESS,
+        incomingEvent: DetailType.ONBOARDING_REQUEST,
+        permissions: samplePolicyDocument,
+        script: '',
+        eventManager: controlPlane.eventManager,
+      }
+    );
     new CoreApplicationPlane(coreAppPlaneStack, 'CoreApplicationPlane', {
       eventManager: controlPlane.eventManager,
-      jobRunnerPropsList: jobsUsingTheSameIncomingEvent,
+      jobRunnersList: [firstProvisioningJobRunner, secondProvisioningJobRunner],
     });
 
     cdk.Aspects.of(controlPlaneStack).add(new AwsSolutionsChecks({ verbose: true }));
@@ -139,9 +146,33 @@ describe('EventManager', () => {
     });
 
     const coreAppPlaneStack = new cdk.Stack(app, 'CoreApplicationPlaneStack');
+    const firstProvisioningJobRunner: BashJobRunner = new BashJobRunner(
+      coreAppPlaneStack,
+      'firstProvisioningJobRunner',
+      {
+        name: 'provisioning-1',
+        outgoingEvent: DetailType.PROVISION_SUCCESS,
+        incomingEvent: DetailType.ONBOARDING_REQUEST,
+        permissions: samplePolicyDocument,
+        script: '',
+        eventManager: eventManager,
+      }
+    );
+    const secondProvisioningJobRunner: BashJobRunner = new BashJobRunner(
+      coreAppPlaneStack,
+      'secondProvisioningJobRunner',
+      {
+        name: 'provisioning-2',
+        outgoingEvent: DetailType.PROVISION_SUCCESS,
+        incomingEvent: DetailType.ONBOARDING_REQUEST,
+        permissions: samplePolicyDocument,
+        script: '',
+        eventManager: eventManager,
+      }
+    );
     new CoreApplicationPlane(coreAppPlaneStack, 'CoreApplicationPlane', {
       eventManager: eventManager,
-      jobRunnerPropsList: jobsUsingTheSameIncomingEvent,
+      jobRunnersList: [firstProvisioningJobRunner, secondProvisioningJobRunner],
     });
 
     cdk.Aspects.of(controlPlaneStack).add(new AwsSolutionsChecks({ verbose: true }));
@@ -171,9 +202,33 @@ describe('EventManager', () => {
     });
 
     const coreAppPlaneStack = new cdk.Stack(app, 'CoreApplicationPlaneStack');
+    const firstProvisioningJobRunner: BashJobRunner = new BashJobRunner(
+      coreAppPlaneStack,
+      'firstProvisioningJobRunner',
+      {
+        name: 'provisioning-1',
+        outgoingEvent: DetailType.PROVISION_SUCCESS,
+        incomingEvent: DetailType.ONBOARDING_REQUEST,
+        permissions: samplePolicyDocument,
+        script: '',
+        eventManager: eventManager,
+      }
+    );
+    const secondProvisioningJobRunner: BashJobRunner = new BashJobRunner(
+      coreAppPlaneStack,
+      'secondProvisioningJobRunner',
+      {
+        name: 'provisioning-2',
+        outgoingEvent: DetailType.PROVISION_SUCCESS,
+        incomingEvent: DetailType.ONBOARDING_REQUEST,
+        permissions: samplePolicyDocument,
+        script: '',
+        eventManager: eventManager,
+      }
+    );
     new CoreApplicationPlane(coreAppPlaneStack, 'CoreApplicationPlane', {
       eventManager: eventManager,
-      jobRunnerPropsList: jobsUsingTheSameIncomingEvent,
+      jobRunnersList: [firstProvisioningJobRunner, secondProvisioningJobRunner],
     });
     cdk.Aspects.of(controlPlaneStack).add(new AwsSolutionsChecks({ verbose: true }));
     cdk.Aspects.of(coreAppPlaneStack).add(new AwsSolutionsChecks({ verbose: true }));
