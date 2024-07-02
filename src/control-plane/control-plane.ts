@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as cdk from 'aws-cdk-lib';
+import { CorsPreflightOptions } from 'aws-cdk-lib/aws-apigatewayv2';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IAuth } from './auth/auth-interface';
@@ -9,7 +10,7 @@ import { CognitoAuth } from './auth/cognito-auth';
 import { BillingProvider, IBilling } from './billing';
 import { TenantManagementService } from './tenant-management/tenant-management.service';
 import { UserManagementService } from './user-management/user-management.service';
-import { APICorsConfig, ControlPlaneAPI } from './control-plane-api';
+import { ControlPlaneAPI } from './control-plane-api';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
 import { addTemplateTag, EventManager, IEventManager } from '../utils';
 import { TenantConfigService } from './tenant-config';
@@ -57,7 +58,7 @@ export interface ControlPlaneProps {
   /**
    * Settings for Cors Configuration for the ControlPlane API.
    */
-  readonly apiCorsConfig?: APICorsConfig;
+  readonly apiCorsConfig?: CorsPreflightOptions;
 }
 
 export class ControlPlane extends Construct {

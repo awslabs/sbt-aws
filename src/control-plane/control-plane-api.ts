@@ -10,15 +10,6 @@ import { Construct } from 'constructs';
 import { IAuth } from './auth/auth-interface';
 import { addTemplateTag } from '../utils';
 
-export interface APICorsConfig {
-  readonly allowOrigins?: string[];
-  readonly allowCredentials?: boolean;
-  readonly allowHeaders?: string[];
-  readonly allowMethods?: apigatewayV2.CorsHttpMethod[];
-  readonly maxAge?: cdk.Duration;
-  readonly exposeHeaders?: string[];
-}
-
 export interface ControlPlaneAPIProps {
   readonly auth: IAuth;
   readonly disableAPILogging?: boolean;
@@ -26,7 +17,7 @@ export interface ControlPlaneAPIProps {
   /**
    * Settings for Cors Configuration for the ControlPlane API.
    */
-  readonly apiCorsConfig?: APICorsConfig;
+  readonly apiCorsConfig?: apigatewayV2.CorsPreflightOptions;
 }
 
 export class ControlPlaneAPI extends Construct {
