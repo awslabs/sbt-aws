@@ -2,8 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Construct } from 'constructs';
-// import { BashJobOrchestrator } from './bash-job-orchestrator';
-// import { BashJobRunner } from './bash-job-runner';
 import { BashJobRunner } from './bash-job-runner';
 import { IEventManager, addTemplateTag } from '../utils';
 

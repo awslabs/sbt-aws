@@ -147,29 +147,6 @@ export class BashJobRunner extends Construct {
     eventBus.grantPutEventsTo(this.provisioningStateMachine);
 
     this.eventTarget = new targets.SfnStateMachine(this.provisioningStateMachine);
-
-    // const environmentVariablesOverride: {
-    //   name: string;
-    //   value: string;
-    //   type: codebuild.BuildEnvironmentVariableType;
-    // }[] = [];
-
-    // let envVarsFromIncomingEvent: string[] = [];
-    // if (props.environmentStringVariablesFromIncomingEvent) {
-    // envVarsFromIncomingEvent.concat(props.environmentStringVariablesFromIncomingEvent);
-    // }
-
-    // if (props.environmentJSONVariablesFromIncomingEvent) {
-    // envVarsFromIncomingEvent.concat(props.environmentJSONVariablesFromIncomingEvent);
-    // }
-
-    // envVarsFromIncomingEvent?.forEach((importedVariable: string) => {
-    //   environmentVariablesOverride.push({
-    //     name: importedVariable,
-    //     value: EventField.fromPath(`$.detail.${importedVariable}`),
-    //     type: codebuild.BuildEnvironmentVariableType.PLAINTEXT,
-    //   });
-    // });
   }
 
   private createCodeBuildProject(props: BashJobRunnerProps): codebuild.Project {
