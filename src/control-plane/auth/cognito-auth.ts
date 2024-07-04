@@ -398,10 +398,12 @@ export class CognitoAuth extends Construct implements IAuth {
     // TODO: The caller should be surfacing these, not the implementor
     new cdk.CfnOutput(this, 'ControlPlaneIdpUserPoolId', {
       value: this.userPool.userPoolId,
+      key: 'ControlPlaneIdpUserPoolId',
     });
 
     new cdk.CfnOutput(this, 'ControlPlaneIdpClientId', {
       value: userPoolUserClient.userPoolClientId,
+      key: 'ControlPlaneIdpClientId',
     });
 
     const userManagementExecRole = new Role(this, 'userManagementExecRole', {
