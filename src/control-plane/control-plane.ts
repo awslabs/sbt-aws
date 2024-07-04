@@ -8,12 +8,12 @@ import { Construct } from 'constructs';
 import { IAuth } from './auth/auth-interface';
 import { CognitoAuth } from './auth/cognito-auth';
 import { BillingProvider, IBilling } from './billing';
+import { ControlPlaneAPI } from './control-plane-api';
+import { TenantConfigService } from './tenant-config';
 import { TenantManagementService } from './tenant-management/tenant-management.service';
 import { UserManagementService } from './user-management/user-management.service';
-import { ControlPlaneAPI } from './control-plane-api';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
 import { addTemplateTag, EventManager, IEventManager } from '../utils';
-import { TenantConfigService } from './tenant-config';
 
 export interface ControlPlaneProps {
   /**

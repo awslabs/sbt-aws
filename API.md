@@ -3414,6 +3414,7 @@ const controlPlaneAPIProps: ControlPlaneAPIProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.auth">auth</a></code> | <code><a href="#@cdklabs/sbt-aws.IAuth">IAuth</a></code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.apiCorsConfig">apiCorsConfig</a></code> | <code>aws-cdk-lib.aws_apigatewayv2.CorsPreflightOptions</code> | Settings for Cors Configuration for the ControlPlane API. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPIProps.property.disableAPILogging">disableAPILogging</a></code> | <code>boolean</code> | *No description.* |
 
 ---
@@ -3425,6 +3426,18 @@ public readonly auth: IAuth;
 ```
 
 - *Type:* <a href="#@cdklabs/sbt-aws.IAuth">IAuth</a>
+
+---
+
+##### `apiCorsConfig`<sup>Optional</sup> <a name="apiCorsConfig" id="@cdklabs/sbt-aws.ControlPlaneAPIProps.property.apiCorsConfig"></a>
+
+```typescript
+public readonly apiCorsConfig: CorsPreflightOptions;
+```
+
+- *Type:* aws-cdk-lib.aws_apigatewayv2.CorsPreflightOptions
+
+Settings for Cors Configuration for the ControlPlane API.
 
 ---
 
@@ -3453,6 +3466,7 @@ const controlPlaneProps: ControlPlaneProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminEmail">systemAdminEmail</a></code> | <code>string</code> | The email address of the system admin. |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.apiCorsConfig">apiCorsConfig</a></code> | <code>aws-cdk-lib.aws_apigatewayv2.CorsPreflightOptions</code> | Settings for Cors Configuration for the ControlPlane API. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.auth">auth</a></code> | <code><a href="#@cdklabs/sbt-aws.IAuth">IAuth</a></code> | The authentication provider for the control plane. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.billing">billing</a></code> | <code><a href="#@cdklabs/sbt-aws.IBilling">IBilling</a></code> | The billing provider configuration. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.disableAPILogging">disableAPILogging</a></code> | <code>boolean</code> | If true, the API Gateway will not log requests to the CloudWatch Logs. |
@@ -3471,6 +3485,18 @@ public readonly systemAdminEmail: string;
 - *Type:* string
 
 The email address of the system admin.
+
+---
+
+##### `apiCorsConfig`<sup>Optional</sup> <a name="apiCorsConfig" id="@cdklabs/sbt-aws.ControlPlaneProps.property.apiCorsConfig"></a>
+
+```typescript
+public readonly apiCorsConfig: CorsPreflightOptions;
+```
+
+- *Type:* aws-cdk-lib.aws_apigatewayv2.CorsPreflightOptions
+
+Settings for Cors Configuration for the ControlPlane API.
 
 ---
 
