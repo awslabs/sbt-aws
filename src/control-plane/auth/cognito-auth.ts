@@ -332,7 +332,7 @@ export class CognitoAuth extends Construct implements IAuth {
     const userPoolDomain = new cognito.UserPoolDomain(this, 'UserPoolDomain', {
       userPool: this.userPool,
       cognitoDomain: {
-        domainPrefix: `saascontrolplane-${this.node.addr}`,
+        domainPrefix: `${cdk.Stack.of(this).account}-${this.node.addr}`,
       },
     });
 
@@ -398,12 +398,10 @@ export class CognitoAuth extends Construct implements IAuth {
     // TODO: The caller should be surfacing these, not the implementor
     new cdk.CfnOutput(this, 'ControlPlaneIdpUserPoolId', {
       value: this.userPool.userPoolId,
-      key: 'ControlPlaneIdpUserPoolId',
     });
 
     new cdk.CfnOutput(this, 'ControlPlaneIdpClientId', {
       value: userPoolUserClient.userPoolClientId,
-      key: 'ControlPlaneIdpClientId',
     });
 
     const userManagementExecRole = new Role(this, 'userManagementExecRole', {
@@ -498,7 +496,7 @@ export class CognitoAuth extends Construct implements IAuth {
       ]
     );
 
-    this.createAdminUserFunction = new PythonFunction(scope, 'createAdminUserFunction', {
+    this.createAdminUserFunction = new PythonFunction(this, 'createAdminUserFunction', {
       entry: path.join(__dirname, '../../../resources/functions/auth-custom-resource'),
       runtime: Runtime.PYTHON_3_12,
       index: 'index.py',
