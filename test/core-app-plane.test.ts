@@ -3,7 +3,7 @@
 
 import * as cdk from 'aws-cdk-lib';
 import { Annotations, Match, Template } from 'aws-cdk-lib/assertions';
-import { PolicyDocument } from 'aws-cdk-lib/aws-iam';
+import { PolicyDocument, PolicyStatement, Effect } from 'aws-cdk-lib/aws-iam';
 import { AwsSolutionsChecks, NagSuppressions } from 'cdk-nag';
 import { Construct, IConstruct } from 'constructs';
 import { CoreApplicationPlane, BashJobRunner } from '../src/core-app-plane';
@@ -27,23 +27,17 @@ describe('No unsuppressed cdk-nag Warnings or Errors', () => {
         this,
         'provisioningJobRunner',
         {
-          name: 'provisioning',
           outgoingEvent: DetailType.PROVISION_SUCCESS,
           incomingEvent: DetailType.ONBOARDING_REQUEST,
-          permissions: PolicyDocument.fromJson(
-            JSON.parse(`{
-                          "Version":"2012-10-17",
-                          "Statement":[
-                              {
-                                "Action":[
-                                    "cloudformation:CreateStack"
-                                ],
-                                "Resource":"arn:aws:cloudformation:*:*:stack/MyStack/*",
-                                "Effect":"Allow"
-                              }
-                          ]
-                        }`)
-          ),
+          permissions: new PolicyDocument({
+            statements: [
+              new PolicyStatement({
+                actions: ['cloudformation:CreateStack'],
+                resources: ['arn:aws:cloudformation:*:*:stack/MyStack/*'],
+                effect: Effect.ALLOW,
+              }),
+            ],
+          }),
           script: '',
           eventManager: eventManager,
         }
@@ -94,23 +88,17 @@ describe('CoreApplicationPlane', () => {
           this,
           'provisioningJobRunner',
           {
-            name: 'provisioning',
             outgoingEvent: DetailType.PROVISION_SUCCESS,
             incomingEvent: DetailType.ONBOARDING_REQUEST,
-            permissions: PolicyDocument.fromJson(
-              JSON.parse(`{
-                            "Version":"2012-10-17",
-                            "Statement":[
-                                {
-                                  "Action":[
-                                      "cloudformation:CreateStack"
-                                  ],
-                                  "Resource":"*",
-                                  "Effect":"Allow"
-                                }
-                            ]
-                          }`)
-            ),
+            permissions: new PolicyDocument({
+              statements: [
+                new PolicyStatement({
+                  actions: ['cloudformation:CreateStack'],
+                  resources: ['*'],
+                  effect: Effect.ALLOW,
+                }),
+              ],
+            }),
             script: '',
             eventManager: eventManager,
           }
@@ -146,23 +134,17 @@ describe('CoreApplicationPlane', () => {
           this,
           'provisioningJobRunner',
           {
-            name: 'provisioning',
             outgoingEvent: DetailType.PROVISION_SUCCESS,
             incomingEvent: DetailType.ONBOARDING_REQUEST,
-            permissions: PolicyDocument.fromJson(
-              JSON.parse(`{
-                            "Version":"2012-10-17",
-                            "Statement":[
-                                {
-                                  "Action":[
-                                      "cloudformation:CreateStack"
-                                  ],
-                                  "Resource":"*",
-                                  "Effect":"Allow"
-                                }
-                            ]
-                          }`)
-            ),
+            permissions: new PolicyDocument({
+              statements: [
+                new PolicyStatement({
+                  actions: ['cloudformation:CreateStack'],
+                  resources: ['*'],
+                  effect: Effect.ALLOW,
+                }),
+              ],
+            }),
             script: '',
             scriptEnvironmentVariables: {
               MY_TEST_ENV_VAR: 'test env var',

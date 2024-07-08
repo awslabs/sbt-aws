@@ -31,7 +31,6 @@ export class IntegStack extends cdk.Stack {
     }
 
     const provisioningJobRunnerProps: BashJobRunnerProps = {
-      name: 'provisioning',
       permissions: new PolicyDocument({
         statements: [
           new PolicyStatement({
@@ -108,7 +107,6 @@ echo "done!"
     };
 
     const deprovisioningJobRunnerProps: BashJobRunnerProps = {
-      name: 'deprovisioning',
       permissions: new PolicyDocument({
         statements: [
           new PolicyStatement({

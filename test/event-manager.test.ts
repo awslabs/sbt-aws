@@ -94,7 +94,6 @@ describe('EventManager', () => {
       coreAppPlaneStack,
       'firstProvisioningJobRunner',
       {
-        name: 'provisioning-1',
         outgoingEvent: DetailType.PROVISION_SUCCESS,
         incomingEvent: DetailType.ONBOARDING_REQUEST,
         permissions: samplePolicyDocument,
@@ -106,7 +105,6 @@ describe('EventManager', () => {
       coreAppPlaneStack,
       'secondProvisioningJobRunner',
       {
-        name: 'provisioning-2',
         outgoingEvent: DetailType.PROVISION_SUCCESS,
         incomingEvent: DetailType.ONBOARDING_REQUEST,
         permissions: samplePolicyDocument,
@@ -150,7 +148,6 @@ describe('EventManager', () => {
       coreAppPlaneStack,
       'firstProvisioningJobRunner',
       {
-        name: 'provisioning-1',
         outgoingEvent: DetailType.PROVISION_SUCCESS,
         incomingEvent: DetailType.ONBOARDING_REQUEST,
         permissions: samplePolicyDocument,
@@ -162,7 +159,6 @@ describe('EventManager', () => {
       coreAppPlaneStack,
       'secondProvisioningJobRunner',
       {
-        name: 'provisioning-2',
         outgoingEvent: DetailType.PROVISION_SUCCESS,
         incomingEvent: DetailType.ONBOARDING_REQUEST,
         permissions: samplePolicyDocument,
@@ -206,7 +202,6 @@ describe('EventManager', () => {
       coreAppPlaneStack,
       'firstProvisioningJobRunner',
       {
-        name: 'provisioning-1',
         outgoingEvent: DetailType.PROVISION_SUCCESS,
         incomingEvent: DetailType.ONBOARDING_REQUEST,
         permissions: samplePolicyDocument,
@@ -218,7 +213,6 @@ describe('EventManager', () => {
       coreAppPlaneStack,
       'secondProvisioningJobRunner',
       {
-        name: 'provisioning-2',
         outgoingEvent: DetailType.PROVISION_SUCCESS,
         incomingEvent: DetailType.ONBOARDING_REQUEST,
         permissions: samplePolicyDocument,

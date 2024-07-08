@@ -8,14 +8,7 @@ import * as targets from 'aws-cdk-lib/aws-events-targets';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as kms from 'aws-cdk-lib/aws-kms';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
-import {
-  StateMachine,
-  JsonPath,
-  IntegrationPattern,
-  TaskInput,
-  DefinitionBody,
-  LogLevel,
-} from 'aws-cdk-lib/aws-stepfunctions';
+import * as stepfunctions from 'aws-cdk-lib/aws-stepfunctions';
 import * as tasks from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
@@ -31,11 +24,6 @@ export interface BashJobRunnerProps {
    * @default 'tenantId'
    */
   readonly tenantIdentifierKeyInIncomingEvent?: string;
-
-  /**
-   * The name of the BashJobRunner. Note that this value must be unique.
-   */
-  readonly name: string;
 
   /**
    * The IAM permission document for the BashJobRunner.
@@ -109,7 +97,7 @@ export class BashJobRunner extends Construct {
    * The StateMachine used to implement this BashJobRunner orchestration.
    * @attribute
    */
-  public readonly provisioningStateMachine: StateMachine;
+  public readonly provisioningStateMachine: stepfunctions.StateMachine;
 
   /**
    * The eventTarget to use when triggering this BashJobRunner.
@@ -163,15 +151,11 @@ export class BashJobRunner extends Construct {
       }
     }
 
-    const codeBuildProjectEncryptionKey = new kms.Key(
-      this,
-      `${props.name}-codeBuildProjectEncryptionKey`,
-      {
-        enableKeyRotation: true,
-      }
-    );
+    const codeBuildProjectEncryptionKey = new kms.Key(this, `codeBuildProjectEncryptionKey`, {
+      enableKeyRotation: true,
+    });
 
-    const codebuildProject = new codebuild.Project(this, `${props.name}-codebuildProject`, {
+    const codebuildProject = new codebuild.Project(this, `codebuildProject`, {
       encryptionKey: codeBuildProjectEncryptionKey,
       environment: {
         buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_5,
@@ -226,7 +210,7 @@ export class BashJobRunner extends Construct {
     );
 
     codebuildProject.role?.addManagedPolicy(
-      new iam.ManagedPolicy(this, `${props.name}-codeBuildProvisionProjectRole`, {
+      new iam.ManagedPolicy(this, `codeBuildProvisionProjectRole`, {
         document: props.permissions,
       })
     );
@@ -238,7 +222,7 @@ export class BashJobRunner extends Construct {
     props: BashJobRunnerProps,
     jobRunnerCodeBuildProject: codebuild.Project,
     eventBus: IEventBus
-  ): StateMachine {
+  ): stepfunctions.StateMachine {
     const eventSource = props.eventManager.supportedEvents[props.outgoingEvent];
     const detailType = props.outgoingEvent;
 
@@ -252,14 +236,16 @@ export class BashJobRunner extends Construct {
     props.environmentStringVariablesFromIncomingEvent?.forEach((importedVar: string) => {
       environmentVariablesOverride[importedVar] = {
         type: codebuild.BuildEnvironmentVariableType.PLAINTEXT,
-        value: JsonPath.stringAt(`$.detail.${importedVar}`),
+        value: stepfunctions.JsonPath.stringAt(`$.detail.${importedVar}`),
       };
     });
 
     props.environmentJSONVariablesFromIncomingEvent?.forEach((importedVar: string) => {
       environmentVariablesOverride[importedVar] = {
         type: codebuild.BuildEnvironmentVariableType.PLAINTEXT,
-        value: JsonPath.jsonToString(JsonPath.objectAt(`$.detail.${importedVar}`)),
+        value: stepfunctions.JsonPath.jsonToString(
+          stepfunctions.JsonPath.objectAt(`$.detail.${importedVar}`)
+        ),
       };
     });
 
@@ -274,19 +260,19 @@ export class BashJobRunner extends Construct {
       'startProvisioningCodeBuild',
       {
         project: jobRunnerCodeBuildProject,
-        integrationPattern: IntegrationPattern.RUN_JOB,
+        integrationPattern: stepfunctions.IntegrationPattern.RUN_JOB,
         environmentVariablesOverride: environmentVariablesOverride,
         resultPath: '$.startProvisioningCodeBuild',
       }
     );
 
     const exportedVarObj: { [key: string]: any } = {
-      tenantId: JsonPath.stringAt(`$.detail.${tenantIdentifierKeyInIncomingEvent}`),
+      tenantId: stepfunctions.JsonPath.stringAt(`$.detail.${tenantIdentifierKeyInIncomingEvent}`),
       tenantOutput: {},
     };
     props.environmentVariablesToOutgoingEvent?.forEach((exportedVar: string) => {
-      exportedVarObj.tenantOutput[exportedVar] = JsonPath.arrayGetItem(
-        JsonPath.listAt(
+      exportedVarObj.tenantOutput[exportedVar] = stepfunctions.JsonPath.arrayGetItem(
+        stepfunctions.JsonPath.listAt(
           `$.startProvisioningCodeBuild.Build.ExportedEnvironmentVariables[?(@.Name==${exportedVar})].Value`
         ),
         0
@@ -297,7 +283,7 @@ export class BashJobRunner extends Construct {
       entries: [
         {
           detailType: detailType,
-          detail: TaskInput.fromObject(exportedVarObj),
+          detail: stepfunctions.TaskInput.fromObject(exportedVarObj),
           source: eventSource,
           eventBus: eventBus,
         },
@@ -305,19 +291,23 @@ export class BashJobRunner extends Construct {
       resultPath: '$.notifyEventBridgeTask',
     });
 
-    const definitionBody = DefinitionBody.fromChainable(
+    const definitionBody = stepfunctions.DefinitionBody.fromChainable(
       startProvisioningCodeBuild.next(notifyEventBridgeTask)
     );
 
-    const provisioningStateMachine = new StateMachine(this, 'provisioningStateMachine', {
-      definitionBody: definitionBody,
-      timeout: cdk.Duration.hours(1),
-      logs: {
-        destination: stateMachineLogGroup,
-        level: LogLevel.ALL,
-      },
-      tracingEnabled: true,
-    });
+    const provisioningStateMachine = new stepfunctions.StateMachine(
+      this,
+      'provisioningStateMachine',
+      {
+        definitionBody: definitionBody,
+        timeout: cdk.Duration.hours(1),
+        logs: {
+          destination: stateMachineLogGroup,
+          level: stepfunctions.LogLevel.ALL,
+        },
+        tracingEnabled: true,
+      }
+    );
 
     NagSuppressions.addResourceSuppressions(
       provisioningStateMachine,

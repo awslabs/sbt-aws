@@ -2748,7 +2748,6 @@ const bashJobRunnerProps: BashJobRunnerProps = { ... }
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | The EventManager instance that allows connecting to events flowing between the Control Plane and other components. |
 | <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The incoming event DetailType that triggers this job. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.name">name</a></code> | <code>string</code> | The name of the BashJobRunner. |
 | <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.outgoingEvent">outgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The outgoing event DetailType that is emitted upon job completion. |
 | <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.permissions">permissions</a></code> | <code>aws-cdk-lib.aws_iam.PolicyDocument</code> | The IAM permission document for the BashJobRunner. |
 | <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.script">script</a></code> | <code>string</code> | The bash script to run as part of the BashJobRunner. |
@@ -2782,20 +2781,6 @@ public readonly incomingEvent: DetailType;
 - *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
 
 The incoming event DetailType that triggers this job.
-
----
-
-##### `name`<sup>Required</sup> <a name="name" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.name"></a>
-
-```typescript
-public readonly name: string;
-```
-
-- *Type:* string
-
-The name of the BashJobRunner.
-
-Note that this value must be unique.
 
 ---
 
