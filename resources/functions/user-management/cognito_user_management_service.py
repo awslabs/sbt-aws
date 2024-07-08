@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import boto3
-import json
 
 client = boto3.client('cognito-idp')
 
@@ -169,7 +168,7 @@ class UserInfo:
         self.modified = modified
 
     def serialize(self):
-        return json.dumps(self.__dict__, default=str)
+        return self.__dict__
 
 
 class UserInfoList:
@@ -181,4 +180,4 @@ class UserInfoList:
 
     def serialize(self):
         user_dicts = [user.__dict__ for user in self.users]
-        return json.dumps(user_dicts, default=str)
+        return user_dicts
