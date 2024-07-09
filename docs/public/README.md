@@ -203,7 +203,6 @@ Notice the use of the `provisioning.sh` and `deprovisioning.sh` scripts at the t
 
 ```typescript
 const provisioningJobRunnerProps = {
-  name: 'provisioning',
   permissions: PolicyDocument.fromJson(/*See below*/),
   script: '' /*See below*/,
   environmentStringVariablesFromIncomingEvent: ['tenantId', 'tier'],
@@ -223,7 +222,6 @@ Let's take a moment and dissect this object.
 
 | Key                                             | Type                                                                                                  | Purpose                                                                                                            |
 | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| **name**                                        | string                                                                                                | The **name** key is just a name for this job.                                                                      |
 | **script**                                      | string                                                                                                | A string in bash script format that represents the job to be run (example below)                                   |
 | **permissions**                                 | [PolicyDocument](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_iam.PolicyDocument.html) | An IAM policy document giving this job the IAM permisisons it needs to do what it's being asked to do              |
 | **environmentStringVariablesFromIncomingEvent** | string[]                                                                                              | The environment variables to import into the BashJobRunner from event details field.                               |
@@ -373,7 +371,6 @@ export class AppPlaneStack extends cdk.Stack {
     super(scope, id, props);
 
     const provisioningJobRunnerProps = {
-      name: 'provisioning',
       permissions: new PolicyDocument({
         statements: [
           new PolicyStatement({
