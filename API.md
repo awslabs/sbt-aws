@@ -151,133 +151,6 @@ when registering a new customer.
 ---
 
 
-### BashJobOrchestrator <a name="BashJobOrchestrator" id="@cdklabs/sbt-aws.BashJobOrchestrator"></a>
-
-Provides a BashJobOrchestrator to execute a BashJobRunner.
-
-#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.BashJobOrchestrator.Initializer"></a>
-
-```typescript
-import { BashJobOrchestrator } from '@cdklabs/sbt-aws'
-
-new BashJobOrchestrator(scope: Construct, id: string, props: BashJobOrchestratorProps)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestrator.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestrator.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestrator.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps">BashJobOrchestratorProps</a></code> | *No description.* |
-
----
-
-##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.BashJobOrchestrator.Initializer.parameter.scope"></a>
-
-- *Type:* constructs.Construct
-
----
-
-##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.BashJobOrchestrator.Initializer.parameter.id"></a>
-
-- *Type:* string
-
----
-
-##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.BashJobOrchestrator.Initializer.parameter.props"></a>
-
-- *Type:* <a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps">BashJobOrchestratorProps</a>
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestrator.toString">toString</a></code> | Returns a string representation of this construct. |
-
----
-
-##### `toString` <a name="toString" id="@cdklabs/sbt-aws.BashJobOrchestrator.toString"></a>
-
-```typescript
-public toString(): string
-```
-
-Returns a string representation of this construct.
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestrator.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
-
----
-
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.BashJobOrchestrator.isConstruct"></a>
-
-```typescript
-import { BashJobOrchestrator } from '@cdklabs/sbt-aws'
-
-BashJobOrchestrator.isConstruct(x: any)
-```
-
-Checks if `x` is a construct.
-
-###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.BashJobOrchestrator.isConstruct.parameter.x"></a>
-
-- *Type:* any
-
-Any object.
-
----
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestrator.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestrator.property.eventTarget">eventTarget</a></code> | <code>aws-cdk-lib.aws_events.IRuleTarget</code> | The eventTarget to use when triggering this BashJobOrchestrator. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestrator.property.provisioningStateMachine">provisioningStateMachine</a></code> | <code>aws-cdk-lib.aws_stepfunctions.StateMachine</code> | The StateMachine used to implement this BashJobOrchestrator. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.BashJobOrchestrator.property.node"></a>
-
-```typescript
-public readonly node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `eventTarget`<sup>Required</sup> <a name="eventTarget" id="@cdklabs/sbt-aws.BashJobOrchestrator.property.eventTarget"></a>
-
-```typescript
-public readonly eventTarget: IRuleTarget;
-```
-
-- *Type:* aws-cdk-lib.aws_events.IRuleTarget
-
-The eventTarget to use when triggering this BashJobOrchestrator.
-
----
-
-##### `provisioningStateMachine`<sup>Required</sup> <a name="provisioningStateMachine" id="@cdklabs/sbt-aws.BashJobOrchestrator.property.provisioningStateMachine"></a>
-
-```typescript
-public readonly provisioningStateMachine: StateMachine;
-```
-
-- *Type:* aws-cdk-lib.aws_stepfunctions.StateMachine
-
-The StateMachine used to implement this BashJobOrchestrator.
-
----
-
-
 ### BashJobRunner <a name="BashJobRunner" id="@cdklabs/sbt-aws.BashJobRunner"></a>
 
 Provides a BashJobRunner to execute arbitrary bash code.
@@ -365,6 +238,8 @@ Any object.
 | <code><a href="#@cdklabs/sbt-aws.BashJobRunner.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@cdklabs/sbt-aws.BashJobRunner.property.codebuildProject">codebuildProject</a></code> | <code>aws-cdk-lib.aws_codebuild.Project</code> | The codebuildProject used to implement this BashJobRunner. |
 | <code><a href="#@cdklabs/sbt-aws.BashJobRunner.property.eventTarget">eventTarget</a></code> | <code>aws-cdk-lib.aws_events.IRuleTarget</code> | The eventTarget to use when triggering this BashJobRunner. |
+| <code><a href="#@cdklabs/sbt-aws.BashJobRunner.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The incoming event DetailType that triggers this job. |
+| <code><a href="#@cdklabs/sbt-aws.BashJobRunner.property.provisioningStateMachine">provisioningStateMachine</a></code> | <code>aws-cdk-lib.aws_stepfunctions.StateMachine</code> | The StateMachine used to implement this BashJobRunner orchestration. |
 | <code><a href="#@cdklabs/sbt-aws.BashJobRunner.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | The environment variables to export into the outgoing event once the BashJobRunner has finished. |
 
 ---
@@ -402,6 +277,30 @@ public readonly eventTarget: IRuleTarget;
 - *Type:* aws-cdk-lib.aws_events.IRuleTarget
 
 The eventTarget to use when triggering this BashJobRunner.
+
+---
+
+##### `incomingEvent`<sup>Required</sup> <a name="incomingEvent" id="@cdklabs/sbt-aws.BashJobRunner.property.incomingEvent"></a>
+
+```typescript
+public readonly incomingEvent: DetailType;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+
+The incoming event DetailType that triggers this job.
+
+---
+
+##### `provisioningStateMachine`<sup>Required</sup> <a name="provisioningStateMachine" id="@cdklabs/sbt-aws.BashJobRunner.property.provisioningStateMachine"></a>
+
+```typescript
+public readonly provisioningStateMachine: StateMachine;
+```
+
+- *Type:* aws-cdk-lib.aws_stepfunctions.StateMachine
+
+The StateMachine used to implement this BashJobRunner orchestration.
 
 ---
 
@@ -2831,355 +2730,6 @@ fields is checked when a new customer is registered.
 
 ---
 
-### BashJobOrchestratorProps <a name="BashJobOrchestratorProps" id="@cdklabs/sbt-aws.BashJobOrchestratorProps"></a>
-
-Encapsulates the list of properties for a BashJobOrchestrator.
-
-#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.Initializer"></a>
-
-```typescript
-import { BashJobOrchestratorProps } from '@cdklabs/sbt-aws'
-
-const bashJobOrchestratorProps: BashJobOrchestratorProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.analyticsReporting">analyticsReporting</a></code> | <code>boolean</code> | Include runtime versioning information in this Stack. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.crossRegionReferences">crossRegionReferences</a></code> | <code>boolean</code> | Enable this flag to allow native cross region stack references. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.description">description</a></code> | <code>string</code> | A description of the stack. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.env">env</a></code> | <code>aws-cdk-lib.Environment</code> | The AWS environment (account/region) where this stack will be deployed. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.permissionsBoundary">permissionsBoundary</a></code> | <code>aws-cdk-lib.PermissionsBoundary</code> | Options for applying a permissions boundary to all IAM Roles and Users created within this Stage. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.stackName">stackName</a></code> | <code>string</code> | Name to deploy the stack with. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.suppressTemplateIndentation">suppressTemplateIndentation</a></code> | <code>boolean</code> | Enable this flag to suppress indentation in generated CloudFormation templates. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.synthesizer">synthesizer</a></code> | <code>aws-cdk-lib.IStackSynthesizer</code> | Synthesis method to use while deploying this stack. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.tags">tags</a></code> | <code>{[ key: string ]: string}</code> | Stack tags that will be applied to all the taggable resources and the stack itself. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.terminationProtection">terminationProtection</a></code> | <code>boolean</code> | Whether to enable termination protection for this stack. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.bashJobRunner">bashJobRunner</a></code> | <code><a href="#@cdklabs/sbt-aws.BashJobRunner">BashJobRunner</a></code> | The BashJobRunner to execute as part of this BashJobOrchestrator. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.detailType">detailType</a></code> | <code>string</code> | The detail type to use when publishing event bridge events. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.eventSource">eventSource</a></code> | <code>string</code> | The event source to use when publishing event bridge events. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.targetEventBus">targetEventBus</a></code> | <code>aws-cdk-lib.aws_events.IEventBus</code> | The event bus to publish the outgoing event to. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentJSONVariablesFromIncomingEvent">environmentJSONVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the CoreApplicationPlaneJobRunner from event details field. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentStringVariablesFromIncomingEvent">environmentStringVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the CoreApplicationPlaneJobRunner from event details field. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | Environment variables to export into the outgoing event once the bash job has finished. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobOrchestratorProps.property.tenantIdentifierKeyInIncomingEvent">tenantIdentifierKeyInIncomingEvent</a></code> | <code>string</code> | The key where the tenant identifier is to be extracted from. |
-
----
-
-##### `analyticsReporting`<sup>Optional</sup> <a name="analyticsReporting" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.analyticsReporting"></a>
-
-```typescript
-public readonly analyticsReporting: boolean;
-```
-
-- *Type:* boolean
-- *Default:* `analyticsReporting` setting of containing `App`, or value of 'aws:cdk:version-reporting' context key
-
-Include runtime versioning information in this Stack.
-
----
-
-##### `crossRegionReferences`<sup>Optional</sup> <a name="crossRegionReferences" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.crossRegionReferences"></a>
-
-```typescript
-public readonly crossRegionReferences: boolean;
-```
-
-- *Type:* boolean
-- *Default:* false
-
-Enable this flag to allow native cross region stack references.
-
-Enabling this will create a CloudFormation custom resource
-in both the producing stack and consuming stack in order to perform the export/import
-
-This feature is currently experimental
-
----
-
-##### `description`<sup>Optional</sup> <a name="description" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.description"></a>
-
-```typescript
-public readonly description: string;
-```
-
-- *Type:* string
-- *Default:* No description.
-
-A description of the stack.
-
----
-
-##### `env`<sup>Optional</sup> <a name="env" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.env"></a>
-
-```typescript
-public readonly env: Environment;
-```
-
-- *Type:* aws-cdk-lib.Environment
-- *Default:* The environment of the containing `Stage` if available, otherwise create the stack will be environment-agnostic.
-
-The AWS environment (account/region) where this stack will be deployed.
-
-Set the `region`/`account` fields of `env` to either a concrete value to
-select the indicated environment (recommended for production stacks), or to
-the values of environment variables
-`CDK_DEFAULT_REGION`/`CDK_DEFAULT_ACCOUNT` to let the target environment
-depend on the AWS credentials/configuration that the CDK CLI is executed
-under (recommended for development stacks).
-
-If the `Stack` is instantiated inside a `Stage`, any undefined
-`region`/`account` fields from `env` will default to the same field on the
-encompassing `Stage`, if configured there.
-
-If either `region` or `account` are not set nor inherited from `Stage`, the
-Stack will be considered "*environment-agnostic*"". Environment-agnostic
-stacks can be deployed to any environment but may not be able to take
-advantage of all features of the CDK. For example, they will not be able to
-use environmental context lookups such as `ec2.Vpc.fromLookup` and will not
-automatically translate Service Principals to the right format based on the
-environment's AWS partition, and other such enhancements.
-
----
-
-*Example*
-
-```typescript
-// Use a concrete account and region to deploy this stack to:
-// `.account` and `.region` will simply return these values.
-new Stack(app, 'Stack1', {
-  env: {
-    account: '123456789012',
-    region: 'us-east-1'
-  },
-});
-
-// Use the CLI's current credentials to determine the target environment:
-// `.account` and `.region` will reflect the account+region the CLI
-// is configured to use (based on the user CLI credentials)
-new Stack(app, 'Stack2', {
-  env: {
-    account: process.env.CDK_DEFAULT_ACCOUNT,
-    region: process.env.CDK_DEFAULT_REGION
-  },
-});
-
-// Define multiple stacks stage associated with an environment
-const myStage = new Stage(app, 'MyStage', {
-  env: {
-    account: '123456789012',
-    region: 'us-east-1'
-  }
-});
-
-// both of these stacks will use the stage's account/region:
-// `.account` and `.region` will resolve to the concrete values as above
-new MyStack(myStage, 'Stack1');
-new YourStack(myStage, 'Stack2');
-
-// Define an environment-agnostic stack:
-// `.account` and `.region` will resolve to `{ "Ref": "AWS::AccountId" }` and `{ "Ref": "AWS::Region" }` respectively.
-// which will only resolve to actual values by CloudFormation during deployment.
-new MyStack(app, 'Stack1');
-```
-
-
-##### `permissionsBoundary`<sup>Optional</sup> <a name="permissionsBoundary" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.permissionsBoundary"></a>
-
-```typescript
-public readonly permissionsBoundary: PermissionsBoundary;
-```
-
-- *Type:* aws-cdk-lib.PermissionsBoundary
-- *Default:* no permissions boundary is applied
-
-Options for applying a permissions boundary to all IAM Roles and Users created within this Stage.
-
----
-
-##### `stackName`<sup>Optional</sup> <a name="stackName" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.stackName"></a>
-
-```typescript
-public readonly stackName: string;
-```
-
-- *Type:* string
-- *Default:* Derived from construct path.
-
-Name to deploy the stack with.
-
----
-
-##### `suppressTemplateIndentation`<sup>Optional</sup> <a name="suppressTemplateIndentation" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.suppressTemplateIndentation"></a>
-
-```typescript
-public readonly suppressTemplateIndentation: boolean;
-```
-
-- *Type:* boolean
-- *Default:* the value of `@aws-cdk/core:suppressTemplateIndentation`, or `false` if that is not set.
-
-Enable this flag to suppress indentation in generated CloudFormation templates.
-
-If not specified, the value of the `@aws-cdk/core:suppressTemplateIndentation`
-context key will be used. If that is not specified, then the
-default value `false` will be used.
-
----
-
-##### `synthesizer`<sup>Optional</sup> <a name="synthesizer" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.synthesizer"></a>
-
-```typescript
-public readonly synthesizer: IStackSynthesizer;
-```
-
-- *Type:* aws-cdk-lib.IStackSynthesizer
-- *Default:* The synthesizer specified on `App`, or `DefaultStackSynthesizer` otherwise.
-
-Synthesis method to use while deploying this stack.
-
-The Stack Synthesizer controls aspects of synthesis and deployment,
-like how assets are referenced and what IAM roles to use. For more
-information, see the README of the main CDK package.
-
-If not specified, the `defaultStackSynthesizer` from `App` will be used.
-If that is not specified, `DefaultStackSynthesizer` is used if
-`@aws-cdk/core:newStyleStackSynthesis` is set to `true` or the CDK major
-version is v2. In CDK v1 `LegacyStackSynthesizer` is the default if no
-other synthesizer is specified.
-
----
-
-##### `tags`<sup>Optional</sup> <a name="tags" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.tags"></a>
-
-```typescript
-public readonly tags: {[ key: string ]: string};
-```
-
-- *Type:* {[ key: string ]: string}
-- *Default:* {}
-
-Stack tags that will be applied to all the taggable resources and the stack itself.
-
----
-
-##### `terminationProtection`<sup>Optional</sup> <a name="terminationProtection" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.terminationProtection"></a>
-
-```typescript
-public readonly terminationProtection: boolean;
-```
-
-- *Type:* boolean
-- *Default:* false
-
-Whether to enable termination protection for this stack.
-
----
-
-##### `bashJobRunner`<sup>Required</sup> <a name="bashJobRunner" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.bashJobRunner"></a>
-
-```typescript
-public readonly bashJobRunner: BashJobRunner;
-```
-
-- *Type:* <a href="#@cdklabs/sbt-aws.BashJobRunner">BashJobRunner</a>
-
-The BashJobRunner to execute as part of this BashJobOrchestrator.
-
----
-
-##### `detailType`<sup>Required</sup> <a name="detailType" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.detailType"></a>
-
-```typescript
-public readonly detailType: string;
-```
-
-- *Type:* string
-
-The detail type to use when publishing event bridge events.
-
----
-
-##### `eventSource`<sup>Required</sup> <a name="eventSource" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.eventSource"></a>
-
-```typescript
-public readonly eventSource: string;
-```
-
-- *Type:* string
-
-The event source to use when publishing event bridge events.
-
----
-
-##### `targetEventBus`<sup>Required</sup> <a name="targetEventBus" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.targetEventBus"></a>
-
-```typescript
-public readonly targetEventBus: IEventBus;
-```
-
-- *Type:* aws-cdk-lib.aws_events.IEventBus
-
-The event bus to publish the outgoing event to.
-
----
-
-##### `environmentJSONVariablesFromIncomingEvent`<sup>Optional</sup> <a name="environmentJSONVariablesFromIncomingEvent" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentJSONVariablesFromIncomingEvent"></a>
-
-```typescript
-public readonly environmentJSONVariablesFromIncomingEvent: string[];
-```
-
-- *Type:* string[]
-
-The environment variables to import into the CoreApplicationPlaneJobRunner from event details field.
-
-This argument consists of the names of only JSON-formatted string type variables.
-Ex. '{"test": 2}'
-
----
-
-##### `environmentStringVariablesFromIncomingEvent`<sup>Optional</sup> <a name="environmentStringVariablesFromIncomingEvent" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentStringVariablesFromIncomingEvent"></a>
-
-```typescript
-public readonly environmentStringVariablesFromIncomingEvent: string[];
-```
-
-- *Type:* string[]
-
-The environment variables to import into the CoreApplicationPlaneJobRunner from event details field.
-
-This argument consists of the names of only string type variables. Ex. 'test'
-
----
-
-##### `environmentVariablesToOutgoingEvent`<sup>Optional</sup> <a name="environmentVariablesToOutgoingEvent" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.environmentVariablesToOutgoingEvent"></a>
-
-```typescript
-public readonly environmentVariablesToOutgoingEvent: string[];
-```
-
-- *Type:* string[]
-
-Environment variables to export into the outgoing event once the bash job has finished.
-
----
-
-##### `tenantIdentifierKeyInIncomingEvent`<sup>Optional</sup> <a name="tenantIdentifierKeyInIncomingEvent" id="@cdklabs/sbt-aws.BashJobOrchestratorProps.property.tenantIdentifierKeyInIncomingEvent"></a>
-
-```typescript
-public readonly tenantIdentifierKeyInIncomingEvent: string;
-```
-
-- *Type:* string
-- *Default:* 'tenantId'
-
-The key where the tenant identifier is to be extracted from.
-
----
-
 ### BashJobRunnerProps <a name="BashJobRunnerProps" id="@cdklabs/sbt-aws.BashJobRunnerProps"></a>
 
 Encapsulates the list of properties for a BashJobRunner.
@@ -3196,27 +2746,53 @@ const bashJobRunnerProps: BashJobRunnerProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.name">name</a></code> | <code>string</code> | The name of the BashJobRunner. |
+| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | The EventManager instance that allows connecting to events flowing between the Control Plane and other components. |
+| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The incoming event DetailType that triggers this job. |
+| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.outgoingEvent">outgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The outgoing event DetailType that is emitted upon job completion. |
 | <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.permissions">permissions</a></code> | <code>aws-cdk-lib.aws_iam.PolicyDocument</code> | The IAM permission document for the BashJobRunner. |
 | <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.script">script</a></code> | <code>string</code> | The bash script to run as part of the BashJobRunner. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.environmentVariablesFromIncomingEvent">environmentVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the BashJobRunner from event details field. |
+| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.environmentJSONVariablesFromIncomingEvent">environmentJSONVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the BashJobRunner from event details field. |
+| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.environmentStringVariablesFromIncomingEvent">environmentStringVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the BashJobRunner from event details field. |
 | <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | The environment variables to export into the outgoing event once the BashJobRunner has finished. |
 | <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.postScript">postScript</a></code> | <code>string</code> | The bash script to run after the main script has completed. |
 | <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.scriptEnvironmentVariables">scriptEnvironmentVariables</a></code> | <code>{[ key: string ]: string}</code> | The variables to pass into the codebuild BashJobRunner. |
+| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.tenantIdentifierKeyInIncomingEvent">tenantIdentifierKeyInIncomingEvent</a></code> | <code>string</code> | The key where the tenant identifier is to be extracted from in the incoming event. |
 
 ---
 
-##### `name`<sup>Required</sup> <a name="name" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.name"></a>
+##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.eventManager"></a>
 
 ```typescript
-public readonly name: string;
+public readonly eventManager: IEventManager;
 ```
 
-- *Type:* string
+- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
 
-The name of the BashJobRunner.
+The EventManager instance that allows connecting to events flowing between the Control Plane and other components.
 
-Note that this value must be unique.
+---
+
+##### `incomingEvent`<sup>Required</sup> <a name="incomingEvent" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.incomingEvent"></a>
+
+```typescript
+public readonly incomingEvent: DetailType;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+
+The incoming event DetailType that triggers this job.
+
+---
+
+##### `outgoingEvent`<sup>Required</sup> <a name="outgoingEvent" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.outgoingEvent"></a>
+
+```typescript
+public readonly outgoingEvent: DetailType;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+
+The outgoing event DetailType that is emitted upon job completion.
 
 ---
 
@@ -3244,15 +2820,32 @@ The bash script to run as part of the BashJobRunner.
 
 ---
 
-##### `environmentVariablesFromIncomingEvent`<sup>Optional</sup> <a name="environmentVariablesFromIncomingEvent" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.environmentVariablesFromIncomingEvent"></a>
+##### `environmentJSONVariablesFromIncomingEvent`<sup>Optional</sup> <a name="environmentJSONVariablesFromIncomingEvent" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.environmentJSONVariablesFromIncomingEvent"></a>
 
 ```typescript
-public readonly environmentVariablesFromIncomingEvent: string[];
+public readonly environmentJSONVariablesFromIncomingEvent: string[];
 ```
 
 - *Type:* string[]
 
 The environment variables to import into the BashJobRunner from event details field.
+
+This argument consists of the names of only JSON-formatted string type variables.
+Ex. '{"test": 2}'
+
+---
+
+##### `environmentStringVariablesFromIncomingEvent`<sup>Optional</sup> <a name="environmentStringVariablesFromIncomingEvent" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.environmentStringVariablesFromIncomingEvent"></a>
+
+```typescript
+public readonly environmentStringVariablesFromIncomingEvent: string[];
+```
+
+- *Type:* string[]
+
+The environment variables to import into the BashJobRunner from event details field.
+
+This argument consists of the names of only string type variables. Ex. 'test'
 
 ---
 
@@ -3289,6 +2882,19 @@ public readonly scriptEnvironmentVariables: {[ key: string ]: string};
 - *Type:* {[ key: string ]: string}
 
 The variables to pass into the codebuild BashJobRunner.
+
+---
+
+##### `tenantIdentifierKeyInIncomingEvent`<sup>Optional</sup> <a name="tenantIdentifierKeyInIncomingEvent" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.tenantIdentifierKeyInIncomingEvent"></a>
+
+```typescript
+public readonly tenantIdentifierKeyInIncomingEvent: string;
+```
+
+- *Type:* string
+- *Default:* 'tenantId'
+
+The key where the tenant identifier is to be extracted from in the incoming event.
 
 ---
 
@@ -3579,176 +3185,6 @@ The name of the system admin role.
 
 ---
 
-### CoreApplicationPlaneJobRunnerProps <a name="CoreApplicationPlaneJobRunnerProps" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps"></a>
-
-Encapsulates the list of properties for a CoreApplicationPlaneJobRunner.
-
-#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.Initializer"></a>
-
-```typescript
-import { CoreApplicationPlaneJobRunnerProps } from '@cdklabs/sbt-aws'
-
-const coreApplicationPlaneJobRunnerProps: CoreApplicationPlaneJobRunnerProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The incoming event DetailType that triggers this job. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.name">name</a></code> | <code>string</code> | The name of the CoreApplicationPlaneJobRunner. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.outgoingEvent">outgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The outgoing event DetailType that is emitted upon job completion. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.permissions">permissions</a></code> | <code>aws-cdk-lib.aws_iam.PolicyDocument</code> | The IAM permission document for the CoreApplicationPlaneJobRunner. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.script">script</a></code> | <code>string</code> | The bash script to run as part of the CoreApplicationPlaneJobRunner. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.environmentJSONVariablesFromIncomingEvent">environmentJSONVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the CoreApplicationPlaneJobRunner from event details field. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.environmentStringVariablesFromIncomingEvent">environmentStringVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the CoreApplicationPlaneJobRunner from event details field. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | The environment variables to export into the outgoing event once the CoreApplicationPlaneJobRunner has finished. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.postScript">postScript</a></code> | <code>string</code> | The bash script to run after the main script has completed. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.scriptEnvironmentVariables">scriptEnvironmentVariables</a></code> | <code>{[ key: string ]: string}</code> | The variables to pass into the codebuild CoreApplicationPlaneJobRunner. |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.tenantIdentifierKeyInIncomingEvent">tenantIdentifierKeyInIncomingEvent</a></code> | <code>string</code> | The key where the tenant identifier is to be extracted from in the incoming event. |
-
----
-
-##### `incomingEvent`<sup>Required</sup> <a name="incomingEvent" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.incomingEvent"></a>
-
-```typescript
-public readonly incomingEvent: DetailType;
-```
-
-- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
-
-The incoming event DetailType that triggers this job.
-
----
-
-##### `name`<sup>Required</sup> <a name="name" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.name"></a>
-
-```typescript
-public readonly name: string;
-```
-
-- *Type:* string
-
-The name of the CoreApplicationPlaneJobRunner.
-
-Note that this value must be unique.
-
----
-
-##### `outgoingEvent`<sup>Required</sup> <a name="outgoingEvent" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.outgoingEvent"></a>
-
-```typescript
-public readonly outgoingEvent: DetailType;
-```
-
-- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
-
-The outgoing event DetailType that is emitted upon job completion.
-
----
-
-##### `permissions`<sup>Required</sup> <a name="permissions" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.permissions"></a>
-
-```typescript
-public readonly permissions: PolicyDocument;
-```
-
-- *Type:* aws-cdk-lib.aws_iam.PolicyDocument
-
-The IAM permission document for the CoreApplicationPlaneJobRunner.
-
----
-
-##### `script`<sup>Required</sup> <a name="script" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.script"></a>
-
-```typescript
-public readonly script: string;
-```
-
-- *Type:* string
-
-The bash script to run as part of the CoreApplicationPlaneJobRunner.
-
----
-
-##### `environmentJSONVariablesFromIncomingEvent`<sup>Optional</sup> <a name="environmentJSONVariablesFromIncomingEvent" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.environmentJSONVariablesFromIncomingEvent"></a>
-
-```typescript
-public readonly environmentJSONVariablesFromIncomingEvent: string[];
-```
-
-- *Type:* string[]
-
-The environment variables to import into the CoreApplicationPlaneJobRunner from event details field.
-
-This argument consists of the names of only JSON-formatted string type variables.
-Ex. '{"test": 2}'
-
----
-
-##### `environmentStringVariablesFromIncomingEvent`<sup>Optional</sup> <a name="environmentStringVariablesFromIncomingEvent" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.environmentStringVariablesFromIncomingEvent"></a>
-
-```typescript
-public readonly environmentStringVariablesFromIncomingEvent: string[];
-```
-
-- *Type:* string[]
-
-The environment variables to import into the CoreApplicationPlaneJobRunner from event details field.
-
-This argument consists of the names of only string type variables. Ex. 'test'
-
----
-
-##### `environmentVariablesToOutgoingEvent`<sup>Optional</sup> <a name="environmentVariablesToOutgoingEvent" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.environmentVariablesToOutgoingEvent"></a>
-
-```typescript
-public readonly environmentVariablesToOutgoingEvent: string[];
-```
-
-- *Type:* string[]
-
-The environment variables to export into the outgoing event once the CoreApplicationPlaneJobRunner has finished.
-
----
-
-##### `postScript`<sup>Optional</sup> <a name="postScript" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.postScript"></a>
-
-```typescript
-public readonly postScript: string;
-```
-
-- *Type:* string
-
-The bash script to run after the main script has completed.
-
----
-
-##### `scriptEnvironmentVariables`<sup>Optional</sup> <a name="scriptEnvironmentVariables" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.scriptEnvironmentVariables"></a>
-
-```typescript
-public readonly scriptEnvironmentVariables: {[ key: string ]: string};
-```
-
-- *Type:* {[ key: string ]: string}
-
-The variables to pass into the codebuild CoreApplicationPlaneJobRunner.
-
----
-
-##### `tenantIdentifierKeyInIncomingEvent`<sup>Optional</sup> <a name="tenantIdentifierKeyInIncomingEvent" id="@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps.property.tenantIdentifierKeyInIncomingEvent"></a>
-
-```typescript
-public readonly tenantIdentifierKeyInIncomingEvent: string;
-```
-
-- *Type:* string
-- *Default:* 'tenantId'
-
-The key where the tenant identifier is to be extracted from in the incoming event.
-
----
-
 ### CoreApplicationPlaneProps <a name="CoreApplicationPlaneProps" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps"></a>
 
 Encapsulates the list of properties for a CoreApplicationPlane.
@@ -3766,11 +3202,11 @@ const coreApplicationPlaneProps: CoreApplicationPlaneProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.jobRunnerPropsList">jobRunnerPropsList</a></code> | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps">CoreApplicationPlaneJobRunnerProps</a>[]</code> | The list of JobRunner definitions to create. |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.jobRunnersList">jobRunnersList</a></code> | <code><a href="#@cdklabs/sbt-aws.BashJobRunner">BashJobRunner</a>[]</code> | The list of JobRunners. |
 
 ---
 
-##### `eventManager`<sup>Optional</sup> <a name="eventManager" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventManager"></a>
+##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventManager"></a>
 
 ```typescript
 public readonly eventManager: IEventManager;
@@ -3780,15 +3216,15 @@ public readonly eventManager: IEventManager;
 
 ---
 
-##### `jobRunnerPropsList`<sup>Optional</sup> <a name="jobRunnerPropsList" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.jobRunnerPropsList"></a>
+##### `jobRunnersList`<sup>Optional</sup> <a name="jobRunnersList" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.jobRunnersList"></a>
 
 ```typescript
-public readonly jobRunnerPropsList: CoreApplicationPlaneJobRunnerProps[];
+public readonly jobRunnersList: BashJobRunner[];
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.CoreApplicationPlaneJobRunnerProps">CoreApplicationPlaneJobRunnerProps</a>[]
+- *Type:* <a href="#@cdklabs/sbt-aws.BashJobRunner">BashJobRunner</a>[]
 
-The list of JobRunner definitions to create.
+The list of JobRunners.
 
 ---
 

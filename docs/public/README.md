@@ -99,7 +99,7 @@ import { Construct } from 'constructs';
 
 export class ControlPlaneStack extends Stack {
   public readonly regApiGatewayUrl: string;
-  public readonly eventBusArn: string;
+  public readonly eventManager: sbt.EventManager;
 
   constructor(scope: Construct, id: string, props?: any) {
     super(scope, id, props);
@@ -113,7 +113,7 @@ export class ControlPlaneStack extends Stack {
       systemAdminEmail: 'ENTER YOUR EMAIL HERE',
     });
 
-    this.eventBusArn = controlPlane.eventManager.busArn;
+    this.eventManager = controlPlane.eventManager;
     this.regApiGatewayUrl = controlPlane.controlPlaneAPIGatewayUrl;
   }
 }
@@ -181,7 +181,7 @@ export class ApplicationPlaneStack extends Stack {
     });
     new sbt.CoreApplicationPlane(this, 'CoreApplicationPlane', {
       eventManager: eventManager,
-      jobRunnerPropsList: [],
+      jobRunnersList: [],
     });
   }
 }
@@ -199,7 +199,7 @@ Although entirely optional, SBT includes a utility that lets you define, and run
 
 ![sbt-provisioning.png](../../images/sbt-provisioning.png)
 
-Notice the use of the `provisioning.sh` and `deprovisioning.sh` scripts at the top. These scripts are fed to the `JobRunner` as parameters. Internally the `JobRunner` launches an AWS CodeBuild project, wrapped inside an AWS Step Function, to execute the bash scripts. The `JobRunner` also lets you specify what input variables to feed to the scripts, along with what output variables you expect them to return. Note that in this version of SBT, `JobRunner`s are created by the `CoreAppPlane` based on its `jobRunnerPropsList` input (the empty array in the code above). The type of object here is the [`jobRunnerProps`](/API.md#coreapplicationplanejobrunnerprops-). Let's take a simple example: imagine our SaaS application deployed only a single S3 bucket per tenant. Let's create a job runner for that provisioning now.
+Notice the use of the `provisioning.sh` and `deprovisioning.sh` scripts at the top. These scripts are fed to the `JobRunner` as parameters. Internally the `JobRunner` launches an AWS CodeBuild project, wrapped inside an AWS Step Function, to execute the bash scripts. The `JobRunner` also lets you specify what input variables to feed to the scripts, along with what output variables you expect them to return. Note that in this version of SBT, you can create `JobRunner`s with [`jobRunnerProps`](/API.md#bashjobrunnerprops-) and configure `CoreAppPlane` with `JobRunner`s using its `jobRunnersList` property. The `CoreAppPlane` will then link these `JobRunner`s to EventBridge. Let's take a simple example: imagine our SaaS application deployed only a single S3 bucket per tenant. Let's create a job runner for that provisioning now.
 
 ```typescript
 const provisioningJobRunnerProps = {
@@ -213,6 +213,7 @@ const provisioningJobRunnerProps = {
   },
   outgoingEvent: sbt.DetailType.PROVISION_SUCCESS,
   incomingEvent: sbt.DetailType.ONBOARDING_REQUEST,
+  eventManager: eventManager /*See below on how to create EventManager*/,
 };
 ```
 
@@ -220,16 +221,17 @@ const provisioningJobRunnerProps = {
 
 Let's take a moment and dissect this object.
 
-| Key                                             | Type                                                                                                  | Purpose                                                                                               |
-| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| **name**                                        | string                                                                                                | The **name** key is just a name for this job.                                                         |
-| **script**                                      | string                                                                                                | A string in bash script format that represents the job to be run (example below)                      |
-| **permissions**                                 | [PolicyDocument](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_iam.PolicyDocument.html) | An IAM policy document giving this job the IAM permisisons it needs to do what it's being asked to do |
-| **environmentStringVariablesFromIncomingEvent** | string[]                                                                                              | The environment variables to import into the BashJobRunner from event details field.                  |
-| **environmentVariablesToOutgoingEvent**         | string[]                                                                                              | The environment variables to export into the outgoing event once the BashJobRunner has finished.      |
-| **scriptEnvironmentVariables**                  | `{ [key: string]: string }`                                                                           | The variables to pass into the codebuild BashJobRunner.                                               |
-| **outgoingEvent**                               | any                                                                                                   | Outgoing EventBridge wiring details                                                                   |
-| **incomingEvent**                               | any                                                                                                   | Incoming EventBridge wiring details                                                                   |
+| Key                                             | Type                                                                                                  | Purpose                                                                                                            |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| **name**                                        | string                                                                                                | The **name** key is just a name for this job.                                                                      |
+| **script**                                      | string                                                                                                | A string in bash script format that represents the job to be run (example below)                                   |
+| **permissions**                                 | [PolicyDocument](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_iam.PolicyDocument.html) | An IAM policy document giving this job the IAM permisisons it needs to do what it's being asked to do              |
+| **environmentStringVariablesFromIncomingEvent** | string[]                                                                                              | The environment variables to import into the BashJobRunner from event details field.                               |
+| **environmentVariablesToOutgoingEvent**         | string[]                                                                                              | The environment variables to export into the outgoing event once the BashJobRunner has finished.                   |
+| **scriptEnvironmentVariables**                  | `{ [key: string]: string }`                                                                           | The variables to pass into the codebuild BashJobRunner.                                                            |
+| **outgoingEvent**                               | any                                                                                                   | Outgoing EventBridge wiring details                                                                                |
+| **incomingEvent**                               | any                                                                                                   | Incoming EventBridge wiring details                                                                                |
+| **eventManager**                                | [IEventManager](/API.md#ieventmanager-)                                                               | The EventManager instance that allows connecting to events flowing between the Control Plane and other components. |
 
 The heavy lifting of the `JobRunner` happens with the value of the `script` key. Recall, that this particular example is for provisioning. Also remember that the "SaaS application" we're illustrating here is only provisioning a new S3 bucket for each tenant. Let's take a look at that example provisioning script now:
 
@@ -364,11 +366,12 @@ import { EventBus } from 'aws-cdk-lib/aws-events';
 import { PolicyDocument, PolicyStatement, Effect } from 'aws-cdk-lib/aws-iam';
 
 export interface AppPlaneProps extends cdk.StackProps {
-  eventBusArn: string;
+  eventManager: sbt.EventManager;
 }
 export class AppPlaneStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props: AppPlaneProps) {
     super(scope, id, props);
+
     const provisioningJobRunnerProps = {
       name: 'provisioning',
       permissions: new PolicyDocument({
@@ -428,16 +431,18 @@ echo "done!"
       },
       outgoingEvent: sbt.DetailType.PROVISION_SUCCESS,
       incomingEvent: sbt.DetailType.ONBOARDING_REQUEST,
+      eventManager: props.eventManager,
     };
 
-    const eventBus = EventBus.fromEventBusArn(this, 'EventBus', props.eventBusArn);
-    const eventManager = new sbt.EventManager(this, 'EventManager', {
-      eventBus: eventBus,
-    });
+    const provisioningJobRunner: sbt.BashJobRunner = new sbt.BashJobRunner(
+      this,
+      'provisioningJobRunner',
+      provisioningJobRunnerProps
+    );
 
     new sbt.CoreApplicationPlane(this, 'CoreApplicationPlane', {
-      eventManager: eventManager,
-      jobRunnerPropsList: [provisioningJobRunnerProps],
+      eventManager: props.eventManager,
+      jobRunnersList: [provisioningJobRunner],
     });
   }
 }
@@ -455,7 +460,7 @@ import { AppPlaneStack } from '../lib/app-plane';
 const app = new cdk.App();
 const controlPlaneStack = new ControlPlaneStack(app, 'ControlPlaneStack');
 const appPlaneStack = new AppPlaneStack(app, 'AppPlaneStack', {
-  eventBusArn: controlPlaneStack.eventBusArn,
+  eventManager: controlPlaneStack.eventManager,
 });
 ```
 
