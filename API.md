@@ -569,6 +569,7 @@ Any object.
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.tokenEndpoint">tokenEndpoint</a></code> | <code>string</code> | The endpoint URL for granting OAuth tokens. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.updateUserFunction">updateUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for updating a user. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.userClientId">userClientId</a></code> | <code>string</code> | The client ID enabled for user-centric authentication flows, such as Authorization Code flow. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.userPool">userPool</a></code> | <code>aws-cdk-lib.aws_cognito.UserPool</code> | UserPool created as part of this construct. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.wellKnownEndpointUrl">wellKnownEndpointUrl</a></code> | <code>string</code> | The well-known endpoint URL for the control plane identity provider. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.activateTenantScope">activateTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for activating a tenant. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuth.property.createTenantScope">createTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for creating a tenant. |
@@ -777,6 +778,18 @@ public readonly userClientId: string;
 The client ID enabled for user-centric authentication flows, such as Authorization Code flow.
 
 This client ID is used for authenticating end-users.
+
+---
+
+##### `userPool`<sup>Required</sup> <a name="userPool" id="@cdklabs/sbt-aws.CognitoAuth.property.userPool"></a>
+
+```typescript
+public readonly userPool: UserPool;
+```
+
+- *Type:* aws-cdk-lib.aws_cognito.UserPool
+
+UserPool created as part of this construct.
 
 ---
 
