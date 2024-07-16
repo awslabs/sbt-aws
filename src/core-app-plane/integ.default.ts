@@ -195,7 +195,7 @@ const integStack = new IntegStack(app, process.env.CDK_PARAM_STACK_ID ?? 'CoreAp
 
 NagSuppressions.addResourceSuppressionsByPath(
   integStack,
-  `/${integStack.artifactId}/CoreApplicationPlane/deprovisioning-codeBuildProvisionProjectRole/Resource`,
+  `/${integStack.artifactId}/deprovisioningJobRunner/codeBuildProvisionProjectRole/Resource`,
   [
     {
       id: 'AwsSolutions-IAM5',
@@ -207,7 +207,7 @@ NagSuppressions.addResourceSuppressionsByPath(
 
 NagSuppressions.addResourceSuppressionsByPath(
   integStack,
-  `/${integStack.artifactId}/CoreApplicationPlane/provisioning-codeBuildProvisionProjectRole/Resource`,
+  `/${integStack.artifactId}/provisioningJobRunner/codeBuildProvisionProjectRole/Resource`,
   [
     {
       id: 'AwsSolutions-IAM5',
