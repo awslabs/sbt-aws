@@ -206,7 +206,7 @@ export class CognitoAuth extends Construct implements IAuth {
   /**
    * UserPool created as part of this construct.
    */
-  private readonly userPool: cognito.UserPool;
+  readonly userPool: cognito.UserPool;
 
   /**
    * The Lambda function for creating a new Admin User. This is used as part of a
