@@ -10,16 +10,44 @@ import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { addTemplateTag } from '../../utils';
 
-export interface TenantConfigServiceProps {
+/**
+ * Represents the properties required to initialize the TenantConfigLambdas.
+ *
+ * @interface TenantConfigLambdasProps
+ * @property {Table} tenantDetails - The table that stores the tenant details.
+ * @property {string} tenantConfigIndexName - The name of the global secondary index for the tenant configuration.
+ * @property {string} tenantDetailsTenantNameColumn - The name of the column that stores the tenant name.
+ * @property {string} tenantDetailsTenantConfigColumn - The name of the column that stores the tenant configuration.
+ */
+export interface TenantConfigLambdasProps {
   readonly tenantDetails: Table;
   readonly tenantConfigIndexName: string;
   readonly tenantDetailsTenantNameColumn: string;
   readonly tenantDetailsTenantConfigColumn: string;
 }
 
-export class TenantConfigService extends Construct {
-  public readonly tenantConfigServiceLambda: lambda.Function;
-  constructor(scope: Construct, id: string, props: TenantConfigServiceProps) {
+/**
+ * Represents a set of Lambda functions for managing tenant configurations.
+ *
+ * @class TenantConfigLambdas
+ * @extends Construct
+ */
+export class TenantConfigLambdas extends Construct {
+  /**
+   * The Lambda function responsible for managing tenant configurations.
+   *
+   * @type {lambda.Function}
+   */
+  public readonly tenantConfigFunction: lambda.Function;
+
+  /**
+   * Constructs a new instance of the TenantConfigLambdas.
+   *
+   * @param {Construct} scope - The parent construct.
+   * @param {string} id - The ID of the construct.
+   * @param {TenantConfigLambdasProps} props - The properties required to initialize the TenantConfigLambdas.
+   */
+  constructor(scope: Construct, id: string, props: TenantConfigLambdasProps) {
     super(scope, id);
     addTemplateTag(this, 'TenantConfigService');
 
@@ -28,7 +56,7 @@ export class TenantConfigService extends Construct {
       cdk.Stack.of(this).region
     }:017000801446:layer:AWSLambdaPowertoolsPythonV2:59`;
 
-    this.tenantConfigServiceLambda = new lambda_python.PythonFunction(
+    this.tenantConfigFunction = new lambda_python.PythonFunction(
       this,
       'TenantConfigServiceLambda',
       {
@@ -56,10 +84,10 @@ export class TenantConfigService extends Construct {
       }
     );
 
-    props.tenantDetails.grantReadData(this.tenantConfigServiceLambda);
+    props.tenantDetails.grantReadData(this.tenantConfigFunction);
 
     NagSuppressions.addResourceSuppressions(
-      this.tenantConfigServiceLambda.role!,
+      this.tenantConfigFunction.role!,
       [
         {
           id: 'AwsSolutions-IAM4',
@@ -77,7 +105,9 @@ export class TenantConfigService extends Construct {
         {
           id: 'AwsSolutions-IAM5',
           reason: 'Index name(s) not known beforehand.',
-          appliesTo: [`Resource::<ControlPlanetablesstackTenantDetails78527218.Arn>/index/*`],
+          appliesTo: [
+            `Resource::<ControlPlanetenantManagementServicvestenantManagementTableTenantDetails974E95B8.Arn>/index/*`,
+          ],
         },
       ],
       true // applyToChildren = true, so that it applies to policies created for the role.

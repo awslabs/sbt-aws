@@ -4,29 +4,51 @@
 import * as path from 'path';
 import { PythonFunction } from '@aws-cdk/aws-lambda-python-alpha';
 import { Duration, Stack } from 'aws-cdk-lib';
-import { Role, ServicePrincipal, ManagedPolicy } from 'aws-cdk-lib/aws-iam';
-import { Runtime, LayerVersion, Function } from 'aws-cdk-lib/aws-lambda';
+import { ManagedPolicy, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
+import { Function, LayerVersion, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
-import { Tables } from './tables';
-import { DetailType, IEventManager } from '../utils';
+import { TenantManagementTable } from './tenant-management.table';
+import { DetailType, IEventManager } from '../../utils';
 
-export interface ServicesProps {
-  readonly tables: Tables;
+/**
+Represents the properties required for the Tenant Management Lambda function.
+@interface TenantManagementLambdaProps
+@property {TenantManagementTable} table - The table used for Tenant Management.
+@property {IEventManager} eventManager - The event manager used for handling events in Tenant Management. */
+export interface TenantManagementLambdaProps {
+  readonly table: TenantManagementTable;
   readonly eventManager: IEventManager;
 }
 
-export class Services extends Construct {
-  tenantManagementServices: Function;
+/**
+Represents the Tenant Management Lambda construct.
+@class TenantManagementLambda
+@extends {Construct}
+@property {Function} tenantManagementFunc - The Tenant Management Lambda function.
+@param {Construct} scope - The scope in which this construct is defined.
+@param {string} id - The construct's identifier.
+@param {TenantManagementLambdaProps} props - The properties required for the Tenant Management Lambda.
+*/
+export class TenantManagementLambda extends Construct {
+  tenantManagementFunc: Function;
 
-  constructor(scope: Construct, id: string, props: ServicesProps) {
+  constructor(scope: Construct, id: string, props: TenantManagementLambdaProps) {
     super(scope, id);
 
+    /**
+     * Creates an IAM role for the Tenant Management Lambda function.
+     * The role is granted read and write access to the Tenant Details table,
+     * and the ability to put events to the Event Manager.
+     * The role is also assigned the AWSLambdaBasicExecutionRole,
+     * CloudWatchLambdaInsightsExecutionRolePolicy, and AWSXrayWriteOnlyAccess
+     * managed policies.
+     */
     const tenantManagementExecRole = new Role(this, 'tenantManagementExecRole', {
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
     });
 
-    props.tables.tenantDetails.grantReadWriteData(tenantManagementExecRole);
+    props.table.tenantDetails.grantReadWriteData(tenantManagementExecRole);
     props.eventManager.grantPutEventsTo(tenantManagementExecRole);
 
     tenantManagementExecRole.addManagedPolicy(
@@ -45,7 +67,9 @@ export class Services extends Construct {
         {
           id: 'AwsSolutions-IAM5',
           reason: 'Index name(s) not known beforehand.',
-          appliesTo: [`Resource::<ControlPlanetablesstackTenantDetails78527218.Arn>/index/*`],
+          appliesTo: [
+            `Resource::<ControlPlanetenantManagementServicvestenantManagementTableTenantDetails974E95B8.Arn>/index/*`,
+          ],
         },
         {
           id: 'AwsSolutions-IAM4',
@@ -66,8 +90,13 @@ export class Services extends Construct {
       Stack.of(this).region
     }:017000801446:layer:AWSLambdaPowertoolsPythonV2:59`;
 
-    const tenantManagementServices = new PythonFunction(this, 'TenantManagementServices', {
-      entry: path.join(__dirname, '../../resources/functions/tenant-management'),
+    /**
+     * Creates the Tenant Management Lambda function.
+     * The function is configured with the necessary environment variables,
+     * the Tenant Management execution role, and the AWS Lambda Powertools layer.
+     */
+    const tenantManagementFunc = new PythonFunction(this, 'TenantManagementServices', {
+      entry: path.join(__dirname, '../../../resources/functions/tenant-management'),
       runtime: Runtime.PYTHON_3_12,
       index: 'index.py',
       handler: 'lambda_handler',
@@ -79,7 +108,7 @@ export class Services extends Construct {
       environment: {
         EVENTBUS_NAME: props.eventManager.busName,
         EVENT_SOURCE: props.eventManager.controlPlaneEventSource,
-        TENANT_DETAILS_TABLE: props.tables.tenantDetails.tableName,
+        TENANT_DETAILS_TABLE: props.table.tenantDetails.tableName,
         ONBOARDING_DETAIL_TYPE: DetailType.ONBOARDING_REQUEST,
         OFFBOARDING_DETAIL_TYPE: DetailType.OFFBOARDING_REQUEST,
         ACTIVATE_DETAIL_TYPE: DetailType.ACTIVATE_REQUEST,
@@ -87,6 +116,6 @@ export class Services extends Construct {
       },
     });
 
-    this.tenantManagementServices = tenantManagementServices;
+    this.tenantManagementFunc = tenantManagementFunc;
   }
 }

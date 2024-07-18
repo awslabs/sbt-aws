@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Stack } from 'aws-cdk-lib';
+import * as apigatewayV2 from 'aws-cdk-lib/aws-apigatewayv2';
 import { Construct } from 'constructs';
 
 export const addTemplateTag = (construct: Construct, tag: string) => {
@@ -72,4 +73,31 @@ export const conditionallyAddScope = (unknownScope?: string) => {
     return [unknownScope];
   }
   return [];
+};
+
+export interface IRoute {
+  readonly method: apigatewayV2.HttpMethod;
+  readonly scope?: string;
+  readonly path: string;
+  readonly integration: apigatewayV2.HttpRouteIntegration;
+}
+export const generateRoutes = (
+  api: apigatewayV2.HttpApi,
+  routes: IRoute[],
+  authorizer?: apigatewayV2.IHttpRouteAuthorizer
+) => {
+  let allRoutes: apigatewayV2.HttpRoute[] = [];
+  routes.forEach((route) => {
+    allRoutes = [
+      ...api.addRoutes({
+        path: route.path,
+        methods: [route.method],
+        integration: route.integration,
+        authorizer: authorizer,
+        authorizationScopes: conditionallyAddScope(route.scope),
+      }),
+      ...allRoutes,
+    ];
+  });
+  return allRoutes;
 };

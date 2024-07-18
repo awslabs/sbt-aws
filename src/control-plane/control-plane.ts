@@ -2,17 +2,18 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as cdk from 'aws-cdk-lib';
+import { CorsPreflightOptions } from 'aws-cdk-lib/aws-apigatewayv2';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IAuth } from './auth/auth-interface';
 import { CognitoAuth } from './auth/cognito-auth';
-import { IBilling, BillingProvider } from './billing';
+import { BillingProvider, IBilling } from './billing';
 import { ControlPlaneAPI } from './control-plane-api';
-import { Services } from './services';
-import { Tables } from './tables';
-import { TenantConfigService } from './tenant-config/tenant-config-service';
+import { TenantConfigService } from './tenant-config';
+import { TenantManagementService } from './tenant-management/tenant-management.service';
+import { UserManagementService } from './user-management/user-management.service';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
-import { addTemplateTag, DetailType, EventManager, IEventManager } from '../utils';
+import { addTemplateTag, EventManager, IEventManager } from '../utils';
 
 export interface ControlPlaneProps {
   /**
@@ -53,6 +54,11 @@ export interface ControlPlaneProps {
    * @default false
    */
   readonly disableAPILogging?: boolean;
+
+  /**
+   * Settings for Cors Configuration for the ControlPlane API.
+   */
+  readonly apiCorsConfig?: CorsPreflightOptions;
 }
 
 export class ControlPlane extends Construct {
@@ -60,11 +66,6 @@ export class ControlPlane extends Construct {
    * The URL of the control plane API Gateway.
    */
   readonly controlPlaneAPIGatewayUrl: string;
-
-  /**
-   * The Tables instance containing the DynamoDB tables for tenant data and configurations.
-   */
-  readonly tables: Tables;
 
   /**
    * The EventManager instance that allows connecting to events flowing between
@@ -81,11 +82,7 @@ export class ControlPlane extends Construct {
 
     cdk.Aspects.of(this).add(new DestroyPolicySetter());
 
-    const auth =
-      props.auth ||
-      new CognitoAuth(this, 'CognitoAuth', {
-        setAPIGWScopes: false,
-      });
+    const auth = props.auth || new CognitoAuth(this, 'CognitoAuth');
 
     auth.createAdminUser(this, 'adminUser', {
       name: systemAdminName,
@@ -93,75 +90,62 @@ export class ControlPlane extends Construct {
       role: systemAdminRoleName,
     });
 
-    // todo: decompose 'Tables' into purpose-specific constructs (ex. TenantManagement)
-    this.tables = new Tables(this, 'tables-stack');
-
-    this.eventManager = props.eventManager ?? new EventManager(this, 'EventManager');
-
-    // todo: decompose 'Services' into purpose-specific constructs (ex. TenantManagement)
-    const services = new Services(this, 'services-stack', {
-      tables: this.tables,
-      eventManager: this.eventManager,
-    });
-
-    const tenantConfigService = new TenantConfigService(this, 'auth-info-service-stack', {
-      tenantDetails: this.tables.tenantDetails,
-      tenantDetailsTenantNameColumn: this.tables.tenantNameColumn,
-      tenantConfigIndexName: this.tables.tenantConfigIndexName,
-      tenantDetailsTenantConfigColumn: this.tables.tenantConfigColumn,
-    });
-
-    // todo: decompose 'ControlPlaneAPI' into purpose-specific constructs (ex. TenantManagement)
-    const controlPlaneAPI = new ControlPlaneAPI(this, 'controlplane-api-stack', {
-      auth: auth,
+    const api = new ControlPlaneAPI(this, 'controlPlaneApi', {
+      auth,
       disableAPILogging: props.disableAPILogging,
-      services: services,
-      tenantConfigServiceLambda: tenantConfigService.tenantConfigServiceLambda,
+      apiCorsConfig: props.apiCorsConfig,
     });
 
-    this.controlPlaneAPIGatewayUrl = controlPlaneAPI.apiUrl;
-
-    this.eventManager.addTargetToEvent(
+    const eventManager = props.eventManager ?? new EventManager(this, 'EventManager');
+    const tenantManagementServices = new TenantManagementService(
       this,
-      DetailType.PROVISION_SUCCESS,
-      controlPlaneAPI.tenantUpdateServiceTarget
+      'tenantManagementServicves',
+      {
+        api: api.api,
+        auth,
+        authorizer: api.jwtAuthorizer,
+        eventManager,
+      }
     );
 
-    this.eventManager.addTargetToEvent(
-      this,
-      DetailType.DEPROVISION_SUCCESS,
-      controlPlaneAPI.tenantUpdateServiceTarget
-    );
-
-    new cdk.CfnOutput(this, 'controlPlaneAPIGatewayUrl', {
-      value: controlPlaneAPI.apiUrl,
-      key: 'controlPlaneAPIGatewayUrl',
+    new TenantConfigService(this, 'tenantConfigService', {
+      api: api.api,
+      tenantManagementTable: tenantManagementServices.table,
     });
+
+    new UserManagementService(this, 'userManagementService', {
+      api: api.api,
+      auth,
+      jwtAuthorizer: api.jwtAuthorizer,
+    });
+
+    this.controlPlaneAPIGatewayUrl = api.apiUrl;
 
     new cdk.CfnOutput(this, 'eventBridgeArn', {
-      value: this.eventManager.busArn,
+      value: eventManager.busArn,
       key: 'eventBridgeArn',
     });
 
     if (props.billing) {
       const billingTemplate = new BillingProvider(this, 'Billing', {
         billing: props.billing,
-        eventManager: this.eventManager,
-        controlPlaneAPI: controlPlaneAPI.api,
+        eventManager: eventManager,
+        controlPlaneAPI: api.api,
       });
 
       if (billingTemplate.controlPlaneAPIBillingWebhookResourcePath) {
         new cdk.CfnOutput(this, 'billingWebhookURL', {
-          value: `${controlPlaneAPI.apiUrl}${billingTemplate.controlPlaneAPIBillingWebhookResourcePath}`,
+          value: `${api.apiUrl}${billingTemplate.controlPlaneAPIBillingWebhookResourcePath}`,
           key: 'billingWebhookURL',
         });
       }
     }
+    this.eventManager = eventManager;
 
     // defined suppression here to suppress EventsRole Default policy
     // which gets updated in EventManager construct, but is part of ControlPlane API
     NagSuppressions.addResourceSuppressions(
-      controlPlaneAPI,
+      api,
       [
         {
           id: 'AwsSolutions-IAM5',
