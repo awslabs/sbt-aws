@@ -32,6 +32,7 @@ Please consult the issues and discussions section of the SBT repo for good first
 ## Development
 
 1. Make desired changes
+1. Run `npm install` to install the npm packages
 1. Make sure existing (and new) tests pass successfully by running `npm run test`
 1. Run `npm run build` to compile
 1. Go to the root of the project. Then, deploy the CDK stack using the following:
