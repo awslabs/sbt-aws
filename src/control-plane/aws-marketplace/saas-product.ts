@@ -377,7 +377,7 @@ exports.redirecthandler = async(event, context, callback) => {
 
     if (props.marketplaceSellerEmail) {
       registerNewMarketplaceCustomerPython.addEnvironment(
-        'MarketplaceSellerEmail',
+        'MARKETPLACE_SELLER_EMAIL',
         props.marketplaceSellerEmail
       );
     }
