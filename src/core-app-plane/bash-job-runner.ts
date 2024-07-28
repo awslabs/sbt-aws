@@ -81,6 +81,12 @@ export interface BashJobRunnerProps {
    */
 
   readonly eventManager: IEventManager;
+
+  /**
+   * Any additional properties for the CodeBuild project beyond the default.
+   * These take precedence over defaults.
+   */
+  readonly codeBuildProps?: codebuild.ProjectProps;
 }
 
 /**
@@ -178,6 +184,7 @@ export class BashJobRunner extends Construct {
             ...(props.postScript && { commands: props.postScript }),
           },
         },
+        ...props?.codeBuildProps,
       }),
     });
 

@@ -19,6 +19,8 @@ Once you have all the required dependencies installed, you can fork this repo, t
 git clone https://github.com/{your-account}/sbt-aws.git
 cd sbt-aws
 npm install
+cd src/point-solutions/libraries
+npm install
 ```
 
 ### When to contribute
