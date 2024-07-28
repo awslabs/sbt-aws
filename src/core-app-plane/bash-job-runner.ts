@@ -184,8 +184,8 @@ export class BashJobRunner extends Construct {
             ...(props.postScript && { commands: props.postScript }),
           },
         },
-        ...props?.codeBuildProps,
       }),
+      ...props?.codeBuildProps,
     });
 
     NagSuppressions.addResourceSuppressions(codebuildProject, [

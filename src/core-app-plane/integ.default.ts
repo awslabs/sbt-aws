@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as cdk from 'aws-cdk-lib';
-import { ComputeType, LinuxArmLambdaBuildImage } from 'aws-cdk-lib/aws-codebuild';
+import { ComputeType, LinuxArmLambdaBuildImage, ProjectProps } from 'aws-cdk-lib/aws-codebuild';
 import { CfnRule, EventBus, Rule } from 'aws-cdk-lib/aws-events';
 import { Effect, PolicyDocument, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
@@ -30,6 +30,18 @@ export class IntegStack extends cdk.Stack {
     } else {
       eventManager = new EventManager(this, 'EventManager');
     }
+
+    const codeBuildProps: ProjectProps = {
+      environment: {
+        environmentVariables: {
+          VARIABLE_NAME: {
+            value: 'someValue',
+          },
+        },
+        buildImage: LinuxArmLambdaBuildImage.AMAZON_LINUX_2_NODE_18,
+        computeType: ComputeType.LAMBDA_2GB,
+      },
+    };
 
     const provisioningJobRunnerProps: BashJobRunnerProps = {
       permissions: new PolicyDocument({
@@ -105,17 +117,7 @@ echo "done!"
       outgoingEvent: DetailType.PROVISION_SUCCESS,
       incomingEvent: DetailType.ONBOARDING_REQUEST,
       eventManager: eventManager,
-      codeBuildProps: {
-        environment: {
-          environmentVariables: {
-            VARIABLE_NAME: {
-              value: 'someValue',
-            },
-          },
-          buildImage: LinuxArmLambdaBuildImage.AMAZON_LINUX_2_NODE_18,
-          computeType: ComputeType.LAMBDA_2GB,
-        },
-      },
+      codeBuildProps: codeBuildProps,
     };
 
     const deprovisioningJobRunnerProps: BashJobRunnerProps = {
@@ -148,6 +150,7 @@ echo "done!"
       outgoingEvent: DetailType.DEPROVISION_SUCCESS,
       incomingEvent: DetailType.OFFBOARDING_REQUEST,
       eventManager: eventManager,
+      codeBuildProps: codeBuildProps,
     };
 
     const provisioningJobRunner: BashJobRunner = new BashJobRunner(
