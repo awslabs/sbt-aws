@@ -2834,6 +2834,20 @@ The bash script to run as part of the BashJobRunner.
 
 ---
 
+##### `codeBuildProps`<sup>Optional</sup> <a name="codeBuildProps" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.codeBuildProps"></a>
+
+```typescript
+public readonly codeBuildProps: ProjectProps;
+```
+
+- *Type:* aws-cdk-lib.aws_codebuild.ProjectProps
+
+Any additional properties for the CodeBuild project beyond the default.
+
+These take precedence over defaults.
+
+---
+
 ##### `environmentJSONVariablesFromIncomingEvent`<sup>Optional</sup> <a name="environmentJSONVariablesFromIncomingEvent" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.environmentJSONVariablesFromIncomingEvent"></a>
 
 ```typescript
