@@ -151,172 +151,6 @@ when registering a new customer.
 ---
 
 
-### BashJobRunner <a name="BashJobRunner" id="@cdklabs/sbt-aws.BashJobRunner"></a>
-
-Provides a BashJobRunner to execute arbitrary bash code.
-
-#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.BashJobRunner.Initializer"></a>
-
-```typescript
-import { BashJobRunner } from '@cdklabs/sbt-aws'
-
-new BashJobRunner(scope: Construct, id: string, props: BashJobRunnerProps)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunner.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunner.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunner.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps">BashJobRunnerProps</a></code> | *No description.* |
-
----
-
-##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.BashJobRunner.Initializer.parameter.scope"></a>
-
-- *Type:* constructs.Construct
-
----
-
-##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.BashJobRunner.Initializer.parameter.id"></a>
-
-- *Type:* string
-
----
-
-##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.BashJobRunner.Initializer.parameter.props"></a>
-
-- *Type:* <a href="#@cdklabs/sbt-aws.BashJobRunnerProps">BashJobRunnerProps</a>
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunner.toString">toString</a></code> | Returns a string representation of this construct. |
-
----
-
-##### `toString` <a name="toString" id="@cdklabs/sbt-aws.BashJobRunner.toString"></a>
-
-```typescript
-public toString(): string
-```
-
-Returns a string representation of this construct.
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunner.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
-
----
-
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.BashJobRunner.isConstruct"></a>
-
-```typescript
-import { BashJobRunner } from '@cdklabs/sbt-aws'
-
-BashJobRunner.isConstruct(x: any)
-```
-
-Checks if `x` is a construct.
-
-###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.BashJobRunner.isConstruct.parameter.x"></a>
-
-- *Type:* any
-
-Any object.
-
----
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunner.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunner.property.codebuildProject">codebuildProject</a></code> | <code>aws-cdk-lib.aws_codebuild.Project</code> | The codebuildProject used to implement this BashJobRunner. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunner.property.eventTarget">eventTarget</a></code> | <code>aws-cdk-lib.aws_events.IRuleTarget</code> | The eventTarget to use when triggering this BashJobRunner. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunner.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The incoming event DetailType that triggers this job. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunner.property.provisioningStateMachine">provisioningStateMachine</a></code> | <code>aws-cdk-lib.aws_stepfunctions.StateMachine</code> | The StateMachine used to implement this BashJobRunner orchestration. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunner.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | The environment variables to export into the outgoing event once the BashJobRunner has finished. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.BashJobRunner.property.node"></a>
-
-```typescript
-public readonly node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `codebuildProject`<sup>Required</sup> <a name="codebuildProject" id="@cdklabs/sbt-aws.BashJobRunner.property.codebuildProject"></a>
-
-```typescript
-public readonly codebuildProject: Project;
-```
-
-- *Type:* aws-cdk-lib.aws_codebuild.Project
-
-The codebuildProject used to implement this BashJobRunner.
-
----
-
-##### `eventTarget`<sup>Required</sup> <a name="eventTarget" id="@cdklabs/sbt-aws.BashJobRunner.property.eventTarget"></a>
-
-```typescript
-public readonly eventTarget: IRuleTarget;
-```
-
-- *Type:* aws-cdk-lib.aws_events.IRuleTarget
-
-The eventTarget to use when triggering this BashJobRunner.
-
----
-
-##### `incomingEvent`<sup>Required</sup> <a name="incomingEvent" id="@cdklabs/sbt-aws.BashJobRunner.property.incomingEvent"></a>
-
-```typescript
-public readonly incomingEvent: DetailType;
-```
-
-- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
-
-The incoming event DetailType that triggers this job.
-
----
-
-##### `provisioningStateMachine`<sup>Required</sup> <a name="provisioningStateMachine" id="@cdklabs/sbt-aws.BashJobRunner.property.provisioningStateMachine"></a>
-
-```typescript
-public readonly provisioningStateMachine: StateMachine;
-```
-
-- *Type:* aws-cdk-lib.aws_stepfunctions.StateMachine
-
-The StateMachine used to implement this BashJobRunner orchestration.
-
----
-
-##### `environmentVariablesToOutgoingEvent`<sup>Optional</sup> <a name="environmentVariablesToOutgoingEvent" id="@cdklabs/sbt-aws.BashJobRunner.property.environmentVariablesToOutgoingEvent"></a>
-
-```typescript
-public readonly environmentVariablesToOutgoingEvent: string[];
-```
-
-- *Type:* string[]
-
-The environment variables to export into the outgoing event once the BashJobRunner has finished.
-
----
-
-
 ### BillingProvider <a name="BillingProvider" id="@cdklabs/sbt-aws.BillingProvider"></a>
 
 Represents a Billing Provider that handles billing-related operations.
@@ -1379,6 +1213,175 @@ The EventManager instance that allows connecting to events flowing between the C
 ---
 
 
+### DeprovisioningScriptJob <a name="DeprovisioningScriptJob" id="@cdklabs/sbt-aws.DeprovisioningScriptJob"></a>
+
+Provides a ProvisioningScriptJob to execute arbitrary bash code.
+
+This is a simple wrapper around ScriptJob that reduces some of the parameters
+that need to be configured.
+
+#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.DeprovisioningScriptJob.Initializer"></a>
+
+```typescript
+import { DeprovisioningScriptJob } from '@cdklabs/sbt-aws'
+
+new DeprovisioningScriptJob(scope: Construct, id: string, props: TenantLifecycleScriptJobProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.DeprovisioningScriptJob.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.DeprovisioningScriptJob.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.DeprovisioningScriptJob.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps">TenantLifecycleScriptJobProps</a></code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.DeprovisioningScriptJob.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.DeprovisioningScriptJob.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.DeprovisioningScriptJob.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps">TenantLifecycleScriptJobProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.DeprovisioningScriptJob.toString">toString</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `toString` <a name="toString" id="@cdklabs/sbt-aws.DeprovisioningScriptJob.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.DeprovisioningScriptJob.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.DeprovisioningScriptJob.isConstruct"></a>
+
+```typescript
+import { DeprovisioningScriptJob } from '@cdklabs/sbt-aws'
+
+DeprovisioningScriptJob.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.DeprovisioningScriptJob.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.DeprovisioningScriptJob.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@cdklabs/sbt-aws.DeprovisioningScriptJob.property.codebuildProject">codebuildProject</a></code> | <code>aws-cdk-lib.aws_codebuild.Project</code> | The codebuildProject used to implement this ScriptJob. |
+| <code><a href="#@cdklabs/sbt-aws.DeprovisioningScriptJob.property.eventTarget">eventTarget</a></code> | <code>aws-cdk-lib.aws_events.IRuleTarget</code> | The eventTarget to use when triggering this ScriptJob. |
+| <code><a href="#@cdklabs/sbt-aws.DeprovisioningScriptJob.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The incoming event DetailType that triggers this job. |
+| <code><a href="#@cdklabs/sbt-aws.DeprovisioningScriptJob.property.provisioningStateMachine">provisioningStateMachine</a></code> | <code>aws-cdk-lib.aws_stepfunctions.StateMachine</code> | The StateMachine used to implement this ScriptJob orchestration. |
+| <code><a href="#@cdklabs/sbt-aws.DeprovisioningScriptJob.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.DeprovisioningScriptJob.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `codebuildProject`<sup>Required</sup> <a name="codebuildProject" id="@cdklabs/sbt-aws.DeprovisioningScriptJob.property.codebuildProject"></a>
+
+```typescript
+public readonly codebuildProject: Project;
+```
+
+- *Type:* aws-cdk-lib.aws_codebuild.Project
+
+The codebuildProject used to implement this ScriptJob.
+
+---
+
+##### `eventTarget`<sup>Required</sup> <a name="eventTarget" id="@cdklabs/sbt-aws.DeprovisioningScriptJob.property.eventTarget"></a>
+
+```typescript
+public readonly eventTarget: IRuleTarget;
+```
+
+- *Type:* aws-cdk-lib.aws_events.IRuleTarget
+
+The eventTarget to use when triggering this ScriptJob.
+
+---
+
+##### `incomingEvent`<sup>Required</sup> <a name="incomingEvent" id="@cdklabs/sbt-aws.DeprovisioningScriptJob.property.incomingEvent"></a>
+
+```typescript
+public readonly incomingEvent: DetailType;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+
+The incoming event DetailType that triggers this job.
+
+---
+
+##### `provisioningStateMachine`<sup>Required</sup> <a name="provisioningStateMachine" id="@cdklabs/sbt-aws.DeprovisioningScriptJob.property.provisioningStateMachine"></a>
+
+```typescript
+public readonly provisioningStateMachine: StateMachine;
+```
+
+- *Type:* aws-cdk-lib.aws_stepfunctions.StateMachine
+
+The StateMachine used to implement this ScriptJob orchestration.
+
+---
+
+##### `environmentVariablesToOutgoingEvent`<sup>Optional</sup> <a name="environmentVariablesToOutgoingEvent" id="@cdklabs/sbt-aws.DeprovisioningScriptJob.property.environmentVariablesToOutgoingEvent"></a>
+
+```typescript
+public readonly environmentVariablesToOutgoingEvent: string[];
+```
+
+- *Type:* string[]
+
+The environment variables to export into the outgoing event once the ScriptJob has finished.
+
+---
+
+
 ### EventManager <a name="EventManager" id="@cdklabs/sbt-aws.EventManager"></a>
 
 - *Implements:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
@@ -1770,6 +1773,175 @@ The DynamoDB table containing the aggregated data.
 ---
 
 
+### ProvisioningScriptJob <a name="ProvisioningScriptJob" id="@cdklabs/sbt-aws.ProvisioningScriptJob"></a>
+
+Provides a ProvisioningScriptJob to execute arbitrary bash code.
+
+This is a simple wrapper around ScriptJob that reduces some of the parameters
+that need to be configured.
+
+#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.ProvisioningScriptJob.Initializer"></a>
+
+```typescript
+import { ProvisioningScriptJob } from '@cdklabs/sbt-aws'
+
+new ProvisioningScriptJob(scope: Construct, id: string, props: TenantLifecycleScriptJobProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.ProvisioningScriptJob.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ProvisioningScriptJob.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ProvisioningScriptJob.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps">TenantLifecycleScriptJobProps</a></code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.ProvisioningScriptJob.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.ProvisioningScriptJob.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.ProvisioningScriptJob.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps">TenantLifecycleScriptJobProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.ProvisioningScriptJob.toString">toString</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `toString` <a name="toString" id="@cdklabs/sbt-aws.ProvisioningScriptJob.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.ProvisioningScriptJob.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.ProvisioningScriptJob.isConstruct"></a>
+
+```typescript
+import { ProvisioningScriptJob } from '@cdklabs/sbt-aws'
+
+ProvisioningScriptJob.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.ProvisioningScriptJob.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.ProvisioningScriptJob.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@cdklabs/sbt-aws.ProvisioningScriptJob.property.codebuildProject">codebuildProject</a></code> | <code>aws-cdk-lib.aws_codebuild.Project</code> | The codebuildProject used to implement this ScriptJob. |
+| <code><a href="#@cdklabs/sbt-aws.ProvisioningScriptJob.property.eventTarget">eventTarget</a></code> | <code>aws-cdk-lib.aws_events.IRuleTarget</code> | The eventTarget to use when triggering this ScriptJob. |
+| <code><a href="#@cdklabs/sbt-aws.ProvisioningScriptJob.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The incoming event DetailType that triggers this job. |
+| <code><a href="#@cdklabs/sbt-aws.ProvisioningScriptJob.property.provisioningStateMachine">provisioningStateMachine</a></code> | <code>aws-cdk-lib.aws_stepfunctions.StateMachine</code> | The StateMachine used to implement this ScriptJob orchestration. |
+| <code><a href="#@cdklabs/sbt-aws.ProvisioningScriptJob.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.ProvisioningScriptJob.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `codebuildProject`<sup>Required</sup> <a name="codebuildProject" id="@cdklabs/sbt-aws.ProvisioningScriptJob.property.codebuildProject"></a>
+
+```typescript
+public readonly codebuildProject: Project;
+```
+
+- *Type:* aws-cdk-lib.aws_codebuild.Project
+
+The codebuildProject used to implement this ScriptJob.
+
+---
+
+##### `eventTarget`<sup>Required</sup> <a name="eventTarget" id="@cdklabs/sbt-aws.ProvisioningScriptJob.property.eventTarget"></a>
+
+```typescript
+public readonly eventTarget: IRuleTarget;
+```
+
+- *Type:* aws-cdk-lib.aws_events.IRuleTarget
+
+The eventTarget to use when triggering this ScriptJob.
+
+---
+
+##### `incomingEvent`<sup>Required</sup> <a name="incomingEvent" id="@cdklabs/sbt-aws.ProvisioningScriptJob.property.incomingEvent"></a>
+
+```typescript
+public readonly incomingEvent: DetailType;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+
+The incoming event DetailType that triggers this job.
+
+---
+
+##### `provisioningStateMachine`<sup>Required</sup> <a name="provisioningStateMachine" id="@cdklabs/sbt-aws.ProvisioningScriptJob.property.provisioningStateMachine"></a>
+
+```typescript
+public readonly provisioningStateMachine: StateMachine;
+```
+
+- *Type:* aws-cdk-lib.aws_stepfunctions.StateMachine
+
+The StateMachine used to implement this ScriptJob orchestration.
+
+---
+
+##### `environmentVariablesToOutgoingEvent`<sup>Optional</sup> <a name="environmentVariablesToOutgoingEvent" id="@cdklabs/sbt-aws.ProvisioningScriptJob.property.environmentVariablesToOutgoingEvent"></a>
+
+```typescript
+public readonly environmentVariablesToOutgoingEvent: string[];
+```
+
+- *Type:* string[]
+
+The environment variables to export into the outgoing event once the ScriptJob has finished.
+
+---
+
+
 ### SampleRegistrationWebPage <a name="SampleRegistrationWebPage" id="@cdklabs/sbt-aws.SampleRegistrationWebPage"></a>
 
 Constructs a sample registration web page hosted on Amazon S3 and fronted by Amazon CloudFront.
@@ -1869,6 +2041,172 @@ public readonly node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+
+### ScriptJob <a name="ScriptJob" id="@cdklabs/sbt-aws.ScriptJob"></a>
+
+Provides a ScriptJob to execute arbitrary bash code.
+
+#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.ScriptJob.Initializer"></a>
+
+```typescript
+import { ScriptJob } from '@cdklabs/sbt-aws'
+
+new ScriptJob(scope: Construct, id: string, props: ScriptJobProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJob.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJob.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJob.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps">ScriptJobProps</a></code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.ScriptJob.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.ScriptJob.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.ScriptJob.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@cdklabs/sbt-aws.ScriptJobProps">ScriptJobProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJob.toString">toString</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `toString` <a name="toString" id="@cdklabs/sbt-aws.ScriptJob.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJob.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.ScriptJob.isConstruct"></a>
+
+```typescript
+import { ScriptJob } from '@cdklabs/sbt-aws'
+
+ScriptJob.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.ScriptJob.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJob.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJob.property.codebuildProject">codebuildProject</a></code> | <code>aws-cdk-lib.aws_codebuild.Project</code> | The codebuildProject used to implement this ScriptJob. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJob.property.eventTarget">eventTarget</a></code> | <code>aws-cdk-lib.aws_events.IRuleTarget</code> | The eventTarget to use when triggering this ScriptJob. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJob.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The incoming event DetailType that triggers this job. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJob.property.provisioningStateMachine">provisioningStateMachine</a></code> | <code>aws-cdk-lib.aws_stepfunctions.StateMachine</code> | The StateMachine used to implement this ScriptJob orchestration. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJob.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.ScriptJob.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `codebuildProject`<sup>Required</sup> <a name="codebuildProject" id="@cdklabs/sbt-aws.ScriptJob.property.codebuildProject"></a>
+
+```typescript
+public readonly codebuildProject: Project;
+```
+
+- *Type:* aws-cdk-lib.aws_codebuild.Project
+
+The codebuildProject used to implement this ScriptJob.
+
+---
+
+##### `eventTarget`<sup>Required</sup> <a name="eventTarget" id="@cdklabs/sbt-aws.ScriptJob.property.eventTarget"></a>
+
+```typescript
+public readonly eventTarget: IRuleTarget;
+```
+
+- *Type:* aws-cdk-lib.aws_events.IRuleTarget
+
+The eventTarget to use when triggering this ScriptJob.
+
+---
+
+##### `incomingEvent`<sup>Required</sup> <a name="incomingEvent" id="@cdklabs/sbt-aws.ScriptJob.property.incomingEvent"></a>
+
+```typescript
+public readonly incomingEvent: DetailType;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+
+The incoming event DetailType that triggers this job.
+
+---
+
+##### `provisioningStateMachine`<sup>Required</sup> <a name="provisioningStateMachine" id="@cdklabs/sbt-aws.ScriptJob.property.provisioningStateMachine"></a>
+
+```typescript
+public readonly provisioningStateMachine: StateMachine;
+```
+
+- *Type:* aws-cdk-lib.aws_stepfunctions.StateMachine
+
+The StateMachine used to implement this ScriptJob orchestration.
+
+---
+
+##### `environmentVariablesToOutgoingEvent`<sup>Optional</sup> <a name="environmentVariablesToOutgoingEvent" id="@cdklabs/sbt-aws.ScriptJob.property.environmentVariablesToOutgoingEvent"></a>
+
+```typescript
+public readonly environmentVariablesToOutgoingEvent: string[];
+```
+
+- *Type:* string[]
+
+The environment variables to export into the outgoing event once the ScriptJob has finished.
 
 ---
 
@@ -2743,174 +3081,6 @@ fields is checked when a new customer is registered.
 
 ---
 
-### BashJobRunnerProps <a name="BashJobRunnerProps" id="@cdklabs/sbt-aws.BashJobRunnerProps"></a>
-
-Encapsulates the list of properties for a BashJobRunner.
-
-#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.BashJobRunnerProps.Initializer"></a>
-
-```typescript
-import { BashJobRunnerProps } from '@cdklabs/sbt-aws'
-
-const bashJobRunnerProps: BashJobRunnerProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | The EventManager instance that allows connecting to events flowing between the Control Plane and other components. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The incoming event DetailType that triggers this job. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.outgoingEvent">outgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The outgoing event DetailType that is emitted upon job completion. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.permissions">permissions</a></code> | <code>aws-cdk-lib.aws_iam.PolicyDocument</code> | The IAM permission document for the BashJobRunner. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.script">script</a></code> | <code>string</code> | The bash script to run as part of the BashJobRunner. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.environmentJSONVariablesFromIncomingEvent">environmentJSONVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the BashJobRunner from event details field. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.environmentStringVariablesFromIncomingEvent">environmentStringVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the BashJobRunner from event details field. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | The environment variables to export into the outgoing event once the BashJobRunner has finished. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.postScript">postScript</a></code> | <code>string</code> | The bash script to run after the main script has completed. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.scriptEnvironmentVariables">scriptEnvironmentVariables</a></code> | <code>{[ key: string ]: string}</code> | The variables to pass into the codebuild BashJobRunner. |
-| <code><a href="#@cdklabs/sbt-aws.BashJobRunnerProps.property.tenantIdentifierKeyInIncomingEvent">tenantIdentifierKeyInIncomingEvent</a></code> | <code>string</code> | The key where the tenant identifier is to be extracted from in the incoming event. |
-
----
-
-##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.eventManager"></a>
-
-```typescript
-public readonly eventManager: IEventManager;
-```
-
-- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
-
-The EventManager instance that allows connecting to events flowing between the Control Plane and other components.
-
----
-
-##### `incomingEvent`<sup>Required</sup> <a name="incomingEvent" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.incomingEvent"></a>
-
-```typescript
-public readonly incomingEvent: DetailType;
-```
-
-- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
-
-The incoming event DetailType that triggers this job.
-
----
-
-##### `outgoingEvent`<sup>Required</sup> <a name="outgoingEvent" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.outgoingEvent"></a>
-
-```typescript
-public readonly outgoingEvent: DetailType;
-```
-
-- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
-
-The outgoing event DetailType that is emitted upon job completion.
-
----
-
-##### `permissions`<sup>Required</sup> <a name="permissions" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.permissions"></a>
-
-```typescript
-public readonly permissions: PolicyDocument;
-```
-
-- *Type:* aws-cdk-lib.aws_iam.PolicyDocument
-
-The IAM permission document for the BashJobRunner.
-
----
-
-##### `script`<sup>Required</sup> <a name="script" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.script"></a>
-
-```typescript
-public readonly script: string;
-```
-
-- *Type:* string
-
-The bash script to run as part of the BashJobRunner.
-
----
-
-##### `environmentJSONVariablesFromIncomingEvent`<sup>Optional</sup> <a name="environmentJSONVariablesFromIncomingEvent" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.environmentJSONVariablesFromIncomingEvent"></a>
-
-```typescript
-public readonly environmentJSONVariablesFromIncomingEvent: string[];
-```
-
-- *Type:* string[]
-
-The environment variables to import into the BashJobRunner from event details field.
-
-This argument consists of the names of only JSON-formatted string type variables.
-Ex. '{"test": 2}'
-
----
-
-##### `environmentStringVariablesFromIncomingEvent`<sup>Optional</sup> <a name="environmentStringVariablesFromIncomingEvent" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.environmentStringVariablesFromIncomingEvent"></a>
-
-```typescript
-public readonly environmentStringVariablesFromIncomingEvent: string[];
-```
-
-- *Type:* string[]
-
-The environment variables to import into the BashJobRunner from event details field.
-
-This argument consists of the names of only string type variables. Ex. 'test'
-
----
-
-##### `environmentVariablesToOutgoingEvent`<sup>Optional</sup> <a name="environmentVariablesToOutgoingEvent" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.environmentVariablesToOutgoingEvent"></a>
-
-```typescript
-public readonly environmentVariablesToOutgoingEvent: string[];
-```
-
-- *Type:* string[]
-
-The environment variables to export into the outgoing event once the BashJobRunner has finished.
-
----
-
-##### `postScript`<sup>Optional</sup> <a name="postScript" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.postScript"></a>
-
-```typescript
-public readonly postScript: string;
-```
-
-- *Type:* string
-
-The bash script to run after the main script has completed.
-
----
-
-##### `scriptEnvironmentVariables`<sup>Optional</sup> <a name="scriptEnvironmentVariables" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.scriptEnvironmentVariables"></a>
-
-```typescript
-public readonly scriptEnvironmentVariables: {[ key: string ]: string};
-```
-
-- *Type:* {[ key: string ]: string}
-
-The variables to pass into the codebuild BashJobRunner.
-
----
-
-##### `tenantIdentifierKeyInIncomingEvent`<sup>Optional</sup> <a name="tenantIdentifierKeyInIncomingEvent" id="@cdklabs/sbt-aws.BashJobRunnerProps.property.tenantIdentifierKeyInIncomingEvent"></a>
-
-```typescript
-public readonly tenantIdentifierKeyInIncomingEvent: string;
-```
-
-- *Type:* string
-- *Default:* 'tenantId'
-
-The key where the tenant identifier is to be extracted from in the incoming event.
-
----
-
 ### BillingProviderProps <a name="BillingProviderProps" id="@cdklabs/sbt-aws.BillingProviderProps"></a>
 
 Encapsulates the list of properties for a BillingProvider.
@@ -3215,7 +3385,7 @@ const coreApplicationPlaneProps: CoreApplicationPlaneProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | *No description.* |
-| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.jobRunnersList">jobRunnersList</a></code> | <code><a href="#@cdklabs/sbt-aws.BashJobRunner">BashJobRunner</a>[]</code> | The list of JobRunners. |
+| <code><a href="#@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.scriptJobs">scriptJobs</a></code> | <code><a href="#@cdklabs/sbt-aws.ScriptJob">ScriptJob</a>[]</code> | The list of JobRunners. |
 
 ---
 
@@ -3229,13 +3399,13 @@ public readonly eventManager: IEventManager;
 
 ---
 
-##### `jobRunnersList`<sup>Optional</sup> <a name="jobRunnersList" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.jobRunnersList"></a>
+##### `scriptJobs`<sup>Optional</sup> <a name="scriptJobs" id="@cdklabs/sbt-aws.CoreApplicationPlaneProps.property.scriptJobs"></a>
 
 ```typescript
-public readonly jobRunnersList: BashJobRunner[];
+public readonly scriptJobs: ScriptJob[];
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.BashJobRunner">BashJobRunner</a>[]
+- *Type:* <a href="#@cdklabs/sbt-aws.ScriptJob">ScriptJob</a>[]
 
 The list of JobRunners.
 
@@ -3443,6 +3613,51 @@ The JMESPath to find the primary key value in the incoming data stream.
 
 ---
 
+### OutgoingEventDetailTypes <a name="OutgoingEventDetailTypes" id="@cdklabs/sbt-aws.OutgoingEventDetailTypes"></a>
+
+Represents the DetailTypes that can be emitted as part of the outgoing event.
+
+#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.OutgoingEventDetailTypes.Initializer"></a>
+
+```typescript
+import { OutgoingEventDetailTypes } from '@cdklabs/sbt-aws'
+
+const outgoingEventDetailTypes: OutgoingEventDetailTypes = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.OutgoingEventDetailTypes.property.failure">failure</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The detail type for a failed event. |
+| <code><a href="#@cdklabs/sbt-aws.OutgoingEventDetailTypes.property.success">success</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The detail type for a successful event. |
+
+---
+
+##### `failure`<sup>Required</sup> <a name="failure" id="@cdklabs/sbt-aws.OutgoingEventDetailTypes.property.failure"></a>
+
+```typescript
+public readonly failure: DetailType;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+
+The detail type for a failed event.
+
+---
+
+##### `success`<sup>Required</sup> <a name="success" id="@cdklabs/sbt-aws.OutgoingEventDetailTypes.property.success"></a>
+
+```typescript
+public readonly success: DetailType;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+
+The detail type for a successful event.
+
+---
+
 ### SampleRegistrationWebPageProps <a name="SampleRegistrationWebPageProps" id="@cdklabs/sbt-aws.SampleRegistrationWebPageProps"></a>
 
 Properties for the SampleRegistrationWebPage construct.
@@ -3525,6 +3740,198 @@ public readonly imageLogoUrl: string;
 - *Default:* Amazon logo
 
 The URL of the image logo to display on the registration page.
+
+---
+
+### ScriptJobProps <a name="ScriptJobProps" id="@cdklabs/sbt-aws.ScriptJobProps"></a>
+
+Encapsulates the list of properties for a ScriptJob.
+
+#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.ScriptJobProps.Initializer"></a>
+
+```typescript
+import { ScriptJobProps } from '@cdklabs/sbt-aws'
+
+const scriptJobProps: ScriptJobProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | The EventManager instance that allows connecting to events flowing between the Control Plane and other components. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The incoming event DetailType that triggers this job. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.jobFailureStatus">jobFailureStatus</a></code> | <code>{[ key: string ]: string}</code> | In the case of failure, this is the object that will be included in the outgoing event `jobOutput` field. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.jobIdentifierKey">jobIdentifierKey</a></code> | <code>string</code> | The key where the job identifier is to be extracted from in the incoming event. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.outgoingEvent">outgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.OutgoingEventDetailTypes">OutgoingEventDetailTypes</a></code> | The outgoing event DetailTypes that are emitted upon job success or failure. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.permissions">permissions</a></code> | <code>aws-cdk-lib.aws_iam.PolicyDocument</code> | The IAM permission document for the ScriptJob. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.script">script</a></code> | <code>string</code> | The bash script to run as part of the ScriptJob. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.environmentJSONVariablesFromIncomingEvent">environmentJSONVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the ScriptJob from event details field. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.environmentStringVariablesFromIncomingEvent">environmentStringVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the ScriptJob from event details field. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.postScript">postScript</a></code> | <code>string</code> | The bash script to run after the main script has completed. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.scriptEnvironmentVariables">scriptEnvironmentVariables</a></code> | <code>{[ key: string ]: string}</code> | The variables to pass into the codebuild ScriptJob. |
+
+---
+
+##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.ScriptJobProps.property.eventManager"></a>
+
+```typescript
+public readonly eventManager: IEventManager;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
+
+The EventManager instance that allows connecting to events flowing between the Control Plane and other components.
+
+---
+
+##### `incomingEvent`<sup>Required</sup> <a name="incomingEvent" id="@cdklabs/sbt-aws.ScriptJobProps.property.incomingEvent"></a>
+
+```typescript
+public readonly incomingEvent: DetailType;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+
+The incoming event DetailType that triggers this job.
+
+---
+
+##### `jobFailureStatus`<sup>Required</sup> <a name="jobFailureStatus" id="@cdklabs/sbt-aws.ScriptJobProps.property.jobFailureStatus"></a>
+
+```typescript
+public readonly jobFailureStatus: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+
+In the case of failure, this is the object that will be included in the outgoing event `jobOutput` field.
+
+Ex: If the job fails, the outgoing event will look like this:
+  {'tenantId': 'XXX', 'jobOutput': jobFailureStatus}
+
+---
+
+##### `jobIdentifierKey`<sup>Required</sup> <a name="jobIdentifierKey" id="@cdklabs/sbt-aws.ScriptJobProps.property.jobIdentifierKey"></a>
+
+```typescript
+public readonly jobIdentifierKey: string;
+```
+
+- *Type:* string
+
+The key where the job identifier is to be extracted from in the incoming event.
+
+This will be used as the key that will be populated with
+the job identifier in the outgoing event.
+
+Ex: if jobIdentifierKey == 'tenantId' then
+the incoming event should look something like this:
+  {'tenantId': '123', ....}
+and the outgoing event will look something like this:
+  {'tenantId': '123', 'jobOutput': { ... }}
+
+---
+
+##### `outgoingEvent`<sup>Required</sup> <a name="outgoingEvent" id="@cdklabs/sbt-aws.ScriptJobProps.property.outgoingEvent"></a>
+
+```typescript
+public readonly outgoingEvent: OutgoingEventDetailTypes;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.OutgoingEventDetailTypes">OutgoingEventDetailTypes</a>
+
+The outgoing event DetailTypes that are emitted upon job success or failure.
+
+---
+
+##### `permissions`<sup>Required</sup> <a name="permissions" id="@cdklabs/sbt-aws.ScriptJobProps.property.permissions"></a>
+
+```typescript
+public readonly permissions: PolicyDocument;
+```
+
+- *Type:* aws-cdk-lib.aws_iam.PolicyDocument
+
+The IAM permission document for the ScriptJob.
+
+---
+
+##### `script`<sup>Required</sup> <a name="script" id="@cdklabs/sbt-aws.ScriptJobProps.property.script"></a>
+
+```typescript
+public readonly script: string;
+```
+
+- *Type:* string
+
+The bash script to run as part of the ScriptJob.
+
+---
+
+##### `environmentJSONVariablesFromIncomingEvent`<sup>Optional</sup> <a name="environmentJSONVariablesFromIncomingEvent" id="@cdklabs/sbt-aws.ScriptJobProps.property.environmentJSONVariablesFromIncomingEvent"></a>
+
+```typescript
+public readonly environmentJSONVariablesFromIncomingEvent: string[];
+```
+
+- *Type:* string[]
+
+The environment variables to import into the ScriptJob from event details field.
+
+This argument consists of the names of only JSON-formatted string type variables.
+Ex. '{"test": 2}'
+
+---
+
+##### `environmentStringVariablesFromIncomingEvent`<sup>Optional</sup> <a name="environmentStringVariablesFromIncomingEvent" id="@cdklabs/sbt-aws.ScriptJobProps.property.environmentStringVariablesFromIncomingEvent"></a>
+
+```typescript
+public readonly environmentStringVariablesFromIncomingEvent: string[];
+```
+
+- *Type:* string[]
+
+The environment variables to import into the ScriptJob from event details field.
+
+This argument consists of the names of only string type variables. Ex. 'test'
+
+---
+
+##### `environmentVariablesToOutgoingEvent`<sup>Optional</sup> <a name="environmentVariablesToOutgoingEvent" id="@cdklabs/sbt-aws.ScriptJobProps.property.environmentVariablesToOutgoingEvent"></a>
+
+```typescript
+public readonly environmentVariablesToOutgoingEvent: string[];
+```
+
+- *Type:* string[]
+
+The environment variables to export into the outgoing event once the ScriptJob has finished.
+
+---
+
+##### `postScript`<sup>Optional</sup> <a name="postScript" id="@cdklabs/sbt-aws.ScriptJobProps.property.postScript"></a>
+
+```typescript
+public readonly postScript: string;
+```
+
+- *Type:* string
+
+The bash script to run after the main script has completed.
+
+---
+
+##### `scriptEnvironmentVariables`<sup>Optional</sup> <a name="scriptEnvironmentVariables" id="@cdklabs/sbt-aws.ScriptJobProps.property.scriptEnvironmentVariables"></a>
+
+```typescript
+public readonly scriptEnvironmentVariables: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+
+The variables to pass into the codebuild ScriptJob.
 
 ---
 
@@ -3629,6 +4036,134 @@ public readonly tenantManagementTable: TenantManagementTable;
 ```
 
 - *Type:* <a href="#@cdklabs/sbt-aws.TenantManagementTable">TenantManagementTable</a>
+
+---
+
+### TenantLifecycleScriptJobProps <a name="TenantLifecycleScriptJobProps" id="@cdklabs/sbt-aws.TenantLifecycleScriptJobProps"></a>
+
+Encapsulates the list of properties for a ScriptJobs that handle lifecycle management for tenants.
+
+#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.Initializer"></a>
+
+```typescript
+import { TenantLifecycleScriptJobProps } from '@cdklabs/sbt-aws'
+
+const tenantLifecycleScriptJobProps: TenantLifecycleScriptJobProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | The EventManager instance that allows connecting to events flowing between the Control Plane and other components. |
+| <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.permissions">permissions</a></code> | <code>aws-cdk-lib.aws_iam.PolicyDocument</code> | The IAM permission document for the ScriptJob. |
+| <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.script">script</a></code> | <code>string</code> | The bash script to run as part of the ScriptJob. |
+| <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.environmentJSONVariablesFromIncomingEvent">environmentJSONVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the ScriptJob from event details field. |
+| <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.environmentStringVariablesFromIncomingEvent">environmentStringVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the ScriptJob from event details field. |
+| <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
+| <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.postScript">postScript</a></code> | <code>string</code> | The bash script to run after the main script has completed. |
+| <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.scriptEnvironmentVariables">scriptEnvironmentVariables</a></code> | <code>{[ key: string ]: string}</code> | The variables to pass into the codebuild ScriptJob. |
+
+---
+
+##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.eventManager"></a>
+
+```typescript
+public readonly eventManager: IEventManager;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
+
+The EventManager instance that allows connecting to events flowing between the Control Plane and other components.
+
+---
+
+##### `permissions`<sup>Required</sup> <a name="permissions" id="@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.permissions"></a>
+
+```typescript
+public readonly permissions: PolicyDocument;
+```
+
+- *Type:* aws-cdk-lib.aws_iam.PolicyDocument
+
+The IAM permission document for the ScriptJob.
+
+---
+
+##### `script`<sup>Required</sup> <a name="script" id="@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.script"></a>
+
+```typescript
+public readonly script: string;
+```
+
+- *Type:* string
+
+The bash script to run as part of the ScriptJob.
+
+---
+
+##### `environmentJSONVariablesFromIncomingEvent`<sup>Optional</sup> <a name="environmentJSONVariablesFromIncomingEvent" id="@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.environmentJSONVariablesFromIncomingEvent"></a>
+
+```typescript
+public readonly environmentJSONVariablesFromIncomingEvent: string[];
+```
+
+- *Type:* string[]
+
+The environment variables to import into the ScriptJob from event details field.
+
+This argument consists of the names of only JSON-formatted string type variables.
+Ex. '{"test": 2}'
+
+---
+
+##### `environmentStringVariablesFromIncomingEvent`<sup>Optional</sup> <a name="environmentStringVariablesFromIncomingEvent" id="@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.environmentStringVariablesFromIncomingEvent"></a>
+
+```typescript
+public readonly environmentStringVariablesFromIncomingEvent: string[];
+```
+
+- *Type:* string[]
+
+The environment variables to import into the ScriptJob from event details field.
+
+This argument consists of the names of only string type variables. Ex. 'test'
+
+---
+
+##### `environmentVariablesToOutgoingEvent`<sup>Optional</sup> <a name="environmentVariablesToOutgoingEvent" id="@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.environmentVariablesToOutgoingEvent"></a>
+
+```typescript
+public readonly environmentVariablesToOutgoingEvent: string[];
+```
+
+- *Type:* string[]
+
+The environment variables to export into the outgoing event once the ScriptJob has finished.
+
+---
+
+##### `postScript`<sup>Optional</sup> <a name="postScript" id="@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.postScript"></a>
+
+```typescript
+public readonly postScript: string;
+```
+
+- *Type:* string
+
+The bash script to run after the main script has completed.
+
+---
+
+##### `scriptEnvironmentVariables`<sup>Optional</sup> <a name="scriptEnvironmentVariables" id="@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.scriptEnvironmentVariables"></a>
+
+```typescript
+public readonly scriptEnvironmentVariables: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+
+The variables to pass into the codebuild ScriptJob.
 
 ---
 

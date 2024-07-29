@@ -441,7 +441,7 @@ case "$1" in
 
 "get-tenant")
   if [ $# -ne 2 ]; then
-    echo "Error: delete-tenant requires tenant id"
+    echo "Error: get-tenant requires tenant id"
     exit 1
   fi
   get_tenant "$2"

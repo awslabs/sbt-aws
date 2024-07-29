@@ -177,7 +177,7 @@ export class ApplicationPlaneStack extends Stack {
 
     new sbt.CoreApplicationPlane(this, 'CoreApplicationPlane', {
       eventManager: props.eventManager,
-      jobRunnersList: [],
+      scriptJobs: [],
     });
   }
 }
@@ -191,14 +191,14 @@ Again, SBT allows builders to publish and subscribe directly to EventBridge, and
 
 #### Core Application Plane Utilities
 
-Although entirely optional, SBT includes a utility that lets you define, and run arbitrary jobs upon receipt of a control plane message, called a `JobRunner`. This is the mechanism currently used for onboarding and off-boarding in the reference architectures which were ported to SBT (see references at the end of this document). That tenant provisioning/deprovisioning process is depicted below:
+Although entirely optional, SBT includes a utility that lets you define, and run arbitrary jobs upon receipt of a control plane message, called a `ScriptJob`. This mechanism is extended to produce two new helper constructs `ProvisioningScriptJob` and `DeprovisioningScriptJob` which are used for onboarding and off-boarding, respectively, in the reference architectures which were ported to SBT (see references at the end of this document). That tenant provisioning/deprovisioning process is depicted below:
 
 ![sbt-provisioning.png](../../images/sbt-provisioning.png)
 
-Notice the use of the `provisioning.sh` and `deprovisioning.sh` scripts at the top. These scripts are fed to the `JobRunner` as parameters. Internally the `JobRunner` launches an AWS CodeBuild project, wrapped inside an AWS Step Function, to execute the bash scripts. The `JobRunner` also lets you specify what input variables to feed to the scripts, along with what output variables you expect them to return. Note that in this version of SBT, you can create `JobRunner`s with [`jobRunnerProps`](/API.md#bashjobrunnerprops-) and configure `CoreAppPlane` with `JobRunner`s using its `jobRunnersList` property. The `CoreAppPlane` will then link these `JobRunner`s to EventBridge. Let's take a simple example: imagine our SaaS application deployed only a single S3 bucket per tenant. Let's create a job runner for that provisioning now.
+Notice the use of the `provisioning.sh` and `deprovisioning.sh` scripts at the top. These scripts are fed to the `ProvisioningScriptJob` and `DeprovisioningScriptJob` as parameters. Internally the `ScriptJob` launches an AWS CodeBuild project, wrapped inside an AWS Step Function, to execute the bash scripts. The `ScriptJob` also lets you specify what input variables to feed to the scripts, along with what output variables you expect them to return. Note that in this version of SBT, you can create `ScriptJob`s with [`ScriptJobProps`](/API.md#scriptjobprops-) and configure `CoreAppPlane` with `ScriptJob`s using its `scriptJobs` property. The `CoreAppPlane` will then link these `ScriptJob`s to EventBridge. Let's take a simple example: imagine our SaaS application deployed only a single S3 bucket per tenant. Let's create a script job for that provisioning now.
 
 ```typescript
-const provisioningJobRunnerProps = {
+const scriptJobProps = {
   permissions: PolicyDocument.fromJson(/*See below*/),
   script: '' /*See below*/,
   environmentStringVariablesFromIncomingEvent: ['tenantId', 'tier'],
@@ -212,7 +212,7 @@ const provisioningJobRunnerProps = {
 };
 ```
 
-##### Bash Job Runner Properties
+##### Script Job Properties
 
 Let's take a moment and dissect this object.
 
@@ -220,14 +220,14 @@ Let's take a moment and dissect this object.
 | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | **script**                                      | string                                                                                                | A string in bash script format that represents the job to be run (example below)                                   |
 | **permissions**                                 | [PolicyDocument](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_iam.PolicyDocument.html) | An IAM policy document giving this job the IAM permisisons it needs to do what it's being asked to do              |
-| **environmentStringVariablesFromIncomingEvent** | string[]                                                                                              | The environment variables to import into the BashJobRunner from event details field.                               |
-| **environmentVariablesToOutgoingEvent**         | string[]                                                                                              | The environment variables to export into the outgoing event once the BashJobRunner has finished.                   |
-| **scriptEnvironmentVariables**                  | `{ [key: string]: string }`                                                                           | The variables to pass into the codebuild BashJobRunner.                                                            |
+| **environmentStringVariablesFromIncomingEvent** | string[]                                                                                              | The environment variables to import into the ScriptJob from event details field.                                   |
+| **environmentVariablesToOutgoingEvent**         | string[]                                                                                              | The environment variables to export into the outgoing event once the ScriptJob has finished.                       |
+| **scriptEnvironmentVariables**                  | `{ [key: string]: string }`                                                                           | The variables to pass into the codebuild ScriptJob.                                                                |
 | **outgoingEvent**                               | any                                                                                                   | Outgoing EventBridge wiring details                                                                                |
 | **incomingEvent**                               | any                                                                                                   | Incoming EventBridge wiring details                                                                                |
 | **eventManager**                                | [IEventManager](/API.md#ieventmanager-)                                                               | The EventManager instance that allows connecting to events flowing between the Control Plane and other components. |
 
-The heavy lifting of the `JobRunner` happens with the value of the `script` key. Recall, that this particular example is for provisioning. Also remember that the "SaaS application" we're illustrating here is only provisioning a new S3 bucket for each tenant. Let's take a look at that example provisioning script now:
+The heavy lifting of the `ScriptJob` happens with the value of the `script` key. Let's take a look at the example provisioning script now:
 
 ```sh
 echo "starting..."
@@ -296,7 +296,7 @@ echo "tenantId: $tenantId"
 echo "tier: $tier"
 ```
 
-Let's examine how exactly those variables get populated. Remember that the `JobRunner` creates an [AWS CodeBuild](https://docs.aws.amazon.com/codebuild/latest/userguide/welcome.html) project internally. When the `JobRunner` creates the CodeBuild project, it can specify what environment variables to provide. Also recall that the `JobRunner` utility is activated with an EventBridge message matching the criteria specified in the `incomingEvent` parameter of the `jobRunnerProps`. The message that arrives via EventBridge has a `detail` JSON Object (see [docs here](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-events-structure.html)) that carries with it contextual information included by the sender, in our case, the control plane. For each key in the `environmentStringVariablesFromIncomingEvent` key, the `JobRunner` extracts the value of a matching key found in the EventBridge message's detail JSON object, and provides that value to the CodeBuild project as an environment variable.
+Let's examine how exactly those variables get populated. Remember that the `ScriptJob` creates an [AWS CodeBuild](https://docs.aws.amazon.com/codebuild/latest/userguide/welcome.html) project internally. When the `ScriptJob` creates the CodeBuild project, it can specify what environment variables to provide. Also recall that the `ScriptJob` utility is activated with an EventBridge message matching the criteria specified in the `incomingEvent` parameter of the `ScriptJobProps`. The message that arrives via EventBridge has a `detail` JSON Object (see [docs here](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-events-structure.html)) that carries with it contextual information included by the sender, in our case, the control plane. For each key in the `environmentStringVariablesFromIncomingEvent` key, the `ScriptJob` extracts the value of a matching key found in the EventBridge message's detail JSON object, and provides that value to the CodeBuild project as an environment variable.
 
 So, take for example, this sample EventBridge provisioning message sent by a control plane:
 
@@ -347,7 +347,7 @@ echo $tenantConfig
 export tenantStatus="created"
 ```
 
-Similar to how it mapped incoming EventBridge message detail variables to environment variables, the `JobRunner` does almost the same thing but in reverse. The variables specified in the `environmentVariablesToOutgoingEvent` section of `jobRunnerProps` will be extracted from the environment, and sent back in the EventBridge message's detail section.
+Similar to how it mapped incoming EventBridge message detail variables to environment variables, the `ScriptJob` does almost the same thing but in reverse. The variables specified in the `environmentVariablesToOutgoingEvent` section of `ScriptJobProps` will be extracted from the environment, and sent back in the EventBridge message's detail section.
 
 #### Putting it all together
 
@@ -366,7 +366,7 @@ export class AppPlaneStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props: AppPlaneProps) {
     super(scope, id, props);
 
-    const provisioningJobRunnerProps = {
+    const provisioningScriptJobProps = {
       permissions: new PolicyDocument({
         statements: [
           new PolicyStatement({
@@ -427,15 +427,15 @@ echo "done!"
       eventManager: props.eventManager,
     };
 
-    const provisioningJobRunner: sbt.BashJobRunner = new sbt.BashJobRunner(
+    const provisioningJobScript: sbt.ProvisioningScriptJob = new sbt.ProvisioningScriptJob(
       this,
-      'provisioningJobRunner',
-      provisioningJobRunnerProps
+      'provisioningJobScript',
+      provisioningScriptJobProps
     );
 
     new sbt.CoreApplicationPlane(this, 'CoreApplicationPlane', {
-      eventManager: props.eventManager,
-      jobRunnersList: [provisioningJobRunner],
+      eventManager: eventManager,
+      scriptJobs: [provisioningJobScript, deprovisioningJobScript],
     });
   }
 }
@@ -543,7 +543,7 @@ Now that we've onboarded a tenant, let's take a look at the console to see what 
 
 First, let's open the [DynamoDB console](https://console.aws.amazon.com/dynamodbv2/home#). Once open, click the `Explore Items` link on the left. On the "Tables" screen, select the table that starts with `ControlPlaneStack`. Notice there is an entry for the tenant we just onboarded. Also notice it's probably still "in progress"
 
-Recall that we deployed a `JobRunner` with our application plane, and it's a wrapper around an AWS Step Function that runs our provisioning script via CodeBuild. Let's take a look at that Step Function now by clicking navigating to [Step Functions in the console](https://console.aws.amazon.com/states/home) (ensure you're in the same region you deployed to).
+Recall that we deployed a `ScriptJob` with our application plane, and it's a wrapper around an AWS Step Function that runs our provisioning script via CodeBuild. Let's take a look at that Step Function now by clicking navigating to [Step Functions in the console](https://console.aws.amazon.com/states/home) (ensure you're in the same region you deployed to).
 
 The Step Function is likely still running, but feel free to examine the execution. Once finished, it'll return the results back to EventBridge, and close the loop with the Control plane.
 
@@ -575,7 +575,7 @@ The control plane emits this event any time it onboards a new tenant. This event
 
 #### Tenant Provision Success
 
-As per our configuration, the application plane emits this event upon completion of onboarding. It contains the `tenantId` and a `tenantOutput` object containing the environment variables (key/value pairs) whose keys have been identified in the `environmentVariablesToOutgoingEvent` parameter. In the example above, a provision success event would look something like this:
+As per our configuration, the application plane emits this event upon completion of onboarding. It contains the `tenantId` and a `jobOutput` object containing the environment variables (key/value pairs) whose keys have been identified in the `environmentVariablesToOutgoingEvent` parameter. In the example above, a provision success event would look something like this:
 
 ##### Sample provision success event
 
@@ -584,7 +584,7 @@ As per our configuration, the application plane emits this event upon completion
   "source": "applicationPlaneEventSource",
   "detail-type": "provisionSuccess",
   "detail": {
-    "tenantOutput": {
+    "jobOutput": {
       "tenantStatus": "created",
       "tenantConfig": "{\n  \"userPoolId\": \"MY_SAAS_APP_USERPOOL_ID\",\n  \"appClientId\": \"MY_SAAS_APP_CLIENT_ID\",\n  \"apiGatewayUrl\": \"MY_API_GATEWAY_URL\"\n}",
       "tenantName": "tenant$RANDOM",
@@ -624,7 +624,7 @@ The application plane emits this event upon completion of offboarding. Similar t
   "source": "applicationPlaneEventSource",
   "detail-type": "deprovisionSuccess",
   "detail": {
-    "tenantOutput": {
+    "jobOutput": {
       // defined in the deprovisioning job configuration
     },
     "tenantId": "guid string"

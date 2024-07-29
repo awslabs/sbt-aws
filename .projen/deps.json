@@ -143,6 +143,7 @@
     },
     {
       "name": "@aws-cdk/aws-lambda-python-alpha",
+      "version": "2.140.0-alpha.0",
       "type": "runtime"
     },
     {

@@ -6,8 +6,8 @@ import { Annotations, Match, Template } from 'aws-cdk-lib/assertions';
 import { PolicyDocument, PolicyStatement, Effect } from 'aws-cdk-lib/aws-iam';
 import { AwsSolutionsChecks, NagSuppressions } from 'cdk-nag';
 import { Construct, IConstruct } from 'constructs';
-import { CoreApplicationPlane, BashJobRunner } from '../src/core-app-plane';
-import { DetailType, EventManager } from '../src/utils';
+import { CoreApplicationPlane, ProvisioningScriptJob } from '../src/core-app-plane';
+import { EventManager } from '../src/utils';
 
 class DestroyPolicySetter implements cdk.IAspect {
   public visit(node: IConstruct): void {
@@ -23,12 +23,10 @@ describe('No unsuppressed cdk-nag Warnings or Errors', () => {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
       super(scope, id, props);
       const eventManager = new EventManager(this, 'EventManager');
-      const provisioningJobRunner: BashJobRunner = new BashJobRunner(
+      const provisioningJobScript: ProvisioningScriptJob = new ProvisioningScriptJob(
         this,
-        'provisioningJobRunner',
+        'provisioningJobScript',
         {
-          outgoingEvent: DetailType.PROVISION_SUCCESS,
-          incomingEvent: DetailType.ONBOARDING_REQUEST,
           permissions: new PolicyDocument({
             statements: [
               new PolicyStatement({
@@ -44,7 +42,7 @@ describe('No unsuppressed cdk-nag Warnings or Errors', () => {
       );
       new CoreApplicationPlane(this, 'CoreApplicationPlane', {
         eventManager: eventManager,
-        jobRunnersList: [provisioningJobRunner],
+        scriptJobs: [provisioningJobScript],
       });
     }
   }
@@ -84,12 +82,10 @@ describe('CoreApplicationPlane', () => {
       constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
         const eventManager = new EventManager(this, 'EventManager');
-        const provisioningJobRunner: BashJobRunner = new BashJobRunner(
+        const provisioningJobScript: ProvisioningScriptJob = new ProvisioningScriptJob(
           this,
-          'provisioningJobRunner',
+          'provisioningJobScript',
           {
-            outgoingEvent: DetailType.PROVISION_SUCCESS,
-            incomingEvent: DetailType.ONBOARDING_REQUEST,
             permissions: new PolicyDocument({
               statements: [
                 new PolicyStatement({
@@ -105,7 +101,7 @@ describe('CoreApplicationPlane', () => {
         );
         new CoreApplicationPlane(this, 'CoreApplicationPlane', {
           eventManager: eventManager,
-          jobRunnersList: [provisioningJobRunner],
+          scriptJobs: [provisioningJobScript],
         });
       }
     }
@@ -130,12 +126,10 @@ describe('CoreApplicationPlane', () => {
       constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
         const eventManager = new EventManager(this, 'EventManager');
-        const provisioningJobRunner: BashJobRunner = new BashJobRunner(
+        const provisioningJobScript: ProvisioningScriptJob = new ProvisioningScriptJob(
           this,
-          'provisioningJobRunner',
+          'provisioningJobScript',
           {
-            outgoingEvent: DetailType.PROVISION_SUCCESS,
-            incomingEvent: DetailType.ONBOARDING_REQUEST,
             permissions: new PolicyDocument({
               statements: [
                 new PolicyStatement({
@@ -154,7 +148,7 @@ describe('CoreApplicationPlane', () => {
         );
         const coreApplicationPlane = new CoreApplicationPlane(this, 'CoreApplicationPlane', {
           eventManager: eventManager,
-          jobRunnersList: [provisioningJobRunner],
+          scriptJobs: [provisioningJobScript],
         });
         cdk.Aspects.of(coreApplicationPlane).add(new DestroyPolicySetter());
       }
