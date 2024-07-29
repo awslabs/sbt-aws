@@ -1215,7 +1215,7 @@ The EventManager instance that allows connecting to events flowing between the C
 
 ### DeprovisioningScriptJob <a name="DeprovisioningScriptJob" id="@cdklabs/sbt-aws.DeprovisioningScriptJob"></a>
 
-Provides a ProvisioningScriptJob to execute arbitrary bash code.
+Provides a DeprovisioningScriptJob to execute arbitrary bash code.
 
 This is a simple wrapper around ScriptJob that reduces some of the parameters
 that need to be configured.

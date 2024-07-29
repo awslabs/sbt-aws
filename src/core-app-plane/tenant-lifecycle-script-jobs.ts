@@ -82,7 +82,7 @@ export class ProvisioningScriptJob extends ScriptJob {
 }
 
 /**
- * Provides a ProvisioningScriptJob to execute arbitrary bash code.
+ * Provides a DeprovisioningScriptJob to execute arbitrary bash code.
  * This is a simple wrapper around ScriptJob that reduces some of the parameters
  * that need to be configured.
  */
