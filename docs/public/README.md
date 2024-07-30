@@ -99,7 +99,7 @@ import { Construct } from 'constructs';
 
 export class ControlPlaneStack extends Stack {
   public readonly regApiGatewayUrl: string;
-  public readonly eventManager: sbt.EventManager;
+  public readonly eventManager: sbt.IEventManager;
 
   constructor(scope: Construct, id: string, props?: any) {
     super(scope, id, props);
@@ -137,7 +137,7 @@ import { ControlPlaneStack } from '../lib/control-plane';
 const app = new cdk.App();
 const controlPlaneStack = new ControlPlaneStack(app, 'ControlPlaneStack');
 // const appPlaneStack = new AppPlaneStack(app, 'AppPlaneStack', {
-//   eventBusArn: controlPlaneStack.eventBusArn,
+//   eventManager: controlPlaneStack.eventManager,
 // });
 ```
 
@@ -168,19 +168,15 @@ As mentioned before, SBT is unopinionated about the application in which it's de
 
 ```typescript
 export interface AppPlaneProps extends cdk.StackProps {
-  eventBusArn: string;
+  eventManager: sbt.IEventManager;
 }
 
 export class ApplicationPlaneStack extends Stack {
   constructor(scope: Construct, id: string, props: AppPlaneProps) {
     super(scope, id, props);
 
-    const eventBus = EventBus.fromEventBusArn(this, 'EventBus', props.eventBusArn);
-    const eventManager = new sbt.EventManager(this, 'EventManager', {
-      eventBus: eventBus,
-    });
     new sbt.CoreApplicationPlane(this, 'CoreApplicationPlane', {
-      eventManager: eventManager,
+      eventManager: props.eventManager,
       jobRunnersList: [],
     });
   }
@@ -203,7 +199,6 @@ Notice the use of the `provisioning.sh` and `deprovisioning.sh` scripts at the t
 
 ```typescript
 const provisioningJobRunnerProps = {
-  name: 'provisioning',
   permissions: PolicyDocument.fromJson(/*See below*/),
   script: '' /*See below*/,
   environmentStringVariablesFromIncomingEvent: ['tenantId', 'tier'],
@@ -223,7 +218,6 @@ Let's take a moment and dissect this object.
 
 | Key                                             | Type                                                                                                  | Purpose                                                                                                            |
 | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| **name**                                        | string                                                                                                | The **name** key is just a name for this job.                                                                      |
 | **script**                                      | string                                                                                                | A string in bash script format that represents the job to be run (example below)                                   |
 | **permissions**                                 | [PolicyDocument](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_iam.PolicyDocument.html) | An IAM policy document giving this job the IAM permisisons it needs to do what it's being asked to do              |
 | **environmentStringVariablesFromIncomingEvent** | string[]                                                                                              | The environment variables to import into the BashJobRunner from event details field.                               |
@@ -366,14 +360,13 @@ import { EventBus } from 'aws-cdk-lib/aws-events';
 import { PolicyDocument, PolicyStatement, Effect } from 'aws-cdk-lib/aws-iam';
 
 export interface AppPlaneProps extends cdk.StackProps {
-  eventManager: sbt.EventManager;
+  eventManager: sbt.IEventManager;
 }
 export class AppPlaneStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props: AppPlaneProps) {
     super(scope, id, props);
 
     const provisioningJobRunnerProps = {
-      name: 'provisioning',
       permissions: new PolicyDocument({
         statements: [
           new PolicyStatement({
@@ -476,7 +469,7 @@ cdk deploy ControlPlaneStack AppPlaneStack
 Once deployed, let's run a few tests to see our basic control plane and application plane in action. When you deployed the control plane, you should've received an email with temporary admin credentials. Let's use those credentials now to log in to that account. Please replace the placeholder ('INSERT PASSWORD HERE') with your temporary password in the script below. Once logged in, this script will onboard a new tenant, and retrieve its details. Note this script uses the [`jq` JSON processor](https://jqlang.github.io/jq/).
 
 ```sh
-PASSWORD="INSERT PASSWORD HERE"
+PASSWORD='INSERT PASSWORD HERE'
 # Change this to a real email if you'd like to log into the tenant
 TENANT_EMAIL="tenant@example.com"
 CONTROL_PLANE_STACK_NAME="ControlPlaneStack"
