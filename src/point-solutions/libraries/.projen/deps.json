@@ -104,22 +104,27 @@
     },
     {
       "name": "@aws-sdk/client-cognito-identity-provider",
+      "version": "^3.621.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-dynamodb",
+      "version": "^3.621.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-ssm",
+      "version": "^3.621.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-sts",
+      "version": "^3.621.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/credential-providers",
+      "version": "^3.621.0",
       "type": "bundled"
     },
     {
@@ -148,7 +153,7 @@
     },
     {
       "name": "aws-cdk-lib",
-      "version": "2.123.0",
+      "version": "2.140.0",
       "type": "peer"
     },
     {
@@ -158,22 +163,27 @@
     },
     {
       "name": "@aws-sdk/client-cognito-identity-provider",
+      "version": "^3.621.0",
       "type": "runtime"
     },
     {
       "name": "@aws-sdk/client-dynamodb",
+      "version": "^3.621.0",
       "type": "runtime"
     },
     {
       "name": "@aws-sdk/client-ssm",
+      "version": "^3.621.0",
       "type": "runtime"
     },
     {
       "name": "@aws-sdk/client-sts",
+      "version": "^3.621.0",
       "type": "runtime"
     },
     {
       "name": "@aws-sdk/credential-providers",
+      "version": "^3.621.0",
       "type": "runtime"
     },
     {
@@ -190,7 +200,7 @@
     },
     {
       "name": "aws-cdk-lib",
-      "version": "2.123.0",
+      "version": "2.140.0",
       "type": "runtime"
     },
     {

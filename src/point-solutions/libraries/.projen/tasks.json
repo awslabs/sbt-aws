@@ -218,7 +218,7 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/jest,@types/uuid,constructs,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,jest,jsii-diff,jsii-docgen,jsii-pacmak,jsii-rosetta,jsii,prettier,projen,ts-jest,typescript,@aws-sdk/client-cognito-identity-provider,@aws-sdk/client-dynamodb,@aws-sdk/client-ssm,@aws-sdk/client-sts,@aws-sdk/credential-providers,@aws-sdk/types,@smithy/types,jsonwebtoken,jwks-rsa,uuid,aws-cdk-lib"
+          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@types/jest,@types/uuid,constructs,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,jest,jsii-diff,jsii-docgen,jsii-pacmak,jsii-rosetta,jsii,prettier,projen,ts-jest,typescript,@aws-sdk/types,@smithy/types,jsonwebtoken,jwks-rsa,uuid,aws-cdk-lib"
         },
         {
           "exec": "npm install"
