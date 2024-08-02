@@ -133,20 +133,17 @@ export class TenantManagementService extends Construct {
 
     const tenantUpdateServiceTarget = new ApiDestination(putTenantAPIDestination, {
       pathParameterValues: ['$.detail.tenantId'],
-      event: events.RuleTargetInput.fromEventPath('$.detail.tenantOutput'),
+      event: events.RuleTargetInput.fromEventPath('$.detail.jobOutput'),
     });
 
-    props.eventManager.addTargetToEvent(
-      this,
+    [
       DetailType.PROVISION_SUCCESS,
-      tenantUpdateServiceTarget
-    );
-
-    props.eventManager.addTargetToEvent(
-      this,
+      DetailType.PROVISION_FAILURE,
       DetailType.DEPROVISION_SUCCESS,
-      tenantUpdateServiceTarget
-    );
+      DetailType.DEPROVISION_FAILURE,
+    ].forEach((detailType) => {
+      props.eventManager.addTargetToEvent(this, detailType, tenantUpdateServiceTarget);
+    });
 
     this.table = table;
   }

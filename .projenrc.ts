@@ -34,7 +34,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   copyrightPeriod: '2024-',
   defaultReleaseBranch: 'main',
   deps: [
-    '@aws-cdk/aws-lambda-python-alpha',
+    `@aws-cdk/aws-lambda-python-alpha@${CDK_VERSION}-alpha.0`,
     'cdk-nag',
     `@aws-cdk/aws-kinesisfirehose-alpha@${CDK_VERSION}-alpha.0`,
     `@aws-cdk/aws-kinesisfirehose-destinations-alpha@${CDK_VERSION}-alpha.0`,
