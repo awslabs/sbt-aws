@@ -195,10 +195,10 @@ Although entirely optional, SBT includes a utility that lets you define, and run
 
 ![sbt-provisioning.png](../../images/sbt-provisioning.png)
 
-Notice the use of the `provisioning.sh` and `deprovisioning.sh` scripts at the top. These scripts are fed to the `ProvisioningScriptJob` and `DeprovisioningScriptJob` as parameters. Internally the `ScriptJob` launches an AWS CodeBuild project, wrapped inside an AWS Step Function, to execute the bash scripts. The `ScriptJob` also lets you specify what input variables to feed to the scripts, along with what output variables you expect them to return. Note that in this version of SBT, you can create `ScriptJob`s with [`ScriptJobProps`](/API.md#scriptjobprops-) and configure `CoreAppPlane` with `ScriptJob`s using its `scriptJobs` property. The `CoreAppPlane` will then link these `ScriptJob`s to EventBridge. Let's take a simple example: imagine our SaaS application deployed only a single S3 bucket per tenant. Let's create a script job for that provisioning now.
+Notice the use of the `provisioning.sh` and `deprovisioning.sh` scripts at the top. These scripts are fed to the `ProvisioningScriptJob` and `DeprovisioningScriptJob` as parameters. Internally the `ScriptJob` launches an AWS CodeBuild project, wrapped inside an AWS Step Function, to execute the bash scripts. The `ScriptJob` also lets you specify what input variables to feed to the scripts, along with what output variables you expect them to return. Note that in this version of SBT, you can create the `ScriptJob` construct with [`ScriptJobProps`](/API.md#scriptjobprops-) and configure `CoreAppPlane` with `ScriptJob`s using its `scriptJobs` property. The `CoreAppPlane` will then link these `ScriptJob`s to EventBridge. Let's take a simple example: imagine our SaaS application deployed only a single S3 bucket per tenant. Let's create a `ProvisioningScriptJob` for that provisioning now.
 
 ```typescript
-const scriptJobProps = {
+const scriptJobProps: TenantLifecycleScriptJobProps = {
   permissions: PolicyDocument.fromJson(/*See below*/),
   script: '' /*See below*/,
   environmentStringVariablesFromIncomingEvent: ['tenantId', 'tier'],
@@ -206,28 +206,24 @@ const scriptJobProps = {
   scriptEnvironmentVariables: {
     TEST: 'test',
   },
-  outgoingEvent: sbt.DetailType.PROVISION_SUCCESS,
-  incomingEvent: sbt.DetailType.ONBOARDING_REQUEST,
   eventManager: eventManager /*See below on how to create EventManager*/,
 };
 ```
 
-##### Script Job Properties
+##### ProvisioningScriptJob and DeprovisioningScriptJob Properties (TenantLifecycleScriptJobProps)
 
 Let's take a moment and dissect this object.
 
 | Key                                             | Type                                                                                                  | Purpose                                                                                                            |
 | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | **script**                                      | string                                                                                                | A string in bash script format that represents the job to be run (example below)                                   |
-| **permissions**                                 | [PolicyDocument](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_iam.PolicyDocument.html) | An IAM policy document giving this job the IAM permisisons it needs to do what it's being asked to do              |
+| **permissions**                                 | [PolicyDocument](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_iam.PolicyDocument.html) | An IAM policy document giving this job the IAM permissions it needs to do what it's being asked to do              |
 | **environmentStringVariablesFromIncomingEvent** | string[]                                                                                              | The environment variables to import into the ScriptJob from event details field.                                   |
 | **environmentVariablesToOutgoingEvent**         | string[]                                                                                              | The environment variables to export into the outgoing event once the ScriptJob has finished.                       |
 | **scriptEnvironmentVariables**                  | `{ [key: string]: string }`                                                                           | The variables to pass into the codebuild ScriptJob.                                                                |
-| **outgoingEvent**                               | any                                                                                                   | Outgoing EventBridge wiring details                                                                                |
-| **incomingEvent**                               | any                                                                                                   | Incoming EventBridge wiring details                                                                                |
 | **eventManager**                                | [IEventManager](/API.md#ieventmanager-)                                                               | The EventManager instance that allows connecting to events flowing between the Control Plane and other components. |
 
-The heavy lifting of the `ScriptJob` happens with the value of the `script` key. Let's take a look at the example provisioning script now:
+The heavy lifting of the `ScriptJob` construct (along with constructs that extend it like `ProvisioningScriptJob`) happens with the value of the `script` key. Let's take a look at the example provisioning script now:
 
 ```sh
 echo "starting..."
@@ -296,7 +292,7 @@ echo "tenantId: $tenantId"
 echo "tier: $tier"
 ```
 
-Let's examine how exactly those variables get populated. Remember that the `ScriptJob` creates an [AWS CodeBuild](https://docs.aws.amazon.com/codebuild/latest/userguide/welcome.html) project internally. When the `ScriptJob` creates the CodeBuild project, it can specify what environment variables to provide. Also recall that the `ScriptJob` utility is activated with an EventBridge message matching the criteria specified in the `incomingEvent` parameter of the `ScriptJobProps`. The message that arrives via EventBridge has a `detail` JSON Object (see [docs here](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-events-structure.html)) that carries with it contextual information included by the sender, in our case, the control plane. For each key in the `environmentStringVariablesFromIncomingEvent` key, the `ScriptJob` extracts the value of a matching key found in the EventBridge message's detail JSON object, and provides that value to the CodeBuild project as an environment variable.
+Let's examine how exactly those variables get populated. Remember that the `ScriptJob` (which is used to extend the `ProvisioningScriptJob` construct) creates an [AWS CodeBuild](https://docs.aws.amazon.com/codebuild/latest/userguide/welcome.html) project internally. When the `ScriptJob` creates the CodeBuild project, it can specify what environment variables to provide. The `ScriptJob` utility is also triggered by an EventBridge message matching the criteria specified in the `incomingEvent` parameter of the `ScriptJobProps`. (You don't need to worry about doing that for `ProvisioningScriptJob` and `DeprovisioningScriptJob` because that is already configured.) The message that arrives via EventBridge has a `detail` JSON Object (see [docs here](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-events-structure.html)) that carries with it contextual information included by the sender, in our case, the control plane. For each key in the `environmentStringVariablesFromIncomingEvent` key, the `ScriptJob` extracts the value of a matching key found in the EventBridge message's detail JSON object, and provides that value to the CodeBuild project as an environment variable.
 
 So, take for example, this sample EventBridge provisioning message sent by a control plane:
 
@@ -366,7 +362,7 @@ export class AppPlaneStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props: AppPlaneProps) {
     super(scope, id, props);
 
-    const provisioningScriptJobProps = {
+    const provisioningScriptJobProps: sbt.TenantLifecycleScriptJobProps = {
       permissions: new PolicyDocument({
         statements: [
           new PolicyStatement({
@@ -422,8 +418,6 @@ echo "done!"
       scriptEnvironmentVariables: {
         TEST: 'test',
       },
-      outgoingEvent: sbt.DetailType.PROVISION_SUCCESS,
-      incomingEvent: sbt.DetailType.ONBOARDING_REQUEST,
       eventManager: props.eventManager,
     };
 
@@ -435,7 +429,7 @@ echo "done!"
 
     new sbt.CoreApplicationPlane(this, 'CoreApplicationPlane', {
       eventManager: eventManager,
-      scriptJobs: [provisioningJobScript, deprovisioningJobScript],
+      scriptJobs: [provisioningJobScript],
     });
   }
 }

@@ -85,12 +85,10 @@ export tenantStatus="created"
 
 echo "done!"
 `,
-      postScript: '',
       environmentStringVariablesFromIncomingEvent: ['tenantId', 'tier', 'tenantName', 'email'],
       environmentJSONVariablesFromIncomingEvent: ['prices'],
       environmentVariablesToOutgoingEvent: [
         'tenantS3Bucket',
-        'someOtherVariable',
         'tenantConfig',
         'tenantStatus',
         'prices', // added so we don't lose it for targets beyond provisioning (ex. billing)
