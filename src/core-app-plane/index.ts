@@ -2,4 +2,5 @@
 // SPDX-License-Identifier: Apache-2.0
 
 export * from './core-app-plane';
-export * from './bash-job-runner';
+export * from './script-job';
+export * from './tenant-lifecycle-script-jobs';

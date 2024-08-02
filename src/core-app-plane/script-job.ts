@@ -15,23 +15,59 @@ import { Construct } from 'constructs';
 import { addTemplateTag, DetailType, IEventManager } from '../utils';
 
 /**
- * Encapsulates the list of properties for a BashJobRunner.
+ * Represents the DetailTypes that can be emitted
+ * as part of the outgoing event.
+ * @readonly
  */
-export interface BashJobRunnerProps {
+export interface OutgoingEventDetailTypes {
   /**
-   * The key where the tenant identifier is to be extracted from in
-   * the incoming event.
-   * @default 'tenantId'
+   * The detail type for a successful event.
    */
-  readonly tenantIdentifierKeyInIncomingEvent?: string;
+  readonly success: DetailType;
 
   /**
-   * The IAM permission document for the BashJobRunner.
+   * The detail type for a failed event.
+   */
+  readonly failure: DetailType;
+}
+
+/**
+ * Encapsulates the list of properties for a ScriptJob.
+ */
+export interface ScriptJobProps {
+  /**
+   * The key where the job identifier is to be extracted from in
+   * the incoming event.
+   *
+   * This will be used as the key that will be populated with
+   * the job identifier in the outgoing event.
+   *
+   * Ex: if jobIdentifierKey == 'tenantId' then
+   * the incoming event should look something like this:
+   *   {'tenantId': '123', ....}
+   * and the outgoing event will look something like this:
+   *   {'tenantId': '123', 'jobOutput': { ... }}
+   */
+  readonly jobIdentifierKey: string;
+
+  /**
+   * In the case of failure, this is the object that will
+   * be included in the outgoing event `jobOutput` field.
+   *
+   * Ex: If the job fails, the outgoing event will look like this:
+   *   {'tenantId': 'XXX', 'jobOutput': jobFailureStatus}
+   */
+  readonly jobFailureStatus: {
+    [key: string]: string;
+  };
+
+  /**
+   * The IAM permission document for the ScriptJob.
    */
   readonly permissions: iam.PolicyDocument;
 
   /**
-   * The bash script to run as part of the BashJobRunner.
+   * The bash script to run as part of the ScriptJob.
    */
   readonly script: string;
 
@@ -41,9 +77,9 @@ export interface BashJobRunnerProps {
   readonly incomingEvent: DetailType;
 
   /**
-   * The outgoing event DetailType that is emitted upon job completion.
+   * The outgoing event DetailTypes that are emitted upon job success or failure.
    */
-  readonly outgoingEvent: DetailType;
+  readonly outgoingEvent: OutgoingEventDetailTypes;
 
   /**
    * The bash script to run after the main script has completed.
@@ -51,25 +87,25 @@ export interface BashJobRunnerProps {
   readonly postScript?: string;
 
   /**
-   * The environment variables to import into the BashJobRunner from event details field.
+   * The environment variables to import into the ScriptJob from event details field.
    * This argument consists of the names of only string type variables. Ex. 'test'
    */
   readonly environmentStringVariablesFromIncomingEvent?: string[];
 
   /**
-   * The environment variables to import into the BashJobRunner from event details field.
+   * The environment variables to import into the ScriptJob from event details field.
    * This argument consists of the names of only JSON-formatted string type variables.
    * Ex. '{"test": 2}'
    */
   readonly environmentJSONVariablesFromIncomingEvent?: string[];
 
   /**
-   * The environment variables to export into the outgoing event once the BashJobRunner has finished.
+   * The environment variables to export into the outgoing event once the ScriptJob has finished.
    */
   readonly environmentVariablesToOutgoingEvent?: string[];
 
   /**
-   * The variables to pass into the codebuild BashJobRunner.
+   * The variables to pass into the codebuild ScriptJob.
    */
   readonly scriptEnvironmentVariables?: {
     [key: string]: string;
@@ -79,34 +115,33 @@ export interface BashJobRunnerProps {
    * The EventManager instance that allows connecting to events flowing between
    * the Control Plane and other components.
    */
-
   readonly eventManager: IEventManager;
 }
 
 /**
- * Provides a BashJobRunner to execute arbitrary bash code.
+ * Provides a ScriptJob to execute arbitrary bash code.
  */
-export class BashJobRunner extends Construct {
+export class ScriptJob extends Construct {
   /**
-   * The codebuildProject used to implement this BashJobRunner.
+   * The codebuildProject used to implement this ScriptJob.
    * @attribute
    */
   public readonly codebuildProject: codebuild.Project;
 
   /**
-   * The StateMachine used to implement this BashJobRunner orchestration.
+   * The StateMachine used to implement this ScriptJob orchestration.
    * @attribute
    */
   public readonly provisioningStateMachine: stepfunctions.StateMachine;
 
   /**
-   * The eventTarget to use when triggering this BashJobRunner.
+   * The eventTarget to use when triggering this ScriptJob.
    * @attribute
    */
   public readonly eventTarget: IRuleTarget;
 
   /**
-   * The environment variables to export into the outgoing event once the BashJobRunner has finished.
+   * The environment variables to export into the outgoing event once the ScriptJob has finished.
    * @attribute
    */
   public readonly environmentVariablesToOutgoingEvent?: string[];
@@ -116,9 +151,9 @@ export class BashJobRunner extends Construct {
    */
   readonly incomingEvent: DetailType;
 
-  constructor(scope: Construct, id: string, props: BashJobRunnerProps) {
+  constructor(scope: Construct, id: string, props: ScriptJobProps) {
     super(scope, id);
-    addTemplateTag(this, 'BashJobRunner');
+    addTemplateTag(this, 'ScriptJob');
 
     const eventBus = EventBus.fromEventBusArn(this, 'EventBus', props.eventManager.busArn);
     this.environmentVariablesToOutgoingEvent = props.environmentVariablesToOutgoingEvent;
@@ -137,7 +172,7 @@ export class BashJobRunner extends Construct {
     this.eventTarget = new targets.SfnStateMachine(this.provisioningStateMachine);
   }
 
-  private createCodeBuildProject(props: BashJobRunnerProps): codebuild.Project {
+  private createCodeBuildProject(props: ScriptJobProps): codebuild.Project {
     const environmentVariables: {
       [key: string]: codebuild.BuildEnvironmentVariable;
     } = {};
@@ -219,19 +254,17 @@ export class BashJobRunner extends Construct {
   }
 
   private createProvisioningStateMachine(
-    props: BashJobRunnerProps,
+    props: ScriptJobProps,
     jobRunnerCodeBuildProject: codebuild.Project,
     eventBus: IEventBus
   ): stepfunctions.StateMachine {
-    const eventSource = props.eventManager.supportedEvents[props.outgoingEvent];
+    const successEventSource = props.eventManager.supportedEvents[props.outgoingEvent.success];
+    const failureEventSource = props.eventManager.supportedEvents[props.outgoingEvent.failure];
     const detailType = props.outgoingEvent;
 
     const environmentVariablesOverride: {
       [name: string]: codebuild.BuildEnvironmentVariable;
     } = {};
-
-    const tenantIdentifierKeyInIncomingEvent =
-      props.tenantIdentifierKeyInIncomingEvent ?? 'tenantId';
 
     props.environmentStringVariablesFromIncomingEvent?.forEach((importedVar: string) => {
       environmentVariablesOverride[importedVar] = {
@@ -255,44 +288,72 @@ export class BashJobRunner extends Construct {
       logGroupName: `/aws/vendedlogs/states/${this.node.id}-${this.node.addr}`,
     });
 
-    const startProvisioningCodeBuild = new tasks.CodeBuildStartBuild(
-      this,
-      'startProvisioningCodeBuild',
-      {
-        project: jobRunnerCodeBuildProject,
-        integrationPattern: stepfunctions.IntegrationPattern.RUN_JOB,
-        environmentVariablesOverride: environmentVariablesOverride,
-        resultPath: '$.startProvisioningCodeBuild',
-      }
-    );
+    const startCodeBuild = new tasks.CodeBuildStartBuild(this, 'startCodeBuild', {
+      project: jobRunnerCodeBuildProject,
+      integrationPattern: stepfunctions.IntegrationPattern.RUN_JOB,
+      environmentVariablesOverride: environmentVariablesOverride,
+      resultPath: '$.startCodeBuild',
+    });
 
     const exportedVarObj: { [key: string]: any } = {
-      tenantId: stepfunctions.JsonPath.stringAt(`$.detail.${tenantIdentifierKeyInIncomingEvent}`),
-      tenantOutput: {},
+      [props.jobIdentifierKey]: stepfunctions.JsonPath.stringAt(
+        `$.detail.${props.jobIdentifierKey}`
+      ),
+      jobOutput: {},
     };
     props.environmentVariablesToOutgoingEvent?.forEach((exportedVar: string) => {
-      exportedVarObj.tenantOutput[exportedVar] = stepfunctions.JsonPath.arrayGetItem(
+      exportedVarObj.jobOutput[exportedVar] = stepfunctions.JsonPath.arrayGetItem(
         stepfunctions.JsonPath.listAt(
-          `$.startProvisioningCodeBuild.Build.ExportedEnvironmentVariables[?(@.Name==${exportedVar})].Value`
+          `$.startCodeBuild.Build.ExportedEnvironmentVariables[?(@.Name==${exportedVar})].Value`
         ),
         0
       );
     });
 
-    const notifyEventBridgeTask = new tasks.EventBridgePutEvents(this, 'notifyEventBridgeTask', {
-      entries: [
-        {
-          detailType: detailType,
-          detail: stepfunctions.TaskInput.fromObject(exportedVarObj),
-          source: eventSource,
-          eventBus: eventBus,
-        },
-      ],
-      resultPath: '$.notifyEventBridgeTask',
+    const notifySuccessEventBridgeTask = new tasks.EventBridgePutEvents(
+      this,
+      'notifySuccessEventBridgeTask',
+      {
+        entries: [
+          {
+            detailType: detailType.success,
+            detail: stepfunctions.TaskInput.fromObject(exportedVarObj),
+            source: successEventSource,
+            eventBus: eventBus,
+          },
+        ],
+        resultPath: '$.notifySuccessEventBridgeTask',
+      }
+    );
+
+    const notifyFailureEventBridgeTask = new tasks.EventBridgePutEvents(
+      this,
+      'notifyFailureEventBridgeTask',
+      {
+        entries: [
+          {
+            detailType: detailType.failure,
+            detail: stepfunctions.TaskInput.fromObject({
+              [props.jobIdentifierKey]: stepfunctions.JsonPath.stringAt(
+                `$.detail.${props.jobIdentifierKey}`
+              ),
+              jobOutput: props.jobFailureStatus,
+            }),
+            source: failureEventSource,
+            eventBus: eventBus,
+          },
+        ],
+        resultPath: '$.notifyFailureEventBridgeTask',
+      }
+    );
+
+    startCodeBuild.addCatch(notifyFailureEventBridgeTask, {
+      errors: ['States.ALL'],
+      resultPath: '$.startCodeBuild.Catch',
     });
 
     const definitionBody = stepfunctions.DefinitionBody.fromChainable(
-      startProvisioningCodeBuild.next(notifyEventBridgeTask)
+      startCodeBuild.next(notifySuccessEventBridgeTask)
     );
 
     const provisioningStateMachine = new stepfunctions.StateMachine(

@@ -6,7 +6,7 @@ import { Capture, Template } from 'aws-cdk-lib/assertions';
 import { Effect, PolicyDocument, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { AwsSolutionsChecks } from 'cdk-nag';
 import { CognitoAuth, ControlPlane } from '../src/control-plane';
-import { CoreApplicationPlane, BashJobRunner } from '../src/core-app-plane';
+import { CoreApplicationPlane, ProvisioningScriptJob } from '../src/core-app-plane';
 import { DetailType, EventManager } from '../src/utils';
 
 function testForDuplicateRulesInCoreAppPlaneStack(stack: cdk.Stack) {
@@ -47,7 +47,9 @@ function testForRulesInOtherStack(stack: cdk.Stack) {
     return;
   }
 
-  // template.allResourcesProperties('AWS::Events::Rule', eventRuleCapture);
+  // because there are rules in this stack, check if
+  // the existing rules are for the onboarding-request
+  // detail type which is defined in a separate stack
   const eventRules: { [key: string]: any } = [];
   do {
     eventRules.push(eventRuleCapture.asObject());
@@ -90,23 +92,19 @@ describe('EventManager', () => {
     });
 
     const coreAppPlaneStack = new cdk.Stack(app, 'CoreApplicationPlaneStack');
-    const firstProvisioningJobRunner: BashJobRunner = new BashJobRunner(
+    const firstProvisioningScriptJob: ProvisioningScriptJob = new ProvisioningScriptJob(
       coreAppPlaneStack,
-      'firstProvisioningJobRunner',
+      'firstProvisioningScriptJob',
       {
-        outgoingEvent: DetailType.PROVISION_SUCCESS,
-        incomingEvent: DetailType.ONBOARDING_REQUEST,
         permissions: samplePolicyDocument,
         script: '',
         eventManager: controlPlane.eventManager,
       }
     );
-    const secondProvisioningJobRunner: BashJobRunner = new BashJobRunner(
+    const secondProvisioningScriptJob: ProvisioningScriptJob = new ProvisioningScriptJob(
       coreAppPlaneStack,
-      'secondProvisioningJobRunner',
+      'secondProvisioningScriptJob',
       {
-        outgoingEvent: DetailType.PROVISION_SUCCESS,
-        incomingEvent: DetailType.ONBOARDING_REQUEST,
         permissions: samplePolicyDocument,
         script: '',
         eventManager: controlPlane.eventManager,
@@ -114,7 +112,7 @@ describe('EventManager', () => {
     );
     new CoreApplicationPlane(coreAppPlaneStack, 'CoreApplicationPlane', {
       eventManager: controlPlane.eventManager,
-      jobRunnersList: [firstProvisioningJobRunner, secondProvisioningJobRunner],
+      scriptJobs: [firstProvisioningScriptJob, secondProvisioningScriptJob],
     });
 
     cdk.Aspects.of(controlPlaneStack).add(new AwsSolutionsChecks({ verbose: true }));
@@ -144,23 +142,19 @@ describe('EventManager', () => {
     });
 
     const coreAppPlaneStack = new cdk.Stack(app, 'CoreApplicationPlaneStack');
-    const firstProvisioningJobRunner: BashJobRunner = new BashJobRunner(
+    const firstProvisioningScriptJob: ProvisioningScriptJob = new ProvisioningScriptJob(
       coreAppPlaneStack,
-      'firstProvisioningJobRunner',
+      'firstProvisioningScriptJob',
       {
-        outgoingEvent: DetailType.PROVISION_SUCCESS,
-        incomingEvent: DetailType.ONBOARDING_REQUEST,
         permissions: samplePolicyDocument,
         script: '',
         eventManager: eventManager,
       }
     );
-    const secondProvisioningJobRunner: BashJobRunner = new BashJobRunner(
+    const secondProvisioningScriptJob: ProvisioningScriptJob = new ProvisioningScriptJob(
       coreAppPlaneStack,
-      'secondProvisioningJobRunner',
+      'secondProvisioningScriptJob',
       {
-        outgoingEvent: DetailType.PROVISION_SUCCESS,
-        incomingEvent: DetailType.ONBOARDING_REQUEST,
         permissions: samplePolicyDocument,
         script: '',
         eventManager: eventManager,
@@ -168,7 +162,7 @@ describe('EventManager', () => {
     );
     new CoreApplicationPlane(coreAppPlaneStack, 'CoreApplicationPlane', {
       eventManager: eventManager,
-      jobRunnersList: [firstProvisioningJobRunner, secondProvisioningJobRunner],
+      scriptJobs: [firstProvisioningScriptJob, secondProvisioningScriptJob],
     });
 
     cdk.Aspects.of(controlPlaneStack).add(new AwsSolutionsChecks({ verbose: true }));
@@ -198,23 +192,19 @@ describe('EventManager', () => {
     });
 
     const coreAppPlaneStack = new cdk.Stack(app, 'CoreApplicationPlaneStack');
-    const firstProvisioningJobRunner: BashJobRunner = new BashJobRunner(
+    const firstProvisioningScriptJob: ProvisioningScriptJob = new ProvisioningScriptJob(
       coreAppPlaneStack,
-      'firstProvisioningJobRunner',
+      'firstProvisioningScriptJob',
       {
-        outgoingEvent: DetailType.PROVISION_SUCCESS,
-        incomingEvent: DetailType.ONBOARDING_REQUEST,
         permissions: samplePolicyDocument,
         script: '',
         eventManager: eventManager,
       }
     );
-    const secondProvisioningJobRunner: BashJobRunner = new BashJobRunner(
+    const secondProvisioningScriptJob: ProvisioningScriptJob = new ProvisioningScriptJob(
       coreAppPlaneStack,
-      'secondProvisioningJobRunner',
+      'secondProvisioningScriptJob',
       {
-        outgoingEvent: DetailType.PROVISION_SUCCESS,
-        incomingEvent: DetailType.ONBOARDING_REQUEST,
         permissions: samplePolicyDocument,
         script: '',
         eventManager: eventManager,
@@ -222,7 +212,7 @@ describe('EventManager', () => {
     );
     new CoreApplicationPlane(coreAppPlaneStack, 'CoreApplicationPlane', {
       eventManager: eventManager,
-      jobRunnersList: [firstProvisioningJobRunner, secondProvisioningJobRunner],
+      scriptJobs: [firstProvisioningScriptJob, secondProvisioningScriptJob],
     });
     cdk.Aspects.of(controlPlaneStack).add(new AwsSolutionsChecks({ verbose: true }));
     cdk.Aspects.of(coreAppPlaneStack).add(new AwsSolutionsChecks({ verbose: true }));
@@ -246,7 +236,7 @@ describe('EventManager', () => {
     // and key-in using a DetailType, a value exists for the source,
     // which is used in the getOrCreateRule(...) function to create
     // a new event-manager rule.
-    // (ex. "source: [this.supportedEvents[eventType]]")
+    // (ex. "source: eventTypes.map((eventType) => this.supportedEvents[eventType]),")
     it('should have values for all DetailType enum entries', () => {
       Object.values(DetailType).forEach((detailTypeValues) => {
         expect(eventManager.supportedEvents[detailTypeValues]).toBeDefined();

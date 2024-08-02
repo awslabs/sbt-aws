@@ -6,10 +6,9 @@ import { CfnRule, EventBus, Rule } from 'aws-cdk-lib/aws-events';
 import { Effect, PolicyDocument, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { AwsSolutionsChecks, NagSuppressions } from 'cdk-nag';
-import { CoreApplicationPlane } from '.';
-import { BashJobRunner, BashJobRunnerProps } from './bash-job-runner';
+import * as sbt from '.';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
-import { DetailType, EventManager } from '../utils';
+import { EventManager } from '../utils';
 
 export interface IntegStackProps extends cdk.StackProps {
   eventBusArn?: string;
@@ -30,7 +29,7 @@ export class IntegStack extends cdk.Stack {
       eventManager = new EventManager(this, 'EventManager');
     }
 
-    const provisioningJobRunnerProps: BashJobRunnerProps = {
+    const provisioningScriptJobProps: sbt.TenantLifecycleScriptJobProps = {
       permissions: new PolicyDocument({
         statements: [
           new PolicyStatement({
@@ -86,12 +85,10 @@ export tenantStatus="created"
 
 echo "done!"
 `,
-      postScript: '',
       environmentStringVariablesFromIncomingEvent: ['tenantId', 'tier', 'tenantName', 'email'],
       environmentJSONVariablesFromIncomingEvent: ['prices'],
       environmentVariablesToOutgoingEvent: [
         'tenantS3Bucket',
-        'someOtherVariable',
         'tenantConfig',
         'tenantStatus',
         'prices', // added so we don't lose it for targets beyond provisioning (ex. billing)
@@ -101,12 +98,10 @@ echo "done!"
       scriptEnvironmentVariables: {
         TEST: 'test',
       },
-      outgoingEvent: DetailType.PROVISION_SUCCESS,
-      incomingEvent: DetailType.ONBOARDING_REQUEST,
       eventManager: eventManager,
     };
 
-    const deprovisioningJobRunnerProps: BashJobRunnerProps = {
+    const deprovisioningScriptJobProps: sbt.TenantLifecycleScriptJobProps = {
       permissions: new PolicyDocument({
         statements: [
           new PolicyStatement({
@@ -133,25 +128,23 @@ echo "done!"
 `,
       environmentStringVariablesFromIncomingEvent: ['tenantId'],
       environmentVariablesToOutgoingEvent: ['tenantStatus'],
-      outgoingEvent: DetailType.DEPROVISION_SUCCESS,
-      incomingEvent: DetailType.OFFBOARDING_REQUEST,
       eventManager: eventManager,
     };
 
-    const provisioningJobRunner: BashJobRunner = new BashJobRunner(
+    const provisioningJobScript: sbt.ProvisioningScriptJob = new sbt.ProvisioningScriptJob(
       this,
-      'provisioningJobRunner',
-      provisioningJobRunnerProps
+      'provisioningJobScript',
+      provisioningScriptJobProps
     );
-    const deprovisioningJobRunner: BashJobRunner = new BashJobRunner(
+    const deprovisioningJobScript: sbt.DeprovisioningScriptJob = new sbt.DeprovisioningScriptJob(
       this,
-      'deprovisioningJobRunner',
-      deprovisioningJobRunnerProps
+      'deprovisioningJobScript',
+      deprovisioningScriptJobProps
     );
 
-    new CoreApplicationPlane(this, 'CoreApplicationPlane', {
+    new sbt.CoreApplicationPlane(this, 'CoreApplicationPlane', {
       eventManager: eventManager,
-      jobRunnersList: [provisioningJobRunner, deprovisioningJobRunner],
+      scriptJobs: [provisioningJobScript, deprovisioningJobScript],
     });
 
     const eventBusWatcherRule = new Rule(this, 'EventBusWatcherRule', {
@@ -195,7 +188,7 @@ const integStack = new IntegStack(app, process.env.CDK_PARAM_STACK_ID ?? 'CoreAp
 
 NagSuppressions.addResourceSuppressionsByPath(
   integStack,
-  `/${integStack.artifactId}/deprovisioningJobRunner/codeBuildProvisionProjectRole/Resource`,
+  `/${integStack.artifactId}/provisioningJobScript/codeBuildProvisionProjectRole/Resource`,
   [
     {
       id: 'AwsSolutions-IAM5',
@@ -207,7 +200,7 @@ NagSuppressions.addResourceSuppressionsByPath(
 
 NagSuppressions.addResourceSuppressionsByPath(
   integStack,
-  `/${integStack.artifactId}/provisioningJobRunner/codeBuildProvisionProjectRole/Resource`,
+  `/${integStack.artifactId}/deprovisioningJobScript/codeBuildProvisionProjectRole/Resource`,
   [
     {
       id: 'AwsSolutions-IAM5',
