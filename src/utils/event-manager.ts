@@ -52,10 +52,9 @@ export enum DetailType {
   PROVISION_FAILURE = 'provisionFailure',
 
   /**
-   * Event detail type for provisioning request.
+   * Event detail type for deprovisioning request.
    */
   DEPROVISION_REQUEST = 'deprovisionRequest',
-  /**
   /**
    * Event detail type for successful deprovisioning.
    */
