@@ -5,7 +5,7 @@ import * as cdk from 'aws-cdk-lib';
 import { CfnRule, EventBus, Rule } from 'aws-cdk-lib/aws-events';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { AwsSolutionsChecks } from 'cdk-nag';
-import { CognitoAuth, ControlPlane } from '.';
+import * as sbt from '.';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
 
 export interface IntegStackProps extends cdk.StackProps {
@@ -16,11 +16,11 @@ export class IntegStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props: IntegStackProps) {
     super(scope, id, props);
 
-    const cognitoAuth = new CognitoAuth(this, 'CognitoAuth', {
+    const cognitoAuth = new sbt.CognitoAuth(this, 'CognitoAuth', {
       setAPIGWScopes: false, // only for testing purposes!
     });
 
-    const controlPlane = new ControlPlane(this, 'ControlPlane', {
+    const controlPlane = new sbt.ControlPlane(this, 'ControlPlane', {
       auth: cognitoAuth,
       systemAdminEmail: props.systemAdminEmail,
     });

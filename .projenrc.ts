@@ -20,8 +20,9 @@ const PROJEN_VERSION: string = '0.80.18';
 const CDK_VERSION: string = '2.140.0';
 const JSII_VERSION: string = '~5.3.0';
 const CONSTRUCTS_VERSION: string = '10.0.5';
-const POINT_SOLUTIONS_CDK_VERSION: string = '2.123.0';
+const POINT_SOLUTIONS_CDK_VERSION: string = '2.140.0';
 const POINT_SOLUTIONS_LIB_PROJECT_NAME: string = 'sbt-point-solutions-lib';
+const AWS_SDK_VERSION: string = '^3.621.0';
 
 const project = new awscdk.AwsCdkConstructLibrary({
   author: 'Amazon Web Services - SaaS Factory',
@@ -33,7 +34,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   copyrightPeriod: '2024-',
   defaultReleaseBranch: 'main',
   deps: [
-    '@aws-cdk/aws-lambda-python-alpha',
+    `@aws-cdk/aws-lambda-python-alpha@${CDK_VERSION}-alpha.0`,
     'cdk-nag',
     `@aws-cdk/aws-kinesisfirehose-alpha@${CDK_VERSION}-alpha.0`,
     `@aws-cdk/aws-kinesisfirehose-destinations-alpha@${CDK_VERSION}-alpha.0`,
@@ -89,11 +90,11 @@ const jsiiLibraryProjectOptions: cdk.JsiiProjectOptions = {
   copyrightPeriod: '2024-',
   defaultReleaseBranch: 'main',
   deps: [
-    '@aws-sdk/client-sts',
-    '@aws-sdk/client-ssm',
-    '@aws-sdk/client-cognito-identity-provider',
-    '@aws-sdk/credential-providers',
-    '@aws-sdk/client-dynamodb',
+    `@aws-sdk/client-sts@${AWS_SDK_VERSION}`,
+    `@aws-sdk/client-ssm@${AWS_SDK_VERSION}`,
+    `@aws-sdk/client-cognito-identity-provider@${AWS_SDK_VERSION}`,
+    `@aws-sdk/credential-providers@${AWS_SDK_VERSION}`,
+    `@aws-sdk/client-dynamodb@${AWS_SDK_VERSION}`,
     '@smithy/types',
     'jsonwebtoken',
     'jwks-rsa',
@@ -152,11 +153,11 @@ const jsiiLibraryProjectOptions: cdk.JsiiProjectOptions = {
   ],
   releaseTagPrefix: '@aws/sbt-point-solutions-lib-',
   bundledDeps: [
-    '@aws-sdk/client-sts',
-    '@aws-sdk/client-ssm',
-    '@aws-sdk/client-cognito-identity-provider',
-    '@aws-sdk/credential-providers',
-    '@aws-sdk/client-dynamodb',
+    `@aws-sdk/client-sts@${AWS_SDK_VERSION}`,
+    `@aws-sdk/client-ssm@${AWS_SDK_VERSION}`,
+    `@aws-sdk/client-cognito-identity-provider@${AWS_SDK_VERSION}`,
+    `@aws-sdk/credential-providers@${AWS_SDK_VERSION}`,
+    `@aws-sdk/client-dynamodb@${AWS_SDK_VERSION}`,
     '@smithy/types',
     'jsonwebtoken',
     'jwks-rsa',

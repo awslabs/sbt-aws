@@ -58,19 +58,19 @@
     "typescript": "^5.4.3"
   },
   "peerDependencies": {
-    "aws-cdk-lib": "2.123.0",
+    "aws-cdk-lib": "2.140.0",
     "constructs": "10.0.5"
   },
   "dependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "^3.540.0",
-    "@aws-sdk/client-dynamodb": "^3.540.0",
-    "@aws-sdk/client-ssm": "^3.540.0",
-    "@aws-sdk/client-sts": "^3.540.0",
-    "@aws-sdk/credential-providers": "^3.540.0",
-    "@aws-sdk/types": "^3.535.0",
-    "@smithy/types": "^2.12.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.621.0",
+    "@aws-sdk/client-dynamodb": "^3.621.0",
+    "@aws-sdk/client-ssm": "^3.621.0",
+    "@aws-sdk/client-sts": "^3.621.0",
+    "@aws-sdk/credential-providers": "^3.621.0",
+    "@aws-sdk/types": "^3.609.0",
+    "@smithy/types": "^3.3.0",
     "@types/uuid": "^9.0.8",
-    "aws-cdk-lib": "2.123.0",
+    "aws-cdk-lib": "2.140.0",
     "jsonwebtoken": "^9.0.2",
     "jwks-rsa": "^3.1.0",
     "uuid": "^9.0.1"

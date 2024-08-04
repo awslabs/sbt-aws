@@ -72,7 +72,7 @@
   "dependencies": {
     "@aws-cdk/aws-kinesisfirehose-alpha": "2.140.0-alpha.0",
     "@aws-cdk/aws-kinesisfirehose-destinations-alpha": "2.140.0-alpha.0",
-    "@aws-cdk/aws-lambda-python-alpha": "^2.114.1-alpha.0",
+    "@aws-cdk/aws-lambda-python-alpha": "2.140.0-alpha.0",
     "cdk-nag": "^2.27.230"
   },
   "keywords": [

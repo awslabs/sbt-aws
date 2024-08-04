@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Construct } from 'constructs';
-import { BashJobRunner } from './bash-job-runner';
+import { ScriptJob } from './script-job';
 import { IEventManager, addTemplateTag } from '../utils';
 
 /**
@@ -14,7 +14,7 @@ export interface CoreApplicationPlaneProps {
   /**
    * The list of JobRunners
    */
-  readonly jobRunnersList?: BashJobRunner[];
+  readonly scriptJobs?: ScriptJob[];
 }
 
 /**
@@ -35,8 +35,8 @@ export class CoreApplicationPlane extends Construct {
     addTemplateTag(this, 'CoreApplicationPlane');
     this.eventManager = props.eventManager;
 
-    props.jobRunnersList?.forEach((jobRunner) => {
-      this.eventManager.addTargetToEvent(this, jobRunner.incomingEvent, jobRunner.eventTarget);
+    props.scriptJobs?.forEach((scriptJob) => {
+      this.eventManager.addTargetToEvent(this, scriptJob.incomingEvent, scriptJob.eventTarget);
     });
   }
 }
