@@ -6,11 +6,10 @@ import * as apigatewayV2 from 'aws-cdk-lib/aws-apigatewayv2';
 import * as apigatewayV2Integrations from 'aws-cdk-lib/aws-apigatewayv2-integrations';
 import * as events from 'aws-cdk-lib/aws-events';
 import * as targets from 'aws-cdk-lib/aws-events-targets';
-import { IFunction } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
-import { IBilling, IFunctionTrigger } from './billing-interface';
-import { DetailType, IEventManager, addTemplateTag } from '../../utils';
+import { IBilling } from './billing-interface';
+import { DetailType, IEventManager, addTemplateTag, createEventTarget } from '../../utils';
 
 /**
  * Encapsulates the list of properties for a BillingProvider.
@@ -57,29 +56,31 @@ export class BillingProvider extends Construct {
     super(scope, id);
     addTemplateTag(this, 'BillingProvider');
 
-    this.createEventTarget(
-      props.eventManager,
-      DetailType.ONBOARDING_REQUEST,
-      props.billing.createCustomerFunction
-    );
-
-    this.createEventTarget(
-      props.eventManager,
-      DetailType.OFFBOARDING_REQUEST,
-      props.billing.deleteCustomerFunction
-    );
-
-    this.createEventTarget(
-      props.eventManager,
-      DetailType.TENANT_USER_CREATED,
-      props.billing.createUserFunction
-    );
-
-    this.createEventTarget(
-      props.eventManager,
-      DetailType.TENANT_USER_DELETED,
-      props.billing.deleteUserFunction
-    );
+    [
+      {
+        defaultFunctionTrigger: DetailType.ONBOARDING_REQUEST,
+        functionDefinition: props.billing.createCustomerFunction,
+      },
+      {
+        defaultFunctionTrigger: DetailType.OFFBOARDING_REQUEST,
+        functionDefinition: props.billing.deleteCustomerFunction,
+      },
+      {
+        defaultFunctionTrigger: DetailType.TENANT_USER_CREATED,
+        functionDefinition: props.billing.createUserFunction,
+      },
+      {
+        defaultFunctionTrigger: DetailType.TENANT_USER_DELETED,
+        functionDefinition: props.billing.deleteUserFunction,
+      },
+    ].forEach((target) => {
+      createEventTarget(
+        this,
+        props.eventManager,
+        target.defaultFunctionTrigger,
+        target.functionDefinition
+      );
+    });
 
     if (props.billing.putUsageFunction) {
       const schedule =
@@ -129,27 +130,5 @@ export class BillingProvider extends Construct {
         ]
       );
     }
-  }
-
-  private getFunctionProps(
-    fn: IFunction | IFunctionTrigger,
-    defaultTrigger: DetailType
-  ): IFunctionTrigger {
-    return 'handler' in fn
-      ? { handler: fn.handler, trigger: fn.trigger }
-      : { handler: fn, trigger: defaultTrigger };
-  }
-
-  private createEventTarget(
-    eventManager: IEventManager,
-    defaultEvent: DetailType,
-    fn?: IFunction | IFunctionTrigger
-  ) {
-    if (!fn) {
-      return;
-    }
-
-    const { handler, trigger } = this.getFunctionProps(fn, defaultEvent);
-    eventManager.addTargetToEvent(this, trigger, new targets.LambdaFunction(handler));
   }
 }

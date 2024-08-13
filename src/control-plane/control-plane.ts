@@ -9,6 +9,8 @@ import { IAuth } from './auth/auth-interface';
 import { CognitoAuth } from './auth/cognito-auth';
 import { BillingProvider, IBilling } from './billing';
 import { ControlPlaneAPI } from './control-plane-api';
+import { IMetering } from './metering';
+import { MeteringProvider } from './metering/metering-provider';
 import { TenantConfigService } from './tenant-config';
 import { TenantManagementService } from './tenant-management/tenant-management.service';
 import { UserManagementService } from './user-management/user-management.service';
@@ -43,6 +45,11 @@ export interface ControlPlaneProps {
    * The billing provider configuration.
    */
   readonly billing?: IBilling;
+
+  /**
+   * The metering provider configuration.
+   */
+  readonly metering?: IMetering;
 
   /**
    * The event manager instance. If not provided, a new instance will be created.
@@ -140,6 +147,15 @@ export class ControlPlane extends Construct {
         });
       }
     }
+
+    if (props.metering) {
+      new MeteringProvider(this, 'Metering', {
+        metering: props.metering,
+        controlPlaneAPI: api.api,
+        eventManager: eventManager,
+      });
+    }
+
     this.eventManager = eventManager;
 
     // defined suppression here to suppress EventsRole Default policy

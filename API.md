@@ -3260,6 +3260,7 @@ const controlPlaneProps: ControlPlaneProps = { ... }
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.billing">billing</a></code> | <code><a href="#@cdklabs/sbt-aws.IBilling">IBilling</a></code> | The billing provider configuration. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.disableAPILogging">disableAPILogging</a></code> | <code>boolean</code> | If true, the API Gateway will not log requests to the CloudWatch Logs. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | The event manager instance. |
+| <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.metering">metering</a></code> | <code><a href="#@cdklabs/sbt-aws.IMetering">IMetering</a></code> | The metering provider configuration. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminName">systemAdminName</a></code> | <code>string</code> | The name of the system admin user. |
 | <code><a href="#@cdklabs/sbt-aws.ControlPlaneProps.property.systemAdminRoleName">systemAdminRoleName</a></code> | <code>string</code> | The name of the system admin role. |
 
@@ -3339,6 +3340,18 @@ public readonly eventManager: IEventManager;
 The event manager instance.
 
 If not provided, a new instance will be created.
+
+---
+
+##### `metering`<sup>Optional</sup> <a name="metering" id="@cdklabs/sbt-aws.ControlPlaneProps.property.metering"></a>
+
+```typescript
+public readonly metering: IMetering;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.IMetering">IMetering</a>
+
+The metering provider configuration.
 
 ---
 
@@ -4803,10 +4816,10 @@ Encapsulates the list of properties for an IBilling construct.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.IBilling.property.createCustomerFunction">createCustomerFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction \| <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a></code> | The function to trigger to create a new customer. |
-| <code><a href="#@cdklabs/sbt-aws.IBilling.property.deleteCustomerFunction">deleteCustomerFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction \| <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a></code> | The function to trigger to delete a customer. |
-| <code><a href="#@cdklabs/sbt-aws.IBilling.property.createUserFunction">createUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction \| <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a></code> | The function to trigger to create a new user. |
-| <code><a href="#@cdklabs/sbt-aws.IBilling.property.deleteUserFunction">deleteUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction \| <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a></code> | The function to trigger to delete a user. |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.createCustomerFunction">createCustomerFunction</a></code> | <code><a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a> \| aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to create a new customer. |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.deleteCustomerFunction">deleteCustomerFunction</a></code> | <code><a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a> \| aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to delete a customer. |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.createUserFunction">createUserFunction</a></code> | <code><a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a> \| aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to create a new user. |
+| <code><a href="#@cdklabs/sbt-aws.IBilling.property.deleteUserFunction">deleteUserFunction</a></code> | <code><a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a> \| aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to delete a user. |
 | <code><a href="#@cdklabs/sbt-aws.IBilling.property.ingestor">ingestor</a></code> | <code><a href="#@cdklabs/sbt-aws.IDataIngestorAggregator">IDataIngestorAggregator</a></code> | The IDataIngestorAggregator responsible for accepting and aggregating the raw billing data. |
 | <code><a href="#@cdklabs/sbt-aws.IBilling.property.putUsageFunction">putUsageFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction \| <a href="#@cdklabs/sbt-aws.IFunctionSchedule">IFunctionSchedule</a></code> | The function responsible for taking the aggregated data and pushing that to the billing provider. |
 | <code><a href="#@cdklabs/sbt-aws.IBilling.property.webhookFunction">webhookFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger when a webhook request is received. |
@@ -4817,10 +4830,10 @@ Encapsulates the list of properties for an IBilling construct.
 ##### `createCustomerFunction`<sup>Required</sup> <a name="createCustomerFunction" id="@cdklabs/sbt-aws.IBilling.property.createCustomerFunction"></a>
 
 ```typescript
-public readonly createCustomerFunction: IFunction | IFunctionTrigger;
+public readonly createCustomerFunction: IFunctionTrigger | IFunction;
 ```
 
-- *Type:* aws-cdk-lib.aws_lambda.IFunction | <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a> | aws-cdk-lib.aws_lambda.IFunction
 
 The function to trigger to create a new customer.
 
@@ -4831,10 +4844,10 @@ The function to trigger to create a new customer.
 ##### `deleteCustomerFunction`<sup>Required</sup> <a name="deleteCustomerFunction" id="@cdklabs/sbt-aws.IBilling.property.deleteCustomerFunction"></a>
 
 ```typescript
-public readonly deleteCustomerFunction: IFunction | IFunctionTrigger;
+public readonly deleteCustomerFunction: IFunctionTrigger | IFunction;
 ```
 
-- *Type:* aws-cdk-lib.aws_lambda.IFunction | <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a> | aws-cdk-lib.aws_lambda.IFunction
 
 The function to trigger to delete a customer.
 
@@ -4845,10 +4858,10 @@ The function to trigger to delete a customer.
 ##### `createUserFunction`<sup>Optional</sup> <a name="createUserFunction" id="@cdklabs/sbt-aws.IBilling.property.createUserFunction"></a>
 
 ```typescript
-public readonly createUserFunction: IFunction | IFunctionTrigger;
+public readonly createUserFunction: IFunctionTrigger | IFunction;
 ```
 
-- *Type:* aws-cdk-lib.aws_lambda.IFunction | <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a> | aws-cdk-lib.aws_lambda.IFunction
 
 The function to trigger to create a new user.
 
@@ -4859,10 +4872,10 @@ The function to trigger to create a new user.
 ##### `deleteUserFunction`<sup>Optional</sup> <a name="deleteUserFunction" id="@cdklabs/sbt-aws.IBilling.property.deleteUserFunction"></a>
 
 ```typescript
-public readonly deleteUserFunction: IFunction | IFunctionTrigger;
+public readonly deleteUserFunction: IFunctionTrigger | IFunction;
 ```
 
-- *Type:* aws-cdk-lib.aws_lambda.IFunction | <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a> | aws-cdk-lib.aws_lambda.IFunction
 
 The function to trigger to delete a user.
 
@@ -5182,6 +5195,124 @@ The detail-type that will trigger the handler function.
 
 ---
 
+### IMetering <a name="IMetering" id="@cdklabs/sbt-aws.IMetering"></a>
+
+- *Implemented By:* <a href="#@cdklabs/sbt-aws.IMetering">IMetering</a>
+
+Encapsulates the list of properties for an IMetering construct.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.IMetering.property.createMeterFunction">createMeterFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to create a meter -- POST /meters Once created, the meter can be used to track and analyze the specific usage metrics for tenants. |
+| <code><a href="#@cdklabs/sbt-aws.IMetering.property.fetchUsageFunction">fetchUsageFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to get the usage data that has been recorded for a specific meter. |
+| <code><a href="#@cdklabs/sbt-aws.IMetering.property.ingestUsageFunction">ingestUsageFunction</a></code> | <code><a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a> \| aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to ingest a usage event. |
+| <code><a href="#@cdklabs/sbt-aws.IMetering.property.cancelUsageEventsFunction">cancelUsageEventsFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to exclude specific events from being recorded or included in the usage data. |
+| <code><a href="#@cdklabs/sbt-aws.IMetering.property.createCustomerFunction">createCustomerFunction</a></code> | <code><a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a> \| aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to create a new customer. (Customer in this context is a tenant.). |
+| <code><a href="#@cdklabs/sbt-aws.IMetering.property.deleteCustomerFunction">deleteCustomerFunction</a></code> | <code><a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a> \| aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to delete a customer. (Customer in this context is a tenant.). |
+| <code><a href="#@cdklabs/sbt-aws.IMetering.property.updateMeterFunction">updateMeterFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to update a meter -- PUT /meters/meterId. |
+
+---
+
+##### `createMeterFunction`<sup>Required</sup> <a name="createMeterFunction" id="@cdklabs/sbt-aws.IMetering.property.createMeterFunction"></a>
+
+```typescript
+public readonly createMeterFunction: IFunction;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.IFunction
+
+The function to trigger to create a meter -- POST /meters Once created, the meter can be used to track and analyze the specific usage metrics for tenants.
+
+---
+
+##### `fetchUsageFunction`<sup>Required</sup> <a name="fetchUsageFunction" id="@cdklabs/sbt-aws.IMetering.property.fetchUsageFunction"></a>
+
+```typescript
+public readonly fetchUsageFunction: IFunction;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.IFunction
+
+The function to trigger to get the usage data that has been recorded for a specific meter.
+
+- GET /usage/meterId
+
+---
+
+##### `ingestUsageFunction`<sup>Required</sup> <a name="ingestUsageFunction" id="@cdklabs/sbt-aws.IMetering.property.ingestUsageFunction"></a>
+
+```typescript
+public readonly ingestUsageFunction: IFunctionTrigger | IFunction;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a> | aws-cdk-lib.aws_lambda.IFunction
+
+The function to trigger to ingest a usage event.
+
+Usage events are used to measure and track the usage metrics associated with the meter.
+
+Default event trigger: INGEST_USAGE
+
+---
+
+##### `cancelUsageEventsFunction`<sup>Optional</sup> <a name="cancelUsageEventsFunction" id="@cdklabs/sbt-aws.IMetering.property.cancelUsageEventsFunction"></a>
+
+```typescript
+public readonly cancelUsageEventsFunction: IFunction;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.IFunction
+
+The function to trigger to exclude specific events from being recorded or included in the usage data.
+
+Used for canceling events that were incorrectly ingested.
+-- DELETE /usage
+
+---
+
+##### `createCustomerFunction`<sup>Optional</sup> <a name="createCustomerFunction" id="@cdklabs/sbt-aws.IMetering.property.createCustomerFunction"></a>
+
+```typescript
+public readonly createCustomerFunction: IFunctionTrigger | IFunction;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a> | aws-cdk-lib.aws_lambda.IFunction
+
+The function to trigger to create a new customer. (Customer in this context is a tenant.).
+
+Default event trigger: ONBOARDING_REQUEST
+
+---
+
+##### `deleteCustomerFunction`<sup>Optional</sup> <a name="deleteCustomerFunction" id="@cdklabs/sbt-aws.IMetering.property.deleteCustomerFunction"></a>
+
+```typescript
+public readonly deleteCustomerFunction: IFunctionTrigger | IFunction;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a> | aws-cdk-lib.aws_lambda.IFunction
+
+The function to trigger to delete a customer. (Customer in this context is a tenant.).
+
+Default event trigger: OFFBOARDING_REQUEST
+
+---
+
+##### `updateMeterFunction`<sup>Optional</sup> <a name="updateMeterFunction" id="@cdklabs/sbt-aws.IMetering.property.updateMeterFunction"></a>
+
+```typescript
+public readonly updateMeterFunction: IFunction;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.IFunction
+
+The function to trigger to update a meter -- PUT /meters/meterId.
+
+---
+
 ### IRoute <a name="IRoute" id="@cdklabs/sbt-aws.IRoute"></a>
 
 - *Implemented By:* <a href="#@cdklabs/sbt-aws.IRoute">IRoute</a>
@@ -5306,6 +5437,7 @@ events sent across the EventBus.
 | <code><a href="#@cdklabs/sbt-aws.DetailType.DEACTIVATE_FAILURE">DEACTIVATE_FAILURE</a></code> | Event detail type for failed deactivation. |
 | <code><a href="#@cdklabs/sbt-aws.DetailType.TENANT_USER_CREATED">TENANT_USER_CREATED</a></code> | Event detail type for user creation on the app-plane side. |
 | <code><a href="#@cdklabs/sbt-aws.DetailType.TENANT_USER_DELETED">TENANT_USER_DELETED</a></code> | Event detail type for user deletion on the app-plane side. |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.INGEST_USAGE">INGEST_USAGE</a></code> | Event detail type for ingesting a usage event. |
 
 ---
 
@@ -5451,6 +5583,13 @@ Event detail type for user deletion on the app-plane side.
 
 Note that sbt-aws components do not emit this event. This event
 should be emitted by the application plane.
+
+---
+
+
+##### `INGEST_USAGE` <a name="INGEST_USAGE" id="@cdklabs/sbt-aws.DetailType.INGEST_USAGE"></a>
+
+Event detail type for ingesting a usage event.
 
 ---
 
