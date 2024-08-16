@@ -5208,7 +5208,7 @@ Encapsulates the list of properties for an IMetering construct.
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.IMetering.property.createMeterFunction">createMeterFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to create a meter -- POST /meters Once created, the meter can be used to track and analyze the specific usage metrics for tenants. |
 | <code><a href="#@cdklabs/sbt-aws.IMetering.property.fetchUsageFunction">fetchUsageFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to get the usage data that has been recorded for a specific meter. |
-| <code><a href="#@cdklabs/sbt-aws.IMetering.property.ingestUsageFunction">ingestUsageFunction</a></code> | <code><a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a> \| aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to ingest a usage event. |
+| <code><a href="#@cdklabs/sbt-aws.IMetering.property.ingestUsageEventFunction">ingestUsageEventFunction</a></code> | <code><a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a> \| aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to ingest a usage event. |
 | <code><a href="#@cdklabs/sbt-aws.IMetering.property.cancelUsageEventsFunction">cancelUsageEventsFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to exclude specific events from being recorded or included in the usage data. |
 | <code><a href="#@cdklabs/sbt-aws.IMetering.property.createCustomerFunction">createCustomerFunction</a></code> | <code><a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a> \| aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to create a new customer. (Customer in this context is a tenant.). |
 | <code><a href="#@cdklabs/sbt-aws.IMetering.property.deleteCustomerFunction">deleteCustomerFunction</a></code> | <code><a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a> \| aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to delete a customer. (Customer in this context is a tenant.). |
@@ -5242,10 +5242,10 @@ The function to trigger to get the usage data that has been recorded for a speci
 
 ---
 
-##### `ingestUsageFunction`<sup>Required</sup> <a name="ingestUsageFunction" id="@cdklabs/sbt-aws.IMetering.property.ingestUsageFunction"></a>
+##### `ingestUsageEventFunction`<sup>Required</sup> <a name="ingestUsageEventFunction" id="@cdklabs/sbt-aws.IMetering.property.ingestUsageEventFunction"></a>
 
 ```typescript
-public readonly ingestUsageFunction: IFunctionTrigger | IFunction;
+public readonly ingestUsageEventFunction: IFunctionTrigger | IFunction;
 ```
 
 - *Type:* <a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a> | aws-cdk-lib.aws_lambda.IFunction

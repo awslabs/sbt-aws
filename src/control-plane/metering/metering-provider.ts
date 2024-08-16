@@ -58,7 +58,7 @@ export class MeteringProvider extends Construct {
       },
       {
         defaultFunctionTrigger: utils.DetailType.INGEST_USAGE,
-        functionDefinition: props.metering.ingestUsageFunction,
+        functionDefinition: props.metering.ingestUsageEventFunction,
       },
     ];
 

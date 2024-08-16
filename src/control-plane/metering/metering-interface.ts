@@ -25,7 +25,7 @@ export interface IMetering {
    *
    * Default event trigger: INGEST_USAGE
    */
-  ingestUsageFunction: IFunction | IFunctionTrigger;
+  ingestUsageEventFunction: IFunction | IFunctionTrigger;
 
   /**
    * The function to trigger to get the usage data that has been recorded for a specific meter.
