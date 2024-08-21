@@ -3,24 +3,8 @@
 
 import { Schedule } from 'aws-cdk-lib/aws-events';
 import { IFunction } from 'aws-cdk-lib/aws-lambda';
-import { DetailType } from '../../utils';
+import { IFunctionTrigger } from '../../utils';
 import { IDataIngestorAggregator } from '../ingestor-aggregator/ingestor-aggregator-interface';
-
-/**
- * Optional interface that allows specifying both
- * the function to trigger and the event that will trigger it.
- */
-export interface IFunctionTrigger {
-  /**
-   * The function definition.
-   */
-  readonly handler: IFunction;
-
-  /**
-   * The detail-type that will trigger the handler function.
-   */
-  readonly trigger: DetailType;
-}
 
 /**
  * Optional interface that allows specifying both

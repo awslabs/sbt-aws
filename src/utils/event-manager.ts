@@ -103,6 +103,11 @@ export enum DetailType {
    * should be emitted by the application plane.
    */
   TENANT_USER_DELETED = 'tenantUserDeleted',
+
+  /**
+   * Event detail type for ingesting a usage event.
+   */
+  INGEST_USAGE = 'ingestUsage',
 }
 
 /**
@@ -252,6 +257,7 @@ export class EventManager extends Construct implements IEventManager {
       deactivateFailure: this.applicationPlaneEventSource,
       tenantUserCreated: this.controlPlaneEventSource,
       tenantUserDeleted: this.controlPlaneEventSource,
+      ingestUsage: this.applicationPlaneEventSource,
     };
 
     for (const key in this.supportedEvents) {
