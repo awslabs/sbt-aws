@@ -1773,6 +1773,110 @@ The DynamoDB table containing the aggregated data.
 ---
 
 
+### MeteringProvider <a name="MeteringProvider" id="@cdklabs/sbt-aws.MeteringProvider"></a>
+
+Represents a Metering Provider that handles metering-related operations and connects the concrete IMetering implementation (provided via props.metering) to the control plane.
+
+This construct sets up event targets for various metering-related events
+and adds API routes for 'usage' and 'meters'.
+
+#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.MeteringProvider.Initializer"></a>
+
+```typescript
+import { MeteringProvider } from '@cdklabs/sbt-aws'
+
+new MeteringProvider(scope: Construct, id: string, props: MeteringProviderProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.MeteringProvider.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.MeteringProvider.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.MeteringProvider.Initializer.parameter.props">props</a></code> | <code><a href="#@cdklabs/sbt-aws.MeteringProviderProps">MeteringProviderProps</a></code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.MeteringProvider.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.MeteringProvider.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.MeteringProvider.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@cdklabs/sbt-aws.MeteringProviderProps">MeteringProviderProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.MeteringProvider.toString">toString</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `toString` <a name="toString" id="@cdklabs/sbt-aws.MeteringProvider.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.MeteringProvider.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.MeteringProvider.isConstruct"></a>
+
+```typescript
+import { MeteringProvider } from '@cdklabs/sbt-aws'
+
+MeteringProvider.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.MeteringProvider.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.MeteringProvider.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.MeteringProvider.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+
 ### ProvisioningScriptJob <a name="ProvisioningScriptJob" id="@cdklabs/sbt-aws.ProvisioningScriptJob"></a>
 
 Provides a ProvisioningScriptJob to execute arbitrary bash code.
@@ -3623,6 +3727,64 @@ public readonly primaryKeyPath: string;
 - *Type:* string
 
 The JMESPath to find the primary key value in the incoming data stream.
+
+---
+
+### MeteringProviderProps <a name="MeteringProviderProps" id="@cdklabs/sbt-aws.MeteringProviderProps"></a>
+
+Encapsulates the list of properties for a MeteringProvider.
+
+#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.MeteringProviderProps.Initializer"></a>
+
+```typescript
+import { MeteringProviderProps } from '@cdklabs/sbt-aws'
+
+const meteringProviderProps: MeteringProviderProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.MeteringProviderProps.property.api">api</a></code> | <code><a href="#@cdklabs/sbt-aws.ControlPlaneAPI">ControlPlaneAPI</a></code> | An API resource to use when setting up API endpoints. |
+| <code><a href="#@cdklabs/sbt-aws.MeteringProviderProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | An IEventManager object to help coordinate events. |
+| <code><a href="#@cdklabs/sbt-aws.MeteringProviderProps.property.metering">metering</a></code> | <code><a href="#@cdklabs/sbt-aws.IMetering">IMetering</a></code> | An implementation of the IMetering interface. |
+
+---
+
+##### `api`<sup>Required</sup> <a name="api" id="@cdklabs/sbt-aws.MeteringProviderProps.property.api"></a>
+
+```typescript
+public readonly api: ControlPlaneAPI;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.ControlPlaneAPI">ControlPlaneAPI</a>
+
+An API resource to use when setting up API endpoints.
+
+---
+
+##### `eventManager`<sup>Required</sup> <a name="eventManager" id="@cdklabs/sbt-aws.MeteringProviderProps.property.eventManager"></a>
+
+```typescript
+public readonly eventManager: IEventManager;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a>
+
+An IEventManager object to help coordinate events.
+
+---
+
+##### `metering`<sup>Required</sup> <a name="metering" id="@cdklabs/sbt-aws.MeteringProviderProps.property.metering"></a>
+
+```typescript
+public readonly metering: IMetering;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.IMetering">IMetering</a>
+
+An implementation of the IMetering interface.
 
 ---
 
