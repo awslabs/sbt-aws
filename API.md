@@ -5210,9 +5210,13 @@ Encapsulates the list of properties for an IMetering construct.
 | <code><a href="#@cdklabs/sbt-aws.IMetering.property.fetchUsageFunction">fetchUsageFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to get the usage data that has been recorded for a specific meter. |
 | <code><a href="#@cdklabs/sbt-aws.IMetering.property.ingestUsageEventFunction">ingestUsageEventFunction</a></code> | <code><a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a> \| aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to ingest a usage event. |
 | <code><a href="#@cdklabs/sbt-aws.IMetering.property.cancelUsageEventsFunction">cancelUsageEventsFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to exclude specific events from being recorded or included in the usage data. |
+| <code><a href="#@cdklabs/sbt-aws.IMetering.property.cancelUsageEventsScope">cancelUsageEventsScope</a></code> | <code>string</code> | The scope required to authorize requests for cancelling usage events. |
 | <code><a href="#@cdklabs/sbt-aws.IMetering.property.createCustomerFunction">createCustomerFunction</a></code> | <code><a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a> \| aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to create a new customer. (Customer in this context is a tenant.). |
+| <code><a href="#@cdklabs/sbt-aws.IMetering.property.createMeterScope">createMeterScope</a></code> | <code>string</code> | The scope required to authorize requests for creating a new meter. |
 | <code><a href="#@cdklabs/sbt-aws.IMetering.property.deleteCustomerFunction">deleteCustomerFunction</a></code> | <code><a href="#@cdklabs/sbt-aws.IFunctionTrigger">IFunctionTrigger</a> \| aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to delete a customer. (Customer in this context is a tenant.). |
+| <code><a href="#@cdklabs/sbt-aws.IMetering.property.fetchUsageScope">fetchUsageScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching metering usage. |
 | <code><a href="#@cdklabs/sbt-aws.IMetering.property.updateMeterFunction">updateMeterFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function to trigger to update a meter -- PUT /meters/meterId. |
+| <code><a href="#@cdklabs/sbt-aws.IMetering.property.updateMeterScope">updateMeterScope</a></code> | <code>string</code> | The scope required to authorize requests for updating a meter. |
 
 ---
 
@@ -5273,6 +5277,18 @@ Used for canceling events that were incorrectly ingested.
 
 ---
 
+##### `cancelUsageEventsScope`<sup>Optional</sup> <a name="cancelUsageEventsScope" id="@cdklabs/sbt-aws.IMetering.property.cancelUsageEventsScope"></a>
+
+```typescript
+public readonly cancelUsageEventsScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for cancelling usage events.
+
+---
+
 ##### `createCustomerFunction`<sup>Optional</sup> <a name="createCustomerFunction" id="@cdklabs/sbt-aws.IMetering.property.createCustomerFunction"></a>
 
 ```typescript
@@ -5284,6 +5300,18 @@ public readonly createCustomerFunction: IFunctionTrigger | IFunction;
 The function to trigger to create a new customer. (Customer in this context is a tenant.).
 
 Default event trigger: ONBOARDING_REQUEST
+
+---
+
+##### `createMeterScope`<sup>Optional</sup> <a name="createMeterScope" id="@cdklabs/sbt-aws.IMetering.property.createMeterScope"></a>
+
+```typescript
+public readonly createMeterScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for creating a new meter.
 
 ---
 
@@ -5301,6 +5329,18 @@ Default event trigger: OFFBOARDING_REQUEST
 
 ---
 
+##### `fetchUsageScope`<sup>Optional</sup> <a name="fetchUsageScope" id="@cdklabs/sbt-aws.IMetering.property.fetchUsageScope"></a>
+
+```typescript
+public readonly fetchUsageScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for fetching metering usage.
+
+---
+
 ##### `updateMeterFunction`<sup>Optional</sup> <a name="updateMeterFunction" id="@cdklabs/sbt-aws.IMetering.property.updateMeterFunction"></a>
 
 ```typescript
@@ -5310,6 +5350,18 @@ public readonly updateMeterFunction: IFunction;
 - *Type:* aws-cdk-lib.aws_lambda.IFunction
 
 The function to trigger to update a meter -- PUT /meters/meterId.
+
+---
+
+##### `updateMeterScope`<sup>Optional</sup> <a name="updateMeterScope" id="@cdklabs/sbt-aws.IMetering.property.updateMeterScope"></a>
+
+```typescript
+public readonly updateMeterScope: string;
+```
+
+- *Type:* string
+
+The scope required to authorize requests for updating a meter.
 
 ---
 

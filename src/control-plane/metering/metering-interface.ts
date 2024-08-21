@@ -15,9 +15,19 @@ export interface IMetering {
   createMeterFunction: IFunction;
 
   /**
+   * The scope required to authorize requests for creating a new meter.
+   */
+  createMeterScope?: string;
+
+  /**
    * The function to trigger to update a meter -- PUT /meters/meterId
    */
   updateMeterFunction?: IFunction;
+
+  /**
+   * The scope required to authorize requests for updating a meter.
+   */
+  updateMeterScope?: string;
 
   /**
    * The function to trigger to ingest a usage event.
@@ -34,11 +44,21 @@ export interface IMetering {
   fetchUsageFunction: IFunction; // use 'fetch*' instead of 'get*' to avoid error JSII5000
 
   /**
+   * The scope required to authorize requests for fetching metering usage.
+   */
+  fetchUsageScope?: string;
+
+  /**
    * The function to trigger to exclude specific events from being recorded or included in the usage data.
    * Used for canceling events that were incorrectly ingested.
    * -- DELETE /usage
    */
   cancelUsageEventsFunction?: IFunction;
+
+  /**
+   * The scope required to authorize requests for cancelling usage events.
+   */
+  cancelUsageEventsScope?: string;
 
   /**
    * The function to trigger to create a new customer.

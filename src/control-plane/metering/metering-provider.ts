@@ -7,6 +7,7 @@ import { IFunction } from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 import { IMetering } from './metering-interface';
 import * as utils from '../../utils';
+import { ControlPlaneAPI } from '../control-plane-api';
 
 /**
  * Encapsulates the list of properties for a MeteringProvider.
@@ -23,10 +24,9 @@ export interface MeteringProviderProps {
   readonly eventManager: utils.IEventManager;
 
   /**
-   * An API Gateway Resource for the BillingProvider to use
-   * when setting up API endpoints.
+   * An API resource to use when setting up API endpoints.
    */
-  readonly controlPlaneAPI: apigatewayV2.HttpApi;
+  readonly api: ControlPlaneAPI;
 }
 
 /**
@@ -71,44 +71,51 @@ export class MeteringProvider extends Construct {
       );
     });
 
-    props.controlPlaneAPI.addRoutes({
-      path: `${usagePath}/meterId`,
-      methods: [apigatewayV2.HttpMethod.GET],
-      integration: new apigatewayV2Integrations.HttpLambdaIntegration(
-        'fetchUsageHttpLambdaIntegration',
-        props.metering.fetchUsageFunction
-      ),
-    });
+    const routes: utils.IRoute[] = [
+      {
+        path: `${usagePath}/meterId`,
+        method: apigatewayV2.HttpMethod.GET,
+        integration: new apigatewayV2Integrations.HttpLambdaIntegration(
+          'fetchUsageHttpLambdaIntegration',
+          props.metering.fetchUsageFunction
+        ),
+        scope: props.metering.fetchUsageScope,
+      },
+      {
+        path: metersPath,
+        method: apigatewayV2.HttpMethod.POST,
+        integration: new apigatewayV2Integrations.HttpLambdaIntegration(
+          'createMeterHttpLambdaIntegration',
+          props.metering.createMeterFunction
+        ),
+        scope: props.metering.createMeterScope,
+      },
+    ];
 
     if (props.metering.cancelUsageEventsFunction) {
-      props.controlPlaneAPI.addRoutes({
+      routes.push({
         path: usagePath,
-        methods: [apigatewayV2.HttpMethod.DELETE],
+        method: apigatewayV2.HttpMethod.DELETE,
         integration: new apigatewayV2Integrations.HttpLambdaIntegration(
           'deleteUsageHttpLambdaIntegration',
           props.metering.cancelUsageEventsFunction
         ),
+        scope: props.metering.cancelUsageEventsScope,
       });
     }
 
-    props.controlPlaneAPI.addRoutes({
-      path: metersPath,
-      methods: [apigatewayV2.HttpMethod.POST],
-      integration: new apigatewayV2Integrations.HttpLambdaIntegration(
-        'createMeterHttpLambdaIntegration',
-        props.metering.createMeterFunction
-      ),
-    });
-
     if (props.metering.updateMeterFunction) {
-      props.controlPlaneAPI.addRoutes({
+      routes.push({
         path: `${metersPath}/meterId`,
-        methods: [apigatewayV2.HttpMethod.PUT],
+        method: apigatewayV2.HttpMethod.PUT,
         integration: new apigatewayV2Integrations.HttpLambdaIntegration(
           'updateMeterHttpLambdaIntegration',
           props.metering.updateMeterFunction
         ),
+        scope: props.metering.updateMeterScope,
       });
     }
+
+    utils.generateRoutes(props.api.api, routes, props.api.jwtAuthorizer);
   }
 }

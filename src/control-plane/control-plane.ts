@@ -151,7 +151,7 @@ export class ControlPlane extends Construct {
     if (props.metering) {
       new MeteringProvider(this, 'Metering', {
         metering: props.metering,
-        controlPlaneAPI: api.api,
+        api: api,
         eventManager: eventManager,
       });
     }
