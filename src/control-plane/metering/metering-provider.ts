@@ -106,7 +106,7 @@ export class MeteringProvider extends Construct {
 
     if (props.metering.updateMeterFunction) {
       routes.push({
-        path: `${metersPath}/meterId`,
+        path: `${metersPath}/{meterId}`,
         method: apigatewayV2.HttpMethod.PUT,
         integration: new apigatewayV2Integrations.HttpLambdaIntegration(
           'updateMeterHttpLambdaIntegration',
