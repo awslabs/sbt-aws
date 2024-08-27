@@ -17,6 +17,7 @@ import { Runtime, IFunction, LayerVersion } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { CreateAdminUserProps, IAuth } from './auth-interface';
+import { setupCognitoAuthCLI } from './cli-auth';
 import { addTemplateTag } from '../../utils';
 
 /**
@@ -35,6 +36,36 @@ export interface CognitoAuthProps {
    * @default true
    */
   readonly setAPIGWScopes?: boolean;
+
+  /**
+   * Parameters for CLI authentication setup
+   */
+  readonly cliProps?: {
+    /**
+     * The ID of the hosted zone in Route 53 where the domain is registered.
+     */
+    hostedZoneId: string;
+
+    /**
+     * The fully qualified domain name (FQDN)
+     */
+    fqdn: string;
+
+    /**
+     * The ARN of the SSL/TLS certificate
+     */
+    certificateArn: string;
+
+    /**
+     * The domain prefix for the Cognito User Pool domain.
+     */
+    cognitoDomain: string;
+
+    /**
+     * Initalize as a string-indexed map for properties
+     */
+    [key: string]: string;
+  };
 }
 
 /**
@@ -219,6 +250,9 @@ export class CognitoAuth extends Construct implements IAuth {
     addTemplateTag(this, 'CognitoAuth');
 
     // https://docs.powertools.aws.dev/lambda/python/2.31.0/#lambda-layer
+
+    this.jwtAudience = [];
+
     const lambdaPowertoolsLayer = LayerVersion.fromLayerVersionArn(
       this,
       'LambdaPowerTools',
@@ -250,6 +284,19 @@ export class CognitoAuth extends Construct implements IAuth {
       },
       advancedSecurityMode: cognito.AdvancedSecurityMode.ENFORCED,
     });
+
+    if (props?.cliProps) {
+      setupCognitoAuthCLI(this, props.cliProps, this.userPool, this.jwtAudience);
+      this.tokenEndpoint = `https://${props.cliProps.cognitoDomain}.auth.${Stack.of(this).region}.amazoncognito.com/oauth2/token`;
+    } else {
+      const userPoolDomain = new cognito.UserPoolDomain(this, 'UserPoolDomain', {
+        userPool: this.userPool,
+        cognitoDomain: {
+          domainPrefix: `${cdk.Stack.of(this).account}-${this.node.addr}`,
+        },
+      });
+      this.tokenEndpoint = `https://${userPoolDomain.domainName}.auth.${Stack.of(this).region}.amazoncognito.com/oauth2/token`;
+    }
 
     NagSuppressions.addResourceSuppressions(this.userPool, [
       {
@@ -328,14 +375,6 @@ export class CognitoAuth extends Construct implements IAuth {
       this.deactivateTenantScope = tenantResourceServerWriteScope.scopeName;
     }
 
-    // Create a Cognito User Pool Domain
-    const userPoolDomain = new cognito.UserPoolDomain(this, 'UserPoolDomain', {
-      userPool: this.userPool,
-      cognitoDomain: {
-        domainPrefix: `${cdk.Stack.of(this).account}-${this.node.addr}`,
-      },
-    });
-
     const userPoolMachineClient = new cognito.UserPoolClient(this, 'UserPoolMachineClient', {
       userPool: this.userPool,
       generateSecret: true,
@@ -389,11 +428,8 @@ export class CognitoAuth extends Construct implements IAuth {
     this.machineClientSecret = userPoolMachineClient.userPoolClientSecret;
     this.wellKnownEndpointUrl = `https://cognito-idp.${region}.amazonaws.com/${this.userPool.userPoolId}/.well-known/openid-configuration`;
     this.jwtIssuer = `https://cognito-idp.${region}.amazonaws.com/${this.userPool.userPoolId}`;
-    this.jwtAudience = [
-      userPoolUserClient.userPoolClientId,
-      userPoolMachineClient.userPoolClientId,
-    ];
-    this.tokenEndpoint = `https://${userPoolDomain.domainName}.auth.${region}.amazoncognito.com/oauth2/token`;
+    this.jwtAudience.push(userPoolUserClient.userPoolClientId);
+    this.jwtAudience.push(userPoolMachineClient.userPoolClientId);
 
     // TODO: The caller should be surfacing these, not the implementor
     new cdk.CfnOutput(this, 'ControlPlaneIdpUserPoolId', {
@@ -516,10 +552,17 @@ export class CognitoAuth extends Construct implements IAuth {
       this.createAdminUserFunction.role!,
       [
         {
+          id: 'AwsSolutions-IAM5',
+          reason: 'Auth user resource name(s) not known beforehand.',
+        },
+        {
           id: 'AwsSolutions-IAM4',
-          reason: 'Suppress usage of AWSLambdaBasicExecutionRole.',
+          reason:
+            'Suppress usage of AWSLambdaBasicExecutionRole, CloudWatchLambdaInsightsExecutionRolePolicy, and AWSXrayWriteOnlyAccess.',
           appliesTo: [
             'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
+            'Policy::arn:<AWS::Partition>:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy',
+            'Policy::arn:<AWS::Partition>:iam::aws:policy/AWSXrayWriteOnlyAccess',
           ],
         },
       ],
