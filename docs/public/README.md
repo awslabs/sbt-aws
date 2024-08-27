@@ -665,7 +665,7 @@ sbt-aws-cli --help
 sbt-aws-cli <command> --help
 ```
 
-To get started, use the following command to configure the CLI with your Control Plane stack details. Remember you can use the `--help` flag to view the expected arguments.
+To get started, use the following command to configure the CLI with your Control Plane stack details. The arguments should be directly copied from the stack outputs. Remember you can use the `--help` flag to view the expected arguments.
 ```bash
 sbt-aws-cli configure
 ```
