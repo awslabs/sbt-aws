@@ -3,7 +3,7 @@ name: Publish Python 🐍 distribution 📦 to PyPI
 on:
   push:
     paths:
-      - 'scripts/sbt-aws-cli-test/pyproject.toml'  # Trigger workflow on changes to this specific file
+      - 'scripts/sbt-aws-cli-test/pyproject.toml'
 
 jobs:
   build:
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      url: https://pypi.org/project/sbt-aws-cli-test  # Replace with your package name
+      url: https://pypi.org/project/sbt-aws-cli-test 
     permissions:
       id-token: write
 
