@@ -105,7 +105,7 @@ export function setupCognitoAuthCLI(
     });
 
     const deviceGrantVpc = new ec2.Vpc(scope, 'DeviceGrantVPC', {
-        ipAddresses: ec2.IpAddresses.cidr('10.0.0.0/16'),
+        cidr: '10.192.0.0/16',
         maxAzs: 2,
         subnetConfiguration: [
             {
@@ -113,12 +113,9 @@ export function setupCognitoAuthCLI(
                 name: 'Public',
                 subnetType: ec2.SubnetType.PUBLIC,
             },
-            {
-                cidrMask: 24,
-                name: 'Private',
-                subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
-            },
         ],
+        enableDnsSupport: true,
+        enableDnsHostnames: true,
     });
 
     new ec2.FlowLog(scope, 'FlowLog', {
@@ -462,7 +459,8 @@ def deleteBucket(bucketName):
 
     new cdk.CfnOutput(scope, 'CfnOutputDeviceCognitoClientClientSecret', {
         key: 'DeviceCognitoClientClientSecret',
-        description: 'Device Client Secret for CLI',
+        description:
+            'Device Client Secret for CLI',
         value: retrieveCognitoSecrets.getAttString('DeviceCognitoClientSecret'),
         exportName: 'DeviceCognitoClientClientSecretOutput',
     });
@@ -535,6 +533,7 @@ def deleteBucket(bucketName):
             vpc: deviceGrantVpc,
             internetFacing: true,
             securityGroup: deviceGrantAlbsg,
+            vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
         }
     );
 
@@ -614,7 +613,8 @@ def deleteBucket(bucketName):
 
     new cdk.CfnOutput(scope, 'CfnOutputDeviceCognitoClientClientID', {
         key: 'DeviceCognitoClientClientID',
-        description: 'Device Client ID for CLI',
+        description:
+            'Device Client ID for CLI',
         value: deviceCognitoClient.userPoolClientId,
         exportName: 'DeviceCognitoClientClientIDOutput',
     });
