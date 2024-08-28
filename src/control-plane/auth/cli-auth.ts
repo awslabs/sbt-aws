@@ -83,8 +83,8 @@ export function setupCognitoAuthCLI(
         tableName: 'DeviceGrant',
         partitionKey: { name: 'Device_code', type: dynamodb.AttributeType.STRING },
         billingMode: dynamodb.BillingMode.PROVISIONED,
-        readCapacity: 5,
-        writeCapacity: 5,
+        readCapacity: 20,
+        writeCapacity: 20,
         pointInTimeRecovery: true,
     });
 
@@ -92,16 +92,16 @@ export function setupCognitoAuthCLI(
         indexName: 'AuthZ_state-index',
         partitionKey: { name: 'AuthZ_State', type: dynamodb.AttributeType.STRING },
         projectionType: dynamodb.ProjectionType.ALL,
-        readCapacity: 5,
-        writeCapacity: 5,
+        readCapacity: 20,
+        writeCapacity: 20,
     });
 
     deviceGrantDynamoDbTable.addGlobalSecondaryIndex({
         indexName: 'User_code-index',
         partitionKey: { name: 'User_code', type: dynamodb.AttributeType.STRING },
         projectionType: dynamodb.ProjectionType.ALL,
-        readCapacity: 5,
-        writeCapacity: 5,
+        readCapacity: 20,
+        writeCapacity: 20,
     });
 
     const deviceGrantVpc = new ec2.Vpc(scope, 'DeviceGrantVPC', {
@@ -487,6 +487,7 @@ def deleteBucket(bucketName):
             USER_CODE_LENGTH: '8',
         },
         role: deviceGrantTokenIamRole,
+        timeout: Duration.seconds(30),
     });
     deviceGrantToken.node.addDependency(deployTokenCodeToS3.node.defaultChild as cdk.CfnResource);
 
@@ -498,6 +499,8 @@ def deleteBucket(bucketName):
             DYNAMODB_TABLE: 'DeviceGrant',
         },
         role: deviceGrantCleaningIamRole,
+        timeout: Duration.seconds(30),
+
     });
     deviceGrantTokenCleaning.node.addDependency(
         deployTokenCodeToS3.node.defaultChild as cdk.CfnResource
