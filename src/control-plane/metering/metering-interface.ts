@@ -1,78 +1,76 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { IFunction } from 'aws-cdk-lib/aws-lambda';
-import { IFunctionTrigger } from '../../utils';
+import { IASyncFunction, ISyncFunction } from '../../utils';
 
 /**
  * Encapsulates the list of properties for an IMetering construct.
  */
 export interface IMetering {
   /**
-   * The function to trigger to create a meter -- POST /meters
+   * The sync function responsible for creating a meter.
    * Once created, the meter can be used to track and analyze the specific usage metrics for tenants.
+   * -- POST /meters
    */
-  createMeterFunction: IFunction;
+  createMeterFunction: ISyncFunction;
 
   /**
-   * The scope required to authorize requests for creating a new meter.
+   * The sync function responsible for fetching a single a meter based on its id.
+   * -- GET /meters/{meterId}
    */
-  createMeterScope?: string;
+  fetchMeterFunction: ISyncFunction;
 
   /**
-   * The function to trigger to update a meter -- PUT /meters/meterId
+   * The sync function responsible for fetching multiple meters. This should support pagination.
+   * -- GET /meters
    */
-  updateMeterFunction?: IFunction;
+  fetchAllMetersFunction: ISyncFunction;
 
   /**
-   * The scope required to authorize requests for updating a meter.
+   * The sync function responsible for updating a meter.
+   * -- PUT /meters/{meterId}
    */
-  updateMeterScope?: string;
+  updateMeterFunction?: ISyncFunction;
 
   /**
-   * The function to trigger to ingest a usage event.
+   * The sync function responsible for deleting a meter.
+   * -- DELETE /meters/{meterId}
+   */
+  deleteMeterFunction?: ISyncFunction;
+
+  /**
+   * The async function responsible for ingesting a usage event.
    * Usage events are used to measure and track the usage metrics associated with the meter.
-   *
-   * Default event trigger: INGEST_USAGE
+   * -- Default event trigger: INGEST_USAGE
    */
-  ingestUsageEventFunction: IFunction | IFunctionTrigger;
+  ingestUsageEventFunction: IASyncFunction;
 
   /**
-   * The function to trigger to get the usage data that has been recorded for a specific meter.
-   * -- GET /usage/meterId
+   * The function responsible for getting usage data for a specific meter.
+   * -- GET /usage/{meterId}
    */
-  fetchUsageFunction: IFunction; // use 'fetch*' instead of 'get*' to avoid error JSII5000
-
-  /**
-   * The scope required to authorize requests for fetching metering usage.
-   */
-  fetchUsageScope?: string;
+  fetchUsageFunction: ISyncFunction; // use 'fetch*' instead of 'get*' to avoid error JSII5000
 
   /**
    * The function to trigger to exclude specific events from being recorded or included in the usage data.
    * Used for canceling events that were incorrectly ingested.
    * -- DELETE /usage
    */
-  cancelUsageEventsFunction?: IFunction;
+  cancelUsageEventsFunction?: ISyncFunction;
 
   /**
-   * The scope required to authorize requests for cancelling usage events.
-   */
-  cancelUsageEventsScope?: string;
-
-  /**
-   * The function to trigger to create a new customer.
+   * The function responsible for creating a new customer.
    * (Customer in this context is a tenant.)
    *
    * Default event trigger: ONBOARDING_REQUEST
    */
-  createCustomerFunction?: IFunction | IFunctionTrigger;
+  createCustomerFunction?: IASyncFunction;
 
   /**
-   * The function to trigger to delete a customer.
+   * The function responsible for deleting an existing customer.
    * (Customer in this context is a tenant.)
    *
    * Default event trigger: OFFBOARDING_REQUEST
    */
-  deleteCustomerFunction?: IFunction | IFunctionTrigger;
+  deleteCustomerFunction?: IASyncFunction;
 }
