@@ -3,7 +3,7 @@
 
 import { Schedule } from 'aws-cdk-lib/aws-events';
 import { IFunction } from 'aws-cdk-lib/aws-lambda';
-import { IFunctionTrigger } from '../../utils';
+import { IASyncFunction } from '../../utils';
 import { IDataIngestorAggregator } from '../ingestor-aggregator/ingestor-aggregator-interface';
 
 /**
@@ -19,7 +19,23 @@ export interface IFunctionSchedule {
   /**
    * The schedule that will trigger the handler function.
    */
-  readonly schedule: Schedule;
+  readonly schedule?: Schedule;
+}
+
+/**
+ * Interface that allows specifying both the function to trigger
+ * and the path on the API Gateway that triggers it.
+ */
+export interface IFunctionPath {
+  /**
+   * The path to the webhook resource.
+   */
+  readonly path: string;
+
+  /**
+   * The function definition.
+   */
+  readonly handler: IFunction;
 }
 
 /**
@@ -27,28 +43,33 @@ export interface IFunctionSchedule {
  */
 export interface IBilling {
   /**
+   * The async function responsible for creating a new customer.
    * The function to trigger to create a new customer.
    * (Customer in this context is an entity that has zero or more Users.)
+   * -- Default event trigger: ONBOARDING_REQUEST
    */
-  createCustomerFunction: IFunction | IFunctionTrigger;
+  createCustomerFunction: IASyncFunction;
 
   /**
-   * The function to trigger to delete a customer.
+   * The async function responsible for deleting an existing customer.
    * (Customer in this context is an entity that has zero or more Users.)
+   * -- Default event trigger: OFFBOARDING_REQUEST
    */
-  deleteCustomerFunction: IFunction | IFunctionTrigger;
+  deleteCustomerFunction: IASyncFunction;
 
   /**
-   * The function to trigger to create a new user.
+   * The async function responsible for creating a new user.
    * (User in this context is an entity that belongs to a Customer.)
+   * -- Default event trigger: TENANT_USER_CREATED
    */
-  createUserFunction?: IFunction | IFunctionTrigger;
+  createUserFunction?: IASyncFunction;
 
   /**
-   * The function to trigger to delete a user.
+   * The async function responsible for deleting an existing user.
    * (User in this context is an entity that belongs to a Customer.)
+   * -- Default event trigger: TENANT_USER_DELETED
    */
-  deleteUserFunction?: IFunction | IFunctionTrigger;
+  deleteUserFunction?: IASyncFunction;
 
   /**
    * The IDataIngestorAggregator responsible for accepting and aggregating
@@ -57,18 +78,15 @@ export interface IBilling {
   ingestor?: IDataIngestorAggregator;
 
   /**
-   * The function responsible for taking the aggregated data and pushing
+   * The async function responsible for taking the aggregated data and pushing
    * that to the billing provider.
+   * -- Default event trigger: events.Schedule.rate(cdk.Duration.hours(24))
    */
-  putUsageFunction?: IFunction | IFunctionSchedule;
+  putUsageFunction?: IFunctionSchedule;
 
   /**
    * The function to trigger when a webhook request is received.
+   * -- POST /billing/{$webhookPath}
    */
-  webhookFunction?: IFunction;
-
-  /**
-   * The path to the webhook resource.
-   */
-  webhookPath?: string;
+  webhookFunction?: IFunctionPath;
 }

@@ -3,7 +3,7 @@
 
 import * as apigatewayV2 from 'aws-cdk-lib/aws-apigatewayv2';
 import * as apigatewayV2Integrations from 'aws-cdk-lib/aws-apigatewayv2-integrations';
-import { IFunction } from 'aws-cdk-lib/aws-lambda';
+import * as targets from 'aws-cdk-lib/aws-events-targets';
 import { Construct } from 'constructs';
 import { IMetering } from './metering-interface';
 import * as utils from '../../utils';
@@ -46,7 +46,7 @@ export class MeteringProvider extends Construct {
     const metersPath = '/meters';
     const functionTriggerMappings: {
       defaultFunctionTrigger: utils.DetailType;
-      functionDefinition?: IFunction | utils.IFunctionTrigger;
+      functionDefinition?: utils.IASyncFunction;
     }[] = [
       {
         defaultFunctionTrigger: utils.DetailType.ONBOARDING_REQUEST,
@@ -63,32 +63,50 @@ export class MeteringProvider extends Construct {
     ];
 
     functionTriggerMappings.forEach((target) => {
-      utils.createEventTarget(
-        this,
-        props.eventManager,
-        target.defaultFunctionTrigger,
-        target.functionDefinition
-      );
+      if (target.functionDefinition?.handler) {
+        props.eventManager.addTargetToEvent(this, {
+          eventType: target.functionDefinition?.trigger || target.defaultFunctionTrigger,
+          target: new targets.LambdaFunction(target.functionDefinition?.handler),
+        });
+      }
     });
 
     const routes: utils.IRoute[] = [
       {
-        path: `${usagePath}/meterId`,
+        path: `${usagePath}/{meterId}`,
         method: apigatewayV2.HttpMethod.GET,
         integration: new apigatewayV2Integrations.HttpLambdaIntegration(
           'fetchUsageHttpLambdaIntegration',
-          props.metering.fetchUsageFunction
+          props.metering.fetchUsageFunction.handler
         ),
-        scope: props.metering.fetchUsageScope,
+        scope: props.metering.fetchUsageFunction.scope,
+      },
+      {
+        path: `${metersPath}/{meterId}`,
+        method: apigatewayV2.HttpMethod.GET,
+        integration: new apigatewayV2Integrations.HttpLambdaIntegration(
+          'fetchMeterHttpLambdaIntegration',
+          props.metering.fetchMeterFunction.handler
+        ),
+        scope: props.metering.fetchMeterFunction.scope,
+      },
+      {
+        path: metersPath,
+        method: apigatewayV2.HttpMethod.GET,
+        integration: new apigatewayV2Integrations.HttpLambdaIntegration(
+          'fetchAllMetersHttpLambdaIntegration',
+          props.metering.fetchAllMetersFunction.handler
+        ),
+        scope: props.metering.fetchAllMetersFunction.scope,
       },
       {
         path: metersPath,
         method: apigatewayV2.HttpMethod.POST,
         integration: new apigatewayV2Integrations.HttpLambdaIntegration(
           'createMeterHttpLambdaIntegration',
-          props.metering.createMeterFunction
+          props.metering.createMeterFunction.handler
         ),
-        scope: props.metering.createMeterScope,
+        scope: props.metering.createMeterFunction.scope,
       },
     ];
 
@@ -98,9 +116,9 @@ export class MeteringProvider extends Construct {
         method: apigatewayV2.HttpMethod.DELETE,
         integration: new apigatewayV2Integrations.HttpLambdaIntegration(
           'deleteUsageHttpLambdaIntegration',
-          props.metering.cancelUsageEventsFunction
+          props.metering.cancelUsageEventsFunction.handler
         ),
-        scope: props.metering.cancelUsageEventsScope,
+        scope: props.metering.cancelUsageEventsFunction.scope,
       });
     }
 
@@ -110,9 +128,21 @@ export class MeteringProvider extends Construct {
         method: apigatewayV2.HttpMethod.PUT,
         integration: new apigatewayV2Integrations.HttpLambdaIntegration(
           'updateMeterHttpLambdaIntegration',
-          props.metering.updateMeterFunction
+          props.metering.updateMeterFunction.handler
         ),
-        scope: props.metering.updateMeterScope,
+        scope: props.metering.updateMeterFunction.scope,
+      });
+    }
+
+    if (props.metering.deleteMeterFunction) {
+      routes.push({
+        path: `${metersPath}/{meterId}`,
+        method: apigatewayV2.HttpMethod.DELETE,
+        integration: new apigatewayV2Integrations.HttpLambdaIntegration(
+          'deleteMeterHttpLambdaIntegration',
+          props.metering.deleteMeterFunction.handler
+        ),
+        scope: props.metering.deleteMeterFunction.scope,
       });
     }
 
