@@ -9,6 +9,9 @@ import { IEventManager, addTemplateTag } from '../utils';
  * Encapsulates the list of properties for a CoreApplicationPlane.
  */
 export interface CoreApplicationPlaneProps {
+  /**
+   * The event manager instance. This is used to trigger scriptJobs.
+   */
   readonly eventManager: IEventManager;
 
   /**
@@ -36,7 +39,10 @@ export class CoreApplicationPlane extends Construct {
     this.eventManager = props.eventManager;
 
     props.scriptJobs?.forEach((scriptJob) => {
-      this.eventManager.addTargetToEvent(this, scriptJob.incomingEvent, scriptJob.eventTarget);
+      this.eventManager.addTargetToEvent(this, {
+        eventType: scriptJob.incomingEvent,
+        target: scriptJob.eventTarget,
+      });
     });
   }
 }

@@ -9,7 +9,7 @@ import * as targets from 'aws-cdk-lib/aws-events-targets';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IBilling } from './billing-interface';
-import { DetailType, IEventManager, addTemplateTag, createEventTarget } from '../../utils';
+import { DetailType, IEventManager, addTemplateTag } from '../../utils';
 
 /**
  * Encapsulates the list of properties for a BillingProvider.
@@ -74,28 +74,19 @@ export class BillingProvider extends Construct {
         functionDefinition: props.billing.deleteUserFunction,
       },
     ].forEach((target) => {
-      createEventTarget(
-        this,
-        props.eventManager,
-        target.defaultFunctionTrigger,
-        target.functionDefinition
-      );
+      if (target.functionDefinition?.handler) {
+        props.eventManager.addTargetToEvent(this, {
+          eventType: target.functionDefinition?.trigger || target.defaultFunctionTrigger,
+          target: new targets.LambdaFunction(target.functionDefinition?.handler),
+        });
+      }
     });
 
     if (props.billing.putUsageFunction) {
-      const schedule =
-        'handler' in props.billing.putUsageFunction
-          ? props.billing.putUsageFunction.schedule
-          : events.Schedule.rate(cdk.Duration.hours(24));
-
-      const handler =
-        'handler' in props.billing.putUsageFunction
-          ? props.billing.putUsageFunction.handler
-          : props.billing.putUsageFunction;
-
       new events.Rule(this, 'BillingPutUsageRule', {
-        schedule: schedule,
-        targets: [new targets.LambdaFunction(handler)],
+        schedule:
+          props.billing.putUsageFunction.schedule || events.Schedule.rate(cdk.Duration.hours(24)),
+        targets: [new targets.LambdaFunction(props.billing.putUsageFunction.handler)],
       });
     }
 
@@ -106,15 +97,15 @@ export class BillingProvider extends Construct {
       });
     }
 
-    if (props.billing.webhookFunction && props.billing.webhookPath) {
-      this.controlPlaneAPIBillingWebhookResourcePath = `/billing/${props.billing.webhookPath}`;
+    if (props.billing.webhookFunction) {
+      this.controlPlaneAPIBillingWebhookResourcePath = `/billing/${props.billing.webhookFunction.path}`;
 
       const [controlPlaneAPIBillingWebhookResourceRoute] = props.controlPlaneAPI.addRoutes({
         path: this.controlPlaneAPIBillingWebhookResourcePath,
         methods: [apigatewayV2.HttpMethod.POST],
         integration: new apigatewayV2Integrations.HttpLambdaIntegration(
           'billingWebhookHttpLambdaIntegration',
-          props.billing.webhookFunction
+          props.billing.webhookFunction.handler
         ),
       });
 
