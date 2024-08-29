@@ -138,7 +138,7 @@ def configure(
     if debug:
         print(f"Configuration saved to {CONFIG_FILE}")
 
-def source_config():
+def read_config():
     with open(CONFIG_FILE, 'r') as config_file:
         return json.load(config_file)
 
@@ -147,7 +147,7 @@ def refresh_tokens(debug: bool = typer.Option(False, help="Enable debug mode")):
     """
     Refresh the access and refresh tokens for the current session.
     """
-    config = source_config()
+    config = read_config()
     if debug:
         print("Refreshing tokens...")
         
@@ -190,7 +190,7 @@ def create_tenant(
     """
     Create a new tenant with user-provided name, email, and tier.
     """
-    config = source_config()
+    config = read_config()
     
     if debug:
         print("Creating tenant with:")
@@ -210,10 +210,7 @@ def create_tenant(
         data=json.dumps(data)
     )
 
-    if debug:
-        print(f"Response: {response.json()}")
-    else:
-        print(json.dumps(response.json()))
+    print(json.dumps(response.json()))
 
 @app.command()
 def get_tenant(
@@ -223,7 +220,7 @@ def get_tenant(
     """
     Retrieve information for a specific tenant by ID.
     """
-    config = source_config()
+    config = read_config()
     if debug:
         print(f"Getting tenant with ID: {tenant_id}")
 
@@ -232,10 +229,7 @@ def get_tenant(
         headers={"Authorization": f"Bearer {config['ACCESS_TOKEN']}"}
     )
 
-    if debug:
-        print(f"Response: {response.json()}")
-    else:
-        print(json.dumps(response.json()))
+    print(json.dumps(response.json()))
 
 @app.command()
 def get_all_tenants(
@@ -246,7 +240,7 @@ def get_all_tenants(
     """
     Retrieve a list of all tenants
     """
-    config = source_config()
+    config = read_config()
     if debug:
         print("Getting all tenants")
     
@@ -257,11 +251,8 @@ def get_all_tenants(
         headers={"Authorization": f"Bearer {config['ACCESS_TOKEN']}"},
         params={"limit": limit, "next_token": next_token}
     )
-
-    if debug:
-        print(f"Response: {response.json()}")
-    else:
-        print(json.dumps(response.json()))
+    
+    print(json.dumps(response.json()))
 
 @app.command()
 def delete_tenant(
@@ -271,7 +262,7 @@ def delete_tenant(
     """
     Delete a specific tenant by ID.
     """
-    config = source_config()
+    config = read_config()
     if debug:
         print(f"Deleting tenant with ID: {tenant_id}")
 
@@ -279,11 +270,8 @@ def delete_tenant(
         f"{config['CONTROL_PLANE_API_ENDPOINT']}tenants/{tenant_id}",
         headers={"Authorization": f"Bearer {config['ACCESS_TOKEN']}"}
     )
-
-    if debug:
-        print(f"Response: {response.json()}")
-    else:
-        print(json.dumps(response.json()))
+    
+    print(json.dumps(response.json()))
 
 @app.command()
 def create_user(
@@ -295,7 +283,7 @@ def create_user(
     """
     Create a new user.
     """
-    config = source_config()
+    config = read_config()
 
     if debug:
         print("Creating user with:")
@@ -314,11 +302,8 @@ def create_user(
         headers={"Authorization": f"Bearer {config['ACCESS_TOKEN']}", "Content-Type": "application/json"},
         data=json.dumps(data)
     )
-
-    if debug:
-        print(f"Response: {response.json()}")
-    else:
-        print(json.dumps(response.json()))
+    
+    print(json.dumps(response.json()))
 
 @app.command()
 def get_all_users(
@@ -329,7 +314,7 @@ def get_all_users(
     """
     Retrieve a list of all users
     """
-    config = source_config()
+    config = read_config()
     if debug:
         print("Getting all users")
     
@@ -343,10 +328,7 @@ def get_all_users(
         params=params
     )
 
-    if debug:
-        print(f"Response: {response.json()}")
-    else:
-        print(json.dumps(response.json()))
+    print(json.dumps(response.json()))
 
 @app.command()
 def get_user(
@@ -356,7 +338,7 @@ def get_user(
     """
     Retrieve information for a specific user by ID.
     """
-    config = source_config()
+    config = read_config()
     if debug:
         print(f"Getting user with ID: {user_id}")
 
@@ -365,10 +347,7 @@ def get_user(
         headers={"Authorization": f"Bearer {config['ACCESS_TOKEN']}"}
     )
 
-    if debug:
-        print(f"Response: {response.json()}")
-    else:
-        print(json.dumps(response.json()))
+    print(json.dumps(response.json()))
 
 @app.command()
 def update_user(
@@ -380,7 +359,7 @@ def update_user(
     """
     Update a user's role and/or email.
     """
-    config = source_config()
+    config = read_config()
     data = {k: v for k, v in {"userRole": user_role, "email": user_email}.items() if v is not None}
 
     if debug:
@@ -392,10 +371,7 @@ def update_user(
         data=json.dumps(data)
     )
 
-    if debug:
-        print(f"Response: {response.json()}")
-    else:
-        print(json.dumps(response.json()))
+    print(json.dumps(response.json()))
 
 @app.command()
 def delete_user(
@@ -405,7 +381,7 @@ def delete_user(
     """
     Delete a specific user by ID.
     """
-    config = source_config()
+    config = read_config()
     if debug:
         print(f"Deleting user with ID: {user_id}")
 
@@ -414,10 +390,7 @@ def delete_user(
         headers={"Authorization": f"Bearer {config['ACCESS_TOKEN']}"}
     )
 
-    if debug:
-        print(f"Response: {response.json()}")
-    else:
-        print(json.dumps(response.json()))
+    print(json.dumps(response.json()))
 
 @app.command()
 def update_tenant(
@@ -429,7 +402,7 @@ def update_tenant(
     """
     Update a specific attribute of a tenant.
     """
-    config = source_config()
+    config = read_config()
     data = {key: value}
 
     if debug:
@@ -440,8 +413,5 @@ def update_tenant(
         headers={"Authorization": f"Bearer {config['ACCESS_TOKEN']}", "Content-Type": "application/json"},
         data=json.dumps(data)
     )
-
-    if debug:
-        print(f"Response: {response.json()}")
-    else:
-        print(json.dumps(response.json()))
+    
+    print(json.dumps(response.json()))
