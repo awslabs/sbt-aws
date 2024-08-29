@@ -15,9 +15,9 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as logs from 'aws-cdk-lib/aws-logs';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as route53Targets from 'aws-cdk-lib/aws-route53-targets';
-import * as s3 from 'aws-cdk-lib/aws-s3';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
+import * as path from 'path';
 
 /**
  * Parameters for CLI authentication setup
@@ -184,20 +184,6 @@ export function setupCognitoAuthCLI(
         true
     );
 
-    const s3Bucket = new s3.Bucket(scope, 'S3B4NNNP', {
-        encryption: s3.BucketEncryption.S3_MANAGED,
-        enforceSSL: true,
-        blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-    });
-
-    // Add NagSuppression for s3Bucket
-    NagSuppressions.addResourceSuppressions(s3Bucket, [
-        {
-            id: 'AwsSolutions-S1',
-            reason: 'Access logging is not required for this bucket in this context.',
-        },
-    ]);
-
     const deviceGrantAlbsg = new ec2.SecurityGroup(scope, 'DeviceGrantALBSG', {
         vpc: deviceGrantVpc,
         description: 'SG for Device grant ALB',
@@ -276,49 +262,6 @@ export function setupCognitoAuthCLI(
         ],
     });
 
-    const grantDeviceS3BucketPolicy = new iam.ManagedPolicy(scope, 'GrantDeviceS3BucketPolicy', {
-        statements: [
-            new iam.PolicyStatement({
-                effect: iam.Effect.ALLOW,
-                actions: [
-                    's3:PutObject',
-                    's3:GetObject',
-                    's3:ListBucket',
-                    's3:DeleteObject',
-                    's3:DeleteBucket',
-                ],
-                resources: [s3Bucket.bucketArn, `${s3Bucket.bucketArn}/*`],
-            }),
-            new iam.PolicyStatement({
-                effect: iam.Effect.ALLOW,
-                actions: ['logs:CreateLogGroup', 'logs:CreateLogStream', 'logs:PutLogEvents'],
-                resources: ['*'],
-            }),
-        ],
-    });
-
-    NagSuppressions.addResourceSuppressions(grantDeviceS3BucketPolicy, [
-        {
-            id: 'AwsSolutions-IAM5',
-            reason:
-                'Lambda function needs access to all objects in the S3 bucket for device grant flow and to create and write logs',
-            appliesTo: [
-                'Resource::<CognitoAuthS3B4NNNP892500FC.Arn>/*',
-                'Action::s3:PutObject',
-                'Action::s3:GetObject',
-                'Action::s3:ListBucket',
-                'Action::s3:DeleteObject',
-                'Action::s3:DeleteBucket',
-                'Resource::*',
-            ],
-        },
-    ]);
-
-    const loadS3iamRole = new iam.Role(scope, 'LoadS3IAMRole', {
-        assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
-        managedPolicies: [grantDeviceS3BucketPolicy],
-    });
-
     const retrieveCognitoSecretsLambda = new lambda.Function(scope, 'RetrieveCognitoSecretsLambda', {
         runtime: lambda.Runtime.PYTHON_3_12,
         handler: 'index.lambda_handler',
@@ -367,87 +310,6 @@ def lambda_handler(event, context):
         timeout: Duration.seconds(30),
     });
 
-    const loadS3 = new lambda.Function(scope, 'LoadS3', {
-        runtime: lambda.Runtime.PYTHON_3_12,
-        handler: 'index.lambda_handler',
-        code: lambda.Code.fromInline(`
-import cfnresponse
-from urllib.request import urlopen
-from http.client import HTTPResponse
-import boto3
-import json
-
-def lambda_handler(event, context):
-  print("start")
-  print(json.dumps(event))
-  myBucket = event['ResourceProperties']['bucketname']
-  packageName = event['ResourceProperties']['packageName']
-  packageURL = event['ResourceProperties']['packageURL']
-  print("bucketname: " + myBucket + ", path: " + packageURL + ", package: " + packageName)
-  if event['RequestType'] == 'Create':
-      print("in Create")
-      with urlopen(packageURL) as response:
-          print("Reponse:")
-          print(response)
-          headers = response.getheaders()
-          print("Headers:")
-          print(headers)
-          putS3Object(myBucket, packageName, response.read())
-          cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
-  elif event['RequestType'] == 'Delete':
-      print("in Delete")
-      s3 = boto3.client('s3')
-      try:
-          bucket = s3.list_objects_v2(Bucket=myBucket)
-          if 'Contents' in bucket:
-              for obj in bucket['Contents']:
-                  s3.delete_object(Bucket=myBucket, Key=obj['Key'])
-                  print("deleted: " + obj['Key'])
-      except:
-          print('Bucket already deleted')
-      cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
-  else:
-      print(event)
-      print(context)
-      cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
-
-def putS3Object(bucketName, objectName, objectData):
-  s3 = boto3.client('s3')
-  return s3.put_object(Bucket=bucketName, Key=objectName, Body=objectData)
-
-def deleteBucket(bucketName):
-  s3 = boto3.client('s3')
-  return s3.delete_bucket(Bucket=bucketName)
-`),
-        role: loadS3iamRole,
-        timeout: Duration.seconds(30),
-        reservedConcurrentExecutions: 5,
-        environment: {
-            S3_BUCKET_NAME: s3Bucket.bucketName,
-        },
-    });
-    loadS3.node.addDependency(s3Bucket);
-
-    const deployTokenCodeToS3 = new cdk.CustomResource(scope, 'DeployTokenCodeToS3', {
-        serviceToken: loadS3.functionArn,
-        properties: {
-            bucketname: s3Bucket.bucketName,
-            packageURL:
-                'https://github.com/aws-samples/cognito-device-grant-flow/releases/download/v1.1.0/cognito-device-grant-flow.zip',
-            packageName: 'DeviceGrant-token.zip',
-        },
-    });
-
-    new cdk.CustomResource(scope, 'DeployCleaningCodeToS3', {
-        serviceToken: loadS3.functionArn,
-        properties: {
-            bucketname: s3Bucket.bucketName,
-            packageURL:
-                'https://github.com/aws-samples/cognito-device-grant-flow-cleaning/releases/download/v1.0.0/cognito-device-grant-flow-cleaning.zip',
-            packageName: 'DeviceGrant-cleaning.zip',
-        },
-    });
-
     const retrieveCognitoSecrets = new cdk.CustomResource(scope, 'RetrieveCognitoSecrets', {
         serviceToken: retrieveCognitoSecretsLambda.functionArn,
         properties: {
@@ -468,7 +330,7 @@ def deleteBucket(bucketName):
     const deviceGrantToken = new lambda.Function(scope, 'DeviceGrantToken', {
         runtime: lambda.Runtime.NODEJS_20_X,
         handler: 'index.handler',
-        code: lambda.Code.fromBucket(s3Bucket, 'DeviceGrant-token.zip'),
+        code: lambda.Code.fromAsset(path.join(__dirname, '../../../resources/functions/auth-device-grant-token')),
         environment: {
             APP_CLIENT_ID: grantDeviceAlbCognitoClient.userPoolClientId,
             APP_CLIENT_SECRET: retrieveCognitoSecrets.getAttString('ALBAuthorizerSecret'),
@@ -489,12 +351,11 @@ def deleteBucket(bucketName):
         role: deviceGrantTokenIamRole,
         timeout: Duration.seconds(30),
     });
-    deviceGrantToken.node.addDependency(deployTokenCodeToS3.node.defaultChild as cdk.CfnResource);
 
     const deviceGrantTokenCleaning = new lambda.Function(scope, 'DeviceGrantTokenCleaning', {
         runtime: lambda.Runtime.NODEJS_20_X,
         handler: 'index.handler',
-        code: lambda.Code.fromBucket(s3Bucket, 'DeviceGrant-cleaning.zip'),
+        code: lambda.Code.fromAsset(path.join(__dirname, '../../../resources/functions/auth-token-cleaning')),
         environment: {
             DYNAMODB_TABLE: 'DeviceGrant',
         },
@@ -502,9 +363,6 @@ def deleteBucket(bucketName):
         timeout: Duration.seconds(30),
 
     });
-    deviceGrantTokenCleaning.node.addDependency(
-        deployTokenCodeToS3.node.defaultChild as cdk.CfnResource
-    );
 
     deviceGrantToken.addPermission('ALBToLambdaPerms', {
         action: 'lambda:InvokeFunction',
