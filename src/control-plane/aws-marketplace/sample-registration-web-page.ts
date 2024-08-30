@@ -92,39 +92,44 @@ export class SampleRegistrationWebPage extends Construct {
 
     dynamicFile.node.addDependency(staticFiles);
 
-    NagSuppressions.addResourceSuppressionsByPath(
-      cdk.Stack.of(this),
-      [
-        `${cdk.Stack.of(this).stackName}/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C`,
-      ],
-      [
-        {
-          id: 'AwsSolutions-IAM4',
-          reason: 'Suppress usage of AWSLambdaBasicExecutionRole.',
-          appliesTo: [
-            'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
-          ],
-        },
-        {
-          id: 'AwsSolutions-IAM5',
-          reason: 'Allow wildcard access for CDKBucketDeployment.',
-          appliesTo: [
-            'Action::s3:GetObject*',
-            'Action::s3:GetBucket*',
-            'Action::s3:List*',
-            `Resource::arn:<AWS::Partition>:s3:::cdk-${cdk.DefaultStackSynthesizer.DEFAULT_QUALIFIER}-assets-<AWS::AccountId>-${region}/*`,
-            'Action::s3:DeleteObject*',
-            'Action::s3:Abort*',
-            `Resource::<${cdk.Stack.of(this).getLogicalId(websiteBucket.node.defaultChild as s3.CfnBucket)}.Arn>/*`,
-          ],
-        },
-        {
-          id: 'AwsSolutions-L1',
-          reason: 'NODEJS 18 is the version used cdk maanged custom resource.',
-        },
-      ],
-      true
-    );
+    if (
+      cdk.Stack.of(this).node.tryFindChild('CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C')
+    ) {
+      const CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C = cdk.Stack.of(this).node.findChild(
+        'CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C'
+      );
+      NagSuppressions.addResourceSuppressionsByPath(
+        cdk.Stack.of(this),
+        [CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C.node.path],
+        [
+          {
+            id: 'AwsSolutions-IAM4',
+            reason: 'Suppress usage of AWSLambdaBasicExecutionRole.',
+            appliesTo: [
+              'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
+            ],
+          },
+          {
+            id: 'AwsSolutions-IAM5',
+            reason: 'Allow wildcard access for CDKBucketDeployment.',
+            appliesTo: [
+              'Action::s3:GetObject*',
+              'Action::s3:GetBucket*',
+              'Action::s3:List*',
+              `Resource::arn:<AWS::Partition>:s3:::cdk-${cdk.DefaultStackSynthesizer.DEFAULT_QUALIFIER}-assets-<AWS::AccountId>-${region}/*`,
+              'Action::s3:DeleteObject*',
+              'Action::s3:Abort*',
+              `Resource::<${cdk.Stack.of(this).getLogicalId(websiteBucket.node.defaultChild as s3.CfnBucket)}.Arn>/*`,
+            ],
+          },
+          {
+            id: 'AwsSolutions-L1',
+            reason: 'NODEJS 18 is the version used cdk maanged custom resource.',
+          },
+        ],
+        true
+      );
+    }
 
     const logBucket = new s3.Bucket(this, 'WebsiteS3BucketLog', {
       enforceSSL: true,
