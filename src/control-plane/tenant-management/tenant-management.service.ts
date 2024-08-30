@@ -142,7 +142,10 @@ export class TenantManagementService extends Construct {
       DetailType.DEPROVISION_SUCCESS,
       DetailType.DEPROVISION_FAILURE,
     ].forEach((detailType) => {
-      props.eventManager.addTargetToEvent(this, detailType, tenantUpdateServiceTarget);
+      props.eventManager.addTargetToEvent(this, {
+        eventType: detailType,
+        target: tenantUpdateServiceTarget,
+      });
     });
 
     this.table = table;

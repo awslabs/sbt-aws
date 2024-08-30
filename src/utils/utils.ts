@@ -3,10 +3,9 @@
 
 import { Stack } from 'aws-cdk-lib';
 import * as apigatewayV2 from 'aws-cdk-lib/aws-apigatewayv2';
-import * as targets from 'aws-cdk-lib/aws-events-targets';
 import { IFunction } from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
-import { DetailType, IEventManager } from './event-manager';
+import { DetailType } from './event-manager';
 
 export const addTemplateTag = (construct: Construct, tag: string) => {
   const stackDesc = Stack.of(construct).templateOptions.description;
@@ -106,10 +105,26 @@ export const generateRoutes = (
 };
 
 /**
- * Optional interface that allows specifying both
- * the function to trigger and the event that will trigger it.
+ * Represents a function that is triggered synchronously via an API Gateway.
  */
-export interface IFunctionTrigger {
+export interface ISyncFunction {
+  /**
+   * The function definition.
+   */
+  readonly handler: IFunction;
+
+  /**
+   * The scope required to authorize access to this function.
+   * This is set in the API Gateway.
+   * If it is not provided, the API Gateway will not check for any scopes on the token.
+   */
+  readonly scope?: string;
+}
+
+/**
+ * Represents a function that is triggered asynchronously via an event.
+ */
+export interface IASyncFunction {
   /**
    * The function definition.
    */
@@ -118,37 +133,5 @@ export interface IFunctionTrigger {
   /**
    * The detail-type that will trigger the handler function.
    */
-  readonly trigger: DetailType;
+  readonly trigger?: DetailType;
 }
-
-/**
- * Helper function for attaching functions to events.
- * If an IFunction is passed in as the argument for functionOrFunctionTrigger, then
- * the defaultEvent is used as the trigger for the IFunction.
- *
- * If an IFunctionTrigger is passed in as the argument for functionOrFunctionTrigger, then
- * the trigger property of the IFunctionTrigger is used as the trigger for the IFunction.
- *
- * If the functionOrFunctionTrigger is not passed in, no event is created.
- */
-export const createEventTarget = (
-  scope: Construct,
-  eventManager: IEventManager,
-  defaultEvent: DetailType,
-  functionOrFunctionTrigger?: IFunction | IFunctionTrigger
-) => {
-  if (!functionOrFunctionTrigger) {
-    return;
-  }
-
-  let handler: IFunction, trigger: DetailType;
-  if ('handler' in functionOrFunctionTrigger) {
-    handler = functionOrFunctionTrigger.handler;
-    trigger = functionOrFunctionTrigger.trigger;
-  } else {
-    handler = functionOrFunctionTrigger;
-    trigger = defaultEvent;
-  }
-
-  eventManager.addTargetToEvent(scope, trigger, new targets.LambdaFunction(handler));
-};
