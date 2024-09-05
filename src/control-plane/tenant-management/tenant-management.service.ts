@@ -121,6 +121,9 @@ export class TenantManagementService extends Construct {
           ...(props.auth.updateTenantScope && {
             scope: events.HttpParameter.fromString(props.auth.updateTenantScope),
           }),
+          ...(props.auth.machineClientAudience && {
+            audience: events.HttpParameter.fromString(props.auth.machineClientAudience),
+          }),
         },
       }),
     });
