@@ -4652,6 +4652,7 @@ Function to create an admin user.
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchAllUsersScope">fetchAllUsersScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching all users. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchTenantScope">fetchTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching a single tenant. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchUserScope">fetchUserScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching a single user. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.machineClientAudience">machineClientAudience</a></code> | <code>string</code> | The audience for the machine client. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.updateTenantScope">updateTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for updating a tenant. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.updateUserScope">updateUserScope</a></code> | <code>string</code> | The scope required to authorize requests for updating a user. |
 
@@ -5017,6 +5018,21 @@ public readonly fetchUserScope: string;
 The scope required to authorize requests for fetching a single user.
 
 This scope grants permission to fetch the details of a specific user.
+
+---
+
+##### `machineClientAudience`<sup>Optional</sup> <a name="machineClientAudience" id="@cdklabs/sbt-aws.IAuth.property.machineClientAudience"></a>
+
+```typescript
+public readonly machineClientAudience: string;
+```
+
+- *Type:* string
+
+The audience for the machine client.
+
+If provided, this value will be used in the call to generate the access token
+for the Client Credentials flow.
 
 ---
 
