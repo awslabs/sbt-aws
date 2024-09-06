@@ -47,7 +47,7 @@ const config: Config = {
     navbar: {
       title: 'SBT-AWS',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'sbt logo',
         src: 'img/logo.svg',
       },
       items: [
@@ -56,6 +56,18 @@ const config: Config = {
           sidebarId: 'tutorialSidebar',
           position: 'left',
           label: 'Tutorial',
+        },
+        {
+          type: 'docSidebar',
+          sidebarId: 'partnerIntegrations',
+          position: 'left',
+          label: 'Partner Integrations',
+        },
+        {
+          type: 'docSidebar',
+          sidebarId: 'pointSolutions',
+          position: 'left',
+          label: 'Point Solutions',
         },
       ],
     },
