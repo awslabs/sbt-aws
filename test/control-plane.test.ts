@@ -27,7 +27,7 @@ describe('No unsuppressed cdk-nag Warnings or Errors', () => {
 
   const stack = new ControlPlaneStack(app, 'ControlPlaneStack');
 
-  cdk.Aspects.of(stack).add(new AwsSolutionsChecks({ verbose: true }));
+  cdk.Aspects.of(app).add(new AwsSolutionsChecks({ verbose: true }));
 
   it('should have no unsuppressed Warnings', () => {
     const warnings = Annotations.fromStack(stack).findWarning(

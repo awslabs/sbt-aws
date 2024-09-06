@@ -121,6 +121,9 @@ export class TenantManagementService extends Construct {
           ...(props.auth.updateTenantScope && {
             scope: events.HttpParameter.fromString(props.auth.updateTenantScope),
           }),
+          ...(props.auth.machineClientAudience && {
+            audience: events.HttpParameter.fromString(props.auth.machineClientAudience),
+          }),
         },
       }),
     });
@@ -142,7 +145,10 @@ export class TenantManagementService extends Construct {
       DetailType.DEPROVISION_SUCCESS,
       DetailType.DEPROVISION_FAILURE,
     ].forEach((detailType) => {
-      props.eventManager.addTargetToEvent(this, detailType, tenantUpdateServiceTarget);
+      props.eventManager.addTargetToEvent(this, {
+        eventType: detailType,
+        target: tenantUpdateServiceTarget,
+      });
     });
 
     this.table = table;

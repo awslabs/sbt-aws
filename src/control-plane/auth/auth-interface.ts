@@ -68,6 +68,13 @@ export interface IAuth {
   readonly machineClientSecret: SecretValue;
 
   /**
+   * The audience for the machine client.
+   * If provided, this value will be used in the call to generate the access token
+   * for the Client Credentials flow.
+   */
+  readonly machineClientAudience?: string;
+
+  /**
    * The scope required to authorize requests for fetching a single tenant.
    * This scope grants permission to fetch the details of a specific tenant.
    */

@@ -120,6 +120,21 @@ export type EventMetadata = {
 };
 
 /**
+ * Props for adding a target to an event.
+ */
+export interface AddTargetToEventProps {
+  /**
+   * The detail type of the event to add a target to.
+   */
+  readonly eventType: DetailType;
+
+  /**
+   * The target that will be added to the event.
+   */
+  readonly target: IRuleTarget;
+}
+
+/**
  * Encapsulates the properties for an EventManager.
  */
 export interface EventManagerProps {
@@ -173,10 +188,11 @@ export interface IEventManager {
   /**
    * Adds an IRuleTarget to an event.
    *
-   * @param eventType The detail type of the event to add a target to.
-   * @param target The target that will be added to the event.
+   * @param scope The scope in which to find (or create) the Rule.
+   * @param props Object containing eventType (the detail type of the event to add a target to)
+   * and target (the target that will be added to the event).
    */
-  addTargetToEvent(scope: Construct, eventType: DetailType, target: IRuleTarget): void;
+  addTargetToEvent(scope: Construct, props: AddTargetToEventProps): void;
 
   /**
    * Provides grantee the permissions to place events
@@ -282,11 +298,11 @@ export class EventManager extends Construct implements IEventManager {
    * Adds an IRuleTarget to an event.
    *
    * @param scope The scope in which to find (or create) the Rule.
-   * @param eventType The detail type of the event to add a target to.
-   * @param target The target that will be added to the event.
+   * @param props Object containing eventType (the detail type of the event to add a target to)
+   * and target (the target that will be added to the event).
    */
-  public addTargetToEvent(scope: Construct, eventType: DetailType, target: IRuleTarget): void {
-    this.getOrCreateRule(scope, eventType).addTarget(target);
+  addTargetToEvent(scope: Construct, props: AddTargetToEventProps): void {
+    this.getOrCreateRule(scope, props.eventType).addTarget(props.target);
   }
 
   /**

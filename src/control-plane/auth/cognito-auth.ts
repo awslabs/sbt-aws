@@ -477,26 +477,29 @@ export class CognitoAuth extends Construct implements IAuth {
     this.enableUserFunction = userManagementServices;
 
     // https://github.com/aws/aws-cdk/issues/23204
-    NagSuppressions.addResourceSuppressionsByPath(
-      cdk.Stack.of(this),
-      [
-        `/${cdk.Stack.of(this).stackName}/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/Resource`,
-        `/${cdk.Stack.of(this).stackName}/AWS679f53fac002430cb0da5b7982bd2287/Resource`,
-      ],
-      [
-        {
-          id: 'AwsSolutions-IAM4',
-          reason: 'Suppress usage of AWSLambdaBasicExecutionRole.',
-          appliesTo: [
-            'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
-          ],
-        },
-        {
-          id: 'AwsSolutions-L1',
-          reason: 'NODEJS 18 is the version used in the official quickstart CFN template.',
-        },
-      ]
-    );
+    if (cdk.Stack.of(this).node.tryFindChild('AWS679f53fac002430cb0da5b7982bd2287')) {
+      const AWS679f53fac002430cb0da5b7982bd2287 = cdk.Stack.of(this).node.findChild(
+        'AWS679f53fac002430cb0da5b7982bd2287'
+      );
+      NagSuppressions.addResourceSuppressionsByPath(
+        cdk.Stack.of(this),
+        [AWS679f53fac002430cb0da5b7982bd2287.node.path],
+        [
+          {
+            id: 'AwsSolutions-IAM4',
+            reason: 'Suppress usage of AWSLambdaBasicExecutionRole.',
+            appliesTo: [
+              'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
+            ],
+          },
+          {
+            id: 'AwsSolutions-L1',
+            reason: 'NODEJS 18 is the version used in the official quickstart CFN template.',
+          },
+        ],
+        true
+      );
+    }
 
     this.createAdminUserFunction = new PythonFunction(this, 'createAdminUserFunction', {
       entry: path.join(__dirname, '../../../resources/functions/auth-custom-resource'),
