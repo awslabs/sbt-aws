@@ -46,4 +46,5 @@ tsconfig.tsbuildinfo
 /.eslintrc.json
 !.jsii
 /.projenrc.ts
+/projenrc
 /.gitattributes

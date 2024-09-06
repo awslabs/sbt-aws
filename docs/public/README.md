@@ -635,43 +635,6 @@ The application plane emits this event upon completion of offboarding. Similar t
 - **Built in the open with the community** - SBT strives to meet developers where they are. We encourage PRs, not forks
 - **Guide builders and make it approachable** - SBT will provide rich documentation and examples from which the community can derive inspiration and reference
 
-## Command Line Interface (CLI)
-
-SBT includes a Command Line Interface (CLI) to simplify the management of your SaaS environment on AWS. The CLI is designed to interact with the Control Plane of SBT, allowing users to configure, manage tenants and users, and perform other administrative tasks seamlessly from the command line.
-
-### Key Features
-
-- **Tenant Management:** Create, retrieve, update, and delete tenants within your SaaS environment. The CLI provides straightforward commands to manage tenant data and lifecycle operations.
-- **User Management:** Handle user accounts associated with your SaaS tenants. You can create, retrieve, update, and delete users, ensuring that your SaaS environment’s access controls are easily managed.
-
-### Installation
-
-To install the CLI, ensure that you have `pip` installed, and then install the `sbt-aws-cli` package using the following command
-
-```bash
-pip install sbt-aws-cli
-```
-
-The CLI comes with a built-in `--help` mode that provides detailed information about each command and its options. This feature is particularly useful if you are unfamiliar with the available commands and arguments or need a quick reference.
-
-#### Using `--help`
-
-To access the help mode for the CLI, simply append the `--help` flag to any command. For example:
-
-```bash
-sbt-aws-cli --help
-```
-```bash
-sbt-aws-cli <command> --help
-```
-
-To get started, use the following command to configure the CLI with your Control Plane stack details. The arguments should be directly copied from the stack outputs. Remember you can use the `--help` flag to view the expected arguments.
-```bash
-sbt-aws-cli configure <CONTROL_PLANE_STACK> <CLIENT_ID> <FQDN> <CONTROL_PLANE_API_ENDPOINT> <COGNITO_DOMAIN> ```
-
-Once you have configured the CLI, you have many commands available at your disposable, which you can view using `sbt-aws-cli --help`
-
-
 ## Additional documentation and resources
 
 ### Tenant management

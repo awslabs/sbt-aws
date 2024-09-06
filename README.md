@@ -40,9 +40,10 @@ For a detailed walkthrough, see the [tutorial](https://github.com/awslabs/sbt-aw
 
 Interested in seeing SBT used in a comprehensive SaaS reference architecture? Take a look at the following:
 
-* [Elastic Kubernetes Service (EKS) Reference Architecture](https://github.com/aws-samples/aws-saas-factory-eks-reference-architecture/tree/feat/sbt-merge)
+* [Elastic Kubernetes Service (EKS) Reference Architecture](https://github.com/aws-samples/aws-saas-factory-eks-reference-architecture)
 * [Elastic Container Service (ECS) Reference Architecture](https://github.com/aws-samples/saas-reference-architecture-ecs)
-* Serverless Reference Architecture (In progress)
+* [Serverless Reference Architecture](https://github.com/aws-samples/aws-saas-factory-ref-solution-serverless-saas)
+* [SBT Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/236fe656-f781-4862-a1a9-51becf126857)
 
 ## Getting Help
 
@@ -54,7 +55,7 @@ You may also find help on these community resources:
 
 ## Roadmap
 
-The [SBT for AWS Roadmap project board](PLACEHOLDER) lets developers know about our upcoming features and priorities to help them plan how to best leverage the CDK and identify opportunities to contribute to the project. 
+The [SBT for AWS Roadmap project board](PLACEHOLDER) lets developers know about our upcoming features and priorities to help them plan how to best leverage the CDK and identify opportunities to contribute to the project.
 
 ## Contributing
 
