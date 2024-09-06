@@ -221,7 +221,7 @@ Let's take a moment and dissect this object.
 | **environmentStringVariablesFromIncomingEvent** | string[]                                                                                              | The environment variables to import into the ScriptJob from event details field.                                   |
 | **environmentVariablesToOutgoingEvent**         | string[]                                                                                              | The environment variables to export into the outgoing event once the ScriptJob has finished.                       |
 | **scriptEnvironmentVariables**                  | `{ [key: string]: string }`                                                                           | The variables to pass into the codebuild ScriptJob.                                                                |
-| **eventManager**                                | [IEventManager](/API.md#ieventmanager-)                                                               | The EventManager instance that allows connecting to events flowing between the Control Plane and other components. |
+| **eventManager**                                | [IEventManager](https://github.com/awslabs/sbt-aws/blob/main/API.md#eventmanager-)                    | The EventManager instance that allows connecting to events flowing between the Control Plane and other components. |
 
 The heavy lifting of the `ScriptJob` construct (along with constructs that extend it like `ProvisioningScriptJob`) happens with the value of the `script` key. Let's take a look at the example provisioning script now:
 
