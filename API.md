@@ -3296,8 +3296,21 @@ const cognitoAuthProps: CognitoAuthProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.cliProps">cliProps</a></code> | <code>{[ key: string ]: string}</code> | Parameters for CLI authentication setup. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.controlPlaneCallbackURL">controlPlaneCallbackURL</a></code> | <code>string</code> | The callback URL for the control plane. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.setAPIGWScopes">setAPIGWScopes</a></code> | <code>boolean</code> | Whether or not to specify scopes for validation at the API GW. |
+
+---
+
+##### `cliProps`<sup>Optional</sup> <a name="cliProps" id="@cdklabs/sbt-aws.CognitoAuthProps.property.cliProps"></a>
+
+```typescript
+public readonly cliProps: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+
+Parameters for CLI authentication setup.
 
 ---
 
