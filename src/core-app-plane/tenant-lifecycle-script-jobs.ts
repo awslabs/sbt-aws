@@ -1,6 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
+import { Source } from 'aws-cdk-lib/aws-codebuild';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 import { ScriptJob, ScriptJobProps } from './script-job';
@@ -25,6 +26,14 @@ export interface TenantLifecycleScriptJobProps {
    * The bash script to run after the main script has completed.
    */
   readonly postScript?: string;
+
+  /**
+   * The Source to use when executing the ScriptJob.
+   *
+   * This can be used to pre-populate the ScriptJob environment
+   * with files from S3, as an example.
+   */
+  readonly source?: Source;
 
   /**
    * The environment variables to import into the ScriptJob from event details field.

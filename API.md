@@ -3987,6 +3987,7 @@ const scriptJobProps: ScriptJobProps = { ... }
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.postScript">postScript</a></code> | <code>string</code> | The bash script to run after the main script has completed. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.scriptEnvironmentVariables">scriptEnvironmentVariables</a></code> | <code>{[ key: string ]: string}</code> | The variables to pass into the codebuild ScriptJob. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.source">source</a></code> | <code>aws-cdk-lib.aws_codebuild.Source</code> | The Source to use when executing the ScriptJob. |
 
 ---
 
@@ -4151,6 +4152,21 @@ The variables to pass into the codebuild ScriptJob.
 
 ---
 
+##### `source`<sup>Optional</sup> <a name="source" id="@cdklabs/sbt-aws.ScriptJobProps.property.source"></a>
+
+```typescript
+public readonly source: Source;
+```
+
+- *Type:* aws-cdk-lib.aws_codebuild.Source
+
+The Source to use when executing the ScriptJob.
+
+This can be used to pre-populate the ScriptJob environment
+with files from S3, as an example.
+
+---
+
 ### TenantConfigLambdasProps <a name="TenantConfigLambdasProps" id="@cdklabs/sbt-aws.TenantConfigLambdasProps"></a>
 
 Represents the properties required to initialize the TenantConfigLambdas.
@@ -4279,6 +4295,7 @@ const tenantLifecycleScriptJobProps: TenantLifecycleScriptJobProps = { ... }
 | <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
 | <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.postScript">postScript</a></code> | <code>string</code> | The bash script to run after the main script has completed. |
 | <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.scriptEnvironmentVariables">scriptEnvironmentVariables</a></code> | <code>{[ key: string ]: string}</code> | The variables to pass into the codebuild ScriptJob. |
+| <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.source">source</a></code> | <code>aws-cdk-lib.aws_codebuild.Source</code> | The Source to use when executing the ScriptJob. |
 
 ---
 
@@ -4380,6 +4397,21 @@ public readonly scriptEnvironmentVariables: {[ key: string ]: string};
 - *Type:* {[ key: string ]: string}
 
 The variables to pass into the codebuild ScriptJob.
+
+---
+
+##### `source`<sup>Optional</sup> <a name="source" id="@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.source"></a>
+
+```typescript
+public readonly source: Source;
+```
+
+- *Type:* aws-cdk-lib.aws_codebuild.Source
+
+The Source to use when executing the ScriptJob.
+
+This can be used to pre-populate the ScriptJob environment
+with files from S3, as an example.
 
 ---
 

@@ -72,6 +72,14 @@ export interface ScriptJobProps {
   readonly script: string;
 
   /**
+   * The Source to use when executing the ScriptJob.
+   *
+   * This can be used to pre-populate the ScriptJob environment
+   * with files from S3, as an example.
+   */
+  readonly source?: codebuild.Source;
+
+  /**
    * The incoming event DetailType that triggers this job.
    */
   readonly incomingEvent: DetailType;
@@ -191,6 +199,7 @@ export class ScriptJob extends Construct {
     });
 
     const codebuildProject = new codebuild.Project(this, `codebuildProject`, {
+      source: props.source,
       encryptionKey: codeBuildProjectEncryptionKey,
       environment: {
         buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_5,
