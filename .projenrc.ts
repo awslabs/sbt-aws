@@ -18,7 +18,7 @@ const PS_PUBLICATION_NAMESPACE: string = 'aws';
 const PROJECT_NAME: string = 'sbt-aws';
 const PROJEN_VERSION: string = '0.86.9';
 const CDK_VERSION: string = '2.140.0';
-const JSII_VERSION: string = '~5.3.0';
+const JSII_VERSION: string = '~5.5.0';
 const CONSTRUCTS_VERSION: string = '10.0.5';
 const POINT_SOLUTIONS_CDK_VERSION: string = '2.140.0';
 const POINT_SOLUTIONS_LIB_PROJECT_NAME: string = 'sbt-point-solutions-lib';
@@ -35,7 +35,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   defaultReleaseBranch: 'main',
   deps: [
     `@aws-cdk/aws-lambda-python-alpha@${CDK_VERSION}-alpha.0`,
-    'cdk-nag',
+    'cdk-nag@^2.27.230',
     `@aws-cdk/aws-kinesisfirehose-alpha@${CDK_VERSION}-alpha.0`,
     `@aws-cdk/aws-kinesisfirehose-destinations-alpha@${CDK_VERSION}-alpha.0`,
   ],
