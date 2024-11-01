@@ -13,6 +13,7 @@ import { IMetering } from './metering';
 import { MeteringProvider } from './metering/metering-provider';
 import { TenantConfigService } from './tenant-config';
 import { TenantManagementService } from './tenant-management/tenant-management.service';
+import { TenantRegistrationService } from './tenant-registration';
 import { UserManagementService } from './user-management/user-management.service';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
 import { addTemplateTag, EventManager, IEventManager } from '../utils';
@@ -104,20 +105,24 @@ export class ControlPlane extends Construct {
     });
 
     const eventManager = props.eventManager ?? new EventManager(this, 'EventManager');
-    const tenantManagementServices = new TenantManagementService(
-      this,
-      'tenantManagementServicves',
-      {
-        api: api.api,
-        auth,
-        authorizer: api.jwtAuthorizer,
-        eventManager,
-      }
-    );
+    const tenantManagementService = new TenantManagementService(this, 'tenantManagementService', {
+      api: api.api,
+      auth,
+      authorizer: api.jwtAuthorizer,
+      eventManager,
+    });
+
+    new TenantRegistrationService(this, 'tenantRegistrationService', {
+      api: api.api,
+      auth,
+      authorizer: api.jwtAuthorizer,
+      eventManager,
+      tenantManagementService,
+    });
 
     new TenantConfigService(this, 'tenantConfigService', {
       api: api.api,
-      tenantManagementTable: tenantManagementServices.table,
+      tenantManagementTable: tenantManagementService.table,
     });
 
     new UserManagementService(this, 'userManagementService', {

@@ -1,0 +1,123 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
+
+import * as path from 'path';
+import { PythonFunction, PythonLayerVersion } from '@aws-cdk/aws-lambda-python-alpha';
+import { Duration, Stack } from 'aws-cdk-lib';
+import { HttpApi } from 'aws-cdk-lib/aws-apigatewayv2';
+import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import { Function, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { NagSuppressions } from 'cdk-nag';
+import { Construct } from 'constructs';
+import { TenantRegistrationTable } from './tenant-registration.table';
+import { DetailType, IEventManager } from '../../utils';
+
+/**
+Represents the properties required for the Tenant Management Lambda function.
+@interface TenantRegistrationLambdaProps
+@property {TenantRegistrationTable} table - The table used for Tenant Management.
+@property {IEventManager} eventManager - The event manager used for handling events in Tenant Management.
+@property {HttpApi} api - The API that has serves the /tenants endpoint. This will be the API that the tenant registration lambda makes requests to when managing tenants. */
+export interface TenantRegistrationLambdaProps {
+  readonly table: TenantRegistrationTable;
+  readonly eventManager: IEventManager;
+  readonly api: HttpApi;
+  readonly tenantsPath: string;
+  readonly tenantIdPath: string;
+}
+
+/**
+Represents the Tenant Management Lambda construct.
+@class TenantRegistrationLambda
+@extends {Construct}
+@property {Function} tenantManagementFunc - The Tenant Management Lambda function.
+@param {Construct} scope - The scope in which this construct is defined.
+@param {string} id - The construct's identifier.
+@param {TenantRegistrationLambdaProps} props - The properties required for the Tenant Management Lambda.
+*/
+export class TenantRegistrationLambda extends Construct {
+  tenantRegistrationFunc: Function;
+
+  constructor(scope: Construct, id: string, props: TenantRegistrationLambdaProps) {
+    super(scope, id);
+
+    const lambdaPowertoolsLayer = PythonLayerVersion.fromLayerVersionArn(
+      this,
+      'LambdaPowerTools',
+      `arn:aws:lambda:${Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV2:59`
+    );
+
+    const awsRequestsAuthLayer = new PythonLayerVersion(this, 'AwsRequestsAuthLayer', {
+      entry: path.join(__dirname, '../../../resources/layers/helper'),
+      compatibleRuntimes: [Runtime.PYTHON_3_12],
+    });
+
+    // Lambda for Tenant Registration
+    this.tenantRegistrationFunc = new PythonFunction(this, 'TenantRegistrationFunc', {
+      runtime: Runtime.PYTHON_3_12,
+      entry: path.join(__dirname, '../../../resources/functions/tenant-registrations'),
+      timeout: Duration.minutes(3),
+      environment: {
+        TENANT_REGISTRATION_TABLE_NAME: props.table.tenantRegistration.tableName,
+        TENANT_API_URL: props.api.url!,
+        // CODEBUILD_PROJECT_NAME: tenantInfraManager.projectName,
+        // TABLE_NAME_PREFIX: props.tableNamePrefix,
+        // SHARED_COGNITO_USER_POOL_ID: props.sharedCognitoUserPool.userPoolId,
+        EVENTBUS_NAME: props.eventManager.busName,
+        EVENT_SOURCE: props.eventManager.controlPlaneEventSource,
+        ONBOARDING_DETAIL_TYPE: DetailType.ONBOARDING_REQUEST,
+        OFFBOARDING_DETAIL_TYPE: DetailType.OFFBOARDING_REQUEST,
+      },
+      layers: [lambdaPowertoolsLayer, awsRequestsAuthLayer],
+    });
+
+    props.table.tenantRegistration.grantReadWriteData(this.tenantRegistrationFunc);
+    props.eventManager.grantPutEventsTo(this.tenantRegistrationFunc);
+
+    this.tenantRegistrationFunc.role?.addToPrincipalPolicy(
+      new PolicyStatement({
+        actions: ['execute-api:Invoke'],
+        resources: [
+          // props.api.arnForExecuteApi(
+          //   'POST',
+          //   `${props.tenantsPath}/*`,
+          //   props.api.defaultStage?.stageName
+          // ),
+          props.api.arnForExecuteApi('POST', props.tenantsPath, props.api.defaultStage?.stageName),
+          props.api.arnForExecuteApi(
+            'DELETE',
+            props.tenantIdPath,
+            props.api.defaultStage?.stageName
+          ),
+          // todo: add star (/tenants/*) and suppression for this for PUT and DELETE
+          // to fix message: Forbidden issue when updating tenant
+          props.api.arnForExecuteApi('PUT', props.tenantIdPath, props.api.defaultStage?.stageName),
+        ],
+      })
+    );
+
+    NagSuppressions.addResourceSuppressions(
+      this.tenantRegistrationFunc.role!,
+      [
+        // {
+        //   id: 'AwsSolutions-IAM5',
+        //   reason: 'Index name(s) not known beforehand.',
+        //   appliesTo: [
+        //     `Resource::<${Stack.of(this).getLogicalId(props.api.node.defaultChild as CfnHttpApi)}>/*/*/tenants/*`,
+        //   ],
+        // },
+        {
+          id: 'AwsSolutions-IAM4',
+          reason:
+            'Suppress usage of AWSLambdaBasicExecutionRole, CloudWatchLambdaInsightsExecutionRolePolicy, and AWSXrayWriteOnlyAccess.',
+          appliesTo: [
+            'Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
+            'Policy::arn:<AWS::Partition>:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy',
+            'Policy::arn:<AWS::Partition>:iam::aws:policy/AWSXrayWriteOnlyAccess',
+          ],
+        },
+      ],
+      true // applyToChildren = true, so that it applies to policies created for the role.
+    );
+  }
+}

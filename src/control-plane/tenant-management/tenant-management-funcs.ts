@@ -4,12 +4,13 @@
 import * as path from 'path';
 import { PythonFunction } from '@aws-cdk/aws-lambda-python-alpha';
 import { Duration, Stack } from 'aws-cdk-lib';
+import { CfnTable } from 'aws-cdk-lib/aws-dynamodb';
 import { ManagedPolicy, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { Function, LayerVersion, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { TenantManagementTable } from './tenant-management.table';
-import { DetailType, IEventManager } from '../../utils';
+import { IEventManager } from '../../utils';
 
 /**
 Represents the properties required for the Tenant Management Lambda function.
@@ -68,7 +69,7 @@ export class TenantManagementLambda extends Construct {
           id: 'AwsSolutions-IAM5',
           reason: 'Index name(s) not known beforehand.',
           appliesTo: [
-            `Resource::<ControlPlanetenantManagementServicvestenantManagementTableTenantDetails974E95B8.Arn>/index/*`,
+            `Resource::<${Stack.of(this).getLogicalId(props.table.tenantDetails.node.defaultChild as CfnTable)}.Arn>/index/*`,
           ],
         },
         {
@@ -106,13 +107,13 @@ export class TenantManagementLambda extends Construct {
         LayerVersion.fromLayerVersionArn(this, 'LambdaPowerTools', lambdaPowerToolsLayerARN),
       ],
       environment: {
-        EVENTBUS_NAME: props.eventManager.busName,
-        EVENT_SOURCE: props.eventManager.controlPlaneEventSource,
+        // EVENTBUS_NAME: props.eventManager.busName,
+        // EVENT_SOURCE: props.eventManager.controlPlaneEventSource,
         TENANT_DETAILS_TABLE: props.table.tenantDetails.tableName,
-        ONBOARDING_DETAIL_TYPE: DetailType.ONBOARDING_REQUEST,
-        OFFBOARDING_DETAIL_TYPE: DetailType.OFFBOARDING_REQUEST,
-        ACTIVATE_DETAIL_TYPE: DetailType.ACTIVATE_REQUEST,
-        DEACTIVATE_DETAIL_TYPE: DetailType.DEACTIVATE_SUCCESS,
+        // ONBOARDING_DETAIL_TYPE: DetailType.ONBOARDING_REQUEST,
+        // OFFBOARDING_DETAIL_TYPE: DetailType.OFFBOARDING_REQUEST,
+        // ACTIVATE_DETAIL_TYPE: DetailType.ACTIVATE_REQUEST,
+        // DEACTIVATE_DETAIL_TYPE: DetailType.DEACTIVATE_SUCCESS,
       },
     });
 

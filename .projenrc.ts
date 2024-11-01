@@ -127,7 +127,6 @@ const jsiiLibraryProjectOptions: cdk.JsiiProjectOptions = {
   sampleCode: false,
   stability: 'experimental',
   workflowNodeVersion: '20.x',
-
   npmTokenSecret: 'NPM_TOKEN',
   npmAccess: NpmAccess.PUBLIC,
   githubOptions: GITHUB_OPTIONS,

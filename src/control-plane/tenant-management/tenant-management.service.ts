@@ -2,13 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import * as apigatewayV2 from 'aws-cdk-lib/aws-apigatewayv2';
+import { HttpIamAuthorizer } from 'aws-cdk-lib/aws-apigatewayv2-authorizers';
 import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
-import * as events from 'aws-cdk-lib/aws-events';
-import { ApiDestination } from 'aws-cdk-lib/aws-events-targets';
 import { Construct } from 'constructs';
 import { TenantManagementLambda } from './tenant-management-funcs';
 import { TenantManagementTable } from './tenant-management.table';
-import { DetailType, IEventManager, IRoute, generateRoutes } from '../../utils';
+import { IEventManager, IRoute, generateRoutes } from '../../utils';
 import { IAuth } from '../auth/auth-interface';
 
 /**
@@ -42,6 +41,20 @@ export class TenantManagementService extends Construct {
   table: TenantManagementTable;
 
   /**
+   * The path for the tenant registration endpoint.
+   *
+   * @type {string}
+   */
+  public readonly tenantsPath: string = '/tenants';
+
+  /**
+   * The path for the tenant registration endpoint with the tenant registration id.
+   *
+   * @type {string}
+   */
+  public readonly tenantIdPath: string;
+
+  /**
    * Constructs a new instance of the TenantManagementService.
    *
    * @param {Construct} scope - The parent construct.
@@ -61,95 +74,90 @@ export class TenantManagementService extends Construct {
       'tenantsHttpLambdaIntegration',
       lambda.tenantManagementFunc
     );
-    const tenantsPath = '/tenants';
-    const tenantIdPath = `${tenantsPath}/{tenantId}`;
+    this.tenantIdPath = `${this.tenantsPath}/{${table.tenantIdColumn}}`;
 
     const routes: IRoute[] = [
       {
         method: apigatewayV2.HttpMethod.GET,
-        scope: props.auth.fetchAllTenantsScope,
-        path: tenantsPath,
+        path: this.tenantsPath,
+        authorizer: props.authorizer,
         integration: tenantsHttpLambdaIntegration,
       },
       {
         method: apigatewayV2.HttpMethod.POST,
-        scope: props.auth.createTenantScope,
-        path: tenantsPath,
+        path: this.tenantsPath,
         integration: tenantsHttpLambdaIntegration,
       },
       {
         method: apigatewayV2.HttpMethod.DELETE,
-        scope: props.auth.deleteTenantScope,
-        path: tenantIdPath,
+        path: this.tenantIdPath,
         integration: tenantsHttpLambdaIntegration,
       },
       {
         method: apigatewayV2.HttpMethod.GET,
-        scope: props.auth.fetchTenantScope,
-        path: tenantIdPath,
+        path: this.tenantIdPath,
+        authorizer: props.authorizer,
         integration: tenantsHttpLambdaIntegration,
       },
       {
         method: apigatewayV2.HttpMethod.PUT,
-        scope: props.auth.updateTenantScope,
-        path: tenantIdPath,
+        path: this.tenantIdPath,
         integration: tenantsHttpLambdaIntegration,
       },
-      {
-        method: apigatewayV2.HttpMethod.PUT,
-        scope: props.auth.deactivateTenantScope,
-        path: `${tenantIdPath}/deactivate`,
-        integration: tenantsHttpLambdaIntegration,
-      },
-      {
-        method: apigatewayV2.HttpMethod.PUT,
-        scope: props.auth.activateTenantScope,
-        path: `${tenantIdPath}/activate`,
-        integration: tenantsHttpLambdaIntegration,
-      },
+      // {
+      //   method: apigatewayV2.HttpMethod.PUT,
+      //   path: `${this.tenantIdPath}/deactivate`,
+      //   integration: tenantsHttpLambdaIntegration,
+      // },
+      // {
+      //   method: apigatewayV2.HttpMethod.PUT,
+      //   path: `${this.tenantIdPath}/activate`,
+      //   integration: tenantsHttpLambdaIntegration,
+      // },
     ];
-    generateRoutes(props.api, routes, props.authorizer);
+    generateRoutes(props.api, routes, new HttpIamAuthorizer());
 
-    const connection = new events.Connection(this, 'connection', {
-      authorization: events.Authorization.oauth({
-        authorizationEndpoint: props.auth.tokenEndpoint,
-        clientId: props.auth.machineClientId,
-        clientSecret: props.auth.machineClientSecret,
-        httpMethod: events.HttpMethod.POST,
-        bodyParameters: {
-          grant_type: events.HttpParameter.fromString('client_credentials'),
-          ...(props.auth.updateTenantScope && {
-            scope: events.HttpParameter.fromString(props.auth.updateTenantScope),
-          }),
-          ...(props.auth.machineClientAudience && {
-            audience: events.HttpParameter.fromString(props.auth.machineClientAudience),
-          }),
-        },
-      }),
-    });
+    // // create Another prop for extracting data into tenant-reg table and into tenant table
+    // const connection = new events.Connection(this, 'connection', {
+    //   authorization: events.Authorization.oauth({
+    //     authorizationEndpoint: props.auth.tokenEndpoint,
+    //     clientId: props.auth.machineClientId,
+    //     clientSecret: props.auth.machineClientSecret,
+    //     httpMethod: events.HttpMethod.POST,
+    //     bodyParameters: {
+    //       grant_type: events.HttpParameter.fromString('client_credentials'),
+    //       ...(props.auth.updateTenantScope && {
+    //         scope: events.HttpParameter.fromString(props.auth.updateTenantScope),
+    //       }),
+    //       ...(props.auth.machineClientAudience && {
+    //         audience: events.HttpParameter.fromString(props.auth.machineClientAudience),
+    //       }),
+    //     },
+    //   }),
+    // });
 
-    const putTenantAPIDestination = new events.ApiDestination(this, 'destination', {
-      connection: connection,
-      httpMethod: events.HttpMethod.PUT,
-      endpoint: `${props.api.url}${tenantsPath.substring(1)}/*`, // skip the first '/' in tenantIdPath
-    });
+    // const putTenantAPIDestination = new events.ApiDestination(this, 'destination', {
+    //   connection: connection,
+    //   httpMethod: events.HttpMethod.PUT,
+    //   endpoint: `${props.api.url}${this.tenantsPath.substring(1)}/*`, // skip the first '/' in tenantIdPath
+    // });
 
-    const tenantUpdateServiceTarget = new ApiDestination(putTenantAPIDestination, {
-      pathParameterValues: ['$.detail.tenantId'],
-      event: events.RuleTargetInput.fromEventPath('$.detail.jobOutput'),
-    });
+    // const tenantUpdateServiceTarget = new ApiDestination(putTenantAPIDestination, {
+    //   pathParameterValues: ['$.detail.tenantId'],
+    //   event: events.RuleTargetInput.fromEventPath('$.detail.jobOutput'),
+    // });
 
-    [
-      DetailType.PROVISION_SUCCESS,
-      DetailType.PROVISION_FAILURE,
-      DetailType.DEPROVISION_SUCCESS,
-      DetailType.DEPROVISION_FAILURE,
-    ].forEach((detailType) => {
-      props.eventManager.addTargetToEvent(this, {
-        eventType: detailType,
-        target: tenantUpdateServiceTarget,
-      });
-    });
+    // [
+    //   DetailType.PROVISION_SUCCESS,
+    //   DetailType.PROVISION_FAILURE,
+    //   DetailType.DEPROVISION_SUCCESS,
+    //   DetailType.DEPROVISION_FAILURE,
+    // ].forEach((detailType) => {
+    //   props.eventManager.addTargetToEvent(this, {
+    //     eventType: detailType,
+    //     target: tenantUpdateServiceTarget,
+    //   });
+    // });
 
     this.table = table;
   }

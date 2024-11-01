@@ -13,11 +13,12 @@ help() {
   echo "Operations:"
   echo "  configure <control_plane_stack> <email_user> <email_domain>"
   echo "  refresh-tokens"
-  echo "  create-tenant"
+  echo "  create-tenant-registration"
+  echo "  get-tenant-registration <tenant_registration_id>"
+  echo "  update-tenant-registration <tenant_registration_id> <key> <value>"
+  echo "  delete-tenant-registration <tenant_registration_id>"
   echo "  get-tenant <tenant_id>"
   echo "  get-all-tenants <limit> <next_token>"
-  echo "  delete-tenant <tenant_id>"
-  echo "  update-tenant <tenant_id> <key> <value>"
   echo "  create-user"
   echo "  get-user <user_id>"
   echo "  get-all-users <limit> <next_token>"
@@ -25,6 +26,7 @@ help() {
   echo "  delete-user <user_id>"
   echo "  help"
 }
+
 
 generate_credentials() {
   if $DEBUG; then
@@ -147,13 +149,13 @@ source_config() {
   source "$CONFIG_FILE"
 }
 
-create_tenant() {
+create_tenant_registration() {
   source_config
   TENANT_NAME="tenant$RANDOM"
   TENANT_EMAIL="${EMAIL_USERNAME}+${TENANT_NAME}@${EMAIL_DOMAIN}"
 
   if $DEBUG; then
-    echo "Creating tenant with:"
+    echo "Creating tenant registration with:"
     echo "TENANT_NAME: $TENANT_NAME"
     echo "TENANT_EMAIL: $TENANT_EMAIL"
   fi
@@ -162,24 +164,29 @@ create_tenant() {
     --arg tenantName "$TENANT_NAME" \
     --arg tenantEmail "$TENANT_EMAIL" \
     '{
-      "tenantName": $tenantName,
-      "email": $tenantEmail,
-      "tier": "basic",
-      "tenantStatus": "In progress",
-      "prices": [
-        {
-          "id": "price_123456789Example",
-          "metricName": "productsSold"
-        },
-        {
-          "id": "price_123456789AnotherExample",
-          "metricName": "plusProductsSold"
-        }
-      ]
+      "tenantData": {
+        "tenantName": $tenantName,
+        "email": $tenantEmail,
+        "tier": "basic",
+        "tenantStatus": "In progress",
+        "prices": [
+          {
+            "id": "price_123456789Example",
+            "metricName": "productsSold"
+          },
+          {
+            "id": "price_123456789AnotherExample",
+            "metricName": "plusProductsSold"
+          }
+        ]
+      },
+      "tenantRegistrationData": {
+        "registrationStatus": "CREATING"
+      }
     }')
 
   RESPONSE=$(curl --request POST \
-    --url "${CONTROL_PLANE_API_ENDPOINT}tenants" \
+    --url "${CONTROL_PLANE_API_ENDPOINT}tenant-registrations" \
     --header "Authorization: Bearer ${ACCESS_TOKEN}" \
     --header 'content-type: application/json' \
     --data "$DATA" \
@@ -191,6 +198,122 @@ create_tenant() {
     echo "$RESPONSE"
   fi
 }
+
+get_tenant_registration() {
+  source_config
+  TENANT_REGISTRATION_ID="$1"
+
+  if $DEBUG; then
+    echo "Getting tenant registration with ID: $TENANT_REGISTRATION_ID"
+  fi
+
+  RESPONSE=$(curl --request GET \
+    --url "${CONTROL_PLANE_API_ENDPOINT}tenant-registrations/$TENANT_REGISTRATION_ID" \
+    --header "Authorization: Bearer $ACCESS_TOKEN" \
+    --silent)
+
+  if $DEBUG; then
+    echo "Response: $RESPONSE"
+  else
+    echo "$RESPONSE"
+  fi
+}
+
+update_tenant_registration() {
+  source_config
+  TENANT_REGISTRATION_ID="$1"
+  KEY="$2"
+  VALUE="$3"
+
+  DATA=$(jq --null-input \
+    --arg key "$KEY" \
+    --arg value "$VALUE" \
+    '{ "tenantRegistrationData": {($key): $value}, "tenantData": {($key): $value}}')
+
+  if $DEBUG; then
+    echo "Updating tenant registration with ID: $TENANT_REGISTRATION_ID with DATA: $DATA"
+  fi
+
+  RESPONSE=$(curl --request PATCH \
+    --url "${CONTROL_PLANE_API_ENDPOINT}tenant-registrations/$TENANT_REGISTRATION_ID" \
+    --header "Authorization: Bearer $ACCESS_TOKEN" \
+    --header 'content-type: application/json' \
+    --data "$DATA" \
+    --silent)
+
+  if $DEBUG; then
+    echo "Response: $RESPONSE"
+  else
+    echo "$RESPONSE"
+  fi
+}
+
+delete_tenant_registration() {
+  source_config
+  TENANT_REGISTRATION_ID="$1"
+
+  if $DEBUG; then
+    echo "Deleting tenant registration with ID: $TENANT_REGISTRATION_ID"
+  fi
+
+  RESPONSE=$(curl --request DELETE \
+    --url "${CONTROL_PLANE_API_ENDPOINT}tenant-registrations/$TENANT_REGISTRATION_ID" \
+    --header "Authorization: Bearer $ACCESS_TOKEN" \
+    --header 'content-type: application/json' \
+    --silent)
+
+  if $DEBUG; then
+    echo "Response: $RESPONSE"
+  else
+    echo "$RESPONSE"
+  fi
+}
+
+
+# create_tenant() {
+#   source_config
+#   TENANT_NAME="tenant$RANDOM"
+#   TENANT_EMAIL="${EMAIL_USERNAME}+${TENANT_NAME}@${EMAIL_DOMAIN}"
+
+#   if $DEBUG; then
+#     echo "Creating tenant with:"
+#     echo "TENANT_NAME: $TENANT_NAME"
+#     echo "TENANT_EMAIL: $TENANT_EMAIL"
+#   fi
+
+#   DATA=$(jq --null-input \
+#     --arg tenantName "$TENANT_NAME" \
+#     --arg tenantEmail "$TENANT_EMAIL" \
+#     '{
+#       "tenantName": $tenantName,
+#       "email": $tenantEmail,
+#       "tier": "basic",
+#       "tenantStatus": "In progress",
+#       "prices": [
+#         {
+#           "id": "price_123456789Example",
+#           "metricName": "productsSold"
+#         },
+#         {
+#           "id": "price_123456789AnotherExample",
+#           "metricName": "plusProductsSold"
+#         }
+#       ]
+#     }')
+
+#   RESPONSE=$(curl --request POST \
+#     --url "${CONTROL_PLANE_API_ENDPOINT}tenants" \
+#     --header "Authorization: Bearer ${ACCESS_TOKEN}" \
+#     --header 'content-type: application/json' \
+#     --data "$DATA" \
+#     --silent)
+
+#   if $DEBUG; then
+#     echo "Response: $RESPONSE"
+#   else
+#     echo "$RESPONSE"
+#   fi
+# }
 
 get_tenant() {
   source_config
@@ -235,26 +358,26 @@ get_all_tenants() {
   fi
 }
 
-delete_tenant() {
-  source_config
-  TENANT_ID="$1"
+# delete_tenant() {
+#   source_config
+#   TENANT_ID="$1"
 
-  if $DEBUG; then
-    echo "Deleting tenant with ID: $TENANT_ID"
-  fi
+#   if $DEBUG; then
+#     echo "Deleting tenant with ID: $TENANT_ID"
+#   fi
 
-  RESPONSE=$(curl --request DELETE \
-    --url "${CONTROL_PLANE_API_ENDPOINT}tenants/$TENANT_ID" \
-    --header "Authorization: Bearer $ACCESS_TOKEN" \
-    --header 'content-type: application/json' \
-    --silent)
+#   RESPONSE=$(curl --request DELETE \
+#     --url "${CONTROL_PLANE_API_ENDPOINT}tenants/$TENANT_ID" \
+#     --header "Authorization: Bearer $ACCESS_TOKEN" \
+#     --header 'content-type: application/json' \
+#     --silent)
 
-  if $DEBUG; then
-    echo "Response: $RESPONSE"
-  else
-    echo "$RESPONSE"
-  fi
-}
+#   if $DEBUG; then
+#     echo "Response: $RESPONSE"
+#   else
+#     echo "$RESPONSE"
+#   fi
+# }
 
 create_user() {
   source_config
@@ -384,34 +507,34 @@ delete_user() {
   fi
 }
 
-update_tenant() {
-  source_config
-  TENANT_ID="$1"
-  KEY="$2"
-  VALUE="$3"
+# update_tenant() {
+#   source_config
+#   TENANT_ID="$1"
+#   KEY="$2"
+#   VALUE="$3"
 
-  DATA=$(jq --null-input \
-    --arg key "$KEY" \
-    --arg value "$VALUE" \
-    '{($key): $value}')
+#   DATA=$(jq --null-input \
+#     --arg key "$KEY" \
+#     --arg value "$VALUE" \
+#     '{($key): $value}')
 
-  if $DEBUG; then
-    echo "Updating tenant with ID: $TENANT_ID with DATA: $DATA"
-  fi
+#   if $DEBUG; then
+#     echo "Updating tenant with ID: $TENANT_ID with DATA: $DATA"
+#   fi
 
-  RESPONSE=$(curl --request PUT \
-    --url "${CONTROL_PLANE_API_ENDPOINT}tenants/$TENANT_ID" \
-    --header "Authorization: Bearer $ACCESS_TOKEN" \
-    --header 'content-type: application/json' \
-    --data "$DATA" \
-    --silent)
+#   RESPONSE=$(curl --request PUT \
+#     --url "${CONTROL_PLANE_API_ENDPOINT}tenants/$TENANT_ID" \
+#     --header "Authorization: Bearer $ACCESS_TOKEN" \
+#     --header 'content-type: application/json' \
+#     --data "$DATA" \
+#     --silent)
 
-  if $DEBUG; then
-    echo "Response: $RESPONSE"
-  else
-    echo "$RESPONSE"
-  fi
-}
+#   if $DEBUG; then
+#     echo "Response: $RESPONSE"
+#   else
+#     echo "$RESPONSE"
+#   fi
+# }
 
 # Main
 DEBUG=false
@@ -435,9 +558,37 @@ case "$1" in
   refresh_tokens
   ;;
 
-"create-tenant")
-  create_tenant
+"create-tenant-registration")
+  create_tenant_registration
   ;;
+
+"get-tenant-registration")
+  if [ $# -ne 2 ]; then
+    echo "Error: get-tenant-registration requires tenant registration id"
+    exit 1
+  fi
+  get_tenant_registration "$2"
+  ;;
+
+"update-tenant-registration")
+  if [ $# -ne 4 ]; then
+    echo "Error: update-tenant-registration requires tenant registration id, key, and value"
+    exit 1
+  fi
+  update_tenant_registration "$2" "$3" "$4"
+  ;;
+
+"delete-tenant-registration")
+  if [ $# -ne 2 ]; then
+    echo "Error: delete-tenant-registration requires tenant registration id"
+    exit 1
+  fi
+  delete_tenant_registration "$2"
+  ;;
+
+# "create-tenant")
+#   create_tenant
+#   ;;
 
 "get-tenant")
   if [ $# -ne 2 ]; then
@@ -451,21 +602,21 @@ case "$1" in
   get_all_tenants "$2" "$3"
   ;;
 
-"delete-tenant")
-  if [ $# -ne 2 ]; then
-    echo "Error: delete-tenant requires tenant id"
-    exit 1
-  fi
-  delete_tenant "$2"
-  ;;
+# "delete-tenant")
+#   if [ $# -ne 2 ]; then
+#     echo "Error: delete-tenant requires tenant id"
+#     exit 1
+#   fi
+#   delete_tenant "$2"
+#   ;;
 
-"update-tenant")
-  if [ $# -ne 4 ]; then
-    echo "Error: update-tenant requires tenant id, key, and value"
-    exit 1
-  fi
-  update_tenant "$2" "$3" "$4"
-  ;;
+# "update-tenant")
+#   if [ $# -ne 4 ]; then
+#     echo "Error: update-tenant requires tenant id, key, and value"
+#     exit 1
+#   fi
+#   update_tenant "$2" "$3" "$4"
+#   ;;
 
 "create-user")
   create_user

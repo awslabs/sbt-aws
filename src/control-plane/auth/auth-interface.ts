@@ -75,46 +75,46 @@ export interface IAuth {
   readonly machineClientAudience?: string;
 
   /**
-   * The scope required to authorize requests for fetching a single tenant.
-   * This scope grants permission to fetch the details of a specific tenant.
+   * The scope required to authorize requests for fetching a single tenant registration.
+   * This scope grants permission to fetch the details of a specific tenant registration.
    */
-  readonly fetchTenantScope?: string;
+  readonly fetchTenantRegistrationScope?: string;
 
   /**
    * The scope required to authorize requests for fetching all tenants.
    * This scope grants permission to fetch the details of all tenants.
    */
-  readonly fetchAllTenantsScope?: string;
+  readonly fetchAllTenantRegistrationsScope?: string;
 
   /**
-   * The scope required to authorize requests for deleting a tenant.
-   * This scope grants permission to delete a specific tenant.
+   * The scope required to authorize requests for deleting a tenant registration.
+   * This scope grants permission to delete a specific tenant registration.
    */
-  readonly deleteTenantScope?: string;
+  readonly deleteTenantRegistrationScope?: string;
 
   /**
-   * The scope required to authorize requests for creating a tenant.
-   * This scope grants permission to create a new tenant.
+   * The scope required to authorize requests for creating a tenant registration.
+   * This scope grants permission to create a new tenant registration.
    */
-  readonly createTenantScope?: string;
+  readonly createTenantRegistrationScope?: string;
 
   /**
-   * The scope required to authorize requests for updating a tenant.
-   * This scope grants permission to update the details of a specific tenant.
+   * The scope required to authorize requests for updating a tenant registration.
+   * This scope grants permission to update the details of a specific tenant registration.
    */
-  readonly updateTenantScope?: string;
+  readonly updateTenantRegistrationScope?: string;
 
   /**
-   * The scope required to authorize requests for activating a tenant.
+   * The scope required to authorize requests for activating a tenant via the tenant registration endpoint.
    * This scope grants permission to activate a specific tenant.
    */
-  readonly activateTenantScope?: string;
+  readonly activateTenantRegistrationScope?: string;
 
   /**
-   * The scope required to authorize requests for deactivating a tenant.
+   * The scope required to authorize requests for deactivating a tenant via the tenant registration endpoint.
    * This scope grants permission to deactivate a specific tenant.
    */
-  readonly deactivateTenantScope?: string;
+  readonly deactivateTenantRegistrationScope?: string;
 
   /**
    * The scope required to authorize requests for fetching a single user.

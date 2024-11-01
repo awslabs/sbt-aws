@@ -4,7 +4,7 @@
 import * as path from 'path';
 import * as lambda_python from '@aws-cdk/aws-lambda-python-alpha';
 import * as cdk from 'aws-cdk-lib';
-import { Table } from 'aws-cdk-lib/aws-dynamodb';
+import { CfnTable, Table } from 'aws-cdk-lib/aws-dynamodb';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
@@ -106,7 +106,7 @@ export class TenantConfigLambdas extends Construct {
           id: 'AwsSolutions-IAM5',
           reason: 'Index name(s) not known beforehand.',
           appliesTo: [
-            `Resource::<ControlPlanetenantManagementServicvestenantManagementTableTenantDetails974E95B8.Arn>/index/*`,
+            `Resource::<${cdk.Stack.of(this).getLogicalId(props.tenantDetails.node.defaultChild as CfnTable)}.Arn>/index/*`,
           ],
         },
       ],

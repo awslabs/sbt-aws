@@ -82,6 +82,7 @@ export interface IRoute {
   readonly scope?: string;
   readonly path: string;
   readonly integration: apigatewayV2.HttpRouteIntegration;
+  readonly authorizer?: apigatewayV2.IHttpRouteAuthorizer;
 }
 export const generateRoutes = (
   api: apigatewayV2.HttpApi,
@@ -95,7 +96,7 @@ export const generateRoutes = (
         path: route.path,
         methods: [route.method],
         integration: route.integration,
-        authorizer: authorizer,
+        authorizer: route.authorizer || authorizer,
         authorizationScopes: conditionallyAddScope(route.scope),
       }),
       ...allRoutes,

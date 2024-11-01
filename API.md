@@ -1305,7 +1305,7 @@ Any object.
 | <code><a href="#@cdklabs/sbt-aws.DeprovisioningScriptJob.property.eventTarget">eventTarget</a></code> | <code>aws-cdk-lib.aws_events.IRuleTarget</code> | The eventTarget to use when triggering this ScriptJob. |
 | <code><a href="#@cdklabs/sbt-aws.DeprovisioningScriptJob.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The incoming event DetailType that triggers this job. |
 | <code><a href="#@cdklabs/sbt-aws.DeprovisioningScriptJob.property.provisioningStateMachine">provisioningStateMachine</a></code> | <code>aws-cdk-lib.aws_stepfunctions.StateMachine</code> | The StateMachine used to implement this ScriptJob orchestration. |
-| <code><a href="#@cdklabs/sbt-aws.DeprovisioningScriptJob.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
+| <code><a href="#@cdklabs/sbt-aws.DeprovisioningScriptJob.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.EnvironmentVariablesToOutgoingEventProps">EnvironmentVariablesToOutgoingEventProps</a></code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
 
 ---
 
@@ -1372,10 +1372,10 @@ The StateMachine used to implement this ScriptJob orchestration.
 ##### `environmentVariablesToOutgoingEvent`<sup>Optional</sup> <a name="environmentVariablesToOutgoingEvent" id="@cdklabs/sbt-aws.DeprovisioningScriptJob.property.environmentVariablesToOutgoingEvent"></a>
 
 ```typescript
-public readonly environmentVariablesToOutgoingEvent: string[];
+public readonly environmentVariablesToOutgoingEvent: EnvironmentVariablesToOutgoingEventProps;
 ```
 
-- *Type:* string[]
+- *Type:* <a href="#@cdklabs/sbt-aws.EnvironmentVariablesToOutgoingEventProps">EnvironmentVariablesToOutgoingEventProps</a>
 
 The environment variables to export into the outgoing event once the ScriptJob has finished.
 
@@ -1961,7 +1961,7 @@ Any object.
 | <code><a href="#@cdklabs/sbt-aws.ProvisioningScriptJob.property.eventTarget">eventTarget</a></code> | <code>aws-cdk-lib.aws_events.IRuleTarget</code> | The eventTarget to use when triggering this ScriptJob. |
 | <code><a href="#@cdklabs/sbt-aws.ProvisioningScriptJob.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The incoming event DetailType that triggers this job. |
 | <code><a href="#@cdklabs/sbt-aws.ProvisioningScriptJob.property.provisioningStateMachine">provisioningStateMachine</a></code> | <code>aws-cdk-lib.aws_stepfunctions.StateMachine</code> | The StateMachine used to implement this ScriptJob orchestration. |
-| <code><a href="#@cdklabs/sbt-aws.ProvisioningScriptJob.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
+| <code><a href="#@cdklabs/sbt-aws.ProvisioningScriptJob.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.EnvironmentVariablesToOutgoingEventProps">EnvironmentVariablesToOutgoingEventProps</a></code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
 
 ---
 
@@ -2028,10 +2028,10 @@ The StateMachine used to implement this ScriptJob orchestration.
 ##### `environmentVariablesToOutgoingEvent`<sup>Optional</sup> <a name="environmentVariablesToOutgoingEvent" id="@cdklabs/sbt-aws.ProvisioningScriptJob.property.environmentVariablesToOutgoingEvent"></a>
 
 ```typescript
-public readonly environmentVariablesToOutgoingEvent: string[];
+public readonly environmentVariablesToOutgoingEvent: EnvironmentVariablesToOutgoingEventProps;
 ```
 
-- *Type:* string[]
+- *Type:* <a href="#@cdklabs/sbt-aws.EnvironmentVariablesToOutgoingEventProps">EnvironmentVariablesToOutgoingEventProps</a>
 
 The environment variables to export into the outgoing event once the ScriptJob has finished.
 
@@ -2230,7 +2230,7 @@ Any object.
 | <code><a href="#@cdklabs/sbt-aws.ScriptJob.property.eventTarget">eventTarget</a></code> | <code>aws-cdk-lib.aws_events.IRuleTarget</code> | The eventTarget to use when triggering this ScriptJob. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJob.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The incoming event DetailType that triggers this job. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJob.property.provisioningStateMachine">provisioningStateMachine</a></code> | <code>aws-cdk-lib.aws_stepfunctions.StateMachine</code> | The StateMachine used to implement this ScriptJob orchestration. |
-| <code><a href="#@cdklabs/sbt-aws.ScriptJob.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJob.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.EnvironmentVariablesToOutgoingEventProps">EnvironmentVariablesToOutgoingEventProps</a></code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
 
 ---
 
@@ -2297,10 +2297,10 @@ The StateMachine used to implement this ScriptJob orchestration.
 ##### `environmentVariablesToOutgoingEvent`<sup>Optional</sup> <a name="environmentVariablesToOutgoingEvent" id="@cdklabs/sbt-aws.ScriptJob.property.environmentVariablesToOutgoingEvent"></a>
 
 ```typescript
-public readonly environmentVariablesToOutgoingEvent: string[];
+public readonly environmentVariablesToOutgoingEvent: EnvironmentVariablesToOutgoingEventProps;
 ```
 
-- *Type:* string[]
+- *Type:* <a href="#@cdklabs/sbt-aws.EnvironmentVariablesToOutgoingEventProps">EnvironmentVariablesToOutgoingEventProps</a>
 
 The environment variables to export into the outgoing event once the ScriptJob has finished.
 
@@ -2731,6 +2731,8 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.TenantManagementService.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementService.property.tenantIdPath">tenantIdPath</a></code> | <code>string</code> | The path for the tenant registration endpoint with the tenant registration id. |
+| <code><a href="#@cdklabs/sbt-aws.TenantManagementService.property.tenantsPath">tenantsPath</a></code> | <code>string</code> | The path for the tenant registration endpoint. |
 | <code><a href="#@cdklabs/sbt-aws.TenantManagementService.property.table">table</a></code> | <code><a href="#@cdklabs/sbt-aws.TenantManagementTable">TenantManagementTable</a></code> | The tenant management table instance. |
 
 ---
@@ -2744,6 +2746,30 @@ public readonly node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+##### `tenantIdPath`<sup>Required</sup> <a name="tenantIdPath" id="@cdklabs/sbt-aws.TenantManagementService.property.tenantIdPath"></a>
+
+```typescript
+public readonly tenantIdPath: string;
+```
+
+- *Type:* string
+
+The path for the tenant registration endpoint with the tenant registration id.
+
+---
+
+##### `tenantsPath`<sup>Required</sup> <a name="tenantsPath" id="@cdklabs/sbt-aws.TenantManagementService.property.tenantsPath"></a>
+
+```typescript
+public readonly tenantsPath: string;
+```
+
+- *Type:* string
+
+The path for the tenant registration endpoint.
 
 ---
 
@@ -3627,6 +3653,51 @@ The name of the role of the new admin user.
 
 ---
 
+### EnvironmentVariablesToOutgoingEventProps <a name="EnvironmentVariablesToOutgoingEventProps" id="@cdklabs/sbt-aws.EnvironmentVariablesToOutgoingEventProps"></a>
+
+Represents the different kinds of environment variables that can be emitted as part of a script job.
+
+#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.EnvironmentVariablesToOutgoingEventProps.Initializer"></a>
+
+```typescript
+import { EnvironmentVariablesToOutgoingEventProps } from '@cdklabs/sbt-aws'
+
+const environmentVariablesToOutgoingEventProps: EnvironmentVariablesToOutgoingEventProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.EnvironmentVariablesToOutgoingEventProps.property.tenantData">tenantData</a></code> | <code>string[]</code> | The data from the script job that pertains to the tenant. |
+| <code><a href="#@cdklabs/sbt-aws.EnvironmentVariablesToOutgoingEventProps.property.tenantRegistrationData">tenantRegistrationData</a></code> | <code>string[]</code> | The data from the script job that pertains to the registration of the tenant. |
+
+---
+
+##### `tenantData`<sup>Optional</sup> <a name="tenantData" id="@cdklabs/sbt-aws.EnvironmentVariablesToOutgoingEventProps.property.tenantData"></a>
+
+```typescript
+public readonly tenantData: string[];
+```
+
+- *Type:* string[]
+
+The data from the script job that pertains to the tenant.
+
+---
+
+##### `tenantRegistrationData`<sup>Optional</sup> <a name="tenantRegistrationData" id="@cdklabs/sbt-aws.EnvironmentVariablesToOutgoingEventProps.property.tenantRegistrationData"></a>
+
+```typescript
+public readonly tenantRegistrationData: string[];
+```
+
+- *Type:* string[]
+
+The data from the script job that pertains to the registration of the tenant.
+
+---
+
 ### EventManagerProps <a name="EventManagerProps" id="@cdklabs/sbt-aws.EventManagerProps"></a>
 
 Encapsulates the properties for an EventManager.
@@ -3984,7 +4055,7 @@ const scriptJobProps: ScriptJobProps = { ... }
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.script">script</a></code> | <code>string</code> | The bash script to run as part of the ScriptJob. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.environmentJSONVariablesFromIncomingEvent">environmentJSONVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the ScriptJob from event details field. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.environmentStringVariablesFromIncomingEvent">environmentStringVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the ScriptJob from event details field. |
-| <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.EnvironmentVariablesToOutgoingEventProps">EnvironmentVariablesToOutgoingEventProps</a></code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.postScript">postScript</a></code> | <code>string</code> | The bash script to run after the main script has completed. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.scriptEnvironmentVariables">scriptEnvironmentVariables</a></code> | <code>{[ key: string ]: string}</code> | The variables to pass into the codebuild ScriptJob. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.source">source</a></code> | <code>aws-cdk-lib.aws_codebuild.Source</code> | The Source to use when executing the ScriptJob. |
@@ -4026,7 +4097,7 @@ public readonly jobFailureStatus: {[ key: string ]: string};
 In the case of failure, this is the object that will be included in the outgoing event `jobOutput` field.
 
 Ex: If the job fails, the outgoing event will look like this:
-  {'tenantId': 'XXX', 'jobOutput': jobFailureStatus}
+  {$jobIdentifierKey: 'XXX', 'jobOutput': $jobFailureStatus}
 
 ---
 
@@ -4043,11 +4114,11 @@ The key where the job identifier is to be extracted from in the incoming event.
 This will be used as the key that will be populated with
 the job identifier in the outgoing event.
 
-Ex: if jobIdentifierKey == 'tenantId' then
+Ex: if jobIdentifierKey == 'myKey' then
 the incoming event should look something like this:
-  {'tenantId': '123', ....}
+  {'myKey': '123', ....}
 and the outgoing event will look something like this:
-  {'tenantId': '123', 'jobOutput': { ... }}
+  {'myKey': '123', 'jobOutput': { ... }}
 
 ---
 
@@ -4119,10 +4190,10 @@ This argument consists of the names of only string type variables. Ex. 'test'
 ##### `environmentVariablesToOutgoingEvent`<sup>Optional</sup> <a name="environmentVariablesToOutgoingEvent" id="@cdklabs/sbt-aws.ScriptJobProps.property.environmentVariablesToOutgoingEvent"></a>
 
 ```typescript
-public readonly environmentVariablesToOutgoingEvent: string[];
+public readonly environmentVariablesToOutgoingEvent: EnvironmentVariablesToOutgoingEventProps;
 ```
 
-- *Type:* string[]
+- *Type:* <a href="#@cdklabs/sbt-aws.EnvironmentVariablesToOutgoingEventProps">EnvironmentVariablesToOutgoingEventProps</a>
 
 The environment variables to export into the outgoing event once the ScriptJob has finished.
 
@@ -4292,7 +4363,7 @@ const tenantLifecycleScriptJobProps: TenantLifecycleScriptJobProps = { ... }
 | <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.script">script</a></code> | <code>string</code> | The bash script to run as part of the ScriptJob. |
 | <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.environmentJSONVariablesFromIncomingEvent">environmentJSONVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the ScriptJob from event details field. |
 | <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.environmentStringVariablesFromIncomingEvent">environmentStringVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the ScriptJob from event details field. |
-| <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code>string[]</code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
+| <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.EnvironmentVariablesToOutgoingEventProps">EnvironmentVariablesToOutgoingEventProps</a></code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
 | <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.postScript">postScript</a></code> | <code>string</code> | The bash script to run after the main script has completed. |
 | <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.scriptEnvironmentVariables">scriptEnvironmentVariables</a></code> | <code>{[ key: string ]: string}</code> | The variables to pass into the codebuild ScriptJob. |
 | <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.source">source</a></code> | <code>aws-cdk-lib.aws_codebuild.Source</code> | The Source to use when executing the ScriptJob. |
@@ -4367,10 +4438,10 @@ This argument consists of the names of only string type variables. Ex. 'test'
 ##### `environmentVariablesToOutgoingEvent`<sup>Optional</sup> <a name="environmentVariablesToOutgoingEvent" id="@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.environmentVariablesToOutgoingEvent"></a>
 
 ```typescript
-public readonly environmentVariablesToOutgoingEvent: string[];
+public readonly environmentVariablesToOutgoingEvent: EnvironmentVariablesToOutgoingEventProps;
 ```
 
-- *Type:* string[]
+- *Type:* <a href="#@cdklabs/sbt-aws.EnvironmentVariablesToOutgoingEventProps">EnvironmentVariablesToOutgoingEventProps</a>
 
 The environment variables to export into the outgoing event once the ScriptJob has finished.
 
@@ -4672,20 +4743,20 @@ Function to create an admin user.
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.updateUserFunction">updateUserFunction</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The Lambda function for updating a user. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.userClientId">userClientId</a></code> | <code>string</code> | The client ID enabled for user-centric authentication flows, such as Authorization Code flow. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.wellKnownEndpointUrl">wellKnownEndpointUrl</a></code> | <code>string</code> | The well-known endpoint URL for the control plane identity provider. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.activateTenantScope">activateTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for activating a tenant. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.createTenantScope">createTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for creating a tenant. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.activateTenantRegistrationScope">activateTenantRegistrationScope</a></code> | <code>string</code> | The scope required to authorize requests for activating a tenant via the tenant registration endpoint. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.createTenantRegistrationScope">createTenantRegistrationScope</a></code> | <code>string</code> | The scope required to authorize requests for creating a tenant registration. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.createUserScope">createUserScope</a></code> | <code>string</code> | The scope required to authorize requests for creating a user. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.deactivateTenantScope">deactivateTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for deactivating a tenant. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.deleteTenantScope">deleteTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for deleting a tenant. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.deactivateTenantRegistrationScope">deactivateTenantRegistrationScope</a></code> | <code>string</code> | The scope required to authorize requests for deactivating a tenant via the tenant registration endpoint. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.deleteTenantRegistrationScope">deleteTenantRegistrationScope</a></code> | <code>string</code> | The scope required to authorize requests for deleting a tenant registration. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.deleteUserScope">deleteUserScope</a></code> | <code>string</code> | The scope required to authorize requests for deleting a user. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.disableUserScope">disableUserScope</a></code> | <code>string</code> | The scope required to authorize requests for disabling a user. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.enableUserScope">enableUserScope</a></code> | <code>string</code> | The scope required to authorize requests for enabling a user. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchAllTenantsScope">fetchAllTenantsScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching all tenants. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchAllTenantRegistrationsScope">fetchAllTenantRegistrationsScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching all tenants. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchAllUsersScope">fetchAllUsersScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching all users. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchTenantScope">fetchTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching a single tenant. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchTenantRegistrationScope">fetchTenantRegistrationScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching a single tenant registration. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.fetchUserScope">fetchUserScope</a></code> | <code>string</code> | The scope required to authorize requests for fetching a single user. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.machineClientAudience">machineClientAudience</a></code> | <code>string</code> | The audience for the machine client. |
-| <code><a href="#@cdklabs/sbt-aws.IAuth.property.updateTenantScope">updateTenantScope</a></code> | <code>string</code> | The scope required to authorize requests for updating a tenant. |
+| <code><a href="#@cdklabs/sbt-aws.IAuth.property.updateTenantRegistrationScope">updateTenantRegistrationScope</a></code> | <code>string</code> | The scope required to authorize requests for updating a tenant registration. |
 | <code><a href="#@cdklabs/sbt-aws.IAuth.property.updateUserScope">updateUserScope</a></code> | <code>string</code> | The scope required to authorize requests for updating a user. |
 
 ---
@@ -4885,31 +4956,31 @@ This URL provides configuration information about the identity provider, such as
 
 ---
 
-##### `activateTenantScope`<sup>Optional</sup> <a name="activateTenantScope" id="@cdklabs/sbt-aws.IAuth.property.activateTenantScope"></a>
+##### `activateTenantRegistrationScope`<sup>Optional</sup> <a name="activateTenantRegistrationScope" id="@cdklabs/sbt-aws.IAuth.property.activateTenantRegistrationScope"></a>
 
 ```typescript
-public readonly activateTenantScope: string;
+public readonly activateTenantRegistrationScope: string;
 ```
 
 - *Type:* string
 
-The scope required to authorize requests for activating a tenant.
+The scope required to authorize requests for activating a tenant via the tenant registration endpoint.
 
 This scope grants permission to activate a specific tenant.
 
 ---
 
-##### `createTenantScope`<sup>Optional</sup> <a name="createTenantScope" id="@cdklabs/sbt-aws.IAuth.property.createTenantScope"></a>
+##### `createTenantRegistrationScope`<sup>Optional</sup> <a name="createTenantRegistrationScope" id="@cdklabs/sbt-aws.IAuth.property.createTenantRegistrationScope"></a>
 
 ```typescript
-public readonly createTenantScope: string;
+public readonly createTenantRegistrationScope: string;
 ```
 
 - *Type:* string
 
-The scope required to authorize requests for creating a tenant.
+The scope required to authorize requests for creating a tenant registration.
 
-This scope grants permission to create a new tenant.
+This scope grants permission to create a new tenant registration.
 
 ---
 
@@ -4927,31 +4998,31 @@ This scope grants permission to create a new user.
 
 ---
 
-##### `deactivateTenantScope`<sup>Optional</sup> <a name="deactivateTenantScope" id="@cdklabs/sbt-aws.IAuth.property.deactivateTenantScope"></a>
+##### `deactivateTenantRegistrationScope`<sup>Optional</sup> <a name="deactivateTenantRegistrationScope" id="@cdklabs/sbt-aws.IAuth.property.deactivateTenantRegistrationScope"></a>
 
 ```typescript
-public readonly deactivateTenantScope: string;
+public readonly deactivateTenantRegistrationScope: string;
 ```
 
 - *Type:* string
 
-The scope required to authorize requests for deactivating a tenant.
+The scope required to authorize requests for deactivating a tenant via the tenant registration endpoint.
 
 This scope grants permission to deactivate a specific tenant.
 
 ---
 
-##### `deleteTenantScope`<sup>Optional</sup> <a name="deleteTenantScope" id="@cdklabs/sbt-aws.IAuth.property.deleteTenantScope"></a>
+##### `deleteTenantRegistrationScope`<sup>Optional</sup> <a name="deleteTenantRegistrationScope" id="@cdklabs/sbt-aws.IAuth.property.deleteTenantRegistrationScope"></a>
 
 ```typescript
-public readonly deleteTenantScope: string;
+public readonly deleteTenantRegistrationScope: string;
 ```
 
 - *Type:* string
 
-The scope required to authorize requests for deleting a tenant.
+The scope required to authorize requests for deleting a tenant registration.
 
-This scope grants permission to delete a specific tenant.
+This scope grants permission to delete a specific tenant registration.
 
 ---
 
@@ -4997,10 +5068,10 @@ This scope grants permission to enable a specific user.
 
 ---
 
-##### `fetchAllTenantsScope`<sup>Optional</sup> <a name="fetchAllTenantsScope" id="@cdklabs/sbt-aws.IAuth.property.fetchAllTenantsScope"></a>
+##### `fetchAllTenantRegistrationsScope`<sup>Optional</sup> <a name="fetchAllTenantRegistrationsScope" id="@cdklabs/sbt-aws.IAuth.property.fetchAllTenantRegistrationsScope"></a>
 
 ```typescript
-public readonly fetchAllTenantsScope: string;
+public readonly fetchAllTenantRegistrationsScope: string;
 ```
 
 - *Type:* string
@@ -5025,17 +5096,17 @@ This scope grants permission to fetch the details of all users.
 
 ---
 
-##### `fetchTenantScope`<sup>Optional</sup> <a name="fetchTenantScope" id="@cdklabs/sbt-aws.IAuth.property.fetchTenantScope"></a>
+##### `fetchTenantRegistrationScope`<sup>Optional</sup> <a name="fetchTenantRegistrationScope" id="@cdklabs/sbt-aws.IAuth.property.fetchTenantRegistrationScope"></a>
 
 ```typescript
-public readonly fetchTenantScope: string;
+public readonly fetchTenantRegistrationScope: string;
 ```
 
 - *Type:* string
 
-The scope required to authorize requests for fetching a single tenant.
+The scope required to authorize requests for fetching a single tenant registration.
 
-This scope grants permission to fetch the details of a specific tenant.
+This scope grants permission to fetch the details of a specific tenant registration.
 
 ---
 
@@ -5068,17 +5139,17 @@ for the Client Credentials flow.
 
 ---
 
-##### `updateTenantScope`<sup>Optional</sup> <a name="updateTenantScope" id="@cdklabs/sbt-aws.IAuth.property.updateTenantScope"></a>
+##### `updateTenantRegistrationScope`<sup>Optional</sup> <a name="updateTenantRegistrationScope" id="@cdklabs/sbt-aws.IAuth.property.updateTenantRegistrationScope"></a>
 
 ```typescript
-public readonly updateTenantScope: string;
+public readonly updateTenantRegistrationScope: string;
 ```
 
 - *Type:* string
 
-The scope required to authorize requests for updating a tenant.
+The scope required to authorize requests for updating a tenant registration.
 
-This scope grants permission to update the details of a specific tenant.
+This scope grants permission to update the details of a specific tenant registration.
 
 ---
 
@@ -5656,6 +5727,7 @@ The sync function responsible for updating a meter.
 | <code><a href="#@cdklabs/sbt-aws.IRoute.property.integration">integration</a></code> | <code>aws-cdk-lib.aws_apigatewayv2.HttpRouteIntegration</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.IRoute.property.method">method</a></code> | <code>aws-cdk-lib.aws_apigatewayv2.HttpMethod</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.IRoute.property.path">path</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.IRoute.property.authorizer">authorizer</a></code> | <code>aws-cdk-lib.aws_apigatewayv2.IHttpRouteAuthorizer</code> | *No description.* |
 | <code><a href="#@cdklabs/sbt-aws.IRoute.property.scope">scope</a></code> | <code>string</code> | *No description.* |
 
 ---
@@ -5687,6 +5759,16 @@ public readonly path: string;
 ```
 
 - *Type:* string
+
+---
+
+##### `authorizer`<sup>Optional</sup> <a name="authorizer" id="@cdklabs/sbt-aws.IRoute.property.authorizer"></a>
+
+```typescript
+public readonly authorizer: IHttpRouteAuthorizer;
+```
+
+- *Type:* aws-cdk-lib.aws_apigatewayv2.IHttpRouteAuthorizer
 
 ---
 
