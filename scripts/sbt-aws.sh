@@ -180,7 +180,7 @@ create_tenant_registration() {
         ]
       },
       "tenantRegistrationData": {
-        "registrationStatus": "CREATING"
+        "tenantRegistrationData1": "test"
       }
     }')
 

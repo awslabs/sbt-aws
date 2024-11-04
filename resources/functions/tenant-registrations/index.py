@@ -92,7 +92,7 @@ def get_tenant_registration(tenant_registration_id: str):
         return {"message": "Internal server error"}, HTTPStatus.INTERNAL_SERVER_ERROR
 
     if "Item" not in response:
-        return {"message": "Tenant registration not found"}, HTTPStatus.NOT_FOUND
+        return {"message": "Tenant registration not found."}, HTTPStatus.NOT_FOUND
 
     return response["Item"]
 
@@ -165,7 +165,7 @@ def delete_tenant_registration(tenant_registration_id: str):
             Key={"tenantRegistrationId": tenant_registration_id}
         )
         if "Item" not in response:
-            return {"message": "Tenant registration not found"}, HTTPStatus.NOT_FOUND
+            return {"message": "Tenant registration not found."}, HTTPStatus.NOT_FOUND
 
         tenant_id = response["Item"].get("tenantId")
         if not tenant_id:

@@ -107,13 +107,7 @@ export class TenantManagementLambda extends Construct {
         LayerVersion.fromLayerVersionArn(this, 'LambdaPowerTools', lambdaPowerToolsLayerARN),
       ],
       environment: {
-        // EVENTBUS_NAME: props.eventManager.busName,
-        // EVENT_SOURCE: props.eventManager.controlPlaneEventSource,
         TENANT_DETAILS_TABLE: props.table.tenantDetails.tableName,
-        // ONBOARDING_DETAIL_TYPE: DetailType.ONBOARDING_REQUEST,
-        // OFFBOARDING_DETAIL_TYPE: DetailType.OFFBOARDING_REQUEST,
-        // ACTIVATE_DETAIL_TYPE: DetailType.ACTIVATE_REQUEST,
-        // DEACTIVATE_DETAIL_TYPE: DetailType.DEACTIVATE_SUCCESS,
       },
     });
 

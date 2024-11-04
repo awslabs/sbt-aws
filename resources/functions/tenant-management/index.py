@@ -1,7 +1,6 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-# import json
 import os
 from http import HTTPStatus
 import uuid
@@ -26,13 +25,6 @@ logger = Logger()
 cors_config = CORSConfig(allow_origin="*", max_age=300)
 app = APIGatewayHttpResolver(cors=cors_config, enable_validation=True)
 
-# event_bus = boto3.client("events")
-# eventbus_name = os.environ["EVENTBUS_NAME"]
-# event_source = os.environ["EVENT_SOURCE"]
-# onboarding_detail_type = os.environ["ONBOARDING_DETAIL_TYPE"]
-# offboarding_detail_type = os.environ["OFFBOARDING_DETAIL_TYPE"]
-# activate_detail_type = os.environ["ACTIVATE_DETAIL_TYPE"]
-# deactivate_detail_type = os.environ["DEACTIVATE_DETAIL_TYPE"]
 dynamodb = boto3.resource("dynamodb")
 tenant_details_table = dynamodb.Table(os.environ["TENANT_DETAILS_TABLE"])
 
@@ -134,9 +126,6 @@ def delete_tenant(tenantId: Annotated[str, Path(min_length=0)]):
     try:
         response = __update_tenant(tenantId, {"sbtaws_active": False})
         deleted_tenant = response["Attributes"]
-        # __create_control_plane_event(
-        #     json.dumps(deleted_tenant), offboarding_detail_type
-        # )
     except dynamodb.meta.client.exceptions.ConditionalCheckFailedException:
         logger.info(f"received request to update non-existing tenant {tenantId}")
         raise NotFoundError(f"Tenant {tenantId} not found.")
@@ -171,74 +160,6 @@ def __update_tenant(tenantId, tenant):
         ExpressionAttributeValues=expression_attribute_values,
         ReturnValues="ALL_NEW",
     )
-
-
-# @app.put("/tenants/<tenantId>/deactivate")
-# @tracer.capture_method
-# def deactivate_tenant(tenantId: Annotated[str, Path(min_length=0)]):
-#     logger.info("Request received to deactivate a tenant")
-
-#     try:
-#         response = tenant_details_table.update_item(
-#             Key={
-#                 "tenantId": tenantId,
-#             },
-#             UpdateExpression="set isActive = :isActive",
-#             ExpressionAttributeValues={":isActive": False},
-#             ReturnValues="ALL_NEW",
-#         )
-#         logger.info(f"update_item response {response}")
-
-#         __create_control_plane_event(
-#             json.dumps({"tenantId": tenantId}), deactivate_detail_type
-#         )
-#     except botocore.exceptions.ClientError as error:
-#         logger.error(error)
-#         raise InternalServerError("Unknown error during processing!")
-
-#     else:
-#         return {"message": "Tenant deactivated"}, HTTPStatus.OK
-
-
-# @app.put("/tenants/<tenantId>/activate")
-# @tracer.capture_method
-# def activate_tenant(tenantId: Annotated[str, Path(min_length=0)]):
-#     logger.info("Request received to activate a tenant")
-
-#     try:
-#         response = tenant_details_table.update_item(
-#             Key={
-#                 "tenantId": tenantId,
-#             },
-#             UpdateExpression="set isActive = :isActive",
-#             ExpressionAttributeValues={":isActive": True},
-#             ReturnValues="ALL_NEW",
-#         )
-#         logger.info(f"update_item response {response}")
-
-#         __create_control_plane_event(
-#             json.dumps(response["Attributes"]), activate_detail_type
-#         )
-#     except botocore.exceptions.ClientError as error:
-#         logger.error(error)
-#         raise InternalServerError("Unknown error during processing!")
-
-#     else:
-#         return {"message": "Tenant activated"}, HTTPStatus.OK
-
-
-# def __create_control_plane_event(event_details, detail_type):
-#     response = event_bus.put_events(
-#         Entries=[
-#             {
-#                 "EventBusName": eventbus_name,
-#                 "Source": event_source,
-#                 "DetailType": detail_type,
-#                 "Detail": event_details,
-#             }
-#         ]
-#     )
-#     logger.info(response)
 
 
 @logger.inject_lambda_context(

@@ -61,9 +61,6 @@ export class TenantRegistrationLambda extends Construct {
       environment: {
         TENANT_REGISTRATION_TABLE_NAME: props.table.tenantRegistration.tableName,
         TENANT_API_URL: props.api.url!,
-        // CODEBUILD_PROJECT_NAME: tenantInfraManager.projectName,
-        // TABLE_NAME_PREFIX: props.tableNamePrefix,
-        // SHARED_COGNITO_USER_POOL_ID: props.sharedCognitoUserPool.userPoolId,
         EVENTBUS_NAME: props.eventManager.busName,
         EVENT_SOURCE: props.eventManager.controlPlaneEventSource,
         ONBOARDING_DETAIL_TYPE: DetailType.ONBOARDING_REQUEST,
@@ -85,8 +82,6 @@ export class TenantRegistrationLambda extends Construct {
             `${props.tenantsPath}/*`,
             props.api.defaultStage?.stageName
           ),
-          // todo: add star (/tenants/*) and suppression for this for PUT and DELETE
-          // to fix message: Forbidden issue when updating tenant
           props.api.arnForExecuteApi(
             'PUT',
             `${props.tenantsPath}/*`,

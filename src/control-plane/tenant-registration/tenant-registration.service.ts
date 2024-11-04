@@ -113,18 +113,6 @@ export class TenantRegistrationService extends Construct {
         path: this.tenantRegistrationsIdPath,
         integration: tenantsHttpLambdaIntegration,
       },
-      // {
-      //   method: apigatewayV2.HttpMethod.PUT,
-      //   scope: props.auth.deactivateTenantRegistrationScope,
-      //   path: `${this.tenantRegistrationsIdPath}/deactivate`,
-      //   integration: tenantsHttpLambdaIntegration,
-      // },
-      // {
-      //   method: apigatewayV2.HttpMethod.PUT,
-      //   scope: props.auth.activateTenantRegistrationScope,
-      //   path: `${this.tenantRegistrationsIdPath}/activate`,
-      //   integration: tenantsHttpLambdaIntegration,
-      // },
     ];
     generateRoutes(props.api, routes, props.authorizer);
 

@@ -104,60 +104,8 @@ export class TenantManagementService extends Construct {
         path: this.tenantIdPath,
         integration: tenantsHttpLambdaIntegration,
       },
-      // {
-      //   method: apigatewayV2.HttpMethod.PUT,
-      //   path: `${this.tenantIdPath}/deactivate`,
-      //   integration: tenantsHttpLambdaIntegration,
-      // },
-      // {
-      //   method: apigatewayV2.HttpMethod.PUT,
-      //   path: `${this.tenantIdPath}/activate`,
-      //   integration: tenantsHttpLambdaIntegration,
-      // },
     ];
     generateRoutes(props.api, routes, new HttpIamAuthorizer());
-
-    // // create Another prop for extracting data into tenant-reg table and into tenant table
-    // const connection = new events.Connection(this, 'connection', {
-    //   authorization: events.Authorization.oauth({
-    //     authorizationEndpoint: props.auth.tokenEndpoint,
-    //     clientId: props.auth.machineClientId,
-    //     clientSecret: props.auth.machineClientSecret,
-    //     httpMethod: events.HttpMethod.POST,
-    //     bodyParameters: {
-    //       grant_type: events.HttpParameter.fromString('client_credentials'),
-    //       ...(props.auth.updateTenantScope && {
-    //         scope: events.HttpParameter.fromString(props.auth.updateTenantScope),
-    //       }),
-    //       ...(props.auth.machineClientAudience && {
-    //         audience: events.HttpParameter.fromString(props.auth.machineClientAudience),
-    //       }),
-    //     },
-    //   }),
-    // });
-
-    // const putTenantAPIDestination = new events.ApiDestination(this, 'destination', {
-    //   connection: connection,
-    //   httpMethod: events.HttpMethod.PUT,
-    //   endpoint: `${props.api.url}${this.tenantsPath.substring(1)}/*`, // skip the first '/' in tenantIdPath
-    // });
-
-    // const tenantUpdateServiceTarget = new ApiDestination(putTenantAPIDestination, {
-    //   pathParameterValues: ['$.detail.tenantId'],
-    //   event: events.RuleTargetInput.fromEventPath('$.detail.jobOutput'),
-    // });
-
-    // [
-    //   DetailType.PROVISION_SUCCESS,
-    //   DetailType.PROVISION_FAILURE,
-    //   DetailType.DEPROVISION_SUCCESS,
-    //   DetailType.DEPROVISION_FAILURE,
-    // ].forEach((detailType) => {
-    //   props.eventManager.addTargetToEvent(this, {
-    //     eventType: detailType,
-    //     target: tenantUpdateServiceTarget,
-    //   });
-    // });
 
     this.table = table;
   }
