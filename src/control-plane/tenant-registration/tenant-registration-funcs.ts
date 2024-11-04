@@ -7,11 +7,11 @@ import { Duration, Stack } from 'aws-cdk-lib';
 import { HttpApi } from 'aws-cdk-lib/aws-apigatewayv2';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Function, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { CfnHttpApi } from 'aws-cdk-lib/aws-sam';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { TenantRegistrationTable } from './tenant-registration.table';
 import { DetailType, IEventManager } from '../../utils';
-import { CfnHttpApi } from 'aws-cdk-lib/aws-sam';
 
 /**
 Represents the properties required for the Tenant Management Lambda function.
