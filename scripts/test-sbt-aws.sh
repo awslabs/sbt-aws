@@ -52,7 +52,6 @@ else
     log_test "fail" "Unexpected output when deleting non-existent tenant"
 fi
 
-
 # Test create-tenant-registration
 echo "Testing create-tenant-registration..."
 response=$(./sbt-aws.sh create-tenant-registration)
@@ -71,8 +70,6 @@ if [ -n "$tenant_registration_id" ] && [ "$tenant_registration_id" != "null" ]; 
     else
         log_test "fail" "Failed to set tenant registration sbtaws_active to 'True' in DynamoDB table"
     fi
-
-    # wait_for_stack_creation "$tenant_id"
 
     # Wait for tenant provisioning to complete
     max_attempts=60
@@ -116,6 +113,24 @@ if echo "$updated_tenant_registration" | grep -q "$update_value"; then
     log_test "pass" "Tenant registration updated successfully"
 else
     log_test "fail" "Failed to update tenant registration"
+fi
+
+# Test get-tenant
+echo "Testing get-tenant..."
+tenant=$(./sbt-aws.sh get-tenant "$tenant_id")
+if echo "$tenant" | grep -q "$tenant_id"; then
+    log_test "pass" "Tenant retrieved successfully"
+else
+    log_test "fail" "Failed to retrieve tenant"
+fi
+
+# Test get-all-tenants
+echo "Testing get-all-tenants..."
+tenants=$(./sbt-aws.sh get-all-tenants)
+if echo "$tenants" | grep -q "$tenant_id"; then
+    log_test "pass" "Tenant found in get-all-tenants"
+else
+    log_test "fail" "Tenant not found in get-all-tenants"
 fi
 
 # Test delete-tenant-registration
