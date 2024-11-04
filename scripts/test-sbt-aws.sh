@@ -25,31 +25,6 @@ log_test() {
     fi
 }
 
-# Function to wait for CloudFormation stack creation
-# wait_for_stack_creation() {
-#     local stack_name_pattern=$1
-#     local max_attempts=60
-#     local attempt=0
-
-#     while true; do
-#         stack_status=$(aws cloudformation describe-stacks --query 'Stacks[?contains(StackName, `'"$stack_name_pattern"'`)].StackStatus' --output text)
-#         if [ "$stack_status" = "CREATE_COMPLETE" ]; then
-#             break
-#         elif [ "$stack_status" = "CREATE_FAILED" ]; then
-#             log_test "fail" "CloudFormation stack creation failed"
-#             return 1
-#         fi
-
-#         attempt=$((attempt + 1))
-#         if [ "$attempt" -gt "$max_attempts" ]; then
-#             log_test "fail" "Timeout waiting for CloudFormation stack creation"
-#             return 1
-#         fi
-
-#         sleep 10
-#     done
-# }
-
 check_dynamodb_table_entry() {
     local table_name=$1
     local id=$2
