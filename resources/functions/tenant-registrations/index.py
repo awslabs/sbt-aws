@@ -64,8 +64,6 @@ def create_tenant_registration():
     # that the tenant registration is created without issue
     __update_tenant_registration(tenant_registration_id, {"tenantId": tenant_id})
 
-    # __create_control_plane_event(
-    #     json.dumps(input_details), onboarding_detail_type)
     __create_control_plane_event(
         json.dumps(
             tenant_registration_data

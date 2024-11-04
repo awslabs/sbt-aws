@@ -11,6 +11,7 @@ import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { TenantRegistrationTable } from './tenant-registration.table';
 import { DetailType, IEventManager } from '../../utils';
+import { CfnHttpApi } from 'aws-cdk-lib/aws-sam';
 
 /**
 Represents the properties required for the Tenant Management Lambda function.
@@ -78,20 +79,19 @@ export class TenantRegistrationLambda extends Construct {
       new PolicyStatement({
         actions: ['execute-api:Invoke'],
         resources: [
-          // props.api.arnForExecuteApi(
-          //   'POST',
-          //   `${props.tenantsPath}/*`,
-          //   props.api.defaultStage?.stageName
-          // ),
           props.api.arnForExecuteApi('POST', props.tenantsPath, props.api.defaultStage?.stageName),
           props.api.arnForExecuteApi(
             'DELETE',
-            props.tenantIdPath,
+            `${props.tenantsPath}/*`,
             props.api.defaultStage?.stageName
           ),
           // todo: add star (/tenants/*) and suppression for this for PUT and DELETE
           // to fix message: Forbidden issue when updating tenant
-          props.api.arnForExecuteApi('PUT', props.tenantIdPath, props.api.defaultStage?.stageName),
+          props.api.arnForExecuteApi(
+            'PUT',
+            `${props.tenantsPath}/*`,
+            props.api.defaultStage?.stageName
+          ),
         ],
       })
     );
@@ -99,13 +99,14 @@ export class TenantRegistrationLambda extends Construct {
     NagSuppressions.addResourceSuppressions(
       this.tenantRegistrationFunc.role!,
       [
-        // {
-        //   id: 'AwsSolutions-IAM5',
-        //   reason: 'Index name(s) not known beforehand.',
-        //   appliesTo: [
-        //     `Resource::<${Stack.of(this).getLogicalId(props.api.node.defaultChild as CfnHttpApi)}>/*/*/tenants/*`,
-        //   ],
-        // },
+        {
+          id: 'AwsSolutions-IAM5',
+          reason: 'Tenant Ids not known beforehand for PUT and DELETE endpoints.',
+          appliesTo: [
+            `Resource::arn:<AWS::Partition>:execute-api:<AWS::Region>:<AWS::AccountId>:<${Stack.of(this).getLogicalId(props.api.node.defaultChild as CfnHttpApi)}>/${props.api.defaultStage?.stageName}/DELETE/tenants/*`,
+            `Resource::arn:<AWS::Partition>:execute-api:<AWS::Region>:<AWS::AccountId>:<${Stack.of(this).getLogicalId(props.api.node.defaultChild as CfnHttpApi)}>/${props.api.defaultStage?.stageName}/PUT/tenants/*`,
+          ],
+        },
         {
           id: 'AwsSolutions-IAM4',
           reason:
