@@ -14,10 +14,10 @@ import { TenantRegistrationTable } from './tenant-registration.table';
 import { DetailType, IEventManager } from '../../utils';
 
 /**
-Represents the properties required for the Tenant Management Lambda function.
+Represents the properties required for the Tenant Registration Lambda function.
 @interface TenantRegistrationLambdaProps
-@property {TenantRegistrationTable} table - The table used for Tenant Management.
-@property {IEventManager} eventManager - The event manager used for handling events in Tenant Management.
+@property {TenantRegistrationTable} table - The table used for Tenant Registration.
+@property {IEventManager} eventManager - The event manager used for handling events in Tenant Registration.
 @property {HttpApi} api - The API that has serves the /tenants endpoint. This will be the API that the tenant registration lambda makes requests to when managing tenants. */
 export interface TenantRegistrationLambdaProps {
   readonly table: TenantRegistrationTable;
@@ -28,13 +28,13 @@ export interface TenantRegistrationLambdaProps {
 }
 
 /**
-Represents the Tenant Management Lambda construct.
+Represents the Tenant Registration Lambda construct.
 @class TenantRegistrationLambda
 @extends {Construct}
-@property {Function} tenantManagementFunc - The Tenant Management Lambda function.
+@property {Function} tenantRegistrationFunc - The Tenant Registration Lambda function.
 @param {Construct} scope - The scope in which this construct is defined.
 @param {string} id - The construct's identifier.
-@param {TenantRegistrationLambdaProps} props - The properties required for the Tenant Management Lambda.
+@param {TenantRegistrationLambdaProps} props - The properties required for the Tenant Registration Lambda.
 */
 export class TenantRegistrationLambda extends Construct {
   tenantRegistrationFunc: Function;

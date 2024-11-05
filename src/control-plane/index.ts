@@ -10,5 +10,6 @@ export * from './control-plane';
 export * from './ingestor-aggregator/index';
 export * from './tenant-config';
 export * from './tenant-management';
+export * from './tenant-registration';
 export * from './user-management';
 export * from './metering';
