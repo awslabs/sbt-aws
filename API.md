@@ -3154,7 +3154,7 @@ Any object.
 | <code><a href="#@cdklabs/sbt-aws.TenantRegistrationService.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@cdklabs/sbt-aws.TenantRegistrationService.property.tenantRegistrationsIdPath">tenantRegistrationsIdPath</a></code> | <code>string</code> | The path for the tenant registration endpoint with the tenant registration id. |
 | <code><a href="#@cdklabs/sbt-aws.TenantRegistrationService.property.tenantRegistrationsPath">tenantRegistrationsPath</a></code> | <code>string</code> | The path for the tenant registration endpoint. |
-| <code><a href="#@cdklabs/sbt-aws.TenantRegistrationService.property.table">table</a></code> | <code><a href="#@cdklabs/sbt-aws.TenantRegistrationTable">TenantRegistrationTable</a></code> | The tenant management table instance. |
+| <code><a href="#@cdklabs/sbt-aws.TenantRegistrationService.property.table">table</a></code> | <code><a href="#@cdklabs/sbt-aws.TenantRegistrationTable">TenantRegistrationTable</a></code> | The tenant registration table instance. |
 
 ---
 
@@ -3202,7 +3202,7 @@ public readonly table: TenantRegistrationTable;
 
 - *Type:* <a href="#@cdklabs/sbt-aws.TenantRegistrationTable">TenantRegistrationTable</a>
 
-The tenant management table instance.
+The tenant registration table instance.
 
 ---
 
@@ -5048,7 +5048,7 @@ public readonly tenantsPath: string;
 
 ### TenantRegistrationServiceProps <a name="TenantRegistrationServiceProps" id="@cdklabs/sbt-aws.TenantRegistrationServiceProps"></a>
 
-Represents the properties required to initialize the TenantManagementService.
+Represents the properties required to initialize the TenantRegistrationService.
 
 #### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.TenantRegistrationServiceProps.Initializer"></a>
 

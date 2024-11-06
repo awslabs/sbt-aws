@@ -13,9 +13,9 @@ import { IAuth } from '../auth/auth-interface';
 import { TenantManagementService } from '../tenant-management';
 
 /**
- * Represents the properties required to initialize the TenantManagementService.
+ * Represents the properties required to initialize the TenantRegistrationService.
  *
- * @interface TenantManagementServiceProps
+ * @interface TenantRegistrationServiceProps
  * @property {apigatewayV2.HttpApi} api - The HTTP API Gateway instance.
  * @property {IAuth} auth - The authentication mechanism for the service.
  * @property {apigatewayV2.IHttpRouteAuthorizer} authorizer - The HTTP route authorizer for the service.
@@ -32,12 +32,12 @@ export interface TenantRegistrationServiceProps {
 /**
  * Represents a service for managing tenants in the application.
  *
- * @class TenantManagementService
+ * @class TenantRegistrationService
  * @extends Construct
  */
 export class TenantRegistrationService extends Construct {
   /**
-   * The tenant management table instance.
+   * The tenant registration table instance.
    *
    * @type {TenantRegistrationTable}
    */
@@ -58,7 +58,7 @@ export class TenantRegistrationService extends Construct {
   public readonly tenantRegistrationsIdPath: string;
 
   /**
-   * Constructs a new instance of the TenantManagementService.
+   * Constructs a new instance of the TenantRegistrationService.
    *
    * @param {Construct} scope - The parent construct.
    * @param {string} id - The ID of the construct.
@@ -67,8 +67,8 @@ export class TenantRegistrationService extends Construct {
   constructor(scope: Construct, id: string, props: TenantRegistrationServiceProps) {
     super(scope, id);
 
-    const table = new TenantRegistrationTable(this, 'tenantManagementTable');
-    const lambda = new TenantRegistrationLambda(this, 'tenantManagementLambda', {
+    const table = new TenantRegistrationTable(this, 'tenantRegistrationTable');
+    const lambda = new TenantRegistrationLambda(this, 'tenantRegistrationLambda', {
       eventManager: props.eventManager,
       table,
       api: props.api,
