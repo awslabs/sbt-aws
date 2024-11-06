@@ -4,7 +4,7 @@
 import { Source } from 'aws-cdk-lib/aws-codebuild';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
-import { ScriptJob, ScriptJobProps } from './script-job';
+import { EnvironmentVariablesToOutgoingEventProps, ScriptJob, ScriptJobProps } from './script-job';
 import { DetailType, IEventManager } from '../utils';
 
 /**
@@ -51,7 +51,7 @@ export interface TenantLifecycleScriptJobProps {
   /**
    * The environment variables to export into the outgoing event once the ScriptJob has finished.
    */
-  readonly environmentVariablesToOutgoingEvent?: string[];
+  readonly environmentVariablesToOutgoingEvent?: EnvironmentVariablesToOutgoingEventProps;
 
   /**
    * The variables to pass into the codebuild ScriptJob.
@@ -76,7 +76,7 @@ export class ProvisioningScriptJob extends ScriptJob {
   constructor(scope: Construct, id: string, props: TenantLifecycleScriptJobProps) {
     const scriptJobProps: ScriptJobProps = {
       ...props,
-      jobIdentifierKey: 'tenantId',
+      jobIdentifierKey: 'tenantRegistrationId',
       jobFailureStatus: {
         tenantStatus: 'Failed to provision tenant.',
       },
@@ -99,7 +99,7 @@ export class DeprovisioningScriptJob extends ScriptJob {
   constructor(scope: Construct, id: string, props: TenantLifecycleScriptJobProps) {
     const scriptJobProps: ScriptJobProps = {
       ...props,
-      jobIdentifierKey: 'tenantId',
+      jobIdentifierKey: 'tenantRegistrationId',
       jobFailureStatus: {
         tenantStatus: 'Failed to deprovision tenant.',
       },

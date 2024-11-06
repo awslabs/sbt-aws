@@ -81,20 +81,22 @@ export tenantConfig=$(jq --arg SAAS_APP_USERPOOL_ID "MY_SAAS_APP_USERPOOL_ID" \
 -n '{"userPoolId":$SAAS_APP_USERPOOL_ID,"appClientId":$SAAS_APP_CLIENT_ID,"apiGatewayUrl":$API_GATEWAY_URL}')
 
 echo $tenantConfig
-export tenantStatus="created"
+export registrationStatus="created"
 
 echo "done!"
 `,
       environmentStringVariablesFromIncomingEvent: ['tenantId', 'tier', 'tenantName', 'email'],
       environmentJSONVariablesFromIncomingEvent: ['prices'],
-      environmentVariablesToOutgoingEvent: [
-        'tenantS3Bucket',
-        'tenantConfig',
-        'tenantStatus',
-        'prices', // added so we don't lose it for targets beyond provisioning (ex. billing)
-        'tenantName', // added so we don't lose it for targets beyond provisioning (ex. billing)
-        'email', // added so we don't lose it for targets beyond provisioning (ex. billing)
-      ],
+      environmentVariablesToOutgoingEvent: {
+        tenantData: [
+          'tenantS3Bucket',
+          'tenantConfig',
+          'prices', // added so we don't lose it for targets beyond provisioning (ex. billing)
+          'tenantName', // added so we don't lose it for targets beyond provisioning (ex. billing)
+          'email', // added so we don't lose it for targets beyond provisioning (ex. billing)
+        ],
+        tenantRegistrationData: ['registrationStatus'],
+      },
       scriptEnvironmentVariables: {
         TEST: 'test',
       },
@@ -123,11 +125,13 @@ echo "tenantId: $tenantId"
 aws cloudformation delete-stack --stack-name "tenantTemplateStack-\${tenantId}"
 aws cloudformation wait stack-delete-complete --stack-name "tenantTemplateStack-\${tenantId}"
 export status="deleted stack: tenantTemplateStack-\${tenantId}"
-export tenantStatus="deleted"
+export registrationStatus="deleted"
 echo "done!"
 `,
       environmentStringVariablesFromIncomingEvent: ['tenantId'],
-      environmentVariablesToOutgoingEvent: ['tenantStatus'],
+      environmentVariablesToOutgoingEvent: {
+        tenantRegistrationData: ['registrationStatus'],
+      },
       eventManager: eventManager,
     };
 

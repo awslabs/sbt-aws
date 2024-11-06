@@ -15,6 +15,22 @@ import { Construct } from 'constructs';
 import { addTemplateTag, DetailType, IEventManager } from '../utils';
 
 /**
+ * Represents the different kinds of environment variables that can
+ * be emitted as part of a script job.
+ */
+export interface EnvironmentVariablesToOutgoingEventProps {
+  /**
+   * The data from the script job that pertains to the tenant.
+   */
+  readonly tenantData?: string[];
+
+  /**
+   * The data from the script job that pertains to the registration of the tenant.
+   */
+  readonly tenantRegistrationData?: string[];
+}
+
+/**
  * Represents the DetailTypes that can be emitted
  * as part of the outgoing event.
  * @readonly
@@ -42,11 +58,11 @@ export interface ScriptJobProps {
    * This will be used as the key that will be populated with
    * the job identifier in the outgoing event.
    *
-   * Ex: if jobIdentifierKey == 'tenantId' then
+   * Ex: if jobIdentifierKey == 'myKey' then
    * the incoming event should look something like this:
-   *   {'tenantId': '123', ....}
+   *   {'myKey': '123', ....}
    * and the outgoing event will look something like this:
-   *   {'tenantId': '123', 'jobOutput': { ... }}
+   *   {'myKey': '123', 'jobOutput': { ... }}
    */
   readonly jobIdentifierKey: string;
 
@@ -55,7 +71,7 @@ export interface ScriptJobProps {
    * be included in the outgoing event `jobOutput` field.
    *
    * Ex: If the job fails, the outgoing event will look like this:
-   *   {'tenantId': 'XXX', 'jobOutput': jobFailureStatus}
+   *   {$jobIdentifierKey: 'XXX', 'jobOutput': $jobFailureStatus}
    */
   readonly jobFailureStatus: {
     [key: string]: string;
@@ -110,7 +126,7 @@ export interface ScriptJobProps {
   /**
    * The environment variables to export into the outgoing event once the ScriptJob has finished.
    */
-  readonly environmentVariablesToOutgoingEvent?: string[];
+  readonly environmentVariablesToOutgoingEvent?: EnvironmentVariablesToOutgoingEventProps;
 
   /**
    * The variables to pass into the codebuild ScriptJob.
@@ -152,7 +168,7 @@ export class ScriptJob extends Construct {
    * The environment variables to export into the outgoing event once the ScriptJob has finished.
    * @attribute
    */
-  public readonly environmentVariablesToOutgoingEvent?: string[];
+  public readonly environmentVariablesToOutgoingEvent?: EnvironmentVariablesToOutgoingEventProps;
 
   /**
    * The incoming event DetailType that triggers this job.
@@ -198,6 +214,19 @@ export class ScriptJob extends Construct {
       enableKeyRotation: true,
     });
 
+    var codeBuildProjectExportedVariables: string[] = [];
+    if (props.environmentVariablesToOutgoingEvent?.tenantData) {
+      codeBuildProjectExportedVariables.push(
+        ...props.environmentVariablesToOutgoingEvent.tenantData
+      );
+    }
+
+    if (props.environmentVariablesToOutgoingEvent?.tenantRegistrationData) {
+      codeBuildProjectExportedVariables.push(
+        ...props.environmentVariablesToOutgoingEvent.tenantRegistrationData
+      );
+    }
+
     const codebuildProject = new codebuild.Project(this, `codebuildProject`, {
       source: props.source,
       encryptionKey: codeBuildProjectEncryptionKey,
@@ -210,8 +239,8 @@ export class ScriptJob extends Construct {
         version: '0.2',
         env: {
           shell: 'bash',
-          ...(props.environmentVariablesToOutgoingEvent && {
-            'exported-variables': props.environmentVariablesToOutgoingEvent,
+          ...(codeBuildProjectExportedVariables.length > 0 && {
+            'exported-variables': codeBuildProjectExportedVariables,
           }),
         },
         phases: {
@@ -308,16 +337,36 @@ export class ScriptJob extends Construct {
       [props.jobIdentifierKey]: stepfunctions.JsonPath.stringAt(
         `$.detail.${props.jobIdentifierKey}`
       ),
-      jobOutput: {},
+      jobOutput: {
+        tenantData: {},
+        tenantRegistrationData: {},
+      },
     };
-    props.environmentVariablesToOutgoingEvent?.forEach((exportedVar: string) => {
-      exportedVarObj.jobOutput[exportedVar] = stepfunctions.JsonPath.arrayGetItem(
-        stepfunctions.JsonPath.listAt(
-          `$.startCodeBuild.Build.ExportedEnvironmentVariables[?(@.Name==${exportedVar})].Value`
-        ),
-        0
+
+    if (props.environmentVariablesToOutgoingEvent?.tenantData) {
+      props.environmentVariablesToOutgoingEvent?.tenantData.forEach((exportedVar: string) => {
+        exportedVarObj.jobOutput.tenantData[exportedVar] = stepfunctions.JsonPath.arrayGetItem(
+          stepfunctions.JsonPath.listAt(
+            `$.startCodeBuild.Build.ExportedEnvironmentVariables[?(@.Name==${exportedVar})].Value`
+          ),
+          0
+        );
+      });
+    }
+
+    if (props.environmentVariablesToOutgoingEvent?.tenantRegistrationData) {
+      props.environmentVariablesToOutgoingEvent?.tenantRegistrationData.forEach(
+        (exportedVar: string) => {
+          exportedVarObj.jobOutput.tenantRegistrationData[exportedVar] =
+            stepfunctions.JsonPath.arrayGetItem(
+              stepfunctions.JsonPath.listAt(
+                `$.startCodeBuild.Build.ExportedEnvironmentVariables[?(@.Name==${exportedVar})].Value`
+              ),
+              0
+            );
+        }
       );
-    });
+    }
 
     const notifySuccessEventBridgeTask = new tasks.EventBridgePutEvents(
       this,
