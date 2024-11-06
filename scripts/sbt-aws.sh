@@ -15,6 +15,7 @@ help() {
   echo "  refresh-tokens"
   echo "  create-tenant-registration"
   echo "  get-tenant-registration <tenant_registration_id>"
+  echo "  get-all-tenant-registrations <limit> <next_token>"
   echo "  update-tenant-registration <tenant_registration_id> <key> <value>"
   echo "  delete-tenant-registration <tenant_registration_id>"
   echo "  get-tenant <tenant_id>"
@@ -217,6 +218,29 @@ get_tenant_registration() {
     echo "$RESPONSE"
   fi
 }
+
+get_all_tenant_registrations() {
+  source_config
+  MY_LIMIT="${1:-10}"
+  NEXT_TOKEN="${2:-}"
+
+  if $DEBUG; then
+    echo "Getting all tenant registrations"
+  fi
+
+  RESPONSE=$(curl -G --request GET \
+    --url "${CONTROL_PLANE_API_ENDPOINT}tenant-registrations?limit=${MY_LIMIT}" \
+    --data-urlencode "next_token=${NEXT_TOKEN}" \
+    --header "Authorization: Bearer $ACCESS_TOKEN" \
+    --silent)
+
+  if $DEBUG; then
+    echo "Response: $RESPONSE"
+  else
+    echo "$RESPONSE"
+  fi
+}
+
 
 update_tenant_registration() {
   source_config
@@ -472,6 +496,10 @@ case "$1" in
     exit 1
   fi
   get_tenant_registration "$2"
+  ;;
+
+"get-all-tenant-registrations")
+  get_all_tenant_registrations "$2" "$3"
   ;;
 
 "update-tenant-registration")
