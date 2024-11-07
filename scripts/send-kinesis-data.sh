@@ -1,6 +1,8 @@
 #!/bin/bash
 
-STREAM_NAME=$(aws cloudformation describe-stacks --stack-name $1 --query "Stacks[0].Outputs[?contains(OutputKey,'dataIngestorName')].OutputValue" --output text)
+CONTROL_PLANE_NAME=$1
+
+STREAM_NAME=$(aws cloudformation describe-stacks --stack-name "$CONTROL_PLANE_NAME" --query "Stacks[0].Outputs[?contains(OutputKey,'dataIngestorName')].OutputValue" --output text)
 
 while true; do
   if [ -z "$2" ]; then
