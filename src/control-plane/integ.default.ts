@@ -20,8 +20,11 @@ export class IntegStack extends cdk.Stack {
       setAPIGWScopes: false, // only for testing purposes!
     });
 
+    const mockBilling = new sbt.MockBillingProvider(this, 'MockBilling');
+
     const controlPlane = new sbt.ControlPlane(this, 'ControlPlane', {
       auth: cognitoAuth,
+      billing: mockBilling,
       systemAdminEmail: props.systemAdminEmail,
     });
 

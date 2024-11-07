@@ -119,7 +119,7 @@ export class EntitlementLogic extends Construct {
       [
         {
           id: 'AwsSolutions-IAM5',
-          reason: 'Index name(s) not known beforehand.',
+          reason: 'Multiple permissions required.',
           appliesTo: [`Action::kms:ReEncrypt*`, `Action::kms:GenerateDataKey*`],
         },
         {

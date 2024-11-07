@@ -1869,6 +1869,161 @@ The tree node.
 ---
 
 
+### MockBillingProvider <a name="MockBillingProvider" id="@cdklabs/sbt-aws.MockBillingProvider"></a>
+
+- *Implements:* <a href="#@cdklabs/sbt-aws.IBilling">IBilling</a>
+
+#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.MockBillingProvider.Initializer"></a>
+
+```typescript
+import { MockBillingProvider } from '@cdklabs/sbt-aws'
+
+new MockBillingProvider(scope: Construct, id: string)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.MockBillingProvider.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.MockBillingProvider.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@cdklabs/sbt-aws.MockBillingProvider.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@cdklabs/sbt-aws.MockBillingProvider.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.MockBillingProvider.toString">toString</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `toString` <a name="toString" id="@cdklabs/sbt-aws.MockBillingProvider.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.MockBillingProvider.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@cdklabs/sbt-aws.MockBillingProvider.isConstruct"></a>
+
+```typescript
+import { MockBillingProvider } from '@cdklabs/sbt-aws'
+
+MockBillingProvider.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@cdklabs/sbt-aws.MockBillingProvider.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.MockBillingProvider.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@cdklabs/sbt-aws.MockBillingProvider.property.createCustomerFunction">createCustomerFunction</a></code> | <code><a href="#@cdklabs/sbt-aws.IASyncFunction">IASyncFunction</a></code> | The async function responsible for creating a new customer. |
+| <code><a href="#@cdklabs/sbt-aws.MockBillingProvider.property.deleteCustomerFunction">deleteCustomerFunction</a></code> | <code><a href="#@cdklabs/sbt-aws.IASyncFunction">IASyncFunction</a></code> | The async function responsible for deleting an existing customer. |
+| <code><a href="#@cdklabs/sbt-aws.MockBillingProvider.property.ingestor">ingestor</a></code> | <code><a href="#@cdklabs/sbt-aws.IDataIngestorAggregator">IDataIngestorAggregator</a></code> | The IDataIngestorAggregator responsible for accepting and aggregating the raw billing data. |
+| <code><a href="#@cdklabs/sbt-aws.MockBillingProvider.property.putUsageFunction">putUsageFunction</a></code> | <code><a href="#@cdklabs/sbt-aws.IFunctionSchedule">IFunctionSchedule</a></code> | The async function responsible for taking the aggregated data and pushing that to the billing provider. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@cdklabs/sbt-aws.MockBillingProvider.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `createCustomerFunction`<sup>Required</sup> <a name="createCustomerFunction" id="@cdklabs/sbt-aws.MockBillingProvider.property.createCustomerFunction"></a>
+
+```typescript
+public readonly createCustomerFunction: IASyncFunction;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.IASyncFunction">IASyncFunction</a>
+
+The async function responsible for creating a new customer.
+
+The function to trigger to create a new customer.
+(Customer in this context is an entity that has zero or more Users.)
+-- Default event trigger: ONBOARDING_REQUEST
+
+---
+
+##### `deleteCustomerFunction`<sup>Required</sup> <a name="deleteCustomerFunction" id="@cdklabs/sbt-aws.MockBillingProvider.property.deleteCustomerFunction"></a>
+
+```typescript
+public readonly deleteCustomerFunction: IASyncFunction;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.IASyncFunction">IASyncFunction</a>
+
+The async function responsible for deleting an existing customer.
+
+(Customer in this context is an entity that has zero or more Users.)
+-- Default event trigger: OFFBOARDING_REQUEST
+
+---
+
+##### `ingestor`<sup>Optional</sup> <a name="ingestor" id="@cdklabs/sbt-aws.MockBillingProvider.property.ingestor"></a>
+
+```typescript
+public readonly ingestor: IDataIngestorAggregator;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.IDataIngestorAggregator">IDataIngestorAggregator</a>
+
+The IDataIngestorAggregator responsible for accepting and aggregating the raw billing data.
+
+---
+
+##### `putUsageFunction`<sup>Optional</sup> <a name="putUsageFunction" id="@cdklabs/sbt-aws.MockBillingProvider.property.putUsageFunction"></a>
+
+```typescript
+public readonly putUsageFunction: IFunctionSchedule;
+```
+
+- *Type:* <a href="#@cdklabs/sbt-aws.IFunctionSchedule">IFunctionSchedule</a>
+
+The async function responsible for taking the aggregated data and pushing that to the billing provider.
+
+- Default event trigger: events.Schedule.rate(cdk.Duration.hours(24))
+
+---
+
+
 ### ProvisioningScriptJob <a name="ProvisioningScriptJob" id="@cdklabs/sbt-aws.ProvisioningScriptJob"></a>
 
 Provides a ProvisioningScriptJob to execute arbitrary bash code.
@@ -4173,6 +4328,7 @@ const firehoseAggregatorProps: FirehoseAggregatorProps = { ... }
 | <code><a href="#@cdklabs/sbt-aws.FirehoseAggregatorProps.property.aggregateValuePath">aggregateValuePath</a></code> | <code>string</code> | The JMESPath to find the numeric value of key in the incoming data stream that will be aggregated. |
 | <code><a href="#@cdklabs/sbt-aws.FirehoseAggregatorProps.property.primaryKeyColumn">primaryKeyColumn</a></code> | <code>string</code> | The name to use for the primary key column for the dynamoDB database. |
 | <code><a href="#@cdklabs/sbt-aws.FirehoseAggregatorProps.property.primaryKeyPath">primaryKeyPath</a></code> | <code>string</code> | The JMESPath to find the primary key value in the incoming data stream. |
+| <code><a href="#@cdklabs/sbt-aws.FirehoseAggregatorProps.property.autoDeleteObjects">autoDeleteObjects</a></code> | <code>boolean</code> | Flag to delete objects in the firehoseDestinationBucket when deleting the bucket. |
 
 ---
 
@@ -4221,6 +4377,18 @@ public readonly primaryKeyPath: string;
 - *Type:* string
 
 The JMESPath to find the primary key value in the incoming data stream.
+
+---
+
+##### `autoDeleteObjects`<sup>Optional</sup> <a name="autoDeleteObjects" id="@cdklabs/sbt-aws.FirehoseAggregatorProps.property.autoDeleteObjects"></a>
+
+```typescript
+public readonly autoDeleteObjects: boolean;
+```
+
+- *Type:* boolean
+
+Flag to delete objects in the firehoseDestinationBucket when deleting the bucket.
 
 ---
 
@@ -5699,7 +5867,7 @@ This scope grants permission to update the details of a specific user.
 
 ### IBilling <a name="IBilling" id="@cdklabs/sbt-aws.IBilling"></a>
 
-- *Implemented By:* <a href="#@cdklabs/sbt-aws.IBilling">IBilling</a>
+- *Implemented By:* <a href="#@cdklabs/sbt-aws.MockBillingProvider">MockBillingProvider</a>, <a href="#@cdklabs/sbt-aws.IBilling">IBilling</a>
 
 Encapsulates the list of properties for an IBilling construct.
 
