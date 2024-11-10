@@ -482,7 +482,7 @@ exports.redirecthandler = async(event, context, callback) => {
         },
         {
           id: 'AwsSolutions-IAM5',
-          reason: 'Index name(s) not known beforehand.',
+          reason: 'Index name(s) not known beforehand and multiple permissions required.',
           appliesTo: [
             `Resource::<MarketplaceAWSMarketplaceMeteringRecords3B0F9D94.Arn>/index/*`,
             `Action::kms:ReEncrypt*`,

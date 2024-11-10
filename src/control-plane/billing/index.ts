@@ -3,3 +3,4 @@
 
 export * from './billing-provider';
 export * from './billing-interface';
+export * from './mock-billing-provider';

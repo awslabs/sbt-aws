@@ -655,7 +655,68 @@ Managing the full lifecycle of tenant onboarding is one of the most essential ro
 
 ### Billing
 
-Many SaaS providers rely on integration with a billing service that allows them to created the billing plans that are mapped to their tiering and monetization strategy. Generally, the approach here is to provide an API within the control plane that will provide a universal mechanism for creating billing accounts (onboarding) and publishing billing/consumption events for individual tenants. This service will also include integration with tenant management, enabling tenant state events to be conveyed to/from the billing service. For example, a tenant being disabled could be triggered from billing to tenant management. A change in tiers could also be part of this integration.
+Many SaaS providers rely on integration with a billing service that allows them to create the billing plans that are mapped to their tiering and monetization strategy. Generally, the approach here is to provide an API within the control plane that will provide a universal mechanism for creating billing accounts (onboarding) and publishing billing/consumption events for individual tenants. This service will also include integration with tenant management, enabling tenant state events to be conveyed to/from the billing service. For example, a tenant being disabled could be triggered from billing to tenant management. A change in tiers could also be part of this integration.
+
+### Mock Billing Provider
+
+The Mock Billing Provider is a simplified implementation of the IBilling interface and simulates a mock billing solution. It demonstrates how billing data can be collected, aggregated, and processed in a SaaS application.
+
+#### Components
+
+1. **Customer Table**: Stores information about customers, including their customer ID and tenant ID.
+2. **Billing Table**: Stores aggregated billing data for each tenant, including the billing period and usage metrics.
+3. **Data Aggregation Table**: Temporarily stores raw usage data before it's processed and moved to the Billing Table.
+4. **FirehoseAggregator**: A construct that sets up a Kinesis Firehose for data ingestion, an S3 bucket for initial data storage, and a Lambda function for data processing.
+
+#### Data Flow and Processing
+
+1. Raw usage data is collected through a Kinesis Firehose, which is part of the `FirehoseAggregator` construct.
+2. The data is initially stored in an S3 bucket.
+3. A Lambda function (`DataAggregatorLambda`) is triggered by S3 events when new data arrives.
+4. This function processes the raw data and aggregates it in the Data Aggregation Table.
+5. Periodically (default is every 24 hours), the `PutUsage` Lambda function runs to:
+   - Read the aggregated data from the Data Aggregation Table
+   - Process and transfer this data to the Billing Table
+   - Clear the processed data from the Data Aggregation Table
+
+#### Using the Mock Billing Provider in a CDK Application
+
+To use the Mock Billing Provider with the SBT Control Plane, add it to your CDK stack like this:
+
+```typescript
+import * as sbt from '@cdklabs/sbt-aws';
+
+const mockBillingProvider = new sbt.MockBillingProvider(this, 'MockBillingProvider');
+
+const controlPlane = new sbt.ControlPlane(this, 'ControlPlane', {
+  auth: cognitoAuth,
+  systemAdminEmail: 'admin@example.com',
+  billing: mockBillingProvider,
+});
+```
+
+This will set up the necessary tables, Lambda functions, and Kinesis Firehose for data collection and processing.
+
+#### Create / Delete Customers
+
+This process is integrated with the tenant management process. Creates and deletes of tenants will also be reflected in the Customer Table.
+
+#### Generating Test Data
+
+The toolkit includes a script (`send-kinesis-data.sh`) to generate and send test data to the Kinesis Firehose. To use it:
+
+1. Ensure you have the AWS CLI configured with appropriate permissions.
+2. Run the script, providing the name of your Control Plane stack:
+
+```bash
+./scripts/send-kinesis-data.sh YourControlPlaneStackName [tenant_id]
+```
+
+This script will continuously send random usage data for various tenants to the Kinesis Firehose. You can optionally specify a specific tenant ID as a second argument to send data for only that tenant.
+
+The generated data includes a tenant ID, a metric name ("productsSold"), a random value, and a timestamp. This data will be processed by the `DataAggregatorLambda` and eventually appear in the Billing Table after the `PutUsage` function runs.
+
+By using the Mock Billing Provider and the data generation script, you can simulate a complete billing cycle in your SaaS application, from data collection to aggregation and final billing record creation.
 
 ### Metrics
 

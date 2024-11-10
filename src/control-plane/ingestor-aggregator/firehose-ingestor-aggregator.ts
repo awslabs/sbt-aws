@@ -38,6 +38,11 @@ export interface FirehoseAggregatorProps {
    * The JMESPath to find the numeric value of key in the incoming data stream that will be aggregated.
    */
   readonly aggregateValuePath: string;
+
+  /**
+   * Flag to delete objects in the firehoseDestinationBucket when deleting the bucket.
+   */
+  readonly autoDeleteObjects?: boolean;
 }
 
 /**
@@ -75,6 +80,8 @@ export class FirehoseAggregator extends Construct implements IDataIngestorAggreg
 
     const firehoseDestinationBucket = new s3.Bucket(this, 'FirehoseDestinationBucket', {
       enforceSSL: true,
+      autoDeleteObjects: props.autoDeleteObjects,
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
     });
 
     NagSuppressions.addResourceSuppressions(
