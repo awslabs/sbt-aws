@@ -81,6 +81,7 @@ export class FirehoseAggregator extends Construct implements IDataIngestorAggreg
     const firehoseDestinationBucket = new s3.Bucket(this, 'FirehoseDestinationBucket', {
       enforceSSL: true,
       autoDeleteObjects: props.autoDeleteObjects,
+      ...(props.autoDeleteObjects && { removalPolicy: cdk.RemovalPolicy.DESTROY }),
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
     });
 
