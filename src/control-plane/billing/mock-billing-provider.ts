@@ -32,11 +32,19 @@ export class MockBillingProvider extends Construct implements IBilling {
       pointInTimeRecovery: true,
     });
 
+    new cdk.CfnOutput(this, 'BillingTableName', {
+      value: this.billingTable.tableName,
+    });
+
     // Create DynamoDB table for customer records
     this.customersTable = new dynamodb.Table(this, 'CustomersTable', {
       partitionKey: { name: 'customerId', type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       pointInTimeRecovery: true,
+    });
+
+    new cdk.CfnOutput(this, 'CustomersTableName', {
+      value: this.customersTable.tableName,
     });
 
     // Add a global secondary index on the tenantId field
@@ -53,6 +61,10 @@ export class MockBillingProvider extends Construct implements IBilling {
       aggregateKeyPath: 'metric.name',
       aggregateValuePath: 'metric.value',
       autoDeleteObjects: true,
+    });
+
+    new cdk.CfnOutput(this, 'IngestorTableName', {
+      value: this.ingestor.dataRepository.tableName,
     });
 
     // https://docs.powertools.aws.dev/lambda/python/2.31.0/#lambda-layer
@@ -75,6 +87,11 @@ export class MockBillingProvider extends Construct implements IBilling {
 
     // Create PutUsage function
     const putUsageHandler = this.createPythonFunction('PutUsage', 'put-usage');
+
+    new cdk.CfnOutput(this, 'PutUsageFunctionName', {
+      value: putUsageHandler.functionName,
+    });
+
     this.putUsageFunction = {
       handler: putUsageHandler,
       schedule: cdk.aws_events.Schedule.rate(cdk.Duration.hours(24)),
