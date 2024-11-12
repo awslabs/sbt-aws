@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "sbt-aws-cli"
+version = "0.0.1"
+description = ""
+authors = ["sbt-aws <sbt-aws-maintainers@amazon.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+typer = "^0.12.5"
+requests = "^2.32.3"
+
+[tool.poetry.scripts]
+sbt-aws-cli = "sbt_aws_cli.main:app"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
