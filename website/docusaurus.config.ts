@@ -69,6 +69,18 @@ const config: Config = {
           position: 'left',
           label: 'Point Solutions',
         },
+        {
+          type: 'docSidebar',
+          sidebarId: 'interfaces',
+          position: 'left',
+          label: 'Interfaces',
+        },
+        {
+          type: 'docSidebar',
+          sidebarId: 'referenceArchitectures',
+          position: 'left',
+          label: 'Reference Architectures',
+        },
       ],
     },
     footer: {
