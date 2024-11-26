@@ -3,46 +3,15 @@ sidebar_position: 3
 ---
 # Serverless SaaS - Reference Solution
 
-This serverless saas reference solution is built using [SaaS Builder Toolkit (SBT)](https://github.com/awslabs/sbt-aws) control plane and core application plane components.
+The AWS SaaS Factory Serverless SaaS Reference Architecture is a comprehensive example of a working, multi-tenant SaaS application using serverless technologies on AWS. This architecture leverages a range of AWS services to optimize operational efficiency and scalability while minimizing the complexity of managing infrastructure. The architecture leverages SBT for its control plane and tenant deployments. Key components and  concepts of this architecture include:
+## Key Components
+- **Control Plane**: This is where tenant management and operational services reside. It includes components for registration, onboarding, and provisioning of tenants. The control plane is crucial for managing the lifecycle of tenants in a SaaS environment.
+- **Application Plane**: This consists of the core application services that handle business logic and data processing. It typically involves AWS Lambda for compute, Amazon API Gateway for routing requests, and Amazon DynamoDB for data storage.
+- **Identity and Access Management**: Amazon Cognito is used for user authentication and authorization, providing a secure way to manage user identities across different tenants.
+## Architectural Strategies
+- **Serverless Model**: By using serverless services like AWS Lambda, the architecture reduces operational overhead and allows automatic scaling based on demand. This model aligns resource consumption with tenant activity, optimizing cost efficiency.
+- **Multi-Tenant Management**: The architecture supports both pooled and siloed deployment models, allowing flexibility in how resources are shared or isolated among tenants. This can be configured using AWS Lambda layers and API Gateway usage plans to manage tenant-specific configurations.
+- **Deployment Automation**: The reference architecture includes automated deployment pipelines using AWS CodePipeline, enabling continuous integration and delivery of updates across all tenants.
 
-We have also created a workshop that you can use as a reference to understand this reference solution in a step-by-step fashion. Workshop is available [here](https://github.com/aws-samples/aws-serverless-saas-workshop).
-
-**[Feedback & Feature request](https://www.pulse.aws/survey/EHE3TICQ)** | **[Documentation](DOCUMENTATION.md)**
-
-## Pre-requisites
-
-- This reference architecture uses Python. Make sure you have Python 3.9 or above installed.
-- Make sure you have [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html) installed.
-- Make sure you have the latest version of [AWS CDK CLI](https://docs.aws.amazon.com/cdk/latest/guide/cli.html) installed. Not having the release version of CDK can cause deployment issues.
-- Make sure you have the latest version of [git-remote-codecommit](https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-git-remote-codecommit.html) installed.
-- Make sure that you have Node 18 or above.
-
-## Deploying
-
-To deploy this reference solution run below script. Replace the "test@example.com" email address with yours. This email address will be used to setup an admin user in the control plane of this reference solution.
-
-```bash
-cd scripts
-./install.sh test@example.com
-```
-
-This script will deploy the following:
-
-- Creates a codecommit repo in your AWS account and pushes this reference solutions code to the repo
-- Clones SaaS Builder Toolkit(SBT) control plane repo and installs control plane which has all shared services and control plane UI.
-- Deploys cdk stack `serverless-saas-ref-arch-bootstrap-stack` which provisions
-  - SaaS Builder Toolkit(SBT) core application plane component which provides infrastructure to provision/de-provision a tenant
-  - Infrastructure to host a saas application UI and also deploys this saas application UI.
-- Deploys pooled tenant cdk stack `serverless-saas-ref-arch-tenant-template-pooled`, which deploys cognito userpool and multi-tenant order & product services.
-- Deploys cdk stack `ServerlessSaaSPipeline` which provisions Tenant Pipeline.This pipeline uses CodePipeline and is responsible for auto updating the stack for all the tenants in an automated fashion.
-
-## Steps to Clean-up
-
-Run below script to clean up
-
-```bash
-cd scripts
-./cleanup.sh
-```
-
+# GitHub Repository
 For a complete implementation of the sample architecture for this pattern, see the [GitHub repository](https://github.com/aws-samples/aws-saas-factory-ref-solution-serverless-saas/tree/main)

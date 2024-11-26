@@ -65,12 +65,6 @@ const config: Config = {
         },
         {
           type: 'docSidebar',
-          sidebarId: 'pointSolutions',
-          position: 'left',
-          label: 'Point Solutions',
-        },
-        {
-          type: 'docSidebar',
           sidebarId: 'interfaces',
           position: 'left',
           label: 'Interfaces',
