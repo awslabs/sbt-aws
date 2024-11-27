@@ -4,8 +4,36 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
 import Heading from '@theme/Heading';
-
+import ReactPlayer from 'react-player';
 import styles from './index.module.css';
+
+
+
+function VideoPlayer({ url }) {
+  return (
+    <div style={{ width: '50%', height: '100%' }}>
+      <ReactPlayer 
+        url={url} 
+        controls
+        width="100%"
+        // height="100%"
+      />
+    </div>
+  );
+}
+
+const videos = [
+  {
+    title: 'Video 1 Title',
+    url: 'https://www.youtube.com/watch?v=XYHxu2eMxCk',
+    description: 'Description for Video 1',
+  },
+  {
+    title: 'Video 2 Title',
+    url: 'https://www.youtube.com/watch?v=slo2vPPtldo',
+    description: 'Description for Video 2',
+  },
+];
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
@@ -16,11 +44,21 @@ function HomepageHeader() {
           {siteConfig.title}
         </Heading>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
-        <div className={styles.buttons}>
-          <Link className="button button--secondary button--lg" to="/docs/tutorials/intro">
-            SBT Tutorial - 5min ⏱️
-          </Link>
+        <Link 
+          className="button button--secondary button--lg"
+          to="/docs/tutorials/intro"
+        >
+          SBT Tutorial - 5min ⏱️
+        </Link>
+        <div className={styles.videoGrid}>
+          <h2 className={styles.videoHeading}>Watch and Learn</h2>
+        <div className={styles.videoRow}>
+          <VideoPlayer url={videos[0].url} />
+          <VideoPlayer url={videos[1].url} />
         </div>
+      </div>
+
+
       </div>
     </header>
   );

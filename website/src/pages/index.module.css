@@ -21,3 +21,48 @@
   align-items: center;
   justify-content: center;
 }
+
+.videoHeading {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+/* Your existing styles remain the same */
+.videoGrid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin: 2rem auto;
+}
+
+.videoGrid > *:first-child {
+  margin-bottom: 2rem;
+}
+
+.videoRow {
+  display: flex;
+  justify-content: center;
+  gap: 2rem; /* Creates spacing between videos */
+  width: 100%;
+  max-width: 1200px; /* Prevents videos from getting too wide */
+}
+
+.videoRow > * {
+  flex: 1;
+  max-width: 45%; /* Controls maximum width of each video */
+}
+
+@media screen and (max-width: 996px) {
+  .videoRow {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .videoRow > * {
+    max-width: 90%;
+  }
+}
