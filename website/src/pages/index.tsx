@@ -46,7 +46,7 @@ function HomepageHeader() {
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <Link 
           className="button button--secondary button--lg"
-          to="/docs/tutorials/intro"
+          to="/docs/tutorials/tutorial-basics/intro"
         >
           SBT Tutorial - 5min ⏱️
         </Link>
