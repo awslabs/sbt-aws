@@ -65,9 +65,15 @@ const config: Config = {
         },
         {
           type: 'docSidebar',
-          sidebarId: 'pointSolutions',
+          sidebarId: 'interfaces',
           position: 'left',
-          label: 'Point Solutions',
+          label: 'Interfaces',
+        },
+        {
+          type: 'docSidebar',
+          sidebarId: 'referenceArchitectures',
+          position: 'left',
+          label: 'Reference Architectures',
         },
       ],
     },
@@ -99,6 +105,11 @@ const config: Config = {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
     },
+    colorMode: {
+      defaultMode: 'light',
+      disableSwitch: true,
+      respectPrefersColorScheme: false,
+    }
   } satisfies Preset.ThemeConfig,
   plugins: [require.resolve('docusaurus-lunr-search')],
 };

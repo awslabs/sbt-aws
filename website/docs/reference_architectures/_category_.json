@@ -1,0 +1,8 @@
+{
+  "label": "Elastic Container Service (ECS) Reference Architecture",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Set up and deploy an Amazon ECS SaaS (Software as a Service) reference architecture."
+  }
+}
