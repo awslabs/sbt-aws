@@ -4,7 +4,9 @@ sidebar_position: 1
 # Amazon EKS SaaS Reference Architecture
 
 The AWS SaaS Factory EKS SaaS Reference Architecture provides a working example of a multi-tenant SaaS solution using Amazon Elastic Kubernetes Service (EKS). This architecture, like all SaaS Factory reference architectures, are provided as examples from which to create scalable, secure, and efficient SaaS applications on AWS. This architecture leverages SBT for both control plane and tenant deployments. Key components and considerations of this reference architecture include:
+
 ## Key Components
+
 1. **Multi-Tenant Isolation**: The architecture emphasizes tenant isolation, which is crucial for ensuring that each tenant's data and operations are secure and separate from others. This is achieved through Kubernetes namespaces and network policies.
 2. **Identity and Access Management**: Amazon Cognito is used for managing user identities and access controls, ensuring that tenant-specific access policies are enforced.
 3. **Data Partitioning**: Data for each tenant is partitioned to maintain privacy and security. This can involve using separate databases or schemas for each tenant, depending on the application's requirements.

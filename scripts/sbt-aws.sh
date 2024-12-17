@@ -11,7 +11,7 @@ CONFIG_FILE="${HOME}/.sbt-aws-config"
 help() {
   echo "Usage: $0 [--debug] <operation> [additional args]"
   echo "Operations:"
-  echo "  configure <control_plane_stack> <email_user> <email_domain>"
+  echo "  configure <control_plane_stack> <user_email>"
   echo "  refresh-tokens"
   echo "  create-tenant-registration"
   echo "  get-tenant-registration <tenant_registration_id>"
@@ -57,6 +57,8 @@ generate_credentials() {
   aws cognito-idp update-user-pool-client \
     --user-pool-id "$USER_POOL_ID" \
     --client-id "$CLIENT_ID" \
+    --id-token-validity 3 \
+    --access-token-validity 3 \
     --explicit-auth-flows USER_PASSWORD_AUTH \
     --output text >/dev/null
 
@@ -94,8 +96,9 @@ generate_credentials() {
 
 configure() {
   CONTROL_PLANE_STACK_NAME="$1"
-  EMAIL_USERNAME="$2"
-  EMAIL_DOMAIN="$3"
+  USER_EMAIL="$2"
+  EMAIL_USERNAME="$(echo $USER_EMAIL | cut -d "@" -f 1)"
+  EMAIL_DOMAIN="$(echo $USER_EMAIL | cut -d "@" -f 2)"
 
   if $DEBUG; then
     echo "Configuring with:"
@@ -132,7 +135,7 @@ refresh_tokens() {
     echo "Refreshing tokens..."
   fi
 
-  generate_credentials "$ADMIN_USER_PASSWORD"
+  generate_credentials "$ADMIN_USER_PASSWORD" "$CONTROL_PLANE_STACK_NAME"
   CONTROL_PLANE_API_ENDPOINT=$(aws cloudformation describe-stacks \
     --stack-name "$CONTROL_PLANE_STACK_NAME" \
     --query "Stacks[0].Outputs[?contains(OutputKey,'controlPlaneAPIEndpoint')].OutputValue" \
@@ -181,6 +184,7 @@ create_tenant_registration() {
         ]
       },
       "tenantRegistrationData": {
+        "registrationStatus": "In progress",
         "tenantRegistrationData1": "test"
       }
     }')
