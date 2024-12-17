@@ -105,7 +105,7 @@ Once you deploy your updated stack, create a tenant in your AWS SBT setup using 
 
 When you create a tenant, you must also set the price id to be used for creating subscriptions, By default, the field name is `priceId`, but this can be overridden via the above options. If you are using Zuora, you must also set the plan id. The field `email` must also be set.
 
-_If your provider is set to Zuora, [you must also set these fields](#Zuora)_
+_If your provider is set to Zuora, [you must also set these fields](#zuora)_
 
 If you're running the `hello-cdk` project, this can be done by running [this script](https://github.com/awslabs/sbt-aws/tree/main/docs/public#test-the-deployment) to onboard a new tenant. Modify, the script to also include the price (and plan if required).
 
