@@ -17,7 +17,7 @@ import { Runtime, IFunction, LayerVersion } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { CreateAdminUserProps, IAuth } from './auth-interface';
-import { setupCognitoAuthCLI } from './cli-auth';
+import { cognitoAuthCLI } from './cli-auth';
 import { addTemplateTag } from '../../utils';
 
 /**
@@ -52,9 +52,8 @@ export interface CognitoAuthProps {
     fqdn: string;
 
     /**
-     * The ARN of the SSL/TLS certificate
      */
-    certificateArn: string;
+    readonly zoneName: string;
 
     /**
      * The domain prefix for the Cognito User Pool domain.
@@ -286,7 +285,14 @@ export class CognitoAuth extends Construct implements IAuth {
     });
 
     if (props?.cliProps) {
-      setupCognitoAuthCLI(this, props.cliProps, this.userPool, this.jwtAudience);
+      new cognitoAuthCLI(this, 'cognitoAuthCLI', {
+        hostedZoneId: props.cliProps.hostedZoneId,
+        fqdn: props.cliProps.fqdn,
+        cognitoDomain: props.cliProps.cognitoDomain,
+        userPool: this.userPool,
+        jwtAudience: this.jwtAudience,
+        zoneName: props.cliProps.zoneName,
+      });
       this.tokenEndpoint = `https://${props.cliProps.cognitoDomain}.auth.${Stack.of(this).region}.amazoncognito.com/oauth2/token`;
     } else {
       const userPoolDomain = new cognito.UserPoolDomain(this, 'UserPoolDomain', {

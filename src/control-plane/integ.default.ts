@@ -18,6 +18,12 @@ export class IntegStack extends cdk.Stack {
 
     const cognitoAuth = new sbt.CognitoAuth(this, 'CognitoAuth', {
       setAPIGWScopes: false, // only for testing purposes!
+      // cliProps: {
+      //   hostedZoneId: '...',
+      //   zoneName: '...',
+      //   fqdn: '...',
+      //   cognitoDomain: '...',
+      // },
     });
 
     const controlPlane = new sbt.ControlPlane(this, 'ControlPlane', {
