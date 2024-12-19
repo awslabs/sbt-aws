@@ -239,6 +239,7 @@ export class ScriptJob extends Construct {
         version: '0.2',
         env: {
           shell: 'bash',
+          'git-credential-helper': 'yes',
           ...(codeBuildProjectExportedVariables.length > 0 && {
             'exported-variables': codeBuildProjectExportedVariables,
           }),
