@@ -35,6 +35,12 @@ export interface CognitoAuthProps {
    * @default true
    */
   readonly setAPIGWScopes?: boolean;
+
+  /**
+   * Whether or not to enable self-signup for the user pool.
+   * @default false
+   */
+  readonly selfSignUpEnabled?: boolean;
 }
 
 /**
@@ -249,6 +255,7 @@ export class CognitoAuth extends Construct implements IAuth {
         userRole: new cognito.StringAttribute({ mutable: true, minLen: 1, maxLen: 256 }),
       },
       advancedSecurityMode: cognito.AdvancedSecurityMode.ENFORCED,
+      selfSignUpEnabled: props?.selfSignUpEnabled || false,
     });
 
     NagSuppressions.addResourceSuppressions(this.userPool, [
