@@ -11,7 +11,7 @@ This document describes how to set up a development environment and submit your 
 * Ensure [Node.js ≥ 18.12.0](https://nodejs.org/download/release/latest-v18.x/) is installed
   * We recommend using a version in [Active LTS](https://nodejs.org/en/about/previous-releases)
  
-This project uses [Projen](https://projen.io/releases.html).
+This project uses [Projen](https://projen.io).
 
 Once you have all the required dependencies installed, you can fork this repo, then:
 
