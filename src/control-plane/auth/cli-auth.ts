@@ -31,29 +31,23 @@ interface cognitoAuthCLIProps {
   readonly hostedZoneId: string;
 
   /**
-   * The fully qualified domain name (FQDN) for the ALB
-   */
-  readonly fqdn: string;
-
-  /**
    */
   readonly zoneName: string;
-
-  /**
-   * The domain prefix for the Cognito User Pool domain.
-   */
-  readonly cognitoDomain: string;
 
   readonly userPool: cognito.UserPool;
 
   readonly jwtAudience: string[];
+
+  readonly cognitoDomain: string;
 }
 
 export class cognitoAuthCLI extends Construct {
   constructor(scope: Construct, id: string, props: cognitoAuthCLIProps) {
     super(scope, id);
     addTemplateTag(this, 'CognitoAuthCLI');
-    const { hostedZoneId, fqdn, zoneName, cognitoDomain, userPool, jwtAudience } = props;
+    const { hostedZoneId, zoneName, userPool, jwtAudience, cognitoDomain } = props;
+
+    const fqdn = 'sbt.auth.' + zoneName;
 
     const hostedZone = route53.HostedZone.fromHostedZoneAttributes(this, 'hostedZone', {
       hostedZoneId: hostedZoneId,

@@ -47,18 +47,8 @@ export interface CognitoAuthProps {
     hostedZoneId: string;
 
     /**
-     * The fully qualified domain name (FQDN)
-     */
-    fqdn: string;
-
-    /**
      */
     readonly zoneName: string;
-
-    /**
-     * The domain prefix for the Cognito User Pool domain.
-     */
-    cognitoDomain: string;
 
     /**
      * Initalize as a string-indexed map for properties
@@ -248,6 +238,8 @@ export class CognitoAuth extends Construct implements IAuth {
     super(scope, id);
     addTemplateTag(this, 'CognitoAuth');
 
+    const cognitoDomain = `sbt${cdk.Stack.of(this).account}-${this.node.addr}`;
+
     // https://docs.powertools.aws.dev/lambda/python/2.31.0/#lambda-layer
 
     this.jwtAudience = [];
@@ -287,13 +279,12 @@ export class CognitoAuth extends Construct implements IAuth {
     if (props?.cliProps) {
       new cognitoAuthCLI(this, 'cognitoAuthCLI', {
         hostedZoneId: props.cliProps.hostedZoneId,
-        fqdn: props.cliProps.fqdn,
-        cognitoDomain: props.cliProps.cognitoDomain,
         userPool: this.userPool,
         jwtAudience: this.jwtAudience,
         zoneName: props.cliProps.zoneName,
+        cognitoDomain,
       });
-      this.tokenEndpoint = `https://${props.cliProps.cognitoDomain}.auth.${Stack.of(this).region}.amazoncognito.com/oauth2/token`;
+      this.tokenEndpoint = `https://${cognitoDomain}.auth.${Stack.of(this).region}.amazoncognito.com/oauth2/token`;
     } else {
       const userPoolDomain = new cognito.UserPoolDomain(this, 'UserPoolDomain', {
         userPool: this.userPool,
