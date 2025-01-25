@@ -43,7 +43,7 @@ Interested in seeing SBT used in a comprehensive SaaS reference architecture? Ta
 * [Elastic Kubernetes Service (EKS) Reference Architecture](https://github.com/aws-samples/aws-saas-factory-eks-reference-architecture)
 * [Elastic Container Service (ECS) Reference Architecture](https://github.com/aws-samples/saas-reference-architecture-ecs)
 * [Serverless Reference Architecture](https://github.com/aws-samples/aws-saas-factory-ref-solution-serverless-saas)
-* [SBT Workshop](https://catalog.us-east-1.prod.workshops.aws/workshops/236fe656-f781-4862-a1a9-51becf126857)
+* [SBT Workshop](https://catalog.workshops.aws/sbt-aws)
 
 ## Getting Help
 
