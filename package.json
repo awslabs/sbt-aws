@@ -41,7 +41,7 @@
     "@typescript-eslint/eslint-plugin": "^7",
     "@typescript-eslint/parser": "^7",
     "aws-cdk": "2.140.0",
-    "aws-cdk-lib": "2.140.0",
+    "aws-cdk-lib": "2.177.0",
     "braces": ">=3.0.3",
     "commit-and-tag-version": "^12",
     "constructs": "10.0.5",
