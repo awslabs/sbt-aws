@@ -1,3 +1,4 @@
+import type {ReactNode} from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
@@ -7,11 +8,9 @@ import Heading from '@theme/Heading';
 import ReactPlayer from 'react-player';
 import styles from './index.module.css';
 
-
-
 function VideoPlayer({ url }) {
   return (
-    <div style={{ width: '50%', height: '100%' }}>
+    <div style={{ width: '100%', height: '100%' }}>
       <ReactPlayer 
         url={url} 
         controls
@@ -64,13 +63,12 @@ function HomepageHeader() {
   );
 }
 
-export default function Home(): JSX.Element {
-  const { siteConfig } = useDocusaurusContext();
+export default function Home(): ReactNode {
+  const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
       title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />"
-    >
+      description="Description will go into a meta tag in <head />">
       <HomepageHeader />
       <main>
         <HomepageFeatures />
