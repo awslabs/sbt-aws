@@ -1,0 +1,27 @@
+{
+  "id": "tutorials/tutorial-basics/provisioning-script-breakdown",
+  "title": "Provisioning script breakdown",
+  "description": "Let's break this script down section by section.",
+  "source": "@site/docs/tutorials/tutorial-basics/provisioning-script-breakdown.md",
+  "sourceDirName": "tutorials/tutorial-basics",
+  "slug": "/tutorials/tutorial-basics/provisioning-script-breakdown",
+  "permalink": "/docs/tutorials/tutorial-basics/provisioning-script-breakdown",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/awslabs/sbt-aws/blob/main/website/docs/tutorials/tutorial-basics/provisioning-script-breakdown.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 7,
+  "frontMatter": {
+    "sidebar_position": 7
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Application plane utilities",
+    "permalink": "/docs/tutorials/tutorial-basics/app-plane-utils"
+  },
+  "next": {
+    "title": "Putting it all together",
+    "permalink": "/docs/tutorials/tutorial-basics/putting-it-all-together"
+  }
+}

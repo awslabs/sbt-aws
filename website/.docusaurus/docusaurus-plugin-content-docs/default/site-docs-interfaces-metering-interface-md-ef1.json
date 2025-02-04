@@ -1,0 +1,24 @@
+{
+  "id": "interfaces/metering-interface",
+  "title": "IMetering Interface",
+  "description": "Overview",
+  "source": "@site/docs/interfaces/metering-interface.md",
+  "sourceDirName": "interfaces",
+  "slug": "/interfaces/metering-interface",
+  "permalink": "/docs/interfaces/metering-interface",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/awslabs/sbt-aws/blob/main/website/docs/interfaces/metering-interface.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "sidebar_position": 3,
+    "sidebar_label": "IMetering Interface"
+  },
+  "sidebar": "interfaces",
+  "previous": {
+    "title": "IBilling Interface",
+    "permalink": "/docs/interfaces/billing-interface"
+  }
+}

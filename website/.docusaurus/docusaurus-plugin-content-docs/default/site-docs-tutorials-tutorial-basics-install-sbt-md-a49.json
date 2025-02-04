@@ -1,0 +1,27 @@
+{
+  "id": "tutorials/tutorial-basics/install-sbt",
+  "title": "Install the SaaS Builder Toolkit for AWS",
+  "description": "Now that you've initialized a new CDK app, let's install the SBT components. From within the hello-cdk directory, please run the following command:",
+  "source": "@site/docs/tutorials/tutorial-basics/install-sbt.md",
+  "sourceDirName": "tutorials/tutorial-basics",
+  "slug": "/tutorials/tutorial-basics/install-sbt",
+  "permalink": "/docs/tutorials/tutorial-basics/install-sbt",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/awslabs/sbt-aws/blob/main/website/docs/tutorials/tutorial-basics/install-sbt.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "sidebar_position": 2
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Tutorial Intro",
+    "permalink": "/docs/tutorials/tutorial-basics/intro"
+  },
+  "next": {
+    "title": "Create the control plane",
+    "permalink": "/docs/tutorials/tutorial-basics/create-control-plane"
+  }
+}

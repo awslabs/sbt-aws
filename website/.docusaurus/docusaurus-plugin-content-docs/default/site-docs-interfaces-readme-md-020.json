@@ -1,0 +1,24 @@
+{
+  "id": "interfaces/README",
+  "title": "SBT Interfaces",
+  "description": "This documentation covers the interfaces that form the backbone of SBT's authentication, billing, and metering functionalities. These interfaces provide a standardized and consistent approach to handling various operations, making it easier to manage and integrate different components across the system.",
+  "source": "@site/docs/interfaces/README.md",
+  "sourceDirName": "interfaces",
+  "slug": "/interfaces",
+  "permalink": "/docs/interfaces",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/awslabs/sbt-aws/blob/main/website/docs/interfaces/README.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1,
+    "slug": "/interfaces"
+  },
+  "sidebar": "interfaces",
+  "next": {
+    "title": "IAuth Interface",
+    "permalink": "/docs/interfaces/auth-interface"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "id": "tutorials/sbt-workshop/workshop",
+  "title": "SaaS Builder Toolkit for AWS Workshop",
+  "description": "For a detailed step by step walkthrough, click this link to follow along in a workshop.",
+  "source": "@site/docs/tutorials/sbt-workshop/workshop.md",
+  "sourceDirName": "tutorials/sbt-workshop",
+  "slug": "/tutorials/sbt-workshop/workshop",
+  "permalink": "/docs/tutorials/sbt-workshop/workshop",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/awslabs/sbt-aws/blob/main/website/docs/tutorials/sbt-workshop/workshop.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "SBT for AWS Workshop",
+    "permalink": "/docs/category/sbt-for-aws-workshop"
+  }
+}

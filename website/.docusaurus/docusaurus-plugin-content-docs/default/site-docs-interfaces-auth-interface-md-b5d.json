@@ -1,0 +1,28 @@
+{
+  "id": "interfaces/auth-interface",
+  "title": "IAuth Interface",
+  "description": "Overview",
+  "source": "@site/docs/interfaces/auth-interface.md",
+  "sourceDirName": "interfaces",
+  "slug": "/interfaces/auth-interface",
+  "permalink": "/docs/interfaces/auth-interface",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/awslabs/sbt-aws/blob/main/website/docs/interfaces/auth-interface.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1,
+    "sidebar_label": "IAuth Interface"
+  },
+  "sidebar": "interfaces",
+  "previous": {
+    "title": "SBT Interfaces",
+    "permalink": "/docs/interfaces"
+  },
+  "next": {
+    "title": "IBilling Interface",
+    "permalink": "/docs/interfaces/billing-interface"
+  }
+}

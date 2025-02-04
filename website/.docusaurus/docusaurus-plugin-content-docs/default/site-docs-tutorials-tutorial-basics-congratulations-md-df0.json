@@ -1,0 +1,27 @@
+{
+  "id": "tutorials/tutorial-basics/congratulations",
+  "title": "Congratulations!",
+  "description": "",
+  "source": "@site/docs/tutorials/tutorial-basics/congratulations.md",
+  "sourceDirName": "tutorials/tutorial-basics",
+  "slug": "/tutorials/tutorial-basics/congratulations",
+  "permalink": "/docs/tutorials/tutorial-basics/congratulations",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/awslabs/sbt-aws/blob/main/website/docs/tutorials/tutorial-basics/congratulations.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 10,
+  "frontMatter": {
+    "sidebar_position": 10
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Testing the deployment",
+    "permalink": "/docs/tutorials/tutorial-basics/test-the-deployment"
+  },
+  "next": {
+    "title": "SBT for AWS Workshop",
+    "permalink": "/docs/category/sbt-for-aws-workshop"
+  }
+}

@@ -9,6 +9,7 @@ The AWS SaaS Factory Serverless SaaS Reference Architecture is a comprehensive e
 - **Application Plane**: This consists of the core application services that handle business logic and data processing. It typically involves AWS Lambda for compute, Amazon API Gateway for routing requests, and Amazon DynamoDB for data storage.
 - **Identity and Access Management**: Amazon Cognito is used for user authentication and authorization, providing a secure way to manage user identities across different tenants.
 ## Architectural Strategies
+
 - **Serverless Model**: By using serverless services like AWS Lambda, the architecture reduces operational overhead and allows automatic scaling based on demand. This model aligns resource consumption with tenant activity, optimizing cost efficiency.
 - **Multi-Tenant Management**: The architecture supports both pooled and siloed deployment models, allowing flexibility in how resources are shared or isolated among tenants. This can be configured using AWS Lambda layers and API Gateway usage plans to manage tenant-specific configurations.
 - **Deployment Automation**: The reference architecture includes automated deployment pipelines using AWS CodePipeline, enabling continuous integration and delivery of updates across all tenants.

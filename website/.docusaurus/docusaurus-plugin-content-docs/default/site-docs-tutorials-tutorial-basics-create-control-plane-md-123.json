@@ -1,0 +1,27 @@
+{
+  "id": "tutorials/tutorial-basics/create-control-plane",
+  "title": "Create the control plane",
+  "description": "Now that we have SBT installed, let's create a new SBT control plane. Create a new file under /lib/control-plane.ts with the following contents.",
+  "source": "@site/docs/tutorials/tutorial-basics/create-control-plane.md",
+  "sourceDirName": "tutorials/tutorial-basics",
+  "slug": "/tutorials/tutorial-basics/create-control-plane",
+  "permalink": "/docs/tutorials/tutorial-basics/create-control-plane",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/awslabs/sbt-aws/blob/main/website/docs/tutorials/tutorial-basics/create-control-plane.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "sidebar_position": 3
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Install the SaaS Builder Toolkit for AWS",
+    "permalink": "/docs/tutorials/tutorial-basics/install-sbt"
+  },
+  "next": {
+    "title": "Build the control plane",
+    "permalink": "/docs/tutorials/tutorial-basics/build-it"
+  }
+}
