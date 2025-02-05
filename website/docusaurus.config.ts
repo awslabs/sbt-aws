@@ -11,7 +11,7 @@ const config: Config = {
 
    // Set the production url of your site here
    url: 'https://awslabs.github.io',
-   baseUrl: '/',
+   baseUrl: '/sbt-aws/',
    trailingSlash: false,
    organizationName: 'awslabs', // Usually your GitHub org/user name.
    projectName: 'sbt-aws', // Usually your repo name.
