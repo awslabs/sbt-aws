@@ -512,23 +512,28 @@ DATA=$(jq --null-input \
     --arg tenantName "$TENANT_NAME" \
     --arg tenantEmail "$TENANT_EMAIL" \
     '{
-  "tenantName": $tenantName,
-  "email": $tenantEmail,
-  "tier": "basic",
-  "tenantStatus": "In progress"
-}')
+      "tenantData": {
+        "tenantName": $tenantName,
+        "email": $tenantEmail,
+        "tier": "basic"
+      },
+      "tenantRegistrationData": {
+        "registrationStatus": "In progress"
+      }
+    }')
 
 echo "creating tenant..."
 curl --request POST \
-    --url "${CONTROL_PLANE_API_ENDPOINT}tenants" \
+    --url "${CONTROL_PLANE_API_ENDPOINT}tenant-registrations" \
     --header "Authorization: Bearer ${ACCESS_TOKEN}" \
     --header 'content-type: application/json' \
     --data "$DATA" | jq
 echo "" # add newline
 
+
 echo "retrieving tenants..."
 curl --request GET \
-    --url "${CONTROL_PLANE_API_ENDPOINT}tenants" \
+    --url "${CONTROL_PLANE_API_ENDPOINT}tenant-registrations" \
     --header "Authorization: Bearer ${ACCESS_TOKEN}" \
     --silent | jq
 ```
