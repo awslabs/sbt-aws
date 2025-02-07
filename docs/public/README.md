@@ -554,7 +554,7 @@ In this section we detail the EventBridge messages that pass between the two pla
 
 #### Tenant Onboarding Request
 
-The control plane emits this event any time it onboards a new tenant. This event contains all information present in the create tenant request (POST /tenants) along with some fields added by the tenant management service. In the case above, an onboarding event would look something like this:
+The control plane emits this event any time it onboards a new tenant.  This event contains the tenant registration data, tenant data, and additional fields added by the tenant registration and management services. In the case above, an onboarding event would look something like this:
 
 ##### Sample onboarding request event
 
@@ -564,17 +564,21 @@ The control plane emits this event any time it onboards a new tenant. This event
   "detail-type": "onboardingRequest",
   "detail": {
     "tenantId": "guid string",
+    "tenantRegistrationId": "registration-guid-string",
     "tenantName": "tenant$RANDOM",
     "email": "tenant@example.com",
     "tier": "basic",
-    "tenantStatus": "In progress"
+    "tenantStatus": "In progress",
+    "registrationStatus": "In progress"
   }
 }
 ```
 
 #### Tenant Provision Success
 
-As per our configuration, the application plane emits this event upon completion of onboarding. It contains the `tenantId` and a `jobOutput` object containing the environment variables (key/value pairs) whose keys have been identified in the `environmentVariablesToOutgoingEvent` parameter. In the example above, a provision success event would look something like this:
+As per our configuration, the application plane emits this event upon completion of onboarding. It contains the `tenantId`, `tenantRegistrationId`, and a `jobOutput` object containing the environment variables (key/value pairs) whose keys have been identified in the `environmentVariablesToOutgoingEvent` parameter. The event includes both tenant and registration status updates. In the example above, a provision success event would look something like this:
+
+##### Sample provision success event
 
 ##### Sample provision success event
 
@@ -585,20 +589,23 @@ As per our configuration, the application plane emits this event upon completion
   "detail": {
     "jobOutput": {
       "tenantStatus": "created",
+      "registrationStatus": "completed",
       "tenantConfig": "{\n  \"userPoolId\": \"MY_SAAS_APP_USERPOOL_ID\",\n  \"appClientId\": \"MY_SAAS_APP_CLIENT_ID\",\n  \"apiGatewayUrl\": \"MY_API_GATEWAY_URL\"\n}",
       "tenantName": "tenant$RANDOM",
       "tenantS3Bucket": "mybucket",
       "someOtherVariable": "this is a test",
       "email": "tenant@example.com"
     },
-    "tenantId": "guid string"
+    "tenantId": "guid string",
+    "tenantRegistrationId": "registration-guid-string"
   }
 }
 ```
 
 #### Tenant Offboarding Request
 
-The control plane emits this event any time it offboards a tenant. The detail of this event will contain the entire tenant object (i.e., the fields defined in the create tenant request along with fields like `tenantId`). Similar to the onboarding job defined above, offboarding can be whatever your application requires including, but not limited to, the deletion of the tenant's dedicated infrastructure.
+The control plane emits this event any time it offboards a tenant. The detail of this event will contain the entire tenant object including tenant registration data (i.e., the fields defined in the create tenant request along with fields like `tenantId` and `tenantRegistrationId`). Similar to the onboarding job defined above, offboarding can be whatever your application requires including, but not limited to, the deletion of the tenant's dedicated infrastructure.
+
 
 ##### Sample offboarding request event
 
@@ -607,14 +614,17 @@ The control plane emits this event any time it offboards a tenant. The detail of
   "source": "controlPlaneEventSource",
   "detail-type": "offboardingRequest",
   "detail": {
-    // <entire tenant object>
+    "tenantId": "guid string",
+    "tenantRegistrationId": "registration-guid-string",
+    // <rest of tenant object including registration data>
   }
 }
 ```
 
 #### Tenant Deprovision Success
 
-The application plane emits this event upon completion of offboarding. Similar to provision success event, its contents are determined by the environment variables identified by their key in the `environmentVariablesToOutgoingEvent` parameter.
+The application plane emits this event upon completion of offboarding. Similar to provision success event, its contents are determined by the environment variables identified by their key in the `environmentVariablesToOutgoingEvent` parameter. The event includes both the tenant and registration identifiers, along with status updates related to the deprovisioning process.
+
 
 ##### Sample deprovision success event
 
@@ -624,9 +634,11 @@ The application plane emits this event upon completion of offboarding. Similar t
   "detail-type": "deprovisionSuccess",
   "detail": {
     "jobOutput": {
-      // defined in the deprovisioning job configuration
+      "registrationStatus": "deprovisioned"
+      // other fields defined in the deprovisioning job configuration
     },
-    "tenantId": "guid string"
+    "tenantId": "guid string",
+    "tenantRegistrationId": "registration-guid-string"
   }
 }
 ```
@@ -641,6 +653,10 @@ The application plane emits this event upon completion of offboarding. Similar t
 - **Guide builders and make it approachable** - SBT will provide rich documentation and examples from which the community can derive inspiration and reference
 
 ## Additional documentation and resources
+
+### Tenant registration
+
+This service plays a crucial role in orchestrating the tenant onboarding workflow. It exposes an API endpoint that accepts and validates initial tenant registration requests, working as the first step in the tenant onboarding workflow. Upon receiving a registration request, it coordinates with the Tenant Management service to create the fundamental tenant record and initiates the provisioning process. The service uses EventBridge to orchestrate the workflow between the control plane and application plane until the tenant is fully provisioned.
 
 ### Tenant management
 
