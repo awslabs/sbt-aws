@@ -18,6 +18,7 @@
 
 const { CognitoIdentityProvider } = require("@aws-sdk/client-cognito-identity-provider");
 const { DynamoDB } = require("@aws-sdk/client-dynamodb");
+const base64url = require('base64-url');
 
 var cognitoidentityserviceprovider = new CognitoIdentityProvider({
     // The transformation for apiVersions is not implemented.
@@ -44,7 +45,7 @@ var dynamodb = new DynamoDB({
 
 //Function a random string based of the required lenght and format
 //  length:     length of the random string to generate
-//  client_id:  format of the randrom string to generate
+//  chars:  format of the randrom string to generate
 //  result:     string
 function randomString(length, chars) {
     var mask = '';
@@ -75,10 +76,7 @@ function generateCookieVal() {
 //  encoded:    The Base64 URL encoded value
 //  result:     The decoded value
 function base64UrlDecode(encoded) {
-    encoded = encoded.replace('-', '+').replace('_', '/');
-    while (encoded.length % 4)
-      encoded += '=';
-    return base64Decode(encoded);
+    return base64url.decode(encoded);
 }
 
 //Function that performs Base64 decoding
@@ -100,7 +98,7 @@ function base6UurlEncode(unencoded) {
 //  unencoded:  The decoded value
 //  result:     The Base64 encoded value
 function base64Encode(unencoded) {
-  return new Buffer.from(unencoded || '').toString('base64');
+    return base64url.encode(unencoded);
 }
 
 //Function that returns an error code as a JSON message

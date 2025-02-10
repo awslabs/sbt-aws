@@ -114,7 +114,7 @@ def configure(
         print("Configuring with:")
         print(f"CONTROL_PLANE_STACK_NAME: {control_plane_stack}")
         print(f"CLIENT_ID: {client_id}")
-        print(f"CLIENT_SECRET: {client_secret}")
+        print("CLIENT_SECRET: ****")
         print(f"FQDN: {fqdn}")
         print(f"CONTROL_PLANE_API_ENDPOINT: {control_plane_api_endpoint}")
         print(f"cognito_domain: {cognito_domain}")
