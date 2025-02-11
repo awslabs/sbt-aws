@@ -19,6 +19,7 @@
 const { CognitoIdentityProvider } = require("@aws-sdk/client-cognito-identity-provider");
 const { DynamoDB } = require("@aws-sdk/client-dynamodb");
 const base64url = require('base64-url');
+const generateCustomUuid = require('custom-uuid');
 
 var cognitoidentityserviceprovider = new CognitoIdentityProvider({
     // The transformation for apiVersions is not implemented.
@@ -45,18 +46,10 @@ var dynamodb = new DynamoDB({
 
 //Function a random string based of the required lenght and format
 //  length:     length of the random string to generate
-//  chars:  format of the randrom string to generate
 //  result:     string
-function randomString(length, chars) {
-    var mask = '';
-    if (chars.indexOf('a') > -1) mask += 'abcdefghijklmnopqrstuvwxyz';
-    if (chars.indexOf('b') > -1) mask += 'bcdfghjklmnpqrstvwxz';
-    if (chars.indexOf('A') > -1) mask += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    if (chars.indexOf('B') > -1) mask += 'BCDFGHJKLMNPQRSTVWXZ';
-    if (chars.indexOf('#') > -1) mask += '0123456789';
-    if (chars.indexOf('!') > -1) mask += '~`!@#$%^&*()_+-={}[]:";\'<>?,./|\\';
-    var result = '';
-    for (var i = length; i > 0; --i) result += mask[Math.floor(Math.random() * mask.length)];
+function randomString(length) {
+    var mask = 'abcdefghijklmnopqrstuvwxyzbcdfghjklmnpqrstvwxzABCDEFGHIJKLMNOPQRSTUVWXYZBCDFGHJKLMNPQRSTVWXZ0123456789~`!@#$%^&*()_+-={}[]:";\'<>?,./|\\';
+    var result = generateCustomUuid(mask, length);
     return result;
 }
 
