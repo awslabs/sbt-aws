@@ -55,12 +55,12 @@ var dynamodb = new DynamoDB({
 function processAllow(client_id, device_code, callback) {
     
     //Generating a code verifier and challenge for the PKCE protection of the OAuth2 flow
-    var code_verifier = common.randomString(32);
+    var code_verifier = common.randomString(32, 'aA#');
     var hash = crypto.createHash('sha256').update(code_verifier).digest();
     var code_challenge = common.base6UurlEncode(hash);
 
     //Generating a random state for preventing against CSRF attacks
-    var state = common.randomString(32);
+    var state = common.randomString(32, 'aA#');
     
     //Updating the Authorization request with PKCE code verifier and State
     var DynamoDBParams = {

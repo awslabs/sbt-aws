@@ -144,8 +144,8 @@ function processPostRequest(event, callback) {
 //  callback:       Callback function to return the message
 function requestSetOfCodes(event, callback) {
     // Generating the user code (a unique code to return to the end user) and device code (a unique code for future device calls)
-    var user_code = common.randomString(process.env.USER_CODE_LENGTH);
-    var device_code = common.randomString(process.env.DEVICE_CODE_LENGTH);
+    var user_code = common.randomString(process.env.USER_CODE_LENGTH, process.env.USER_CODE_FORMAT);
+    var device_code = common.randomString(process.env.DEVICE_CODE_LENGTH, process.env.DEVICE_CODE_FORMAT);
     var scope = 'openid';
     
     // Creating a JSON structure to return codes to the device
