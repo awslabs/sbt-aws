@@ -409,12 +409,14 @@ export tenantStatus="created"
 echo "done!"
 `,
       environmentStringVariablesFromIncomingEvent: ['tenantId', 'tier'],
-      environmentVariablesToOutgoingEvent: [
-        'tenantS3Bucket',
-        'someOtherVariable',
-        'tenantConfig',
-        'tenantStatus',
-      ],
+      environmentVariablesToOutgoingEvent:  tenantData: {
+        [
+          'tenantS3Bucket',
+          'someOtherVariable',
+          'tenantConfig',
+          'tenantStatus',
+        ]
+      },
       scriptEnvironmentVariables: {
         TEST: 'test',
       },
@@ -560,16 +562,21 @@ The control plane emits this event any time it onboards a new tenant.  This even
 
 ```json
 {
-  "source": "controlPlaneEventSource",
+  "version": "0",
+  "id": "guid string",
   "detail-type": "onboardingRequest",
+  "source": "controlPlaneEventSource",
+  "account": "account-id",
+  "time": "timestamp",
+  "region": "region",
+  "resources": [],
   "detail": {
-    "tenantId": "guid string",
-    "tenantRegistrationId": "registration-guid-string",
+    "registrationStatus": "In progress",
     "tenantName": "tenant$RANDOM",
     "email": "tenant@example.com",
     "tier": "basic",
-    "tenantStatus": "In progress",
-    "registrationStatus": "In progress"
+    "tenantId": "guid string",
+    "tenantRegistrationId": "registration-guid-string"
   }
 }
 ```
@@ -580,23 +587,31 @@ As per our configuration, the application plane emits this event upon completion
 
 ##### Sample provision success event
 
-##### Sample provision success event
-
 ```json
 {
-  "source": "applicationPlaneEventSource",
+  "version": "0",
+  "id": "guid-string",
   "detail-type": "provisionSuccess",
+  "source": "applicationPlaneEventSource",
+  "account": "account-id",
+  "time": "timestamp",
+  "region": "region",
+  "resources": [
+    "arn:aws:states:region:account-id:stateMachine:stateMachineName",
+    "arn:aws:states:region:account-id:execution:stateMachineName:executionId"
+  ],
   "detail": {
     "jobOutput": {
-      "tenantStatus": "created",
-      "registrationStatus": "completed",
-      "tenantConfig": "{\n  \"userPoolId\": \"MY_SAAS_APP_USERPOOL_ID\",\n  \"appClientId\": \"MY_SAAS_APP_CLIENT_ID\",\n  \"apiGatewayUrl\": \"MY_API_GATEWAY_URL\"\n}",
-      "tenantName": "tenant$RANDOM",
-      "tenantS3Bucket": "mybucket",
-      "someOtherVariable": "this is a test",
-      "email": "tenant@example.com"
+      "tenantData": {
+        "tenantStatus": "created",
+        "tenantConfig": "{\n  \"userPoolId\": \"MY_SAAS_APP_USERPOOL_ID\",\n  \"appClientId\": \"MY_SAAS_APP_CLIENT_ID\",\n  \"apiGatewayUrl\": \"MY_API_GATEWAY_URL\"\n}",
+        "tenantS3Bucket": "tenanttemplatestack-{tenantId}-mybucket-{random-string}",
+        "someOtherVariable": "this is a test"
+      },
+      "tenantRegistrationData": {
+        "registrationStatus": ""
+      }
     },
-    "tenantId": "guid string",
     "tenantRegistrationId": "registration-guid-string"
   }
 }
@@ -611,12 +626,26 @@ The control plane emits this event any time it offboards a tenant. The detail of
 
 ```json
 {
-  "source": "controlPlaneEventSource",
+  "version": "0",
+  "id": "guid-string",
   "detail-type": "offboardingRequest",
+  "source": "controlPlaneEventSource",
+  "account": "account-id",
+  "time": "timestamp",
+  "region": "region",
+  "resources": [],
   "detail": {
-    "tenantId": "guid string",
+    "tenantName": "tenant$RANDOM",
+    "someOtherVariable": "this is a test",
+    "tenantId": "guid-string",
+    "tier": "basic",
+    "sbtaws_active": true,
+    "email": "tenant@example.com",
+    "tenantConfig": "{\n  \"userPoolId\": \"MY_SAAS_APP_USERPOOL_ID\",\n  \"appClientId\": \"MY_SAAS_APP_CLIENT_ID\",\n  \"apiGatewayUrl\": \"MY_API_GATEWAY_URL\"\n}",
+    "tenantS3Bucket": "tenanttemplatestack-{tenantId}-mybucket-{random-string}",
+    "tenantStatus": "created",
     "tenantRegistrationId": "registration-guid-string",
-    // <rest of tenant object including registration data>
+    "registrationStatus": ""
   }
 }
 ```
