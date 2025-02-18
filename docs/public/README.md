@@ -409,8 +409,8 @@ export tenantStatus="created"
 echo "done!"
 `,
       environmentStringVariablesFromIncomingEvent: ['tenantId', 'tier'],
-      environmentVariablesToOutgoingEvent: tenantData: {
-        [
+      environmentVariablesToOutgoingEvent: { 
+        tenantData: [
           'tenantS3Bucket',
           'someOtherVariable',
           'tenantConfig',
