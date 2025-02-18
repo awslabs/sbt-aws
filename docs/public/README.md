@@ -409,14 +409,12 @@ export tenantStatus="created"
 echo "done!"
 `,
       environmentStringVariablesFromIncomingEvent: ['tenantId', 'tier'],
-      environmentVariablesToOutgoingEvent: tenantData: {
-        [
+      environmentVariablesToOutgoingEvent: [
         'tenantS3Bucket',
         'someOtherVariable',
         'tenantConfig',
         'tenantStatus',
-        ]
-      },
+      ],
       scriptEnvironmentVariables: {
         TEST: 'test',
       },
