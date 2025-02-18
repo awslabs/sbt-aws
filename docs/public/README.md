@@ -409,12 +409,12 @@ export tenantStatus="created"
 echo "done!"
 `,
       environmentStringVariablesFromIncomingEvent: ['tenantId', 'tier'],
-      environmentVariablesToOutgoingEvent:  tenantData: {
+      environmentVariablesToOutgoingEvent: tenantData: {
         [
-          'tenantS3Bucket',
-          'someOtherVariable',
-          'tenantConfig',
-          'tenantStatus',
+        'tenantS3Bucket',
+        'someOtherVariable',
+        'tenantConfig',
+        'tenantStatus',
         ]
       },
       scriptEnvironmentVariables: {
@@ -430,7 +430,7 @@ echo "done!"
     );
 
     new sbt.CoreApplicationPlane(this, 'CoreApplicationPlane', {
-      eventManager: eventManager,
+      eventManager: props.eventManager,
       scriptJobs: [provisioningJobScript],
     });
   }
@@ -487,7 +487,7 @@ USER="admin"
 aws cognito-idp update-user-pool-client \
     --user-pool-id "$USER_POOL_ID" \
     --client-id "$CLIENT_ID" \
-    --explicit-auth-flows USER_PASSWORD_AUTH
+    --explicit-auth-flows USER_PASSWORD_AUTH > /dev/null
 
 # remove need for password reset
 aws cognito-idp admin-set-user-password \
@@ -518,26 +518,52 @@ DATA=$(jq --null-input \
         "tenantName": $tenantName,
         "email": $tenantEmail,
         "tier": "basic"
-      },
+        },
       "tenantRegistrationData": {
         "registrationStatus": "In progress"
       }
-    }')
+}')
 
 echo "creating tenant..."
-curl --request POST \
+CREATION_RESPONSE=$(curl --request POST \
     --url "${CONTROL_PLANE_API_ENDPOINT}tenant-registrations" \
     --header "Authorization: Bearer ${ACCESS_TOKEN}" \
     --header 'content-type: application/json' \
-    --data "$DATA" | jq
+    --data "$DATA")
+
+echo "$CREATION_RESPONSE" | jq
 echo "" # add newline
 
+# Extract both IDs from the creation response
+TENANT_ID=$(echo "$CREATION_RESPONSE" | jq -r '.data.tenantId')
+TENANT_REGISTRATION_ID=$(echo "$CREATION_RESPONSE" | jq -r '.data.tenantRegistrationId')
 
-echo "retrieving tenants..."
-curl --request GET \
-    --url "${CONTROL_PLANE_API_ENDPOINT}tenant-registrations" \
-    --header "Authorization: Bearer ${ACCESS_TOKEN}" \
-    --silent | jq
+# Function to check tenant status
+check_tenant_status() {
+    local status=$(curl --silent \
+        --url "${CONTROL_PLANE_API_ENDPOINT}tenant-registrations" \
+        --header "Authorization: Bearer ${ACCESS_TOKEN}" \
+        | jq -r ".data[] | select(.tenantId == \"$TENANT_ID\") | .registrationStatus")
+    echo "$status"
+}
+
+# Wait for tenant to be fully provisioned
+echo "waiting for tenant to be fully provisioned..."
+while true; do
+    STATUS=$(check_tenant_status)
+    echo "Current status: $STATUS"
+    if [ "$STATUS" = "" ]; then
+        echo "Tenant provisioning completed"
+        break
+    elif [ "$STATUS" = "In progress" ]; then
+        echo "Still provisioning... waiting 10 seconds"
+        sleep 10
+    else
+        echo "Unexpected status: $STATUS"
+        exit 1
+    fi
+done
+
 ```
 
 Now that we've onboarded a tenant, let's take a look at the console to see what got deployed.
@@ -556,121 +582,67 @@ In this section we detail the EventBridge messages that pass between the two pla
 
 #### Tenant Onboarding Request
 
-The control plane emits this event any time it onboards a new tenant.  This event contains the tenant registration data, tenant data, and additional fields added by the tenant registration and management services. In the case above, an onboarding event would look something like this:
+The control plane emits this event any time it onboards a new tenant. This event contains all information present in the create tenant request (POST /tenants) along with some fields added by the tenant management service. In the case above, an onboarding event would look something like this:
 
 ##### Sample onboarding request event
 
 ```json
 {
-  "version": "0",
-  "id": "guid string",
-  "detail-type": "onboardingRequest",
   "source": "controlPlaneEventSource",
-  "account": "account-id",
-  "time": "timestamp",
-  "region": "region",
-  "resources": [],
+  "detail-type": "onboardingRequest",
   "detail": {
-    "registrationStatus": "In progress",
+    "tenantId": "guid string",
     "tenantName": "tenant$RANDOM",
     "email": "tenant@example.com",
     "tier": "basic",
-    "tenantId": "guid string",
-    "tenantRegistrationId": "registration-guid-string"
+    "tenantStatus": "In progress"
   }
 }
 ```
 
 #### Tenant Provision Success
 
-As per our configuration, the application plane emits this event upon completion of onboarding. It contains the `tenantId`, `tenantRegistrationId`, and a `jobOutput` object containing the environment variables (key/value pairs) whose keys have been identified in the `environmentVariablesToOutgoingEvent` parameter. The event includes both tenant and registration status updates. In the example above, a provision success event would look something like this:
+As per our configuration, the application plane emits this event upon completion of onboarding. It contains the `tenantId` and a `jobOutput` object containing the environment variables (key/value pairs) whose keys have been identified in the `environmentVariablesToOutgoingEvent` parameter. In the example above, a provision success event would look something like this:
 
 ##### Sample provision success event
 
 ```json
 {
-  "version": "0",
-  "id": "guid-string",
-  "detail-type": "provisionSuccess",
   "source": "applicationPlaneEventSource",
-  "account": "account-id",
-  "time": "timestamp",
-  "region": "region",
-  "resources": [
-    "arn:aws:states:region:account-id:stateMachine:stateMachineName",
-    "arn:aws:states:region:account-id:execution:stateMachineName:executionId"
-  ],
+  "detail-type": "provisionSuccess",
   "detail": {
     "jobOutput": {
-      "tenantData": {
-        "tenantStatus": "created",
-        "tenantConfig": "{\n  \"userPoolId\": \"MY_SAAS_APP_USERPOOL_ID\",\n  \"appClientId\": \"MY_SAAS_APP_CLIENT_ID\",\n  \"apiGatewayUrl\": \"MY_API_GATEWAY_URL\"\n}",
-        "tenantS3Bucket": "tenanttemplatestack-{tenantId}-mybucket-{random-string}",
-        "someOtherVariable": "this is a test"
-      },
-      "tenantRegistrationData": {
-        "registrationStatus": ""
-      }
+      "tenantStatus": "created",
+      "tenantConfig": "{\n  \"userPoolId\": \"MY_SAAS_APP_USERPOOL_ID\",\n  \"appClientId\": \"MY_SAAS_APP_CLIENT_ID\",\n  \"apiGatewayUrl\": \"MY_API_GATEWAY_URL\"\n}",
+      "tenantName": "tenant$RANDOM",
+      "tenantS3Bucket": "mybucket",
+      "someOtherVariable": "this is a test",
+      "email": "tenant@example.com"
     },
-    "tenantRegistrationId": "registration-guid-string"
+    "tenantId": "guid string"
   }
 }
 ```
 
 #### Tenant Offboarding Request
 
-The control plane emits this event any time it offboards a tenant. The detail of this event will contain the entire tenant object including tenant registration data (i.e., the fields defined in the create tenant request along with fields like `tenantId` and `tenantRegistrationId`). Similar to the onboarding job defined above, offboarding can be whatever your application requires including, but not limited to, the deletion of the tenant's dedicated infrastructure.
-
+The control plane emits this event any time it offboards a tenant. The detail of this event will contain the entire tenant object (i.e., the fields defined in the create tenant request along with fields like `tenantId`). Similar to the onboarding job defined above, offboarding can be whatever your application requires including, but not limited to, the deletion of the tenant's dedicated infrastructure.
 
 ##### Sample offboarding request event
 
 ```json
 {
-  "version": "0",
-  "id": "guid-string",
-  "detail-type": "offboardingRequest",
   "source": "controlPlaneEventSource",
-  "account": "account-id",
-  "time": "timestamp",
-  "region": "region",
-  "resources": [],
+  "detail-type": "offboardingRequest",
   "detail": {
-    "tenantName": "tenant$RANDOM",
-    "someOtherVariable": "this is a test",
-    "tenantId": "guid-string",
-    "tier": "basic",
-    "sbtaws_active": true,
-    "email": "tenant@example.com",
-    "tenantConfig": "{\n  \"userPoolId\": \"MY_SAAS_APP_USERPOOL_ID\",\n  \"appClientId\": \"MY_SAAS_APP_CLIENT_ID\",\n  \"apiGatewayUrl\": \"MY_API_GATEWAY_URL\"\n}",
-    "tenantS3Bucket": "tenanttemplatestack-{tenantId}-mybucket-{random-string}",
-    "tenantStatus": "created",
-    "tenantRegistrationId": "registration-guid-string",
-    "registrationStatus": ""
+    // <entire tenant object>
   }
 }
 ```
 
 #### Tenant Deprovision Success
 
-The application plane emits this event upon completion of offboarding. Similar to provision success event, its contents are determined by the environment variables identified by their key in the `environmentVariablesToOutgoingEvent` parameter. The event includes both the tenant and registration identifiers, along with status updates related to the deprovisioning process.
-
-
-##### Sample deprovision success event
-
-```json
-{
-  "source": "applicationPlaneEventSource",
-  "detail-type": "deprovisionSuccess",
-  "detail": {
-    "jobOutput": {
-      "registrationStatus": "deprovisioned"
-      // other fields defined in the deprovisioning job configuration
-    },
-    "tenantId": "guid string",
-    "tenantRegistrationId": "registration-guid-string"
-  }
-}
-```
+The application plane emits this event upon completion of offboarding. Similar to provision success event, its contents are determined by the environment variables identified by their key in the `environmentVariablesToOutgoingEvent` parameter.
 
 ## Design tenets
 
@@ -682,10 +654,6 @@ The application plane emits this event upon completion of offboarding. Similar t
 - **Guide builders and make it approachable** - SBT will provide rich documentation and examples from which the community can derive inspiration and reference
 
 ## Additional documentation and resources
-
-### Tenant registration
-
-This service plays a crucial role in orchestrating the tenant onboarding workflow. It exposes an API endpoint that accepts and validates initial tenant registration requests, working as the first step in the tenant onboarding workflow. Upon receiving a registration request, it coordinates with the Tenant Management service to create the fundamental tenant record and initiates the provisioning process. The service uses EventBridge to orchestrate the workflow between the control plane and application plane until the tenant is fully provisioned.
 
 ### Tenant management
 
