@@ -18,6 +18,10 @@ export class IntegStack extends cdk.Stack {
 
     const cognitoAuth = new sbt.CognitoAuth(this, 'CognitoAuth', {
       setAPIGWScopes: false, // only for testing purposes!
+      cliProps: {
+        hostedZoneId: 'XXXXXXXXXXXXXXXXX',
+        zoneName: 'XXXXXXXXXXXXXXXXX',
+      },
     });
 
     const mockBilling = new sbt.MockBillingProvider(this, 'MockBilling');
