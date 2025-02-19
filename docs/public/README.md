@@ -440,7 +440,7 @@ export tenantStatus="created"
 echo "done!"
 `,
       environmentStringVariablesFromIncomingEvent: ['tenantId', 'tier'],
-      environmentVariablesToOutgoingEvent: {
+      environmentVariablesToOutgoingEvent: { 
         tenantData: [
           'tenantS3Bucket',
           'tenantConfig',
@@ -613,7 +613,6 @@ curl --request GET \
     --url "${CONTROL_PLANE_API_ENDPOINT}tenant-registrations" \
     --header "Authorization: Bearer ${ACCESS_TOKEN}" \
     --silent | jq
-
 ```
 
 Now that we've onboarded a tenant, let's take a look at the console to see what got deployed.
@@ -720,7 +719,6 @@ The application plane emits this event upon successful completion of tenant offb
   }
 }
 ```
-
 ## Design tenets
 
 - **A templated model for producing best practices SaaS applications** - SBT strives to provide a mental model, and a foundational implementation from which almost any SaaS application can be built
