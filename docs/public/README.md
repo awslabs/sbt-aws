@@ -487,7 +487,7 @@ USER="admin"
 aws cognito-idp update-user-pool-client \
     --user-pool-id "$USER_POOL_ID" \
     --client-id "$CLIENT_ID" \
-    --explicit-auth-flows USER_PASSWORD_AUTH
+    --explicit-auth-flows USER_PASSWORD_AUTH > /dev/null
 
 # remove need for password reset
 aws cognito-idp admin-set-user-password \
@@ -514,25 +514,56 @@ DATA=$(jq --null-input \
     --arg tenantName "$TENANT_NAME" \
     --arg tenantEmail "$TENANT_EMAIL" \
     '{
-  "tenantName": $tenantName,
-  "email": $tenantEmail,
-  "tier": "basic",
-  "tenantStatus": "In progress"
+      "tenantData": {
+        "tenantName": $tenantName,
+        "email": $tenantEmail,
+        "tier": "basic"
+        },
+      "tenantRegistrationData": {
+        "registrationStatus": "In progress"
+      }
 }')
 
 echo "creating tenant..."
-curl --request POST \
-    --url "${CONTROL_PLANE_API_ENDPOINT}tenants" \
+CREATION_RESPONSE=$(curl --request POST \
+    --url "${CONTROL_PLANE_API_ENDPOINT}tenant-registrations" \
     --header "Authorization: Bearer ${ACCESS_TOKEN}" \
     --header 'content-type: application/json' \
-    --data "$DATA" | jq
+    --data "$DATA")
+
+echo "$CREATION_RESPONSE" | jq
 echo "" # add newline
 
-echo "retrieving tenants..."
-curl --request GET \
-    --url "${CONTROL_PLANE_API_ENDPOINT}tenants" \
-    --header "Authorization: Bearer ${ACCESS_TOKEN}" \
-    --silent | jq
+# Extract both IDs from the creation response
+TENANT_ID=$(echo "$CREATION_RESPONSE" | jq -r '.data.tenantId')
+TENANT_REGISTRATION_ID=$(echo "$CREATION_RESPONSE" | jq -r '.data.tenantRegistrationId')
+
+# Function to check tenant status
+check_tenant_status() {
+    local status=$(curl --silent \
+        --url "${CONTROL_PLANE_API_ENDPOINT}tenant-registrations" \
+        --header "Authorization: Bearer ${ACCESS_TOKEN}" \
+        | jq -r ".data[] | select(.tenantId == \"$TENANT_ID\") | .registrationStatus")
+    echo "$status"
+}
+
+# Wait for tenant to be fully provisioned
+echo "waiting for tenant to be fully provisioned..."
+while true; do
+    STATUS=$(check_tenant_status)
+    echo "Current status: $STATUS"
+    if [ "$STATUS" = "" ]; then
+        echo "Tenant provisioning completed"
+        break
+    elif [ "$STATUS" = "In progress" ]; then
+        echo "Still provisioning... waiting 10 seconds"
+        sleep 10
+    else
+        echo "Unexpected status: $STATUS"
+        exit 1
+    fi
+done
+
 ```
 
 Now that we've onboarded a tenant, let's take a look at the console to see what got deployed.
@@ -612,21 +643,6 @@ The control plane emits this event any time it offboards a tenant. The detail of
 #### Tenant Deprovision Success
 
 The application plane emits this event upon completion of offboarding. Similar to provision success event, its contents are determined by the environment variables identified by their key in the `environmentVariablesToOutgoingEvent` parameter.
-
-##### Sample deprovision success event
-
-```json
-{
-  "source": "applicationPlaneEventSource",
-  "detail-type": "deprovisionSuccess",
-  "detail": {
-    "jobOutput": {
-      // defined in the deprovisioning job configuration
-    },
-    "tenantId": "guid string"
-  }
-}
-```
 
 ## Design tenets
 
