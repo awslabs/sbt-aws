@@ -30,6 +30,13 @@ export interface CognitoAuthProps {
   readonly controlPlaneCallbackURL?: string;
 
   /**
+   * Whether or not to enforce advanced security mode.
+   * Can be used for testing purposes.
+   * @default true
+   */
+  readonly enableAdvancedSecurityMode?: boolean;
+
+  /**
    * Whether or not to specify scopes for validation at the API GW.
    * Can be used for testing purposes.
    * @default true
@@ -248,7 +255,10 @@ export class CognitoAuth extends Construct implements IAuth {
       customAttributes: {
         userRole: new cognito.StringAttribute({ mutable: true, minLen: 1, maxLen: 256 }),
       },
-      advancedSecurityMode: cognito.AdvancedSecurityMode.ENFORCED,
+      advancedSecurityMode:
+        props?.enableAdvancedSecurityMode != false
+          ? cognito.AdvancedSecurityMode.ENFORCED
+          : cognito.AdvancedSecurityMode.OFF,
     });
 
     NagSuppressions.addResourceSuppressions(this.userPool, [

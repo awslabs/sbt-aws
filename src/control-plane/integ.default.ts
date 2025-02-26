@@ -17,6 +17,7 @@ export class IntegStack extends cdk.Stack {
     super(scope, id, props);
 
     const cognitoAuth = new sbt.CognitoAuth(this, 'CognitoAuth', {
+      enableAdvancedSecurityMode: false, // only for testing purposes!
       setAPIGWScopes: false, // only for testing purposes!
     });
 
