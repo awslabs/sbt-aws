@@ -22,9 +22,8 @@ export class ControlPlaneStack extends Stack {
   constructor(scope: Construct, id: string, props?: any) {
     super(scope, id, props);
     const cognitoAuth = new sbt.CognitoAuth(this, 'CognitoAuth', {
-      // Avoid disabling advanced security mode and checking scopes for API endpoints. Done only for testing purposes.
-      enableAdvancedSecurityMode: false,
-      setAPIGWScopes: false,
+      enableAdvancedSecurityMode: false, // only for testing purposes!
+      setAPIGWScopes: false, // only for testing purposes!
     });
 
     const controlPlane = new sbt.ControlPlane(this, 'ControlPlane', {
