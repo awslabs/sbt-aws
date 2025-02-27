@@ -256,9 +256,9 @@ export class CognitoAuth extends Construct implements IAuth {
         userRole: new cognito.StringAttribute({ mutable: true, minLen: 1, maxLen: 256 }),
       },
       advancedSecurityMode:
-        props?.enableAdvancedSecurityMode != false
-          ? cognito.AdvancedSecurityMode.ENFORCED
-          : cognito.AdvancedSecurityMode.OFF,
+        props?.enableAdvancedSecurityMode == false
+          ? cognito.AdvancedSecurityMode.OFF
+          : cognito.AdvancedSecurityMode.ENFORCED,
     });
 
     NagSuppressions.addResourceSuppressions(this.userPool, [
