@@ -1,12 +1,21 @@
-// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-// SPDX-License-Identifier: Apache-2.0
+/**
+ *  Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
+ *  with the License. A copy of the License is located at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  or in the 'license' file accompanying this file. This file is distributed on an 'AS IS' BASIS, WITHOUT WARRANTIES
+ *  OR CONDITIONS OF ANY KIND, express or implied. See the License for the specific language governing permissions
+ *  and limitations under the License.
+ */
 
 import * as path from 'path';
-import * as firehose from '@aws-cdk/aws-kinesisfirehose-alpha';
-import * as destinations from '@aws-cdk/aws-kinesisfirehose-destinations-alpha';
 import * as lambda_python from '@aws-cdk/aws-lambda-python-alpha';
 import * as cdk from 'aws-cdk-lib';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
+import * as kinesisfirehose from 'aws-cdk-lib/aws-kinesisfirehose';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as s3n from 'aws-cdk-lib/aws-s3-notifications';
@@ -65,7 +74,7 @@ export class FirehoseAggregator extends Construct implements IDataIngestorAggreg
   /**
    * The Firehose DeliveryStream ingestor responsible for accepting the incoming data.
    */
-  public readonly dataIngestor: firehose.DeliveryStream;
+  public readonly dataIngestor: kinesisfirehose.DeliveryStream;
 
   /**
    * The name of the dataIngestor. This is used for visibility.
@@ -96,9 +105,9 @@ export class FirehoseAggregator extends Construct implements IDataIngestorAggreg
       true // applyToChildren = true, so that it applies to policies created for the role.
     );
 
-    this.dataIngestor = new firehose.DeliveryStream(this, 'Firehose', {
-      encryption: firehose.StreamEncryption.AWS_OWNED,
-      destinations: [new destinations.S3Bucket(firehoseDestinationBucket)],
+    this.dataIngestor = new kinesisfirehose.DeliveryStream(this, 'Firehose', {
+      encryption: kinesisfirehose.StreamEncryption.awsOwnedKey(),
+      destination: new kinesisfirehose.S3Bucket(firehoseDestinationBucket),
     });
 
     this.dataIngestorName = this.dataIngestor.deliveryStreamName;
@@ -116,17 +125,17 @@ export class FirehoseAggregator extends Construct implements IDataIngestorAggreg
 
     this.dataRepository = new dynamodb.Table(this, 'Data', {
       partitionKey: { name: props.primaryKeyColumn, type: dynamodb.AttributeType.STRING },
-      pointInTimeRecovery: true,
+      pointInTimeRecoverySpecification: {
+        pointInTimeRecoveryEnabled: true,
+      },
     });
 
-    // https://docs.powertools.aws.dev/lambda/python/2.31.0/#lambda-layer
-    const lambdaPowerToolsLayerARN = `arn:aws:lambda:${
-      cdk.Stack.of(this).region
-    }:017000801446:layer:AWSLambdaPowertoolsPythonV2:59`;
+    // https://docs.powertools.aws.dev/lambda/python/3.6.0/#lambda-layer
+    const lambdaPowerToolsLayerARN = `arn:aws:lambda:${cdk.Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV3-python313-x86_64:7`;
 
     this.dataAggregator = new lambda_python.PythonFunction(this, 'DataAggregatorLambda', {
       entry: path.join(__dirname, '../../../resources/functions/data-aggregator'),
-      runtime: lambda.Runtime.PYTHON_3_12,
+      runtime: lambda.Runtime.PYTHON_3_13,
       index: 'index.py',
       handler: 'handler',
       tracing: lambda.Tracing.ACTIVE,

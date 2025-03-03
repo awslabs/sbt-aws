@@ -1,5 +1,15 @@
-// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-// SPDX-License-Identifier: Apache-2.0
+/**
+ *  Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
+ *  with the License. A copy of the License is located at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  or in the 'license' file accompanying this file. This file is distributed on an 'AS IS' BASIS, WITHOUT WARRANTIES
+ *  OR CONDITIONS OF ANY KIND, express or implied. See the License for the specific language governing permissions
+ *  and limitations under the License.
+ */
 
 import * as path from 'path';
 import { PythonFunction } from '@aws-cdk/aws-lambda-python-alpha';
@@ -124,7 +134,9 @@ export class AWSMarketplaceSaaSProduct extends Construct {
       partitionKey: { name: 'customerIdentifier', type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       stream: dynamodb.StreamViewType.NEW_AND_OLD_IMAGES,
-      pointInTimeRecovery: true,
+      pointInTimeRecoverySpecification: {
+        pointInTimeRecoveryEnabled: true,
+      },
     });
 
     if (createSubscriptionLogic) {
@@ -145,10 +157,8 @@ export class AWSMarketplaceSaaSProduct extends Construct {
       new subscriptions.EmailSubscription(props.marketplaceTechAdminEmail)
     );
 
-    // https://docs.powertools.aws.dev/lambda/python/2.31.0/#lambda-layer
-    const lambdaPowerToolsLayerARN = `arn:aws:lambda:${
-      cdk.Stack.of(this).region
-    }:017000801446:layer:AWSLambdaPowertoolsPythonV2:59`;
+    // https://docs.powertools.aws.dev/lambda/python/3.6.0/#lambda-layer
+    const lambdaPowerToolsLayerARN = `arn:aws:lambda:${cdk.Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV3-python313-x86_64:7`;
 
     const powerToolsLayer = lambda.LayerVersion.fromLayerVersionArn(
       this,
@@ -164,7 +174,7 @@ export class AWSMarketplaceSaaSProduct extends Construct {
           __dirname,
           '../../../resources/aws-marketplace/functions/grant-revoke-access-to-product'
         ),
-        runtime: lambda.Runtime.PYTHON_3_12,
+        runtime: lambda.Runtime.PYTHON_3_13,
         index: 'index.py',
         handler: 'lambda_handler',
         timeout: cdk.Duration.seconds(60),
@@ -214,7 +224,7 @@ export class AWSMarketplaceSaaSProduct extends Construct {
           __dirname,
           '../../../resources/aws-marketplace/functions/register-new-subscriber'
         ),
-        runtime: lambda.Runtime.PYTHON_3_12,
+        runtime: lambda.Runtime.PYTHON_3_13,
         index: 'index.py',
         handler: 'lambda_handler',
         timeout: cdk.Duration.seconds(60),

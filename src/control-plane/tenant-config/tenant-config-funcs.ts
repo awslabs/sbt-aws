@@ -1,5 +1,15 @@
-// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-// SPDX-License-Identifier: Apache-2.0
+/**
+ *  Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
+ *  with the License. A copy of the License is located at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  or in the 'license' file accompanying this file. This file is distributed on an 'AS IS' BASIS, WITHOUT WARRANTIES
+ *  OR CONDITIONS OF ANY KIND, express or implied. See the License for the specific language governing permissions
+ *  and limitations under the License.
+ */
 
 import * as path from 'path';
 import * as lambda_python from '@aws-cdk/aws-lambda-python-alpha';
@@ -51,17 +61,15 @@ export class TenantConfigLambdas extends Construct {
     super(scope, id);
     addTemplateTag(this, 'TenantConfigService');
 
-    // https://docs.powertools.aws.dev/lambda/python/2.31.0/#lambda-layer
-    const lambdaPowerToolsLayerARN = `arn:aws:lambda:${
-      cdk.Stack.of(this).region
-    }:017000801446:layer:AWSLambdaPowertoolsPythonV2:59`;
+    // https://docs.powertools.aws.dev/lambda/python/3.6.0/#lambda-layer
+    const lambdaPowerToolsLayerARN = `arn:aws:lambda:${cdk.Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV3-python313-x86_64:7`;
 
     this.tenantConfigFunction = new lambda_python.PythonFunction(
       this,
       'TenantConfigServiceLambda',
       {
         entry: path.join(__dirname, '../../../resources/functions/tenant-config/'),
-        runtime: lambda.Runtime.PYTHON_3_12,
+        runtime: lambda.Runtime.PYTHON_3_13,
         index: 'index.py',
         handler: 'handler',
         tracing: lambda.Tracing.ACTIVE,

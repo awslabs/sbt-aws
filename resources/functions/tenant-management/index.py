@@ -13,7 +13,7 @@ from aws_lambda_powertools import Logger, Tracer
 from aws_lambda_powertools.event_handler import APIGatewayHttpResolver, CORSConfig
 from aws_lambda_powertools.logging import correlation_paths
 from aws_lambda_powertools.event_handler.openapi.params import Query, Path
-from aws_lambda_powertools.shared.types import Annotated
+from typing_extensions import Annotated
 from aws_lambda_powertools.event_handler.exceptions import (
     InternalServerError,
     NotFoundError,

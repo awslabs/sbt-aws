@@ -1,11 +1,6 @@
 {
   "dependencies": [
     {
-      "name": "@aws-cdk/aws-kinesisfirehose-alpha",
-      "version": "2.140.0-alpha.0",
-      "type": "build"
-    },
-    {
       "name": "@types/jest",
       "type": "build"
     },
@@ -16,22 +11,17 @@
     },
     {
       "name": "@typescript-eslint/eslint-plugin",
-      "version": "^7",
+      "version": "^8",
       "type": "build"
     },
     {
       "name": "@typescript-eslint/parser",
-      "version": "^7",
+      "version": "^8",
       "type": "build"
     },
     {
       "name": "aws-cdk",
-      "version": "2.140.0",
-      "type": "build"
-    },
-    {
-      "name": "braces",
-      "version": ">=3.0.3",
+      "version": "2.179.0",
       "type": "build"
     },
     {
@@ -48,11 +38,11 @@
       "type": "build"
     },
     {
-      "name": "eslint-plugin-header",
+      "name": "eslint-plugin-import",
       "type": "build"
     },
     {
-      "name": "eslint-plugin-import",
+      "name": "eslint-plugin-license-header",
       "type": "build"
     },
     {
@@ -61,7 +51,7 @@
     },
     {
       "name": "eslint",
-      "version": "^8",
+      "version": "^9",
       "type": "build"
     },
     {
@@ -70,7 +60,7 @@
     },
     {
       "name": "jest-junit",
-      "version": "^15",
+      "version": "^16",
       "type": "build"
     },
     {
@@ -88,12 +78,12 @@
     },
     {
       "name": "jsii-rosetta",
-      "version": "~5.5.0",
+      "version": "~5.6.0",
       "type": "build"
     },
     {
       "name": "jsii",
-      "version": "~5.5.0",
+      "version": "~5.6.0",
       "type": "build"
     },
     {
@@ -102,7 +92,7 @@
     },
     {
       "name": "projen",
-      "version": "0.86.9",
+      "version": "~0.91.5",
       "type": "build"
     },
     {
@@ -118,38 +108,23 @@
       "type": "build"
     },
     {
-      "name": "@aws-cdk/aws-kinesisfirehose-alpha",
-      "version": "2.140.0-alpha.0",
-      "type": "peer"
-    },
-    {
       "name": "aws-cdk-lib",
-      "version": "^2.140.0",
+      "version": "^2.179.0",
       "type": "peer"
     },
     {
       "name": "constructs",
-      "version": "^10.0.5",
+      "version": "^10.3.0",
       "type": "peer"
     },
     {
-      "name": "@aws-cdk/aws-kinesisfirehose-alpha",
-      "version": "2.140.0-alpha.0",
-      "type": "runtime"
-    },
-    {
-      "name": "@aws-cdk/aws-kinesisfirehose-destinations-alpha",
-      "version": "2.140.0-alpha.0",
-      "type": "runtime"
-    },
-    {
       "name": "@aws-cdk/aws-lambda-python-alpha",
-      "version": "2.140.0-alpha.0",
+      "version": "2.179.0-alpha.0",
       "type": "runtime"
     },
     {
       "name": "cdk-nag",
-      "version": "^2.27.230",
+      "version": "^2.35.24",
       "type": "runtime"
     }
   ],

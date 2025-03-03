@@ -1,5 +1,15 @@
-// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-// SPDX-License-Identifier: Apache-2.0
+/**
+ *  Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
+ *  with the License. A copy of the License is located at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  or in the 'license' file accompanying this file. This file is distributed on an 'AS IS' BASIS, WITHOUT WARRANTIES
+ *  OR CONDITIONS OF ANY KIND, express or implied. See the License for the specific language governing permissions
+ *  and limitations under the License.
+ */
 
 import * as path from 'path';
 import * as lambda_python from '@aws-cdk/aws-lambda-python-alpha';
@@ -29,7 +39,9 @@ export class MockBillingProvider extends Construct implements IBilling {
       partitionKey: { name: 'tenantId', type: dynamodb.AttributeType.STRING },
       sortKey: { name: 'billingPeriod', type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-      pointInTimeRecovery: true,
+      pointInTimeRecoverySpecification: {
+        pointInTimeRecoveryEnabled: true,
+      },
     });
 
     new cdk.CfnOutput(this, 'BillingTableName', {
@@ -40,7 +52,9 @@ export class MockBillingProvider extends Construct implements IBilling {
     this.customersTable = new dynamodb.Table(this, 'CustomersTable', {
       partitionKey: { name: 'customerId', type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-      pointInTimeRecovery: true,
+      pointInTimeRecoverySpecification: {
+        pointInTimeRecoveryEnabled: true,
+      },
     });
 
     new cdk.CfnOutput(this, 'CustomersTableName', {
@@ -67,11 +81,11 @@ export class MockBillingProvider extends Construct implements IBilling {
       value: this.ingestor.dataRepository.tableName,
     });
 
-    // https://docs.powertools.aws.dev/lambda/python/2.31.0/#lambda-layer
+    // https://docs.powertools.aws.dev/lambda/python/3.6.0/#lambda-layer
     this.lambdaPowertoolsLayer = lambda_python.PythonLayerVersion.fromLayerVersionArn(
       this,
       'LambdaPowerTools',
-      `arn:aws:lambda:${cdk.Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV2:59`
+      `arn:aws:lambda:${cdk.Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV3-python313-x86_64:7`
     );
 
     // Create Lambda functions
@@ -126,7 +140,7 @@ export class MockBillingProvider extends Construct implements IBilling {
   ): lambda_python.PythonFunction {
     const handler = new lambda_python.PythonFunction(this, id, {
       entry: path.join(__dirname, `../../../resources/functions/mock-billing/${entry}`),
-      runtime: lambda.Runtime.PYTHON_3_12,
+      runtime: lambda.Runtime.PYTHON_3_13,
       timeout: cdk.Duration.minutes(5),
       index: 'index.py',
       handler: 'handler',

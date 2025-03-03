@@ -1,5 +1,15 @@
-// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-// SPDX-License-Identifier: Apache-2.0
+/**
+ *  Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
+ *  with the License. A copy of the License is located at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  or in the 'license' file accompanying this file. This file is distributed on an 'AS IS' BASIS, WITHOUT WARRANTIES
+ *  OR CONDITIONS OF ANY KIND, express or implied. See the License for the specific language governing permissions
+ *  and limitations under the License.
+ */
 
 import { awscdk, javascript, cdk } from 'projen';
 import { NpmAccess } from 'projen/lib/javascript';
@@ -8,7 +18,6 @@ import {
   GITHUB_OPTIONS,
   GIT_IGNORE_PATTERNS,
   NPM_IGNORE_PATTERNS,
-  ESLINT_RULE,
 } from './projenrc/constants';
 import { runTestsWorkflow } from './projenrc/run-tests-workflow';
 
@@ -16,11 +25,11 @@ const GITHUB_USER: string = 'awslabs';
 const PUBLICATION_NAMESPACE: string = 'cdklabs';
 const PS_PUBLICATION_NAMESPACE: string = 'aws';
 const PROJECT_NAME: string = 'sbt-aws';
-const PROJEN_VERSION: string = '0.86.9';
-const CDK_VERSION: string = '2.140.0';
-const JSII_VERSION: string = '~5.5.0';
-const CONSTRUCTS_VERSION: string = '10.0.5';
-const POINT_SOLUTIONS_CDK_VERSION: string = '2.140.0';
+const PROJEN_VERSION: string = '~0.91.5';
+const CDK_VERSION: string = '2.179.0';
+const JSII_VERSION: string = '~5.6.0';
+const CONSTRUCTS_VERSION: string = '10.3.0';
+const POINT_SOLUTIONS_CDK_VERSION: string = '2.179.0';
 const POINT_SOLUTIONS_LIB_PROJECT_NAME: string = 'sbt-point-solutions-lib';
 const AWS_SDK_VERSION: string = '^3.621.0';
 
@@ -33,20 +42,10 @@ const project = new awscdk.AwsCdkConstructLibrary({
   copyrightOwner: 'Amazon.com, Inc. or its affiliates. All Rights Reserved.',
   copyrightPeriod: '2024-',
   defaultReleaseBranch: 'main',
-  deps: [
-    `@aws-cdk/aws-lambda-python-alpha@${CDK_VERSION}-alpha.0`,
-    'cdk-nag@^2.27.230',
-    `@aws-cdk/aws-kinesisfirehose-alpha@${CDK_VERSION}-alpha.0`,
-    `@aws-cdk/aws-kinesisfirehose-destinations-alpha@${CDK_VERSION}-alpha.0`,
-  ],
+  deps: [`@aws-cdk/aws-lambda-python-alpha@${CDK_VERSION}-alpha.0`, 'cdk-nag@^2.35.24'],
   description:
     'SaaS Builder Toolkit for AWS is a developer toolkit to implement SaaS best practices and increase developer velocity.',
-  devDeps: [
-    `aws-cdk@${CDK_VERSION}`,
-    'eslint-plugin-header',
-    `@aws-cdk/aws-kinesisfirehose-alpha@${CDK_VERSION}-alpha.0`,
-    `braces@>=3.0.3`, // fixes CVE-2024-4068
-  ],
+  devDeps: [`aws-cdk@${CDK_VERSION}`, 'eslint-plugin-license-header'],
   github: true,
   jsiiVersion: JSII_VERSION,
   keywords: ['constructs', 'aws-cdk', 'saas'],
@@ -57,7 +56,6 @@ const project = new awscdk.AwsCdkConstructLibrary({
   name: `@${PUBLICATION_NAMESPACE}/${PROJECT_NAME}`,
   npmignoreEnabled: true,
   packageManager: javascript.NodePackageManager.NPM,
-  peerDeps: [`@aws-cdk/aws-kinesisfirehose-alpha@${CDK_VERSION}-alpha.0`],
   prettier: true,
   projenrcTs: true,
   projenVersion: PROJEN_VERSION,
@@ -77,9 +75,9 @@ const project = new awscdk.AwsCdkConstructLibrary({
 });
 
 // Add License header automatically
-project.eslint?.addPlugins('header');
+project.eslint?.addPlugins('license-header');
 project.eslint?.addRules({
-  'header/header': ESLINT_RULE,
+  'license-header/header': ['error', 'header.js'],
 });
 
 const jsiiLibraryProjectOptions: cdk.JsiiProjectOptions = {
@@ -105,7 +103,7 @@ const jsiiLibraryProjectOptions: cdk.JsiiProjectOptions = {
   ],
   description:
     'SaaS Builder Toolkit point solutions for AWS is a developer toolkit to implement SaaS best practices and increase developer velocity.',
-  devDeps: ['@types/uuid', '@types/node', 'typescript'],
+  devDeps: ['@types/node', 'typescript'],
   github: true,
   jsiiVersion: JSII_VERSION,
   keywords: ['constructs', 'aws-cdk', 'saas'],
@@ -174,9 +172,9 @@ const jsiiLibraryProjectOptions: cdk.JsiiProjectOptions = {
 const pointSolutionsLibraryProject = new cdk.JsiiProject(jsiiLibraryProjectOptions);
 
 // Add License header automatically
-pointSolutionsLibraryProject.eslint?.addPlugins('header');
+pointSolutionsLibraryProject.eslint?.addPlugins('license-header');
 pointSolutionsLibraryProject.eslint?.addRules({
-  'header/header': ESLINT_RULE,
+  'license-header/header': ['error', 'header.js'],
 });
 
 pointSolutionsLibraryProject.synth();
