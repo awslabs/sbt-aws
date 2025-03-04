@@ -15,7 +15,7 @@ import * as cdk from 'aws-cdk-lib';
 import { CfnRule, EventBus, Rule } from 'aws-cdk-lib/aws-events';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { AwsSolutionsChecks } from 'cdk-nag';
-import * as sbt from '@cdklabs/sbt';
+import * as sbt from '.';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
 
 export interface IntegStackProps extends cdk.StackProps {
