@@ -3860,6 +3860,7 @@ const cognitoAuthProps: CognitoAuthProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.controlPlaneCallbackURL">controlPlaneCallbackURL</a></code> | <code>string</code> | The callback URL for the control plane. |
+| <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.enableAdvancedSecurityMode">enableAdvancedSecurityMode</a></code> | <code>boolean</code> | Whether or not to enforce advanced security mode. |
 | <code><a href="#@cdklabs/sbt-aws.CognitoAuthProps.property.setAPIGWScopes">setAPIGWScopes</a></code> | <code>boolean</code> | Whether or not to specify scopes for validation at the API GW. |
 
 ---
@@ -3874,6 +3875,21 @@ public readonly controlPlaneCallbackURL: string;
 - *Default:* 'http://localhost'
 
 The callback URL for the control plane.
+
+---
+
+##### `enableAdvancedSecurityMode`<sup>Optional</sup> <a name="enableAdvancedSecurityMode" id="@cdklabs/sbt-aws.CognitoAuthProps.property.enableAdvancedSecurityMode"></a>
+
+```typescript
+public readonly enableAdvancedSecurityMode: boolean;
+```
+
+- *Type:* boolean
+- *Default:* true
+
+Whether or not to enforce advanced security mode.
+
+Can be used for testing purposes.
 
 ---
 
