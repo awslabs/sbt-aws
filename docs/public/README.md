@@ -644,7 +644,8 @@ The control plane emits this event any time it onboards a new tenant. This event
     "tenantName": "tenant$RANDOM",
     "email": "tenant@example.com",
     "tier": "basic",
-    "tenantStatus": "In progress"
+    "tenantStatus": "In progress",
+    "tenantRegistrationId": "guid string"
   }
 }
 ```
