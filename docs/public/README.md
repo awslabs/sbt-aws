@@ -104,8 +104,8 @@ export class ControlPlaneStack extends Stack {
   constructor(scope: Construct, id: string, props?: any) {
     super(scope, id, props);
     const cognitoAuth = new sbt.CognitoAuth(this, 'CognitoAuth', {
-      // Avoid checking scopes for API endpoints. Done only for testing purposes.
-      setAPIGWScopes: false,
+      enableAdvancedSecurityMode: false, // only for testing purposes!
+      setAPIGWScopes: false, // only for testing purposes!
     });
 
     const controlPlane = new sbt.ControlPlane(this, 'ControlPlane', {
@@ -440,13 +440,8 @@ export tenantStatus="created"
 echo "done!"
 `,
       environmentStringVariablesFromIncomingEvent: ['tenantId', 'tier'],
-      environmentVariablesToOutgoingEvent: { 
-        tenantData: [
-          'tenantS3Bucket',
-          'tenantConfig',
-          'someOtherVariable', 
-          'tenantStatus'
-     ],
+      environmentVariablesToOutgoingEvent: {
+        tenantData: ['tenantS3Bucket', 'tenantConfig', 'someOtherVariable', 'tenantStatus'],
         tenantRegistrationData: ['registrationStatus'],
       },
       scriptEnvironmentVariables: {
@@ -720,6 +715,7 @@ The application plane emits this event upon successful completion of tenant offb
   }
 }
 ```
+
 ## Design tenets
 
 - **A templated model for producing best practices SaaS applications** - SBT strives to provide a mental model, and a foundational implementation from which almost any SaaS application can be built
