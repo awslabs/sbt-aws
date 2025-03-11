@@ -40,6 +40,13 @@ export interface CognitoAuthProps {
   readonly controlPlaneCallbackURL?: string;
 
   /**
+   * Whether or not to enforce advanced security mode.
+   * Can be used for testing purposes.
+   * @default true
+   */
+  readonly enableAdvancedSecurityMode?: boolean;
+
+  /**
    * Whether or not to specify scopes for validation at the API GW.
    * Can be used for testing purposes.
    * @default true

@@ -46,6 +46,7 @@ def create_tenant_registration():
     json_body = app.current_event.json_body
     tenant_registration_id = str(uuid.uuid4())
     tenant_data = json_body.get("tenantData", {})
+    tenant_data["tenantRegistrationId"] = tenant_registration_id
     tenant_registration_data = json_body.get("tenantRegistrationData", {})
 
     # Create tenant registration
@@ -76,7 +77,7 @@ def create_tenant_registration():
         json.dumps(
             tenant_registration_data
             | tenant_data
-            | {"tenantId": tenant_id, "tenantRegistrationId": tenant_registration_id}
+            | {"tenantId": tenant_id}
         ),
         onboarding_detail_type,
     )

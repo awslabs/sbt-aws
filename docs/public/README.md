@@ -104,8 +104,8 @@ export class ControlPlaneStack extends Stack {
   constructor(scope: Construct, id: string, props?: any) {
     super(scope, id, props);
     const cognitoAuth = new sbt.CognitoAuth(this, 'CognitoAuth', {
-      // Avoid checking scopes for API endpoints. Done only for testing purposes.
-      setAPIGWScopes: false,
+      enableAdvancedSecurityMode: false, // only for testing purposes!
+      setAPIGWScopes: false, // only for testing purposes!
     });
 
     const controlPlane = new sbt.ControlPlane(this, 'ControlPlane', {
@@ -361,6 +361,37 @@ export interface AppPlaneProps extends cdk.StackProps {
 export class AppPlaneStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props: AppPlaneProps) {
     super(scope, id, props);
+    const deprovisioningScriptJobProps: sbt.TenantLifecycleScriptJobProps = {
+      permissions: new PolicyDocument({
+        statements: [
+          new PolicyStatement({
+            actions: [
+              'cloudformation:DeleteStack',
+              'cloudformation:DescribeStacks',
+              's3:DeleteBucket',
+            ],
+            resources: ['*'],
+            effect: Effect.ALLOW,
+          }),
+        ],
+      }),
+      script: `
+echo "starting..."
+
+echo "tenantId: $tenantId"
+
+aws cloudformation delete-stack --stack-name "tenantTemplateStack-\${tenantId}"
+aws cloudformation wait stack-delete-complete --stack-name "tenantTemplateStack-\${tenantId}"
+export status="deleted stack: tenantTemplateStack-\${tenantId}"
+export registrationStatus="deleted"
+echo "done!"
+`,
+      environmentStringVariablesFromIncomingEvent: ['tenantId'],
+      environmentVariablesToOutgoingEvent: {
+        tenantRegistrationData: ['registrationStatus'],
+      },
+      eventManager: props.eventManager,
+    };
 
     const provisioningScriptJobProps: sbt.TenantLifecycleScriptJobProps = {
       permissions: new PolicyDocument({
@@ -409,13 +440,9 @@ export tenantStatus="created"
 echo "done!"
 `,
       environmentStringVariablesFromIncomingEvent: ['tenantId', 'tier'],
-      environmentVariablesToOutgoingEvent: { 
-        tenantData: [
-          'tenantS3Bucket',
-          'someOtherVariable',
-          'tenantConfig',
-          'tenantStatus',
-        ]
+      environmentVariablesToOutgoingEvent: {
+        tenantData: ['tenantS3Bucket', 'tenantConfig', 'someOtherVariable', 'tenantStatus'],
+        tenantRegistrationData: ['registrationStatus'],
       },
       scriptEnvironmentVariables: {
         TEST: 'test',
@@ -429,9 +456,15 @@ echo "done!"
       provisioningScriptJobProps
     );
 
+    const deprovisioningJobScript: sbt.DeprovisioningScriptJob = new sbt.DeprovisioningScriptJob(
+      this,
+      'deprovisioningJobScript',
+      deprovisioningScriptJobProps
+    );
+
     new sbt.CoreApplicationPlane(this, 'CoreApplicationPlane', {
       eventManager: props.eventManager,
-      scriptJobs: [provisioningJobScript],
+      scriptJobs: [provisioningJobScript, deprovisioningJobScript],
     });
   }
 }
@@ -564,6 +597,17 @@ while true; do
     fi
 done
 
+echo "deleting tenant..."
+curl --request DELETE \
+    --url "${CONTROL_PLANE_API_ENDPOINT}tenant-registrations/${TENANT_REGISTRATION_ID}" \
+    --header "Authorization: Bearer ${ACCESS_TOKEN}" \
+    --header 'content-type: application/json' | jq
+
+echo "verifying deletion..."
+curl --request GET \
+    --url "${CONTROL_PLANE_API_ENDPOINT}tenant-registrations" \
+    --header "Authorization: Bearer ${ACCESS_TOKEN}" \
+    --silent | jq
 ```
 
 Now that we've onboarded a tenant, let's take a look at the console to see what got deployed.
@@ -595,7 +639,8 @@ The control plane emits this event any time it onboards a new tenant. This event
     "tenantName": "tenant$RANDOM",
     "email": "tenant@example.com",
     "tier": "basic",
-    "tenantStatus": "In progress"
+    "tenantStatus": "In progress",
+    "tenantRegistrationId": "guid string"
   }
 }
 ```
@@ -642,7 +687,34 @@ The control plane emits this event any time it offboards a tenant. The detail of
 
 #### Tenant Deprovision Success
 
-The application plane emits this event upon completion of offboarding. Similar to provision success event, its contents are determined by the environment variables identified by their key in the `environmentVariablesToOutgoingEvent` parameter.
+The application plane emits this event upon successful completion of tenant offboarding. It contains standard EventBridge metadata, including the source, detail-type, and resources involved in the deprovisioning process. The detail section of the event includes a jobOutput object with tenantData (typically empty after deprovisioning) and tenantRegistrationData containing the final registration status, as well as the tenantRegistrationId of the offboarded tenant. The specific contents of the jobOutput are determined by the configuration of the deprovisioning job and the environmentVariablesToOutgoingEvent parameter, allowing for flexibility in the information included while maintaining a consistent overall format. This event serves as a confirmation that all necessary cleanup and deprovisioning actions for the tenant have been completed.
+
+#### Sample deprovision success event
+
+```json
+{
+  "version": "0",
+  "id": "guid-string",
+  "detail-type": "deprovisionSuccess",
+  "source": "applicationPlaneEventSource",
+  "account": "account-id",
+  "time": "timestamp",
+  "region": "region",
+  "resources": [
+    "arn:aws:states:region:account-id:stateMachine:deprovisioningJobScriptprovisioningStateMachine-id",
+    "arn:aws:states:region:account-id:execution:deprovisioningJobScriptprovisioningStateMachine-id:execution-id"
+  ],
+  "detail": {
+    "jobOutput": {
+      "tenantData": {},
+      "tenantRegistrationData": {
+        "registrationStatus": "deleted"
+      }
+    },
+    "tenantRegistrationId": "registration-guid-string"
+  }
+}
+```
 
 ## Design tenets
 
