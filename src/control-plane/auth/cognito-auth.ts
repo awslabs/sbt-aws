@@ -276,6 +276,10 @@ export class CognitoAuth extends Construct implements IAuth {
         id: 'AwsSolutions-COG2',
         reason: 'Not requiring MFA at this phase.',
       },
+      {
+        id: 'AwsSolutions-COG3',
+        reason: 'Set AdvancedSecurityMode to "ENFORCED" via addPropertyOverride()',
+      },
     ]);
 
     const readUserScope = new cognito.ResourceServerScope({
