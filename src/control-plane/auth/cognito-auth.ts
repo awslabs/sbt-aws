@@ -265,21 +265,16 @@ export class CognitoAuth extends Construct implements IAuth {
       customAttributes: {
         userRole: new cognito.StringAttribute({ mutable: true, minLen: 1, maxLen: 256 }),
       },
-      featurePlan: cognito.FeaturePlan.PLUS,
-    });
-
-    (this.userPool.node.defaultChild as cognito.CfnUserPool).addPropertyOverride('UserPoolAddOns', {
-      AdvancedSecurityMode: 'ENFORCED',
+      advancedSecurityMode:
+        props?.enableAdvancedSecurityMode == false
+          ? cognito.AdvancedSecurityMode.OFF
+          : cognito.AdvancedSecurityMode.ENFORCED,
     });
 
     NagSuppressions.addResourceSuppressions(this.userPool, [
       {
         id: 'AwsSolutions-COG2',
         reason: 'Not requiring MFA at this phase.',
-      },
-      {
-        id: 'AwsSolutions-COG3',
-        reason: 'Set AdvancedSecurityMode to "ENFORCED" via addPropertyOverride()',
       },
     ]);
 
