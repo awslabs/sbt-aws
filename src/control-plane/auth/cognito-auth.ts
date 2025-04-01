@@ -1,5 +1,15 @@
-// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-// SPDX-License-Identifier: Apache-2.0
+/**
+ *  Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
+ *  with the License. A copy of the License is located at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  or in the 'license' file accompanying this file. This file is distributed on an 'AS IS' BASIS, WITHOUT WARRANTIES
+ *  OR CONDITIONS OF ANY KIND, express or implied. See the License for the specific language governing permissions
+ *  and limitations under the License.
+ */
 
 import * as path from 'path';
 import { PythonFunction } from '@aws-cdk/aws-lambda-python-alpha';
@@ -225,11 +235,11 @@ export class CognitoAuth extends Construct implements IAuth {
     super(scope, id);
     addTemplateTag(this, 'CognitoAuth');
 
-    // https://docs.powertools.aws.dev/lambda/python/2.31.0/#lambda-layer
+    // https://docs.powertools.aws.dev/lambda/python/3.6.0/#lambda-layer
     const lambdaPowertoolsLayer = LayerVersion.fromLayerVersionArn(
       this,
       'LambdaPowerTools',
-      `arn:aws:lambda:${Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV2:59`
+      `arn:aws:lambda:${Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV3-python313-x86_64:7`
     );
     const defaultControlPlaneCallbackURL = 'http://localhost';
     const controlPlaneCallbackURL =
@@ -265,6 +275,10 @@ export class CognitoAuth extends Construct implements IAuth {
       {
         id: 'AwsSolutions-COG2',
         reason: 'Not requiring MFA at this phase.',
+      },
+      {
+        id: 'AwsSolutions-COG3',
+        reason: 'Set AdvancedSecurityMode to "ENFORCED" via addPropertyOverride()',
       },
     ]);
 
@@ -467,7 +481,7 @@ export class CognitoAuth extends Construct implements IAuth {
 
     const userManagementServices = new PythonFunction(this, 'UserManagementServices', {
       entry: path.join(__dirname, '../../../resources/functions/user-management'),
-      runtime: Runtime.PYTHON_3_12,
+      runtime: Runtime.PYTHON_3_13,
       index: 'index.py',
       handler: 'lambda_handler',
       timeout: Duration.seconds(60),
@@ -513,7 +527,7 @@ export class CognitoAuth extends Construct implements IAuth {
 
     this.createAdminUserFunction = new PythonFunction(this, 'createAdminUserFunction', {
       entry: path.join(__dirname, '../../../resources/functions/auth-custom-resource'),
-      runtime: Runtime.PYTHON_3_12,
+      runtime: Runtime.PYTHON_3_13,
       index: 'index.py',
       handler: 'handler',
       timeout: Duration.seconds(60),
