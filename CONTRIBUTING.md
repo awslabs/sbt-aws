@@ -32,12 +32,11 @@ Please consult the issues and discussions section of the SBT repo for good first
 ## Development
 
 1. Make desired changes
-1. Make sure existing (and new) tests pass successfully by running `npm run test`
-1. Run `npm run build` to compile
-1. Go to the root of the project. Then, deploy the CDK stack using the following:
-   - For `core-app-plane`: `npx cdk deploy --app='./lib/core-app-plane/integ.default.js'`
-   - For `control-plane`: `CDK_PARAM_SYSTEM_ADMIN_EMAIL="test@example.com" npx cdk deploy --app='./lib/control-plane/integ.default.js'`
-1. Test out the new feature(s) and redeploy as needed
-1. Write tests for any changed code and commit
-1. Create a PR.
-
+2. Make sure existing (and new) tests pass successfully by running `npm run test`
+3. Run `npm run build` to compile
+4. Go to the root of the project. Then, deploy the CDK stack using the following:
+   - For `control-plane`: `CDK_PARAM_SYSTEM_ADMIN_EMAIL="test@example.com" npx cdk deploy --app='./lib/control-plane/integ.default.js'` 
+   - For `core-app-plane`: `CDK_PARAM_EVENT_BUS_ARN=$(aws cloudformation describe-stacks --stack-name "ControlPlane-integ"  --query "Stacks[0].Outputs[?OutputKey=='eventBridgeArn'].OutputValue" --output text) npx cdk deploy --app='./lib/core-app-plane/integ.default.js'`
+5. Test out the new feature(s) and redeploy as needed
+6. Write tests for any changed code and commit
+7. Create a PR
