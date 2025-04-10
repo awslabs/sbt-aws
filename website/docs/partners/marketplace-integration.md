@@ -13,7 +13,8 @@ The AWS Marketplace integration with SBT consists of a set of CDK constructs tha
 
 ## How does it work
 
-When a buyer subscribes to the SaaS product listed in the AWS Marketplace, they are redirected to the fulfillment URL specified for that listing. Using the optional `SampleRegistrationWebPage`, you can create a customizable landing page that can be used to gather more information about the buyer (step 4). This information can then be stored (step 5) and used to inform downstream processes like resource provisioning as part of the onboarding workflow, for example.
+When a buyer subscribes to the SaaS product listed in the AWS Marketplace, they are redirected to the fulfillment URL specified for that listing. Using the optional `SampleRegistrationWebPage`, you can create a customizable landing page that can be used to gather more information about the buyer (step 4). This information can then be stored (step 5) and used to inform downstream processes like resource provisioning as part of the onboarding workflow, for example. For a detailed demonstration of the AWS Marketplace integration in action, check out our [video walkthrough](https://www.youtube.com/watch?v=G0JeP4Gj9x0).
+
 
 ![buyer-onboarding.png](images/buyer-onboarding.png)
 
