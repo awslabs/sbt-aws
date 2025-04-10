@@ -41,7 +41,7 @@ jobs:
         working-directory: ./
       - name: Upload patch
         if: steps.self_mutation.outputs.self_mutation_happened
-        uses: actions/upload-artifact@v4.3.6
+        uses: actions/upload-artifact@v4.4.0
         with:
           name: repo.patch
           path: repo.patch
@@ -56,7 +56,7 @@ jobs:
         run: cd dist && getfacl -R . > permissions-backup.acl
         continue-on-error: true
       - name: Upload artifact
-        uses: actions/upload-artifact@v4.3.6
+        uses: actions/upload-artifact@v4.4.0
         with:
           name: build-artifact
           path: src/point-solutions/libraries/dist
@@ -95,8 +95,9 @@ jobs:
   package-js:
     needs: build
     runs-on: ubuntu-latest
-    permissions: {}
-    if: "! needs.build.outputs.self_mutation_happened"
+    permissions:
+      contents: read
+    if: ${{ !needs.build.outputs.self_mutation_happened }}
     steps:
       - uses: actions/setup-node@v4
         with:
@@ -109,11 +110,19 @@ jobs:
       - name: Restore build artifact permissions
         run: cd dist && setfacl --restore=permissions-backup.acl
         continue-on-error: true
-      - name: Prepare Repository
-        run: mv dist .repo
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          path: .repo
       - name: Install Dependencies
         run: cd .repo && npm ci
+      - name: Extract build artifact
+        run: tar --strip-components=1 -xzvf dist/js/*.tgz -C .repo
+      - name: Move build artifact out of the way
+        run: mv dist dist.old
       - name: Create js artifact
         run: cd .repo && npx projen package:js
-      - name: Collect js Artifact
+      - name: Collect js artifact
         run: mv .repo/dist dist
