@@ -18,9 +18,9 @@ export function runTestsWorkflow(project: AwsCdkConstructLibrary) {
   const runTests = project.github?.addWorkflow('run-tests');
   if (runTests) {
     runTests.on({
-      schedule: [
-        { cron: '0 6 * * *' }, // Runs at midnight Mountain Time (UTC-6) every day
-      ],
+      pullRequest: {
+        branches: ['main'],
+      },
     });
 
     runTests.addJobs({
