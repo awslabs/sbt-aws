@@ -2,8 +2,9 @@
 
 name: run-tests
 on:
-  schedule:
-    - cron: 0 6 * * *
+  pull_request:
+    branches:
+      - main
 jobs:
   run-tests:
     runs-on: ubuntu-22.04
