@@ -79,7 +79,7 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'partnerIntegrations',
           position: 'left',
-          label: 'Partner Integrations',
+          label: 'Integrations',
         },
         {
           type: 'docSidebar',
