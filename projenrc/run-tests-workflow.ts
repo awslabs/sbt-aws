@@ -21,6 +21,7 @@ export function runTestsWorkflow(project: AwsCdkConstructLibrary) {
       pullRequest: {
         branches: ['main'],
       },
+      workflowDispatch: {}, // Add workflow_dispatch trigger to allow manual runs
     });
 
     runTests.addJobs({
