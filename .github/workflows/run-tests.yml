@@ -5,6 +5,7 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch: {}
 jobs:
   run-tests:
     runs-on: ubuntu-22.04
