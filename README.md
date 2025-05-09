@@ -55,7 +55,7 @@ You may also find help on these community resources:
 
 ## Roadmap
 
-The [SBT for AWS Roadmap project board](PLACEHOLDER) lets developers know about our upcoming features and priorities to help them plan how to best leverage the CDK and identify opportunities to contribute to the project.
+The [SBT for AWS Roadmap project board](https://github.com/orgs/awslabs/projects/197) lets developers know about our upcoming features and priorities to help them plan how to best leverage the CDK and identify opportunities to contribute to the project.
 
 ## Contributing
 
