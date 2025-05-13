@@ -25,11 +25,12 @@ const GITHUB_USER: string = 'awslabs';
 const PUBLICATION_NAMESPACE: string = 'cdklabs';
 const PS_PUBLICATION_NAMESPACE: string = 'aws';
 const PROJECT_NAME: string = 'sbt-aws';
-const PROJEN_VERSION: string = '~0.91.5';
-const CDK_VERSION: string = '2.179.0';
-const JSII_VERSION: string = '~5.6.0';
-const CONSTRUCTS_VERSION: string = '10.3.0';
-const POINT_SOLUTIONS_CDK_VERSION: string = '2.179.0';
+const PROJEN_VERSION: string = '~0.92.3';
+const CDK_CLI_VERSION: string = '2.1014.0';
+const CDK_LIB_VERSION: string = '2.195.0';
+const JSII_VERSION: string = '~5.8.0';
+const CONSTRUCTS_VERSION: string = '10.4.2';
+const POINT_SOLUTIONS_CDK_LIB_VERSION: string = '2.195.0';
 const POINT_SOLUTIONS_LIB_PROJECT_NAME: string = 'sbt-point-solutions-lib';
 const AWS_SDK_VERSION: string = '^3.621.0';
 
@@ -37,22 +38,22 @@ const project = new awscdk.AwsCdkConstructLibrary({
   author: 'Amazon Web Services - SaaS Factory',
   authorAddress: 'sbt-aws-maintainers@amazon.com',
   authorOrganization: true,
-  cdkVersion: CDK_VERSION,
+  cdkVersion: CDK_LIB_VERSION,
   constructsVersion: CONSTRUCTS_VERSION,
   copyrightOwner: 'Amazon.com, Inc. or its affiliates. All Rights Reserved.',
   copyrightPeriod: '2024-',
   defaultReleaseBranch: 'main',
-  deps: [`@aws-cdk/aws-lambda-python-alpha@${CDK_VERSION}-alpha.0`, 'cdk-nag@^2.35.24'],
+  deps: [`@aws-cdk/aws-lambda-python-alpha@${CDK_LIB_VERSION}-alpha.0`, 'cdk-nag@^2.35.96'],
   description:
     'SaaS Builder Toolkit for AWS is a developer toolkit to implement SaaS best practices and increase developer velocity.',
-  devDeps: [`aws-cdk@${CDK_VERSION}`, 'eslint-plugin-license-header'],
+  devDeps: [`aws-cdk@${CDK_CLI_VERSION}`, 'eslint-plugin-license-header'],
   github: true,
   jsiiVersion: JSII_VERSION,
   keywords: ['constructs', 'aws-cdk', 'saas'],
   license: 'Apache-2.0',
   licensed: true,
-  maxNodeVersion: '20.x',
-  minNodeVersion: '18.12.0',
+  maxNodeVersion: '24.x',
+  minNodeVersion: '20.x',
   name: `@${PUBLICATION_NAMESPACE}/${PROJECT_NAME}`,
   npmignoreEnabled: true,
   packageManager: javascript.NodePackageManager.NPM,
@@ -63,7 +64,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   repositoryUrl: `https://github.com/${GITHUB_USER}/${PROJECT_NAME}`,
   sampleCode: false,
   stability: 'experimental',
-  workflowNodeVersion: '20.x',
+  workflowNodeVersion: '22.x',
   npmTokenSecret: 'NPM_TOKEN',
   npmAccess: NpmAccess.PUBLIC,
   githubOptions: GITHUB_OPTIONS,
@@ -97,7 +98,7 @@ const jsiiLibraryProjectOptions: cdk.JsiiProjectOptions = {
     'jsonwebtoken',
     'jwks-rsa',
     'uuid',
-    `aws-cdk-lib@${POINT_SOLUTIONS_CDK_VERSION}`,
+    `aws-cdk-lib@2.195.0`,
     '@types/uuid',
     '@aws-sdk/types',
   ],
@@ -109,12 +110,12 @@ const jsiiLibraryProjectOptions: cdk.JsiiProjectOptions = {
   keywords: ['constructs', 'aws-cdk', 'saas'],
   license: 'Apache-2.0',
   licensed: true,
-  maxNodeVersion: '20.x',
-  minNodeVersion: '18.12.0',
+  maxNodeVersion: '24.x',
+  minNodeVersion: '20.x',
   name: `@${PS_PUBLICATION_NAMESPACE}/${POINT_SOLUTIONS_LIB_PROJECT_NAME}`,
   npmignoreEnabled: true,
   packageManager: javascript.NodePackageManager.NPM,
-  peerDeps: [`constructs@${CONSTRUCTS_VERSION}`, `aws-cdk-lib@${POINT_SOLUTIONS_CDK_VERSION}`],
+  peerDeps: [`constructs@${CONSTRUCTS_VERSION}`, `aws-cdk-lib@${POINT_SOLUTIONS_CDK_LIB_VERSION}`],
   prettier: true,
   projenrcTs: true,
   projenVersion: PROJEN_VERSION,
@@ -124,7 +125,7 @@ const jsiiLibraryProjectOptions: cdk.JsiiProjectOptions = {
   outdir: 'src/point-solutions/libraries',
   sampleCode: false,
   stability: 'experimental',
-  workflowNodeVersion: '20.x',
+  workflowNodeVersion: '22.x',
   npmTokenSecret: 'NPM_TOKEN',
   npmAccess: NpmAccess.PUBLIC,
   githubOptions: GITHUB_OPTIONS,

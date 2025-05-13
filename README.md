@@ -13,7 +13,7 @@ It offers a high-level object-oriented abstraction to define SaaS resources on A
 
 Currently, SBT is available in the following language:
 
-* JavaScript, TypeScript ([Node.js ≥ 14.15.0](https://nodejs.org/download/release/latest-v14.x/))
+* JavaScript, TypeScript ([Node.js ≥ 20](https://nodejs.org/download/release/latest-v20.x/))
   * We recommend using a version in [Active LTS](https://nodejs.org/en/about/previous-releases)
 
 Third-party Language Deprecation: language version is only supported until its EOL (End Of Life) shared by the vendor or community and is subject to change with prior notice.
