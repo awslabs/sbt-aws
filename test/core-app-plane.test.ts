@@ -32,7 +32,10 @@ describe('No unsuppressed cdk-nag Warnings or Errors', () => {
   class CoreApplicationPlaneStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
       super(scope, id, props);
-      const eventManager = new EventManager(this, 'EventManager');
+      const eventManager = new EventManager(this, 'EventManager', {
+        controlPlaneEventSource: 'test.control.plane',
+        applicationPlaneEventSource: 'test.app.plane',
+      });
       const provisioningJobScript: ProvisioningScriptJob = new ProvisioningScriptJob(
         this,
         'provisioningJobScript',
@@ -91,7 +94,10 @@ describe('CoreApplicationPlane', () => {
     class CoreApplicationPlaneStack extends cdk.Stack {
       constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
-        const eventManager = new EventManager(this, 'EventManager');
+        const eventManager = new EventManager(this, 'EventManager', {
+          controlPlaneEventSource: 'test.control.plane',
+          applicationPlaneEventSource: 'test.app.plane',
+        });
         const provisioningJobScript: ProvisioningScriptJob = new ProvisioningScriptJob(
           this,
           'provisioningJobScript',
@@ -135,7 +141,10 @@ describe('CoreApplicationPlane', () => {
     class CoreApplicationPlaneStack extends cdk.Stack {
       constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
-        const eventManager = new EventManager(this, 'EventManager');
+        const eventManager = new EventManager(this, 'EventManager', {
+          controlPlaneEventSource: 'test.control.plane',
+          applicationPlaneEventSource: 'test.app.plane',
+        });
         const provisioningJobScript: ProvisioningScriptJob = new ProvisioningScriptJob(
           this,
           'provisioningJobScript',

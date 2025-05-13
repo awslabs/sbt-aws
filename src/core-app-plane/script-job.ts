@@ -22,7 +22,7 @@ import * as stepfunctions from 'aws-cdk-lib/aws-stepfunctions';
 import * as tasks from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
-import { addTemplateTag, DetailType, IEventManager } from '../utils';
+import { addTemplateTag, EventDefinition, IEventManager } from '../utils';
 
 /**
  * Represents the different kinds of environment variables that can
@@ -41,20 +41,20 @@ export interface EnvironmentVariablesToOutgoingEventProps {
 }
 
 /**
- * Represents the DetailTypes that can be emitted
+ * Represents the EventDefinitions that can be emitted
  * as part of the outgoing event.
  * @readonly
  */
-export interface OutgoingEventDetailTypes {
+export interface OutgoingEventDefinitions {
   /**
-   * The detail type for a successful event.
+   * The event definition for a successful event.
    */
-  readonly success: DetailType;
+  readonly success: EventDefinition;
 
   /**
-   * The detail type for a failed event.
+   * The event definition for a failed event.
    */
-  readonly failure: DetailType;
+  readonly failure: EventDefinition;
 }
 
 /**
@@ -106,14 +106,14 @@ export interface ScriptJobProps {
   readonly source?: codebuild.Source;
 
   /**
-   * The incoming event DetailType that triggers this job.
+   * The incoming event definition that triggers this job.
    */
-  readonly incomingEvent: DetailType;
+  readonly incomingEvent: EventDefinition;
 
   /**
-   * The outgoing event DetailTypes that are emitted upon job success or failure.
+   * The outgoing event definitions that are emitted upon job success or failure.
    */
-  readonly outgoingEvent: OutgoingEventDetailTypes;
+  readonly outgoingEvent: OutgoingEventDefinitions;
 
   /**
    * The bash script to run after the main script has completed.
@@ -181,9 +181,9 @@ export class ScriptJob extends Construct {
   public readonly environmentVariablesToOutgoingEvent?: EnvironmentVariablesToOutgoingEventProps;
 
   /**
-   * The incoming event DetailType that triggers this job.
+   * The incoming event definition that triggers this job.
    */
-  readonly incomingEvent: DetailType;
+  readonly incomingEvent: EventDefinition;
 
   constructor(scope: Construct, id: string, props: ScriptJobProps) {
     super(scope, id);
@@ -307,8 +307,8 @@ export class ScriptJob extends Construct {
     jobRunnerCodeBuildProject: codebuild.Project,
     eventBus: IEventBus
   ): stepfunctions.StateMachine {
-    const successEventSource = props.eventManager.supportedEvents[props.outgoingEvent.success];
-    const failureEventSource = props.eventManager.supportedEvents[props.outgoingEvent.failure];
+    const successEventSource = props.outgoingEvent.success.source;
+    const failureEventSource = props.outgoingEvent.failure.source;
     const detailType = props.outgoingEvent;
 
     const environmentVariablesOverride: {
@@ -385,7 +385,7 @@ export class ScriptJob extends Construct {
       {
         entries: [
           {
-            detailType: detailType.success,
+            detailType: detailType.success.detailType,
             detail: stepfunctions.TaskInput.fromObject(exportedVarObj),
             source: successEventSource,
             eventBus: eventBus,
@@ -401,7 +401,7 @@ export class ScriptJob extends Construct {
       {
         entries: [
           {
-            detailType: detailType.failure,
+            detailType: detailType.failure.detailType,
             detail: stepfunctions.TaskInput.fromObject({
               [props.jobIdentifierKey]: stepfunctions.JsonPath.stringAt(
                 `$.detail.${props.jobIdentifierKey}`

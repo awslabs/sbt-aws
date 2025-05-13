@@ -15,7 +15,7 @@ import { Source } from 'aws-cdk-lib/aws-codebuild';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 import { EnvironmentVariablesToOutgoingEventProps, ScriptJob, ScriptJobProps } from './script-job';
-import { DetailType, IEventManager } from '../utils';
+import { IEventManager } from '../utils';
 
 /**
  * Encapsulates the list of properties for a ScriptJobs that
@@ -90,10 +90,10 @@ export class ProvisioningScriptJob extends ScriptJob {
       jobFailureStatus: {
         tenantStatus: 'Failed to provision tenant.',
       },
-      incomingEvent: DetailType.ONBOARDING_REQUEST,
+      incomingEvent: props.eventManager.events.onboardingRequest,
       outgoingEvent: {
-        success: DetailType.PROVISION_SUCCESS,
-        failure: DetailType.PROVISION_FAILURE,
+        success: props.eventManager.events.provisionSuccess,
+        failure: props.eventManager.events.provisionFailure,
       },
     };
     super(scope, id, scriptJobProps);
@@ -113,10 +113,10 @@ export class DeprovisioningScriptJob extends ScriptJob {
       jobFailureStatus: {
         tenantStatus: 'Failed to deprovision tenant.',
       },
-      incomingEvent: DetailType.OFFBOARDING_REQUEST,
+      incomingEvent: props.eventManager.events.offboardingRequest,
       outgoingEvent: {
-        success: DetailType.DEPROVISION_SUCCESS,
-        failure: DetailType.DEPROVISION_FAILURE,
+        success: props.eventManager.events.deprovisionSuccess,
+        failure: props.eventManager.events.deprovisionFailure,
       },
     };
     super(scope, id, scriptJobProps);
