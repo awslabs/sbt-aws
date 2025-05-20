@@ -6,7 +6,7 @@ on:
   workflow_dispatch: {}
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     permissions:
       contents: write
     outputs:
@@ -57,7 +57,7 @@ jobs:
           overwrite: true
   self-mutation:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     permissions:
       contents: write
     if: always() && needs.build.outputs.self_mutation_happened && !(github.event.pull_request.head.repo.full_name != github.repository)
@@ -88,7 +88,7 @@ jobs:
           git push origin HEAD:$PULL_REQUEST_REF
   package-js:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     permissions:
       contents: read
     if: ${{ !needs.build.outputs.self_mutation_happened }}
