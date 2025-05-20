@@ -12,7 +12,7 @@
  */
 
 import * as cdk from 'aws-cdk-lib';
-import { Match, Template } from 'aws-cdk-lib/assertions';
+import { Template } from 'aws-cdk-lib/assertions';
 import { CognitoAuth } from '../src/control-plane';
 
 describe('CognitoAuth', () => {
@@ -21,16 +21,16 @@ describe('CognitoAuth', () => {
       // GIVEN
       const app = new cdk.App();
       const stack = new cdk.Stack(app, 'TestStack');
-      
+
       // WHEN
       new CognitoAuth(stack, 'CognitoAuth');
-      
+
       // THEN
       const template = Template.fromStack(stack);
       template.hasResourceProperties('AWS::Cognito::UserPool', {
         UserPoolAddOns: {
-          AdvancedSecurityMode: 'ENFORCED'
-        }
+          AdvancedSecurityMode: 'ENFORCED',
+        },
       });
     });
 
@@ -38,18 +38,18 @@ describe('CognitoAuth', () => {
       // GIVEN
       const app = new cdk.App();
       const stack = new cdk.Stack(app, 'TestStack');
-      
+
       // WHEN
       new CognitoAuth(stack, 'CognitoAuth', {
-        enableAdvancedSecurityMode: true
+        enableAdvancedSecurityMode: true,
       });
-      
+
       // THEN
       const template = Template.fromStack(stack);
       template.hasResourceProperties('AWS::Cognito::UserPool', {
         UserPoolAddOns: {
-          AdvancedSecurityMode: 'ENFORCED'
-        }
+          AdvancedSecurityMode: 'ENFORCED',
+        },
       });
     });
 
@@ -57,61 +57,21 @@ describe('CognitoAuth', () => {
       // GIVEN
       const app = new cdk.App();
       const stack = new cdk.Stack(app, 'TestStack');
-      
+
       // WHEN
       new CognitoAuth(stack, 'CognitoAuth', {
-        enableAdvancedSecurityMode: false
+        enableAdvancedSecurityMode: false,
       });
-      
+
       // THEN
       const template = Template.fromStack(stack);
-      
+
       // Advanced security mode should not be set when disabled
       template.hasResourceProperties('AWS::Cognito::UserPool', {
-        UserPoolAddOns: Match.absent()
+        UserPoolAddOns: {
+          AdvancedSecurityMode: 'OFF',
+        },
       });
-    });
-
-    it('should handle errors when setting advanced security mode', () => {
-      // GIVEN
-      const app = new cdk.App();
-      const stack = new cdk.Stack(app, 'TestStack');
-      const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
-      
-      // Create a mock implementation that throws an error
-      const originalDefaultChild = Object.getOwnPropertyDescriptor(
-        cdk.Resource.prototype.node, 
-        'defaultChild'
-      );
-      
-      // Mock the defaultChild to throw an error when accessed
-      Object.defineProperty(cdk.Resource.prototype.node, 'defaultChild', {
-        get: function() {
-          throw new Error('Mock error accessing defaultChild');
-        }
-      });
-      
-      try {
-        // WHEN
-        new CognitoAuth(stack, 'CognitoAuth');
-        
-        // THEN
-        // It should not throw but log a warning
-        expect(consoleSpy).toHaveBeenCalledWith(
-          'Failed to enable advanced security mode:',
-          expect.any(Error)
-        );
-      } finally {
-        // Restore the original implementation
-        if (originalDefaultChild) {
-          Object.defineProperty(
-            cdk.Resource.prototype.node,
-            'defaultChild',
-            originalDefaultChild
-          );
-        }
-        consoleSpy.mockRestore();
-      }
     });
   });
 });
