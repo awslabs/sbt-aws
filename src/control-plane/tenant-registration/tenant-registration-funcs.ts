@@ -16,7 +16,7 @@ import { PythonFunction, PythonLayerVersion } from '@aws-cdk/aws-lambda-python-a
 import { Duration, Stack } from 'aws-cdk-lib';
 import { HttpApi } from 'aws-cdk-lib/aws-apigatewayv2';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import { Function, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Function, Runtime, Architecture } from 'aws-cdk-lib/aws-lambda';
 import { CfnHttpApi } from 'aws-cdk-lib/aws-sam';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
@@ -55,12 +55,16 @@ export class TenantRegistrationLambda extends Construct {
     const lambdaPowertoolsLayer = PythonLayerVersion.fromLayerVersionArn(
       this,
       'LambdaPowerTools',
-      `arn:aws:lambda:${Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV3-python313-x86_64:7`
+      `arn:aws:lambda:${Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV3-python313-arm64:7`
     );
 
     const awsRequestsAuthLayer = new PythonLayerVersion(this, 'AwsRequestsAuthLayer', {
       entry: path.join(__dirname, '../../../resources/layers/helper'),
       compatibleRuntimes: [Runtime.PYTHON_3_13],
+      compatibleArchitectures: [Architecture.ARM_64],
+      bundling: {
+        platform: 'linux/arm64',
+      },
     });
 
     // Lambda for Tenant Registration
@@ -77,6 +81,7 @@ export class TenantRegistrationLambda extends Construct {
         OFFBOARDING_DETAIL_TYPE: DetailType.OFFBOARDING_REQUEST,
       },
       layers: [lambdaPowertoolsLayer, awsRequestsAuthLayer],
+      architecture: Architecture.ARM_64,
     });
 
     props.table.tenantRegistration.grantReadWriteData(this.tenantRegistrationFunc);

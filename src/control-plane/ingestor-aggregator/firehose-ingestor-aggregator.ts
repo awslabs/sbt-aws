@@ -17,6 +17,7 @@ import * as cdk from 'aws-cdk-lib';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as kinesisfirehose from 'aws-cdk-lib/aws-kinesisfirehose';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { Architecture } from 'aws-cdk-lib/aws-lambda';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as s3n from 'aws-cdk-lib/aws-s3-notifications';
 import { NagSuppressions } from 'cdk-nag';
@@ -131,7 +132,7 @@ export class FirehoseAggregator extends Construct implements IDataIngestorAggreg
     });
 
     // https://docs.powertools.aws.dev/lambda/python/3.6.0/#lambda-layer
-    const lambdaPowerToolsLayerARN = `arn:aws:lambda:${cdk.Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV3-python313-x86_64:7`;
+    const lambdaPowerToolsLayerARN = `arn:aws:lambda:${cdk.Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV3-python313-arm64:7`;
 
     this.dataAggregator = new lambda_python.PythonFunction(this, 'DataAggregatorLambda', {
       entry: path.join(__dirname, '../../../resources/functions/data-aggregator'),
@@ -154,6 +155,7 @@ export class FirehoseAggregator extends Construct implements IDataIngestorAggreg
       layers: [
         lambda.LayerVersion.fromLayerVersionArn(this, 'LambdaPowerTools', lambdaPowerToolsLayerARN),
       ],
+      architecture: Architecture.ARM_64,
     });
 
     NagSuppressions.addResourceSuppressions(

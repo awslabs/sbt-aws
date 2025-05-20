@@ -16,7 +16,7 @@ import { PythonFunction } from '@aws-cdk/aws-lambda-python-alpha';
 import { Duration, Stack } from 'aws-cdk-lib';
 import { CfnTable } from 'aws-cdk-lib/aws-dynamodb';
 import { ManagedPolicy, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
-import { Function, LayerVersion, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Function, LayerVersion, Runtime, Architecture } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { TenantManagementTable } from './tenant-management.table';
@@ -97,7 +97,7 @@ export class TenantManagementLambda extends Construct {
     );
 
     // https://docs.powertools.aws.dev/lambda/python/3.6.0/#lambda-layer
-    const lambdaPowerToolsLayerARN = `arn:aws:lambda:${Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV3-python313-x86_64:7`;
+    const lambdaPowerToolsLayerARN = `arn:aws:lambda:${Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV3-python313-arm64:7`;
 
     /**
      * Creates the Tenant Management Lambda function.
@@ -117,6 +117,7 @@ export class TenantManagementLambda extends Construct {
       environment: {
         TENANT_DETAILS_TABLE: props.table.tenantDetails.tableName,
       },
+      architecture: Architecture.ARM_64,
     });
 
     this.tenantManagementFunc = tenantManagementFunc;

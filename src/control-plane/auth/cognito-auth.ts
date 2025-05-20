@@ -23,7 +23,7 @@ import {
   ServicePrincipal,
   Effect,
 } from 'aws-cdk-lib/aws-iam';
-import { Runtime, IFunction, LayerVersion } from 'aws-cdk-lib/aws-lambda';
+import { Runtime, IFunction, LayerVersion, Architecture } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { CreateAdminUserProps, IAuth } from './auth-interface';
@@ -239,7 +239,7 @@ export class CognitoAuth extends Construct implements IAuth {
     const lambdaPowertoolsLayer = LayerVersion.fromLayerVersionArn(
       this,
       'LambdaPowerTools',
-      `arn:aws:lambda:${Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV3-python313-x86_64:7`
+      `arn:aws:lambda:${Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV3-python313-arm64:7`
     );
     const defaultControlPlaneCallbackURL = 'http://localhost';
     const controlPlaneCallbackURL =
@@ -490,6 +490,7 @@ export class CognitoAuth extends Construct implements IAuth {
       environment: {
         USER_POOL_ID: this.userPool.userPoolId,
       },
+      architecture: Architecture.ARM_64,
     });
 
     this.createUserFunction = userManagementServices;
@@ -532,6 +533,7 @@ export class CognitoAuth extends Construct implements IAuth {
       handler: 'handler',
       timeout: Duration.seconds(60),
       layers: [lambdaPowertoolsLayer],
+      architecture: Architecture.ARM_64,
     });
     this.userPool.grant(
       this.createAdminUserFunction,

@@ -16,6 +16,7 @@ import * as lambda_python from '@aws-cdk/aws-lambda-python-alpha';
 import * as cdk from 'aws-cdk-lib';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { Architecture } from 'aws-cdk-lib/aws-lambda';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IBilling, IFunctionSchedule } from './billing-interface';
@@ -85,7 +86,7 @@ export class MockBillingProvider extends Construct implements IBilling {
     this.lambdaPowertoolsLayer = lambda_python.PythonLayerVersion.fromLayerVersionArn(
       this,
       'LambdaPowerTools',
-      `arn:aws:lambda:${cdk.Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV3-python313-x86_64:7`
+      `arn:aws:lambda:${cdk.Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV3-python313-arm64:7`
     );
 
     // Create Lambda functions
@@ -151,6 +152,7 @@ export class MockBillingProvider extends Construct implements IBilling {
         ...additionalEnv,
       },
       layers: [this.lambdaPowertoolsLayer],
+      architecture: Architecture.ARM_64,
     });
 
     NagSuppressions.addResourceSuppressions(
