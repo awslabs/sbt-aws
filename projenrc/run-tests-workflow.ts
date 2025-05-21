@@ -47,10 +47,13 @@ export function runTestsWorkflow(
           idToken: JobPermission.WRITE,
           contents: JobPermission.READ,
         },
-        // Add dependency on the build workflow
-        needs: [buildJobId],
-        // Only run if the build workflow succeeded AND the PR is not from a fork
-        if: `\${{ needs.${buildJobId}.result == 'success' && github.event.pull_request.head.repo.full_name == github.repository }}`,
+        // Make dependency conditional - only for PR events, not for manual workflow_dispatch
+        needs: [`\${{ github.event_name == 'pull_request' && '${buildJobId}' || '' }}`],
+        // Run if either:
+        // 1. It's a manual workflow dispatch OR
+        // 2. It's a PR where build succeeded AND PR is from the same repo (not a fork)
+        if: `\${{ github.event_name == 'workflow_dispatch' ||
+            (needs.${buildJobId}.result == 'success' && github.event.pull_request.head.repo.full_name == github.repository) }}`,
         steps: [
           {
             name: 'configure aws credentials',
