@@ -14,15 +14,29 @@
 import { AwsCdkConstructLibrary } from 'projen/lib/awscdk';
 import { JobPermission } from 'projen/lib/github/workflows-model';
 
-export function runTestsWorkflow(project: AwsCdkConstructLibrary) {
+export interface RunTestsWorkflowOptions {
+  /**
+   * Name of the build job that must complete successfully before tests run
+   * @default 'build'
+   */
+  buildJobId?: string;
+}
+
+export function runTestsWorkflow(project: AwsCdkConstructLibrary, options: RunTestsWorkflowOptions = {}) {
+  // Set default values
+  const buildJobId = options.buildJobId || 'build';
   const runTests = project.github?.addWorkflow('run-tests');
   if (runTests) {
+    // Use pull_request_target instead of pullRequest to enable workflow to run for forked repos
+    // with access to repository secrets
     runTests.on({
-      pullRequest: {
+      pullRequestTarget: {
         branches: ['main'],
       },
       workflowDispatch: {}, // Add workflow_dispatch trigger to allow manual runs
     });
+    
+    // Make this workflow depend on the build workflow specified by buildJobId parameter
 
     runTests.addJobs({
       'run-tests': {
@@ -31,6 +45,10 @@ export function runTestsWorkflow(project: AwsCdkConstructLibrary) {
           idToken: JobPermission.WRITE,
           contents: JobPermission.READ,
         },
+        // Add dependency on the build workflow
+        needs: [buildJobId],
+        // Only run if the build workflow succeeded
+        if: `\${{ needs.${buildJobId}.result == 'success' }}`,
         steps: [
           {
             name: 'configure aws credentials',
@@ -43,6 +61,11 @@ export function runTestsWorkflow(project: AwsCdkConstructLibrary) {
           {
             name: 'checkout source',
             uses: 'actions/checkout@v4',
+            with: {
+              // When using pull_request_target, we need to explicitly checkout the PR code
+              ref: '${{ github.event.pull_request.head.ref }}',
+              repository: '${{ github.event.pull_request.head.repo.full_name }}',
+            },
           },
           {
             name: 'run tests',
