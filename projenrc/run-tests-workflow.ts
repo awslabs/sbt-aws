@@ -22,7 +22,10 @@ export interface RunTestsWorkflowOptions {
   buildJobId?: string;
 }
 
-export function runTestsWorkflow(project: AwsCdkConstructLibrary, options: RunTestsWorkflowOptions = {}) {
+export function runTestsWorkflow(
+  project: AwsCdkConstructLibrary,
+  options: RunTestsWorkflowOptions = {}
+) {
   // Set default values
   const buildJobId = options.buildJobId || 'build';
   const runTests = project.github?.addWorkflow('run-tests');
@@ -35,7 +38,7 @@ export function runTestsWorkflow(project: AwsCdkConstructLibrary, options: RunTe
       },
       workflowDispatch: {}, // Add workflow_dispatch trigger to allow manual runs
     });
-    
+
     // Make this workflow depend on the build workflow specified by buildJobId parameter
 
     runTests.addJobs({
