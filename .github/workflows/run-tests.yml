@@ -2,7 +2,7 @@
 
 name: run-tests
 on:
-  pull_request_target:
+  pull_request:
     branches:
       - main
   workflow_dispatch: {}
@@ -22,9 +22,6 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
       - name: checkout source
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
       - name: run tests
         env:
           STEP_FUNCTION_ARN: ${{ secrets.STEP_FUNCTION_ARN }}
