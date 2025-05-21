@@ -50,8 +50,8 @@ export function runTestsWorkflow(
         },
         // Add dependency on the build workflow
         needs: [buildJobId],
-        // Only run if the build workflow succeeded
-        if: `\${{ needs.${buildJobId}.result == 'success' }}`,
+        // Only run if the build workflow succeeded AND the PR is not from a fork
+        if: `\${{ needs.${buildJobId}.result == 'success' && github.event.pull_request.head.repo.full_name == github.repository }}`,
         steps: [
           {
             name: 'configure aws credentials',
