@@ -25,7 +25,7 @@
     },
     {
       "name": "constructs",
-      "version": "10.3.0",
+      "version": "10.4.2",
       "type": "build"
     },
     {
@@ -73,12 +73,12 @@
     },
     {
       "name": "jsii-rosetta",
-      "version": "~5.6.0",
+      "version": "~5.8.0",
       "type": "build"
     },
     {
       "name": "jsii",
-      "version": "~5.6.0",
+      "version": "~5.8.0",
       "type": "build"
     },
     {
@@ -144,12 +144,12 @@
     },
     {
       "name": "aws-cdk-lib",
-      "version": "2.179.0",
+      "version": "2.195.0",
       "type": "peer"
     },
     {
       "name": "constructs",
-      "version": "10.3.0",
+      "version": "10.4.2",
       "type": "peer"
     },
     {
@@ -191,7 +191,7 @@
     },
     {
       "name": "aws-cdk-lib",
-      "version": "2.179.0",
+      "version": "2.195.0",
       "type": "runtime"
     },
     {
