@@ -30,10 +30,9 @@ export function runTestsWorkflow(
   const buildJobId = options.buildJobId || 'build';
   const runTests = project.github?.addWorkflow('run-tests');
   if (runTests) {
-    // Use pull_request_target instead of pullRequest to enable workflow to run for forked repos
-    // with access to repository secrets
+    // Use regular pull_request trigger for better security
     runTests.on({
-      pullRequestTarget: {
+      pullRequest: {
         branches: ['main'],
       },
       workflowDispatch: {}, // Add workflow_dispatch trigger to allow manual runs
@@ -64,11 +63,8 @@ export function runTestsWorkflow(
           {
             name: 'checkout source',
             uses: 'actions/checkout@v4',
-            with: {
-              // When using pull_request_target, we need to explicitly checkout the PR code
-              ref: '${{ github.event.pull_request.head.ref }}',
-              repository: '${{ github.event.pull_request.head.repo.full_name }}',
-            },
+            // When using pull_request trigger, we don't need explicit checkout parameters
+            // as it automatically checks out the PR code
           },
           {
             name: 'run tests',
