@@ -26,7 +26,7 @@ export function runTestsWorkflow(project: AwsCdkConstructLibrary) {
 
     runTests.addJobs({
       'run-tests': {
-        runsOn: ['ubuntu-22.04'],
+        runsOn: ['ubuntu-24.04-arm'],
         permissions: {
           idToken: JobPermission.WRITE,
           contents: JobPermission.READ,

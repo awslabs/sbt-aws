@@ -18,6 +18,7 @@ import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { Architecture } from 'aws-cdk-lib/aws-lambda';
 import { DynamoEventSource, SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import * as s3 from 'aws-cdk-lib/aws-s3';
@@ -158,7 +159,7 @@ export class AWSMarketplaceSaaSProduct extends Construct {
     );
 
     // https://docs.powertools.aws.dev/lambda/python/3.6.0/#lambda-layer
-    const lambdaPowerToolsLayerARN = `arn:aws:lambda:${cdk.Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV3-python313-x86_64:7`;
+    const lambdaPowerToolsLayerARN = `arn:aws:lambda:${cdk.Stack.of(this).region}:017000801446:layer:AWSLambdaPowertoolsPythonV3-python313-arm64:7`;
 
     const powerToolsLayer = lambda.LayerVersion.fromLayerVersionArn(
       this,
@@ -188,6 +189,7 @@ export class AWSMarketplaceSaaSProduct extends Construct {
             batchSize: 1,
           }),
         ],
+        architecture: Architecture.ARM_64,
       }
     );
 
@@ -233,6 +235,7 @@ export class AWSMarketplaceSaaSProduct extends Construct {
           NEW_SUBSCRIBERS_TABLE_NAME: this.subscribersTable.tableName,
           REQUIRED_FIELDS: requiredFields.join(','),
         },
+        architecture: Architecture.ARM_64,
       }
     );
 
