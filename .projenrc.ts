@@ -98,7 +98,7 @@ const jsiiLibraryProjectOptions: cdk.JsiiProjectOptions = {
     'jsonwebtoken',
     'jwks-rsa',
     'uuid',
-    `aws-cdk-lib@2.195.0`,
+    `aws-cdk-lib@${POINT_SOLUTIONS_CDK_LIB_VERSION}`,
     '@types/uuid',
     '@aws-sdk/types',
   ],
