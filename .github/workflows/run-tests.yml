@@ -2,16 +2,18 @@
 
 name: run-tests
 on:
-  pull_request:
+  pull_request_target:
     branches:
       - main
   workflow_dispatch: {}
 jobs:
   run-tests:
+    needs: build
     runs-on: ubuntu-24.04-arm
     permissions:
       id-token: write
       contents: read
+    if: ${{ needs.build.result == 'success' }}
     steps:
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -20,6 +22,9 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
       - name: checkout source
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
       - name: run tests
         env:
           STEP_FUNCTION_ARN: ${{ secrets.STEP_FUNCTION_ARN }}
