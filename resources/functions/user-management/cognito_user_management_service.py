@@ -57,7 +57,7 @@ class CognitoUserManagementService():
                 user_info = UserInfo()
                 for attr in user["Attributes"]:
                     if (attr["Name"] == "custom:userRole"):
-                        user_info.user_role = attr["Value"]
+                        user_info.userRole = attr["Value"]
 
                     if (attr["Name"] == "email"):
                         user_info.email = attr["Value"]
@@ -65,7 +65,7 @@ class CognitoUserManagementService():
                 user_info.created = user["UserCreateDate"]
                 user_info.modified = user["UserLastModifiedDate"]
                 user_info.status = user["UserStatus"]
-                user_info.user_name = user["Username"]
+                user_info.userName = user["Username"]
                 users.add_user(user_info)
 
         return users, response.get('PaginationToken')
