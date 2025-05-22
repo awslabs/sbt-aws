@@ -14,15 +14,31 @@
 import { AwsCdkConstructLibrary } from 'projen/lib/awscdk';
 import { JobPermission } from 'projen/lib/github/workflows-model';
 
-export function runTestsWorkflow(project: AwsCdkConstructLibrary) {
+export interface RunTestsWorkflowOptions {
+  /**
+   * Name of the build job that must complete successfully before tests run
+   * @default 'build'
+   */
+  buildJobId?: string;
+}
+
+export function runTestsWorkflow(
+  project: AwsCdkConstructLibrary,
+  options: RunTestsWorkflowOptions = {}
+) {
+  // Set default values
+  const buildJobId = options.buildJobId || 'build';
   const runTests = project.github?.addWorkflow('run-tests');
   if (runTests) {
+    // Use regular pull_request trigger for better security
     runTests.on({
       pullRequest: {
         branches: ['main'],
       },
       workflowDispatch: {}, // Add workflow_dispatch trigger to allow manual runs
     });
+
+    // Make this workflow depend on the build workflow specified by buildJobId parameter
 
     runTests.addJobs({
       'run-tests': {
@@ -31,6 +47,13 @@ export function runTestsWorkflow(project: AwsCdkConstructLibrary) {
           idToken: JobPermission.WRITE,
           contents: JobPermission.READ,
         },
+        // Make dependency conditional - only for PR events, not for manual workflow_dispatch
+        needs: [`\${{ github.event_name == 'pull_request' && '${buildJobId}' || '' }}`],
+        // Run if either:
+        // 1. It's a manual workflow dispatch OR
+        // 2. It's a PR where build succeeded AND PR is from the same repo (not a fork)
+        if: `\${{ github.event_name == 'workflow_dispatch' ||
+            (needs.${buildJobId}.result == 'success' && github.event.pull_request.head.repo.full_name == github.repository) }}`,
         steps: [
           {
             name: 'configure aws credentials',
@@ -43,6 +66,8 @@ export function runTestsWorkflow(project: AwsCdkConstructLibrary) {
           {
             name: 'checkout source',
             uses: 'actions/checkout@v4',
+            // When using pull_request trigger, we don't need explicit checkout parameters
+            // as it automatically checks out the PR code
           },
           {
             name: 'run tests',

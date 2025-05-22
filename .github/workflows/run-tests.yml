@@ -8,10 +8,14 @@ on:
   workflow_dispatch: {}
 jobs:
   run-tests:
+    needs: ${{ github.event_name == 'pull_request' && 'build' || '' }}
     runs-on: ubuntu-24.04-arm
     permissions:
       id-token: write
       contents: read
+    if: |-
+      ${{ github.event_name == 'workflow_dispatch' ||
+                  (needs.build.result == 'success' && github.event.pull_request.head.repo.full_name == github.repository) }}
     steps:
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v4
