@@ -48,7 +48,7 @@ export function runTestsWorkflow(
           contents: JobPermission.READ,
         },
         // Make dependency conditional - only for PR events, not for manual workflow_dispatch
-        needs: [`\${{ github.event_name == 'pull_request' && '${buildJobId}' || '' }}`],
+        needs: [buildJobId],
         // Run if either:
         // 1. It's a manual workflow dispatch OR
         // 2. It's a PR where build succeeded AND PR is from the same repo (not a fork)
