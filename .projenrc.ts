@@ -180,7 +180,5 @@ pointSolutionsLibraryProject.eslint?.addRules({
 });
 
 pointSolutionsLibraryProject.synth();
-runTestsWorkflow(project, {
-  buildJobId: project.buildTask.name,
-});
+runTestsWorkflow(project);
 project.synth();
