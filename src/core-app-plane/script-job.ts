@@ -266,16 +266,14 @@ export class ScriptJob extends Construct {
         },
         phases: {
           install: {
-            ...(buildImage === defaultBuildImage && {
-              'runtime-versions': {
-                nodejs: 'latest',
-                python: 'latest',
-                java: 'latest',
-                ruby: 'latest',
-                golang: 'latest',
-                dotnet: 'latest',
-              },
-            }),
+            'runtime-versions': {
+              nodejs: 'latest',
+              python: 'latest',
+              java: 'latest',
+              ruby: 'latest',
+              golang: 'latest',
+              dotnet: 'latest',
+            },
           },
           build: {
             commands: props.script,
