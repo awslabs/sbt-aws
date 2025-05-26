@@ -11,11 +11,11 @@
  *  and limitations under the License.
  */
 
-import { Source } from 'aws-cdk-lib/aws-codebuild';
+import { IBuildImage, Source } from 'aws-cdk-lib/aws-codebuild';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
-import { EnvironmentVariablesToOutgoingEventProps, ScriptJob, ScriptJobProps } from './script-job';
 import { DetailType, IEventManager } from '../utils';
+import { EnvironmentVariablesToOutgoingEventProps, ScriptJob, ScriptJobProps } from './script-job';
 
 /**
  * Encapsulates the list of properties for a ScriptJobs that
@@ -69,6 +69,12 @@ export interface TenantLifecycleScriptJobProps {
   readonly scriptEnvironmentVariables?: {
     [key: string]: string;
   };
+
+  /**
+   * The CodeBuild build image to use for the ScriptJob.
+   * If not provided, the default is `codebuild.LinuxBuildImage.AMAZON_LINUX_2_5`.
+   */
+  readonly buildImage?: IBuildImage;
 
   /**
    * The EventManager instance that allows connecting to events flowing between
