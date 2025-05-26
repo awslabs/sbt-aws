@@ -13,7 +13,7 @@
 
 import * as cdk from 'aws-cdk-lib';
 import * as codebuild from 'aws-cdk-lib/aws-codebuild';
-import { IRuleTarget, EventBus, IEventBus } from 'aws-cdk-lib/aws-events';
+import { EventBus, IEventBus, IRuleTarget } from 'aws-cdk-lib/aws-events';
 import * as targets from 'aws-cdk-lib/aws-events-targets';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as kms from 'aws-cdk-lib/aws-kms';
@@ -22,7 +22,7 @@ import * as stepfunctions from 'aws-cdk-lib/aws-stepfunctions';
 import * as tasks from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
-import { addTemplateTag, DetailType, IEventManager } from '../utils';
+import { DetailType, IEventManager, addTemplateTag } from '../utils';
 
 /**
  * Represents the different kinds of environment variables that can
@@ -146,6 +146,12 @@ export interface ScriptJobProps {
   };
 
   /**
+   * The CodeBuild build image to use for the ScriptJob.
+   * If not provided, the default is `codebuild.LinuxBuildImage.AMAZON_LINUX_2_5`.
+   */
+  readonly buildImage?: codebuild.IBuildImage;
+
+  /**
    * The EventManager instance that allows connecting to events flowing between
    * the Control Plane and other components.
    */
@@ -237,11 +243,15 @@ export class ScriptJob extends Construct {
       );
     }
 
+    const defaultBuildImage = codebuild.LinuxBuildImage.AMAZON_LINUX_2_5;
+
+    const buildImage = props.buildImage || defaultBuildImage;
+
     const codebuildProject = new codebuild.Project(this, `codebuildProject`, {
       source: props.source,
       encryptionKey: codeBuildProjectEncryptionKey,
       environment: {
-        buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_5,
+        buildImage: buildImage,
         privileged: true,
         environmentVariables: environmentVariables,
       },
@@ -255,6 +265,18 @@ export class ScriptJob extends Construct {
           }),
         },
         phases: {
+          install: {
+            ...(buildImage === defaultBuildImage && {
+              'runtime-versions': {
+                nodejs: 'latest',
+                python: 'latest',
+                java: 'latest',
+                ruby: 'latest',
+                golang: 'latest',
+                dotnet: 'latest',
+              },
+            }),
+          },
           build: {
             commands: props.script,
           },
