@@ -21,7 +21,7 @@ import { CfnHttpApi } from 'aws-cdk-lib/aws-sam';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { TenantRegistrationTable } from './tenant-registration.table';
-import { DetailType, IEventManager } from '../../utils';
+import { IEventManager } from '../../utils';
 
 /**
 Represents the properties required for the Tenant Registration Lambda function.
@@ -77,8 +77,8 @@ export class TenantRegistrationLambda extends Construct {
         TENANT_API_URL: props.api.url!,
         EVENTBUS_NAME: props.eventManager.busName,
         EVENT_SOURCE: props.eventManager.controlPlaneEventSource,
-        ONBOARDING_DETAIL_TYPE: DetailType.ONBOARDING_REQUEST,
-        OFFBOARDING_DETAIL_TYPE: DetailType.OFFBOARDING_REQUEST,
+        ONBOARDING_DETAIL_TYPE: props.eventManager.events.onboardingRequest.detailType,
+        OFFBOARDING_DETAIL_TYPE: props.eventManager.events.offboardingRequest.detailType,
       },
       layers: [lambdaPowertoolsLayer, awsRequestsAuthLayer],
       architecture: Architecture.ARM_64,

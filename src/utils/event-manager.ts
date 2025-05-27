@@ -17,126 +17,40 @@ import { Construct } from 'constructs';
 import { addTemplateTag } from './utils';
 
 /**
- * Provides an easy way of accessing event detail types.
- * The string values represent the "detail-type" used in
- * events sent across the EventBus.
+ * Represents an event definition with its detail type and source.
  */
-export enum DetailType {
-  /**
-   * Event detail type for onboarding request.
-   */
-  ONBOARDING_REQUEST = 'onboardingRequest',
-  /**
-   * Event detail type for successful onboarding.
-   */
-  ONBOARDING_SUCCESS = 'onboardingSuccess',
-  /**
-   * Event detail type for failed onboarding.
-   */
-  ONBOARDING_FAILURE = 'onboardingFailure',
+export class EventDefinition {
+  #detailType: string;
+  #source: string;
+
+  constructor(detailType: string, source: string) {
+    this.#detailType = detailType;
+    this.#source = source;
+  }
 
   /**
-   * Event detail type for offboarding request.
+   * The detail type of this event
    */
-  OFFBOARDING_REQUEST = 'offboardingRequest',
-  /**
-   * Event detail type for successful offboarding.
-   */
-  OFFBOARDING_SUCCESS = 'offboardingSuccess',
-  /**
-   * Event detail type for failed offboarding.
-   */
-  OFFBOARDING_FAILURE = 'offboardingFailure',
+  get detailType(): string {
+    return this.#detailType;
+  }
 
   /**
-   * Event detail type for successful provisioning.
+   * The source of this event
    */
-  PROVISION_SUCCESS = 'provisionSuccess',
-  /**
-   * Event detail type for failed provisioning.
-   */
-  PROVISION_FAILURE = 'provisionFailure',
-
-  /**
-   * Event detail type for successful deprovisioning.
-   */
-  DEPROVISION_SUCCESS = 'deprovisionSuccess',
-  /**
-   * Event detail type for failed deprovisioning.
-   */
-  DEPROVISION_FAILURE = 'deprovisionFailure',
-
-  /**
-   * Event detail type for successful billing configuration.
-   */
-  BILLING_SUCCESS = 'billingSuccess',
-  /**
-   * Event detail type for failure to configure billing.
-   */
-  BILLING_FAILURE = 'billingFailure',
-
-  /**
-   * Event detail type for activation request.
-   */
-  ACTIVATE_REQUEST = 'activateRequest',
-  /**
-   * Event detail type for successful activation.
-   */
-  ACTIVATE_SUCCESS = 'activateSuccess',
-  /**
-   * Event detail type for failed activation.
-   */
-  ACTIVATE_FAILURE = 'activateFailure',
-
-  /**
-   * Event detail type for deactivation request.
-   */
-  DEACTIVATE_REQUEST = 'deactivateRequest',
-  /**
-   * Event detail type for successful deactivation.
-   */
-  DEACTIVATE_SUCCESS = 'deactivateSuccess',
-  /**
-   * Event detail type for failed deactivation.
-   */
-  DEACTIVATE_FAILURE = 'deactivateFailure',
-
-  /**
-   * Event detail type for user creation on the app-plane side.
-   * Note that sbt-aws components do not emit this event. This event
-   * should be emitted by the application plane.
-   */
-  TENANT_USER_CREATED = 'tenantUserCreated',
-  /**
-   * Event detail type for user deletion on the app-plane side.
-   * Note that sbt-aws components do not emit this event. This event
-   * should be emitted by the application plane.
-   */
-  TENANT_USER_DELETED = 'tenantUserDeleted',
-
-  /**
-   * Event detail type for ingesting a usage event.
-   */
-  INGEST_USAGE = 'ingestUsage',
+  get source(): string {
+    return this.#source;
+  }
 }
-
-/**
- * Represents a mapping between 'detailType' as the key and 'source' as the value.
- */
-export type EventMetadata = {
-  // key: Event 'detailType' -> value: Event 'source'
-  [key: string]: string;
-  // [key in DetailType]: string; // Causes this error: Only string-indexed map types are supported
-};
 
 /**
  * Props for adding a target to an event.
  */
 export interface AddTargetToEventProps {
   /**
-   * The detail type of the event to add a target to.
+   * The event definition to add a target to.
    */
-  readonly eventType: DetailType;
+  readonly eventDefinition: EventDefinition;
 
   /**
    * The target that will be added to the event.
@@ -154,9 +68,9 @@ export interface EventManagerProps {
   readonly eventBus?: IEventBus;
 
   /**
-   * The EventMetadata to use to update the event defaults.
+   * Source overrides for specific event detail types.
    */
-  readonly eventMetadata?: EventMetadata;
+  readonly sourceOverrides?: Record<string, string>;
 
   /**
    * The name of the event source for events coming from the SBT control plane.
@@ -191,24 +105,32 @@ export interface IEventManager {
   readonly busArn: string;
 
   /**
-   * List of recognized events that are available as triggers.
+   * Standard events definitions
    */
-  readonly supportedEvents: EventMetadata;
+  readonly events: Record<string, EventDefinition>;
 
   /**
    * Adds an IRuleTarget to an event.
-   *
-   * @param scope The scope in which to find (or create) the Rule.
-   * @param props Object containing eventType (the detail type of the event to add a target to)
-   * and target (the target that will be added to the event).
    */
   addTargetToEvent(scope: Construct, props: AddTargetToEventProps): void;
 
   /**
-   * Provides grantee the permissions to place events
-   * on the EventManager bus.
-   *
-   * @param grantee The grantee resource that will be granted the permission(s).
+   * Creates a control plane event with the specified detail type
+   */
+  createControlPlaneEvent(detailType: string): EventDefinition;
+
+  /**
+   * Creates an application plane event with the specified detail type
+   */
+  createApplicationPlaneEvent(detailType: string): EventDefinition;
+
+  /**
+   * Creates a custom event with the specified detail type and source
+   */
+  createCustomEvent(detailType: string, source: string): EventDefinition;
+
+  /**
+   * Provides grantee the permissions to place events on the EventManager bus.
    */
   grantPutEventsTo(grantee: IGrantable): void;
 }
@@ -219,20 +141,13 @@ export interface IEventManager {
 export class EventManager extends Construct implements IEventManager {
   /**
    * The event source used for events emitted by the application plane.
-   * @default
    */
-  public readonly applicationPlaneEventSource: string = 'applicationPlaneEventSource';
+  public readonly applicationPlaneEventSource: string;
 
   /**
    * The event source used for events emitted by the control plane.
-   * @default
    */
-  public readonly controlPlaneEventSource: string = 'controlPlaneEventSource';
-
-  /**
-   * List of recognized events that are available as triggers.
-   */
-  public readonly supportedEvents: EventMetadata;
+  public readonly controlPlaneEventSource: string;
 
   /**
    * The eventBus resource that will be used to send and receive events.
@@ -249,92 +164,206 @@ export class EventManager extends Construct implements IEventManager {
    */
   public readonly busArn: string;
 
+  /**
+   * Map of all event definitions by composite key of source:detailType
+   */
+  private readonly eventDefinitions: Map<string, EventDefinition> = new Map();
+
+  /**
+   * Standard event definitions
+   */
+  public readonly events: Record<string, EventDefinition> = {};
+
   constructor(scope: Construct, id: string, props?: EventManagerProps) {
     super(scope, id);
     addTemplateTag(this, 'EventManager');
+
     this.eventBus = props?.eventBus ?? new EventBus(this, 'SbtEventBus');
     this.busName = this.eventBus.eventBusName;
     this.busArn = this.eventBus.eventBusArn;
 
-    this.applicationPlaneEventSource =
-      props?.applicationPlaneEventSource || this.applicationPlaneEventSource;
-    this.controlPlaneEventSource = props?.controlPlaneEventSource || this.controlPlaneEventSource;
+    this.applicationPlaneEventSource = props?.applicationPlaneEventSource || 'applicationPlane';
+    this.controlPlaneEventSource = props?.controlPlaneEventSource || 'controlPlane';
 
-    // for every DetailType enum, there should be
-    // a corresponding key in the supportedEvents map
-    this.supportedEvents = {
-      onboardingRequest: this.controlPlaneEventSource,
-      onboardingSuccess: this.applicationPlaneEventSource,
-      onboardingFailure: this.applicationPlaneEventSource,
-      offboardingRequest: this.controlPlaneEventSource,
-      offboardingSuccess: this.applicationPlaneEventSource,
-      offboardingFailure: this.applicationPlaneEventSource,
-      provisionSuccess: this.applicationPlaneEventSource,
-      provisionFailure: this.applicationPlaneEventSource,
-      deprovisionSuccess: this.applicationPlaneEventSource,
-      deprovisionFailure: this.applicationPlaneEventSource,
-      billingSuccess: this.controlPlaneEventSource,
-      billingFailure: this.controlPlaneEventSource,
-      activateRequest: this.controlPlaneEventSource,
-      activateSuccess: this.applicationPlaneEventSource,
-      activateFailure: this.applicationPlaneEventSource,
-      deactivateRequest: this.controlPlaneEventSource,
-      deactivateSuccess: this.applicationPlaneEventSource,
-      deactivateFailure: this.applicationPlaneEventSource,
-      tenantUserCreated: this.controlPlaneEventSource,
-      tenantUserDeleted: this.controlPlaneEventSource,
-      ingestUsage: this.applicationPlaneEventSource,
-    };
+    const sourceOverrides = props?.sourceOverrides || {};
 
-    for (const key in this.supportedEvents) {
-      // update this.eventMetadata with any values passed in via props
-      if (props?.eventMetadata && props?.eventMetadata[key]) {
-        this.supportedEvents[key] = props.eventMetadata[key];
-      }
+    // Define standard events by name and source
+    // To add a new event, simply add its name to the appropriate array
+
+    // Control plane events
+    const controlPlaneEvents = [
+      'onboardingRequest',
+      'offboardingRequest',
+      'billingSuccess',
+      'billingFailure',
+      'activateRequest',
+      'deactivateRequest',
+      'tenantUserCreated',
+      'tenantUserDeleted',
+    ];
+
+    // Application plane events
+    const applicationPlaneEvents = [
+      'onboardingSuccess',
+      'onboardingFailure',
+      'offboardingSuccess',
+      'offboardingFailure',
+      'provisionSuccess',
+      'provisionFailure',
+      'deprovisionSuccess',
+      'deprovisionFailure',
+      'activateSuccess',
+      'activateFailure',
+      'deactivateSuccess',
+      'deactivateFailure',
+      'ingestUsage',
+    ];
+
+    // Register all control plane events with sbt_aws_ prefix
+    for (const eventName of controlPlaneEvents) {
+      // Create prefixed detail type for standard events
+      const prefixedDetailType = `sbt_aws_${eventName}`;
+      this.events[eventName] = this.createEventDefinition(
+        prefixedDetailType,
+        this.controlPlaneEventSource,
+        sourceOverrides,
+        eventName // Pass the original eventName for source override lookup
+      );
+    }
+
+    // Register all application plane events with sbt_aws_ prefix
+    for (const eventName of applicationPlaneEvents) {
+      // Create prefixed detail type for standard events
+      const prefixedDetailType = `sbt_aws_${eventName}`;
+      this.events[eventName] = this.createEventDefinition(
+        prefixedDetailType,
+        this.applicationPlaneEventSource,
+        sourceOverrides,
+        eventName // Pass the original eventName for source override lookup
+      );
     }
   }
 
   /**
-   * Provides grantee the permissions to place events
-   * on the EventManager bus.
-   *
-   * @param grantee The grantee resource that will be granted the permission(s).
+   * Create an event definition with the given detail type and source
    */
-  grantPutEventsTo(grantee: IGrantable) {
-    this.eventBus.grantPutEventsTo(grantee);
+  private createEventDefinition(
+    detailType: string,
+    defaultSource: string,
+    sourceOverrides?: Record<string, string>,
+    overrideKey?: string
+  ): EventDefinition {
+    // Use override source if specified, otherwise use default
+    // For standard events, use the original event name (without prefix) for source overrides lookup
+    const source = sourceOverrides?.[overrideKey || detailType] || defaultSource;
+
+    // Create a composite key using source and detailType
+    const key = `${source}:${detailType}`;
+
+    // Check if this combination already exists
+    if (this.eventDefinitions.has(key)) {
+      throw new Error(
+        `Event with detail type '${detailType}' and source '${source}' already exists`
+      );
+    }
+
+    const eventDef = new EventDefinition(detailType, source);
+    this.eventDefinitions.set(key, eventDef);
+    return eventDef;
+  }
+
+  /**
+   * Creates a control plane event with the specified detail type
+   */
+  public createControlPlaneEvent(detailType: string): EventDefinition {
+    // Use the composite key to check uniqueness
+    const key = `${this.controlPlaneEventSource}:${detailType}`;
+    if (this.eventDefinitions.has(key)) {
+      throw new Error(
+        `Event with detail type '${detailType}' and source '${this.controlPlaneEventSource}' already exists`
+      );
+    }
+    return this.createEventDefinition(detailType, this.controlPlaneEventSource);
+  }
+
+  /**
+   * Creates an application plane event with the specified detail type
+   */
+  public createApplicationPlaneEvent(detailType: string): EventDefinition {
+    // Use the composite key to check uniqueness
+    const key = `${this.applicationPlaneEventSource}:${detailType}`;
+    if (this.eventDefinitions.has(key)) {
+      throw new Error(
+        `Event with detail type '${detailType}' and source '${this.applicationPlaneEventSource}' already exists`
+      );
+    }
+    return this.createEventDefinition(detailType, this.applicationPlaneEventSource);
+  }
+
+  /**
+   * Creates a custom event with the specified detail type and source
+   */
+  public createCustomEvent(detailType: string, source: string): EventDefinition {
+    // Use the composite key to check uniqueness
+    const key = `${source}:${detailType}`;
+    if (this.eventDefinitions.has(key)) {
+      throw new Error(
+        `Event with detail type '${detailType}' and source '${source}' already exists`
+      );
+    }
+    return this.createEventDefinition(detailType, source);
   }
 
   /**
    * Adds an IRuleTarget to an event.
-   *
-   * @param scope The scope in which to find (or create) the Rule.
-   * @param props Object containing eventType (the detail type of the event to add a target to)
-   * and target (the target that will be added to the event).
    */
-  addTargetToEvent(scope: Construct, props: AddTargetToEventProps): void {
-    this.getOrCreateRule(scope, props.eventType).addTarget(props.target);
+  public addTargetToEvent(scope: Construct, props: AddTargetToEventProps): void {
+    this.getOrCreateRule(scope, props.eventDefinition).addTarget(props.target);
   }
 
   /**
-   * Returns a Rule for the given eventType in the context of a scope.
-   * A new one is created if the rule is not found in the scope.
+   * Sanitizes a string for use as part of a CloudFormation logical ID.
+   * CloudFormation logical IDs can only contain alphanumeric characters and
+   * must be unique within a template. Since our rule IDs are derived from
+   * both source and detailType, which may contain special characters like
+   * periods, colons, or hyphens, we need to replace those characters with
+   * something valid.
    *
-   * @param scope The scope in which to find (or create) the Rule.
-   * @param eventType The detail type of the event to add a target to.
-   * @returns A Rule for the given eventType in the provided scope.
+   * @param id The string to sanitize
+   * @returns A sanitized string valid for use in a CloudFormation logical ID
    */
-  private getOrCreateRule(scope: Construct, eventType: DetailType): Rule {
-    let rule = scope.node.tryFindChild(`${eventType}Rule`) as Rule;
+  private sanitizeRuleId(id: string): string {
+    return id.replace(/[^a-zA-Z0-9]/g, '_');
+  }
+
+  /**
+   * Returns a Rule for the given eventDefinition in the context of a scope.
+   */
+  private getOrCreateRule(scope: Construct, eventDefinition: EventDefinition): Rule {
+    const detailType = eventDefinition.detailType;
+    const source = eventDefinition.source;
+
+    // Create a unique ID for the rule that includes both source and detailType
+    const ruleId = `${this.sanitizeRuleId(source)}_${this.sanitizeRuleId(detailType)}Rule`;
+
+    let rule = scope.node.tryFindChild(ruleId) as Rule;
     if (!rule) {
-      rule = new Rule(scope, `${eventType}Rule`, {
+      rule = new Rule(scope, ruleId, {
         eventBus: this.eventBus,
         eventPattern: {
-          source: [this.supportedEvents[eventType]],
-          detailType: [eventType],
+          source: [source],
+          detailType: [detailType],
         },
       });
     }
 
     return rule;
+  }
+
+  /**
+   * Provides grantee the permissions to place events on the EventManager bus.
+   */
+  public grantPutEventsTo(grantee: IGrantable): void {
+    this.eventBus.grantPutEventsTo(grantee);
   }
 }

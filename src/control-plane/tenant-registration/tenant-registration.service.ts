@@ -18,7 +18,7 @@ import { ApiDestination } from 'aws-cdk-lib/aws-events-targets';
 import { Construct } from 'constructs';
 import { TenantRegistrationLambda } from './tenant-registration-funcs';
 import { TenantRegistrationTable } from './tenant-registration.table';
-import { DetailType, IEventManager, IRoute, generateRoutes } from '../../utils';
+import { IEventManager, IRoute, generateRoutes } from '../../utils';
 import { IAuth } from '../auth/auth-interface';
 import { TenantManagementService } from '../tenant-management';
 
@@ -159,13 +159,13 @@ export class TenantRegistrationService extends Construct {
     );
 
     [
-      DetailType.PROVISION_SUCCESS,
-      DetailType.PROVISION_FAILURE,
-      DetailType.DEPROVISION_SUCCESS,
-      DetailType.DEPROVISION_FAILURE,
-    ].forEach((detailType) => {
+      props.eventManager.events.provisionSuccess,
+      props.eventManager.events.provisionFailure,
+      props.eventManager.events.deprovisionSuccess,
+      props.eventManager.events.deprovisionFailure,
+    ].forEach((eventDefinition) => {
       props.eventManager.addTargetToEvent(this, {
-        eventType: detailType,
+        eventDefinition: eventDefinition,
         target: tenantRegistrationUpdateServiceTarget,
       });
     });

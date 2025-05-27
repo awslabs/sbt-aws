@@ -55,19 +55,19 @@ export class MeteringProvider extends Construct {
     const usagePath = '/usage';
     const metersPath = '/meters';
     const functionTriggerMappings: {
-      defaultFunctionTrigger: utils.DetailType;
+      defaultFunctionTrigger: utils.EventDefinition;
       functionDefinition?: utils.IASyncFunction;
     }[] = [
       {
-        defaultFunctionTrigger: utils.DetailType.ONBOARDING_REQUEST,
+        defaultFunctionTrigger: props.eventManager.events.onboardingRequest,
         functionDefinition: props.metering.createCustomerFunction,
       },
       {
-        defaultFunctionTrigger: utils.DetailType.OFFBOARDING_REQUEST,
+        defaultFunctionTrigger: props.eventManager.events.offboardingRequest,
         functionDefinition: props.metering.deleteCustomerFunction,
       },
       {
-        defaultFunctionTrigger: utils.DetailType.INGEST_USAGE,
+        defaultFunctionTrigger: props.eventManager.events.ingestUsage,
         functionDefinition: props.metering.ingestUsageEventFunction,
       },
     ];
@@ -75,7 +75,7 @@ export class MeteringProvider extends Construct {
     functionTriggerMappings.forEach((target) => {
       if (target.functionDefinition?.handler) {
         props.eventManager.addTargetToEvent(this, {
-          eventType: target.functionDefinition?.trigger || target.defaultFunctionTrigger,
+          eventDefinition: target.functionDefinition?.trigger || target.defaultFunctionTrigger,
           target: new targets.LambdaFunction(target.functionDefinition?.handler),
         });
       }

@@ -1401,7 +1401,7 @@ Any object.
 | <code><a href="#@cdklabs/sbt-aws.DeprovisioningScriptJob.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@cdklabs/sbt-aws.DeprovisioningScriptJob.property.codebuildProject">codebuildProject</a></code> | <code>aws-cdk-lib.aws_codebuild.Project</code> | The codebuildProject used to implement this ScriptJob. |
 | <code><a href="#@cdklabs/sbt-aws.DeprovisioningScriptJob.property.eventTarget">eventTarget</a></code> | <code>aws-cdk-lib.aws_events.IRuleTarget</code> | The eventTarget to use when triggering this ScriptJob. |
-| <code><a href="#@cdklabs/sbt-aws.DeprovisioningScriptJob.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The incoming event DetailType that triggers this job. |
+| <code><a href="#@cdklabs/sbt-aws.DeprovisioningScriptJob.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.EventDefinition">EventDefinition</a></code> | The incoming event definition that triggers this job. |
 | <code><a href="#@cdklabs/sbt-aws.DeprovisioningScriptJob.property.provisioningStateMachine">provisioningStateMachine</a></code> | <code>aws-cdk-lib.aws_stepfunctions.StateMachine</code> | The StateMachine used to implement this ScriptJob orchestration. |
 | <code><a href="#@cdklabs/sbt-aws.DeprovisioningScriptJob.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.EnvironmentVariablesToOutgoingEventProps">EnvironmentVariablesToOutgoingEventProps</a></code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
 
@@ -1446,12 +1446,12 @@ The eventTarget to use when triggering this ScriptJob.
 ##### `incomingEvent`<sup>Required</sup> <a name="incomingEvent" id="@cdklabs/sbt-aws.DeprovisioningScriptJob.property.incomingEvent"></a>
 
 ```typescript
-public readonly incomingEvent: DetailType;
+public readonly incomingEvent: EventDefinition;
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.EventDefinition">EventDefinition</a>
 
-The incoming event DetailType that triggers this job.
+The incoming event definition that triggers this job.
 
 ---
 
@@ -1526,6 +1526,9 @@ new EventManager(scope: Construct, id: string, props?: EventManagerProps)
 | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.EventManager.toString">toString</a></code> | Returns a string representation of this construct. |
 | <code><a href="#@cdklabs/sbt-aws.EventManager.addTargetToEvent">addTargetToEvent</a></code> | Adds an IRuleTarget to an event. |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.createApplicationPlaneEvent">createApplicationPlaneEvent</a></code> | Creates an application plane event with the specified detail type. |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.createControlPlaneEvent">createControlPlaneEvent</a></code> | Creates a control plane event with the specified detail type. |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.createCustomEvent">createCustomEvent</a></code> | Creates a custom event with the specified detail type and source. |
 | <code><a href="#@cdklabs/sbt-aws.EventManager.grantPutEventsTo">grantPutEventsTo</a></code> | Provides grantee the permissions to place events on the EventManager bus. |
 
 ---
@@ -1550,15 +1553,59 @@ Adds an IRuleTarget to an event.
 
 - *Type:* constructs.Construct
 
-The scope in which to find (or create) the Rule.
-
 ---
 
 ###### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.EventManager.addTargetToEvent.parameter.props"></a>
 
 - *Type:* <a href="#@cdklabs/sbt-aws.AddTargetToEventProps">AddTargetToEventProps</a>
 
-Object containing eventType (the detail type of the event to add a target to) and target (the target that will be added to the event).
+---
+
+##### `createApplicationPlaneEvent` <a name="createApplicationPlaneEvent" id="@cdklabs/sbt-aws.EventManager.createApplicationPlaneEvent"></a>
+
+```typescript
+public createApplicationPlaneEvent(detailType: string): EventDefinition
+```
+
+Creates an application plane event with the specified detail type.
+
+###### `detailType`<sup>Required</sup> <a name="detailType" id="@cdklabs/sbt-aws.EventManager.createApplicationPlaneEvent.parameter.detailType"></a>
+
+- *Type:* string
+
+---
+
+##### `createControlPlaneEvent` <a name="createControlPlaneEvent" id="@cdklabs/sbt-aws.EventManager.createControlPlaneEvent"></a>
+
+```typescript
+public createControlPlaneEvent(detailType: string): EventDefinition
+```
+
+Creates a control plane event with the specified detail type.
+
+###### `detailType`<sup>Required</sup> <a name="detailType" id="@cdklabs/sbt-aws.EventManager.createControlPlaneEvent.parameter.detailType"></a>
+
+- *Type:* string
+
+---
+
+##### `createCustomEvent` <a name="createCustomEvent" id="@cdklabs/sbt-aws.EventManager.createCustomEvent"></a>
+
+```typescript
+public createCustomEvent(detailType: string, source: string): EventDefinition
+```
+
+Creates a custom event with the specified detail type and source.
+
+###### `detailType`<sup>Required</sup> <a name="detailType" id="@cdklabs/sbt-aws.EventManager.createCustomEvent.parameter.detailType"></a>
+
+- *Type:* string
+
+---
+
+###### `source`<sup>Required</sup> <a name="source" id="@cdklabs/sbt-aws.EventManager.createCustomEvent.parameter.source"></a>
+
+- *Type:* string
 
 ---
 
@@ -1573,8 +1620,6 @@ Provides grantee the permissions to place events on the EventManager bus.
 ###### `grantee`<sup>Required</sup> <a name="grantee" id="@cdklabs/sbt-aws.EventManager.grantPutEventsTo.parameter.grantee"></a>
 
 - *Type:* aws-cdk-lib.aws_iam.IGrantable
-
-The grantee resource that will be granted the permission(s).
 
 ---
 
@@ -1628,7 +1673,7 @@ Any object.
 | <code><a href="#@cdklabs/sbt-aws.EventManager.property.busName">busName</a></code> | <code>string</code> | The name of the bus that will be used to send and receive events. |
 | <code><a href="#@cdklabs/sbt-aws.EventManager.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The event source used for events emitted by the control plane. |
 | <code><a href="#@cdklabs/sbt-aws.EventManager.property.eventBus">eventBus</a></code> | <code>aws-cdk-lib.aws_events.IEventBus</code> | The eventBus resource that will be used to send and receive events. |
-| <code><a href="#@cdklabs/sbt-aws.EventManager.property.supportedEvents">supportedEvents</a></code> | <code>{[ key: string ]: string}</code> | List of recognized events that are available as triggers. |
+| <code><a href="#@cdklabs/sbt-aws.EventManager.property.events">events</a></code> | <code>{[ key: string ]: <a href="#@cdklabs/sbt-aws.EventDefinition">EventDefinition</a>}</code> | Standard event definitions. |
 
 ---
 
@@ -1704,15 +1749,15 @@ The eventBus resource that will be used to send and receive events.
 
 ---
 
-##### `supportedEvents`<sup>Required</sup> <a name="supportedEvents" id="@cdklabs/sbt-aws.EventManager.property.supportedEvents"></a>
+##### `events`<sup>Required</sup> <a name="events" id="@cdklabs/sbt-aws.EventManager.property.events"></a>
 
 ```typescript
-public readonly supportedEvents: {[ key: string ]: string};
+public readonly events: {[ key: string ]: EventDefinition};
 ```
 
-- *Type:* {[ key: string ]: string}
+- *Type:* {[ key: string ]: <a href="#@cdklabs/sbt-aws.EventDefinition">EventDefinition</a>}
 
-List of recognized events that are available as triggers.
+Standard event definitions.
 
 ---
 
@@ -2282,7 +2327,7 @@ Any object.
 | <code><a href="#@cdklabs/sbt-aws.ProvisioningScriptJob.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@cdklabs/sbt-aws.ProvisioningScriptJob.property.codebuildProject">codebuildProject</a></code> | <code>aws-cdk-lib.aws_codebuild.Project</code> | The codebuildProject used to implement this ScriptJob. |
 | <code><a href="#@cdklabs/sbt-aws.ProvisioningScriptJob.property.eventTarget">eventTarget</a></code> | <code>aws-cdk-lib.aws_events.IRuleTarget</code> | The eventTarget to use when triggering this ScriptJob. |
-| <code><a href="#@cdklabs/sbt-aws.ProvisioningScriptJob.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The incoming event DetailType that triggers this job. |
+| <code><a href="#@cdklabs/sbt-aws.ProvisioningScriptJob.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.EventDefinition">EventDefinition</a></code> | The incoming event definition that triggers this job. |
 | <code><a href="#@cdklabs/sbt-aws.ProvisioningScriptJob.property.provisioningStateMachine">provisioningStateMachine</a></code> | <code>aws-cdk-lib.aws_stepfunctions.StateMachine</code> | The StateMachine used to implement this ScriptJob orchestration. |
 | <code><a href="#@cdklabs/sbt-aws.ProvisioningScriptJob.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.EnvironmentVariablesToOutgoingEventProps">EnvironmentVariablesToOutgoingEventProps</a></code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
 
@@ -2327,12 +2372,12 @@ The eventTarget to use when triggering this ScriptJob.
 ##### `incomingEvent`<sup>Required</sup> <a name="incomingEvent" id="@cdklabs/sbt-aws.ProvisioningScriptJob.property.incomingEvent"></a>
 
 ```typescript
-public readonly incomingEvent: DetailType;
+public readonly incomingEvent: EventDefinition;
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.EventDefinition">EventDefinition</a>
 
-The incoming event DetailType that triggers this job.
+The incoming event definition that triggers this job.
 
 ---
 
@@ -2579,7 +2624,7 @@ Any object.
 | <code><a href="#@cdklabs/sbt-aws.ScriptJob.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJob.property.codebuildProject">codebuildProject</a></code> | <code>aws-cdk-lib.aws_codebuild.Project</code> | The codebuildProject used to implement this ScriptJob. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJob.property.eventTarget">eventTarget</a></code> | <code>aws-cdk-lib.aws_events.IRuleTarget</code> | The eventTarget to use when triggering this ScriptJob. |
-| <code><a href="#@cdklabs/sbt-aws.ScriptJob.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The incoming event DetailType that triggers this job. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJob.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.EventDefinition">EventDefinition</a></code> | The incoming event definition that triggers this job. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJob.property.provisioningStateMachine">provisioningStateMachine</a></code> | <code>aws-cdk-lib.aws_stepfunctions.StateMachine</code> | The StateMachine used to implement this ScriptJob orchestration. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJob.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.EnvironmentVariablesToOutgoingEventProps">EnvironmentVariablesToOutgoingEventProps</a></code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
 
@@ -2624,12 +2669,12 @@ The eventTarget to use when triggering this ScriptJob.
 ##### `incomingEvent`<sup>Required</sup> <a name="incomingEvent" id="@cdklabs/sbt-aws.ScriptJob.property.incomingEvent"></a>
 
 ```typescript
-public readonly incomingEvent: DetailType;
+public readonly incomingEvent: EventDefinition;
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.EventDefinition">EventDefinition</a>
 
-The incoming event DetailType that triggers this job.
+The incoming event definition that triggers this job.
 
 ---
 
@@ -3933,20 +3978,20 @@ const addTargetToEventProps: AddTargetToEventProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.AddTargetToEventProps.property.eventType">eventType</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The detail type of the event to add a target to. |
+| <code><a href="#@cdklabs/sbt-aws.AddTargetToEventProps.property.eventDefinition">eventDefinition</a></code> | <code><a href="#@cdklabs/sbt-aws.EventDefinition">EventDefinition</a></code> | The event definition to add a target to. |
 | <code><a href="#@cdklabs/sbt-aws.AddTargetToEventProps.property.target">target</a></code> | <code>aws-cdk-lib.aws_events.IRuleTarget</code> | The target that will be added to the event. |
 
 ---
 
-##### `eventType`<sup>Required</sup> <a name="eventType" id="@cdklabs/sbt-aws.AddTargetToEventProps.property.eventType"></a>
+##### `eventDefinition`<sup>Required</sup> <a name="eventDefinition" id="@cdklabs/sbt-aws.AddTargetToEventProps.property.eventDefinition"></a>
 
 ```typescript
-public readonly eventType: DetailType;
+public readonly eventDefinition: EventDefinition;
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.EventDefinition">EventDefinition</a>
 
-The detail type of the event to add a target to.
+The event definition to add a target to.
 
 ---
 
@@ -4592,7 +4637,7 @@ const eventManagerProps: EventManagerProps = { ... }
 | <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.applicationPlaneEventSource">applicationPlaneEventSource</a></code> | <code>string</code> | The name of the event source for events coming from the SBT application plane. |
 | <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The name of the event source for events coming from the SBT control plane. |
 | <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.eventBus">eventBus</a></code> | <code>aws-cdk-lib.aws_events.IEventBus</code> | The event bus to register new rules with. |
-| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.eventMetadata">eventMetadata</a></code> | <code>{[ key: string ]: string}</code> | The EventMetadata to use to update the event defaults. |
+| <code><a href="#@cdklabs/sbt-aws.EventManagerProps.property.sourceOverrides">sourceOverrides</a></code> | <code>{[ key: string ]: string}</code> | Source overrides for specific event detail types. |
 
 ---
 
@@ -4634,15 +4679,15 @@ One will be created if not provided.
 
 ---
 
-##### `eventMetadata`<sup>Optional</sup> <a name="eventMetadata" id="@cdklabs/sbt-aws.EventManagerProps.property.eventMetadata"></a>
+##### `sourceOverrides`<sup>Optional</sup> <a name="sourceOverrides" id="@cdklabs/sbt-aws.EventManagerProps.property.sourceOverrides"></a>
 
 ```typescript
-public readonly eventMetadata: {[ key: string ]: string};
+public readonly sourceOverrides: {[ key: string ]: string};
 ```
 
 - *Type:* {[ key: string ]: string}
 
-The EventMetadata to use to update the event defaults.
+Source overrides for specific event detail types.
 
 ---
 
@@ -4788,48 +4833,48 @@ An implementation of the IMetering interface.
 
 ---
 
-### OutgoingEventDetailTypes <a name="OutgoingEventDetailTypes" id="@cdklabs/sbt-aws.OutgoingEventDetailTypes"></a>
+### OutgoingEventDefinitions <a name="OutgoingEventDefinitions" id="@cdklabs/sbt-aws.OutgoingEventDefinitions"></a>
 
-Represents the DetailTypes that can be emitted as part of the outgoing event.
+Represents the EventDefinitions that can be emitted as part of the outgoing event.
 
-#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.OutgoingEventDetailTypes.Initializer"></a>
+#### Initializer <a name="Initializer" id="@cdklabs/sbt-aws.OutgoingEventDefinitions.Initializer"></a>
 
 ```typescript
-import { OutgoingEventDetailTypes } from '@cdklabs/sbt-aws'
+import { OutgoingEventDefinitions } from '@cdklabs/sbt-aws'
 
-const outgoingEventDetailTypes: OutgoingEventDetailTypes = { ... }
+const outgoingEventDefinitions: OutgoingEventDefinitions = { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.OutgoingEventDetailTypes.property.failure">failure</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The detail type for a failed event. |
-| <code><a href="#@cdklabs/sbt-aws.OutgoingEventDetailTypes.property.success">success</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The detail type for a successful event. |
+| <code><a href="#@cdklabs/sbt-aws.OutgoingEventDefinitions.property.failure">failure</a></code> | <code><a href="#@cdklabs/sbt-aws.EventDefinition">EventDefinition</a></code> | The event definition for a failed event. |
+| <code><a href="#@cdklabs/sbt-aws.OutgoingEventDefinitions.property.success">success</a></code> | <code><a href="#@cdklabs/sbt-aws.EventDefinition">EventDefinition</a></code> | The event definition for a successful event. |
 
 ---
 
-##### `failure`<sup>Required</sup> <a name="failure" id="@cdklabs/sbt-aws.OutgoingEventDetailTypes.property.failure"></a>
+##### `failure`<sup>Required</sup> <a name="failure" id="@cdklabs/sbt-aws.OutgoingEventDefinitions.property.failure"></a>
 
 ```typescript
-public readonly failure: DetailType;
+public readonly failure: EventDefinition;
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.EventDefinition">EventDefinition</a>
 
-The detail type for a failed event.
+The event definition for a failed event.
 
 ---
 
-##### `success`<sup>Required</sup> <a name="success" id="@cdklabs/sbt-aws.OutgoingEventDetailTypes.property.success"></a>
+##### `success`<sup>Required</sup> <a name="success" id="@cdklabs/sbt-aws.OutgoingEventDefinitions.property.success"></a>
 
 ```typescript
-public readonly success: DetailType;
+public readonly success: EventDefinition;
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.EventDefinition">EventDefinition</a>
 
-The detail type for a successful event.
+The event definition for a successful event.
 
 ---
 
@@ -4935,10 +4980,10 @@ const scriptJobProps: ScriptJobProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | The EventManager instance that allows connecting to events flowing between the Control Plane and other components. |
-| <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The incoming event DetailType that triggers this job. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.incomingEvent">incomingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.EventDefinition">EventDefinition</a></code> | The incoming event definition that triggers this job. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.jobFailureStatus">jobFailureStatus</a></code> | <code>{[ key: string ]: string}</code> | In the case of failure, this is the object that will be included in the outgoing event `jobOutput` field. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.jobIdentifierKey">jobIdentifierKey</a></code> | <code>string</code> | The key where the job identifier is to be extracted from in the incoming event. |
-| <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.outgoingEvent">outgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.OutgoingEventDetailTypes">OutgoingEventDetailTypes</a></code> | The outgoing event DetailTypes that are emitted upon job success or failure. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.outgoingEvent">outgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.OutgoingEventDefinitions">OutgoingEventDefinitions</a></code> | The outgoing event definitions that are emitted upon job success or failure. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.permissions">permissions</a></code> | <code>aws-cdk-lib.aws_iam.PolicyDocument</code> | The IAM permission document for the ScriptJob. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.script">script</a></code> | <code>string</code> | The bash script to run as part of the ScriptJob. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.environmentJSONVariablesFromIncomingEvent">environmentJSONVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the ScriptJob from event details field. |
@@ -4965,12 +5010,12 @@ The EventManager instance that allows connecting to events flowing between the C
 ##### `incomingEvent`<sup>Required</sup> <a name="incomingEvent" id="@cdklabs/sbt-aws.ScriptJobProps.property.incomingEvent"></a>
 
 ```typescript
-public readonly incomingEvent: DetailType;
+public readonly incomingEvent: EventDefinition;
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.EventDefinition">EventDefinition</a>
 
-The incoming event DetailType that triggers this job.
+The incoming event definition that triggers this job.
 
 ---
 
@@ -5013,12 +5058,12 @@ and the outgoing event will look something like this:
 ##### `outgoingEvent`<sup>Required</sup> <a name="outgoingEvent" id="@cdklabs/sbt-aws.ScriptJobProps.property.outgoingEvent"></a>
 
 ```typescript
-public readonly outgoingEvent: OutgoingEventDetailTypes;
+public readonly outgoingEvent: OutgoingEventDefinitions;
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.OutgoingEventDetailTypes">OutgoingEventDetailTypes</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.OutgoingEventDefinitions">OutgoingEventDefinitions</a>
 
-The outgoing event DetailTypes that are emitted upon job success or failure.
+The outgoing event definitions that are emitted upon job success or failure.
 
 ---
 
@@ -5678,6 +5723,74 @@ public readonly jwtAuthorizer: IHttpRouteAuthorizer;
 
 ---
 
+## Classes <a name="Classes" id="Classes"></a>
+
+### EventDefinition <a name="EventDefinition" id="@cdklabs/sbt-aws.EventDefinition"></a>
+
+Represents an event definition with its detail type and source.
+
+#### Initializers <a name="Initializers" id="@cdklabs/sbt-aws.EventDefinition.Initializer"></a>
+
+```typescript
+import { EventDefinition } from '@cdklabs/sbt-aws'
+
+new EventDefinition(detailType: string, source: string)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.EventDefinition.Initializer.parameter.detailType">detailType</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@cdklabs/sbt-aws.EventDefinition.Initializer.parameter.source">source</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `detailType`<sup>Required</sup> <a name="detailType" id="@cdklabs/sbt-aws.EventDefinition.Initializer.parameter.detailType"></a>
+
+- *Type:* string
+
+---
+
+##### `source`<sup>Required</sup> <a name="source" id="@cdklabs/sbt-aws.EventDefinition.Initializer.parameter.source"></a>
+
+- *Type:* string
+
+---
+
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@cdklabs/sbt-aws.EventDefinition.property.detailType">detailType</a></code> | <code>string</code> | The detail type of this event. |
+| <code><a href="#@cdklabs/sbt-aws.EventDefinition.property.source">source</a></code> | <code>string</code> | The source of this event. |
+
+---
+
+##### `detailType`<sup>Required</sup> <a name="detailType" id="@cdklabs/sbt-aws.EventDefinition.property.detailType"></a>
+
+```typescript
+public readonly detailType: string;
+```
+
+- *Type:* string
+
+The detail type of this event.
+
+---
+
+##### `source`<sup>Required</sup> <a name="source" id="@cdklabs/sbt-aws.EventDefinition.property.source"></a>
+
+```typescript
+public readonly source: string;
+```
+
+- *Type:* string
+
+The source of this event.
+
+---
+
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
@@ -5693,7 +5806,7 @@ Represents a function that is triggered asynchronously via an event.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.IASyncFunction.property.handler">handler</a></code> | <code>aws-cdk-lib.aws_lambda.IFunction</code> | The function definition. |
-| <code><a href="#@cdklabs/sbt-aws.IASyncFunction.property.trigger">trigger</a></code> | <code><a href="#@cdklabs/sbt-aws.DetailType">DetailType</a></code> | The detail-type that will trigger the handler function. |
+| <code><a href="#@cdklabs/sbt-aws.IASyncFunction.property.trigger">trigger</a></code> | <code><a href="#@cdklabs/sbt-aws.EventDefinition">EventDefinition</a></code> | The event definition that will trigger the handler function. |
 
 ---
 
@@ -5712,12 +5825,12 @@ The function definition.
 ##### `trigger`<sup>Optional</sup> <a name="trigger" id="@cdklabs/sbt-aws.IASyncFunction.property.trigger"></a>
 
 ```typescript
-public readonly trigger: DetailType;
+public readonly trigger: EventDefinition;
 ```
 
-- *Type:* <a href="#@cdklabs/sbt-aws.DetailType">DetailType</a>
+- *Type:* <a href="#@cdklabs/sbt-aws.EventDefinition">EventDefinition</a>
 
-The detail-type that will trigger the handler function.
+The event definition that will trigger the handler function.
 
 ---
 
@@ -6387,6 +6500,9 @@ The table containing the aggregated data.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@cdklabs/sbt-aws.IEventManager.addTargetToEvent">addTargetToEvent</a></code> | Adds an IRuleTarget to an event. |
+| <code><a href="#@cdklabs/sbt-aws.IEventManager.createApplicationPlaneEvent">createApplicationPlaneEvent</a></code> | Creates an application plane event with the specified detail type. |
+| <code><a href="#@cdklabs/sbt-aws.IEventManager.createControlPlaneEvent">createControlPlaneEvent</a></code> | Creates a control plane event with the specified detail type. |
+| <code><a href="#@cdklabs/sbt-aws.IEventManager.createCustomEvent">createCustomEvent</a></code> | Creates a custom event with the specified detail type and source. |
 | <code><a href="#@cdklabs/sbt-aws.IEventManager.grantPutEventsTo">grantPutEventsTo</a></code> | Provides grantee the permissions to place events on the EventManager bus. |
 
 ---
@@ -6403,15 +6519,59 @@ Adds an IRuleTarget to an event.
 
 - *Type:* constructs.Construct
 
-The scope in which to find (or create) the Rule.
-
 ---
 
 ###### `props`<sup>Required</sup> <a name="props" id="@cdklabs/sbt-aws.IEventManager.addTargetToEvent.parameter.props"></a>
 
 - *Type:* <a href="#@cdklabs/sbt-aws.AddTargetToEventProps">AddTargetToEventProps</a>
 
-Object containing eventType (the detail type of the event to add a target to) and target (the target that will be added to the event).
+---
+
+##### `createApplicationPlaneEvent` <a name="createApplicationPlaneEvent" id="@cdklabs/sbt-aws.IEventManager.createApplicationPlaneEvent"></a>
+
+```typescript
+public createApplicationPlaneEvent(detailType: string): EventDefinition
+```
+
+Creates an application plane event with the specified detail type.
+
+###### `detailType`<sup>Required</sup> <a name="detailType" id="@cdklabs/sbt-aws.IEventManager.createApplicationPlaneEvent.parameter.detailType"></a>
+
+- *Type:* string
+
+---
+
+##### `createControlPlaneEvent` <a name="createControlPlaneEvent" id="@cdklabs/sbt-aws.IEventManager.createControlPlaneEvent"></a>
+
+```typescript
+public createControlPlaneEvent(detailType: string): EventDefinition
+```
+
+Creates a control plane event with the specified detail type.
+
+###### `detailType`<sup>Required</sup> <a name="detailType" id="@cdklabs/sbt-aws.IEventManager.createControlPlaneEvent.parameter.detailType"></a>
+
+- *Type:* string
+
+---
+
+##### `createCustomEvent` <a name="createCustomEvent" id="@cdklabs/sbt-aws.IEventManager.createCustomEvent"></a>
+
+```typescript
+public createCustomEvent(detailType: string, source: string): EventDefinition
+```
+
+Creates a custom event with the specified detail type and source.
+
+###### `detailType`<sup>Required</sup> <a name="detailType" id="@cdklabs/sbt-aws.IEventManager.createCustomEvent.parameter.detailType"></a>
+
+- *Type:* string
+
+---
+
+###### `source`<sup>Required</sup> <a name="source" id="@cdklabs/sbt-aws.IEventManager.createCustomEvent.parameter.source"></a>
+
+- *Type:* string
 
 ---
 
@@ -6427,8 +6587,6 @@ Provides grantee the permissions to place events on the EventManager bus.
 
 - *Type:* aws-cdk-lib.aws_iam.IGrantable
 
-The grantee resource that will be granted the permission(s).
-
 ---
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -6439,7 +6597,7 @@ The grantee resource that will be granted the permission(s).
 | <code><a href="#@cdklabs/sbt-aws.IEventManager.property.busArn">busArn</a></code> | <code>string</code> | The ARN/ID of the bus that will be used to send and receive events. |
 | <code><a href="#@cdklabs/sbt-aws.IEventManager.property.busName">busName</a></code> | <code>string</code> | The name of the bus that will be used to send and receive events. |
 | <code><a href="#@cdklabs/sbt-aws.IEventManager.property.controlPlaneEventSource">controlPlaneEventSource</a></code> | <code>string</code> | The event source used for events emitted by the control plane. |
-| <code><a href="#@cdklabs/sbt-aws.IEventManager.property.supportedEvents">supportedEvents</a></code> | <code>{[ key: string ]: string}</code> | List of recognized events that are available as triggers. |
+| <code><a href="#@cdklabs/sbt-aws.IEventManager.property.events">events</a></code> | <code>{[ key: string ]: <a href="#@cdklabs/sbt-aws.EventDefinition">EventDefinition</a>}</code> | Standard events definitions. |
 
 ---
 
@@ -6491,15 +6649,15 @@ The event source used for events emitted by the control plane.
 
 ---
 
-##### `supportedEvents`<sup>Required</sup> <a name="supportedEvents" id="@cdklabs/sbt-aws.IEventManager.property.supportedEvents"></a>
+##### `events`<sup>Required</sup> <a name="events" id="@cdklabs/sbt-aws.IEventManager.property.events"></a>
 
 ```typescript
-public readonly supportedEvents: {[ key: string ]: string};
+public readonly events: {[ key: string ]: EventDefinition};
 ```
 
-- *Type:* {[ key: string ]: string}
+- *Type:* {[ key: string ]: <a href="#@cdklabs/sbt-aws.EventDefinition">EventDefinition</a>}
 
-List of recognized events that are available as triggers.
+Standard events definitions.
 
 ---
 
@@ -6894,194 +7052,6 @@ Subscriptions pricing model.
 ##### `CONTRACTS_WITH_SUBSCRIPTION` <a name="CONTRACTS_WITH_SUBSCRIPTION" id="@cdklabs/sbt-aws.AWSMarketplaceSaaSPricingModel.CONTRACTS_WITH_SUBSCRIPTION"></a>
 
 Contracts with subscription pricing model.
-
----
-
-
-### DetailType <a name="DetailType" id="@cdklabs/sbt-aws.DetailType"></a>
-
-Provides an easy way of accessing event detail types.
-
-The string values represent the "detail-type" used in
-events sent across the EventBus.
-
-#### Members <a name="Members" id="Members"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.ONBOARDING_REQUEST">ONBOARDING_REQUEST</a></code> | Event detail type for onboarding request. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.ONBOARDING_SUCCESS">ONBOARDING_SUCCESS</a></code> | Event detail type for successful onboarding. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.ONBOARDING_FAILURE">ONBOARDING_FAILURE</a></code> | Event detail type for failed onboarding. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.OFFBOARDING_REQUEST">OFFBOARDING_REQUEST</a></code> | Event detail type for offboarding request. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.OFFBOARDING_SUCCESS">OFFBOARDING_SUCCESS</a></code> | Event detail type for successful offboarding. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.OFFBOARDING_FAILURE">OFFBOARDING_FAILURE</a></code> | Event detail type for failed offboarding. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.PROVISION_SUCCESS">PROVISION_SUCCESS</a></code> | Event detail type for successful provisioning. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.PROVISION_FAILURE">PROVISION_FAILURE</a></code> | Event detail type for failed provisioning. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.DEPROVISION_SUCCESS">DEPROVISION_SUCCESS</a></code> | Event detail type for successful deprovisioning. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.DEPROVISION_FAILURE">DEPROVISION_FAILURE</a></code> | Event detail type for failed deprovisioning. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.BILLING_SUCCESS">BILLING_SUCCESS</a></code> | Event detail type for successful billing configuration. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.BILLING_FAILURE">BILLING_FAILURE</a></code> | Event detail type for failure to configure billing. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.ACTIVATE_REQUEST">ACTIVATE_REQUEST</a></code> | Event detail type for activation request. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.ACTIVATE_SUCCESS">ACTIVATE_SUCCESS</a></code> | Event detail type for successful activation. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.ACTIVATE_FAILURE">ACTIVATE_FAILURE</a></code> | Event detail type for failed activation. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.DEACTIVATE_REQUEST">DEACTIVATE_REQUEST</a></code> | Event detail type for deactivation request. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.DEACTIVATE_SUCCESS">DEACTIVATE_SUCCESS</a></code> | Event detail type for successful deactivation. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.DEACTIVATE_FAILURE">DEACTIVATE_FAILURE</a></code> | Event detail type for failed deactivation. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.TENANT_USER_CREATED">TENANT_USER_CREATED</a></code> | Event detail type for user creation on the app-plane side. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.TENANT_USER_DELETED">TENANT_USER_DELETED</a></code> | Event detail type for user deletion on the app-plane side. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.INGEST_USAGE">INGEST_USAGE</a></code> | Event detail type for ingesting a usage event. |
-
----
-
-##### `ONBOARDING_REQUEST` <a name="ONBOARDING_REQUEST" id="@cdklabs/sbt-aws.DetailType.ONBOARDING_REQUEST"></a>
-
-Event detail type for onboarding request.
-
----
-
-
-##### `ONBOARDING_SUCCESS` <a name="ONBOARDING_SUCCESS" id="@cdklabs/sbt-aws.DetailType.ONBOARDING_SUCCESS"></a>
-
-Event detail type for successful onboarding.
-
----
-
-
-##### `ONBOARDING_FAILURE` <a name="ONBOARDING_FAILURE" id="@cdklabs/sbt-aws.DetailType.ONBOARDING_FAILURE"></a>
-
-Event detail type for failed onboarding.
-
----
-
-
-##### `OFFBOARDING_REQUEST` <a name="OFFBOARDING_REQUEST" id="@cdklabs/sbt-aws.DetailType.OFFBOARDING_REQUEST"></a>
-
-Event detail type for offboarding request.
-
----
-
-
-##### `OFFBOARDING_SUCCESS` <a name="OFFBOARDING_SUCCESS" id="@cdklabs/sbt-aws.DetailType.OFFBOARDING_SUCCESS"></a>
-
-Event detail type for successful offboarding.
-
----
-
-
-##### `OFFBOARDING_FAILURE` <a name="OFFBOARDING_FAILURE" id="@cdklabs/sbt-aws.DetailType.OFFBOARDING_FAILURE"></a>
-
-Event detail type for failed offboarding.
-
----
-
-
-##### `PROVISION_SUCCESS` <a name="PROVISION_SUCCESS" id="@cdklabs/sbt-aws.DetailType.PROVISION_SUCCESS"></a>
-
-Event detail type for successful provisioning.
-
----
-
-
-##### `PROVISION_FAILURE` <a name="PROVISION_FAILURE" id="@cdklabs/sbt-aws.DetailType.PROVISION_FAILURE"></a>
-
-Event detail type for failed provisioning.
-
----
-
-
-##### `DEPROVISION_SUCCESS` <a name="DEPROVISION_SUCCESS" id="@cdklabs/sbt-aws.DetailType.DEPROVISION_SUCCESS"></a>
-
-Event detail type for successful deprovisioning.
-
----
-
-
-##### `DEPROVISION_FAILURE` <a name="DEPROVISION_FAILURE" id="@cdklabs/sbt-aws.DetailType.DEPROVISION_FAILURE"></a>
-
-Event detail type for failed deprovisioning.
-
----
-
-
-##### `BILLING_SUCCESS` <a name="BILLING_SUCCESS" id="@cdklabs/sbt-aws.DetailType.BILLING_SUCCESS"></a>
-
-Event detail type for successful billing configuration.
-
----
-
-
-##### `BILLING_FAILURE` <a name="BILLING_FAILURE" id="@cdklabs/sbt-aws.DetailType.BILLING_FAILURE"></a>
-
-Event detail type for failure to configure billing.
-
----
-
-
-##### `ACTIVATE_REQUEST` <a name="ACTIVATE_REQUEST" id="@cdklabs/sbt-aws.DetailType.ACTIVATE_REQUEST"></a>
-
-Event detail type for activation request.
-
----
-
-
-##### `ACTIVATE_SUCCESS` <a name="ACTIVATE_SUCCESS" id="@cdklabs/sbt-aws.DetailType.ACTIVATE_SUCCESS"></a>
-
-Event detail type for successful activation.
-
----
-
-
-##### `ACTIVATE_FAILURE` <a name="ACTIVATE_FAILURE" id="@cdklabs/sbt-aws.DetailType.ACTIVATE_FAILURE"></a>
-
-Event detail type for failed activation.
-
----
-
-
-##### `DEACTIVATE_REQUEST` <a name="DEACTIVATE_REQUEST" id="@cdklabs/sbt-aws.DetailType.DEACTIVATE_REQUEST"></a>
-
-Event detail type for deactivation request.
-
----
-
-
-##### `DEACTIVATE_SUCCESS` <a name="DEACTIVATE_SUCCESS" id="@cdklabs/sbt-aws.DetailType.DEACTIVATE_SUCCESS"></a>
-
-Event detail type for successful deactivation.
-
----
-
-
-##### `DEACTIVATE_FAILURE` <a name="DEACTIVATE_FAILURE" id="@cdklabs/sbt-aws.DetailType.DEACTIVATE_FAILURE"></a>
-
-Event detail type for failed deactivation.
-
----
-
-
-##### `TENANT_USER_CREATED` <a name="TENANT_USER_CREATED" id="@cdklabs/sbt-aws.DetailType.TENANT_USER_CREATED"></a>
-
-Event detail type for user creation on the app-plane side.
-
-Note that sbt-aws components do not emit this event. This event
-should be emitted by the application plane.
-
----
-
-
-##### `TENANT_USER_DELETED` <a name="TENANT_USER_DELETED" id="@cdklabs/sbt-aws.DetailType.TENANT_USER_DELETED"></a>
-
-Event detail type for user deletion on the app-plane side.
-
-Note that sbt-aws components do not emit this event. This event
-should be emitted by the application plane.
-
----
-
-
-##### `INGEST_USAGE` <a name="INGEST_USAGE" id="@cdklabs/sbt-aws.DetailType.INGEST_USAGE"></a>
-
-Event detail type for ingesting a usage event.
 
 ---
 
