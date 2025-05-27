@@ -19,7 +19,7 @@ import * as targets from 'aws-cdk-lib/aws-events-targets';
 import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IBilling } from './billing-interface';
-import { DetailType, IEventManager, addTemplateTag } from '../../utils';
+import { IEventManager, addTemplateTag } from '../../utils';
 
 /**
  * Encapsulates the list of properties for a BillingProvider.
@@ -68,25 +68,25 @@ export class BillingProvider extends Construct {
 
     [
       {
-        defaultFunctionTrigger: DetailType.ONBOARDING_REQUEST,
+        defaultFunctionTrigger: props.eventManager.events.onboardingRequest,
         functionDefinition: props.billing.createCustomerFunction,
       },
       {
-        defaultFunctionTrigger: DetailType.OFFBOARDING_REQUEST,
+        defaultFunctionTrigger: props.eventManager.events.offboardingRequest,
         functionDefinition: props.billing.deleteCustomerFunction,
       },
       {
-        defaultFunctionTrigger: DetailType.TENANT_USER_CREATED,
+        defaultFunctionTrigger: props.eventManager.events.tenantUserCreated,
         functionDefinition: props.billing.createUserFunction,
       },
       {
-        defaultFunctionTrigger: DetailType.TENANT_USER_DELETED,
+        defaultFunctionTrigger: props.eventManager.events.tenantUserDeleted,
         functionDefinition: props.billing.deleteUserFunction,
       },
     ].forEach((target) => {
       if (target.functionDefinition?.handler) {
         props.eventManager.addTargetToEvent(this, {
-          eventType: target.functionDefinition?.trigger || target.defaultFunctionTrigger,
+          eventDefinition: target.functionDefinition?.trigger || target.defaultFunctionTrigger,
           target: new targets.LambdaFunction(target.functionDefinition?.handler),
         });
       }
