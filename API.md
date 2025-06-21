@@ -6945,9 +6945,11 @@ events sent across the EventBus.
 | <code><a href="#@cdklabs/sbt-aws.DetailType.OFFBOARDING_REQUEST">OFFBOARDING_REQUEST</a></code> | Event detail type for offboarding request. |
 | <code><a href="#@cdklabs/sbt-aws.DetailType.OFFBOARDING_SUCCESS">OFFBOARDING_SUCCESS</a></code> | Event detail type for successful offboarding. |
 | <code><a href="#@cdklabs/sbt-aws.DetailType.OFFBOARDING_FAILURE">OFFBOARDING_FAILURE</a></code> | Event detail type for failed offboarding. |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.PROVISION_REQUEST">PROVISION_REQUEST</a></code> | Event detail type for provisioning request. |
 | <code><a href="#@cdklabs/sbt-aws.DetailType.PROVISION_SUCCESS">PROVISION_SUCCESS</a></code> | Event detail type for successful provisioning. |
 | <code><a href="#@cdklabs/sbt-aws.DetailType.PROVISION_FAILURE">PROVISION_FAILURE</a></code> | Event detail type for failed provisioning. |
-| <code><a href="#@cdklabs/sbt-aws.DetailType.DEPROVISION_SUCCESS">DEPROVISION_SUCCESS</a></code> | Event detail type for successful deprovisioning. |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.DEPROVISION_REQUEST">DEPROVISION_REQUEST</a></code> | Event detail type for provisioning request. |
+| <code><a href="#@cdklabs/sbt-aws.DetailType.DEPROVISION_SUCCESS">DEPROVISION_SUCCESS</a></code> | /**   Event detail type for successful deprovisioning. |
 | <code><a href="#@cdklabs/sbt-aws.DetailType.DEPROVISION_FAILURE">DEPROVISION_FAILURE</a></code> | Event detail type for failed deprovisioning. |
 | <code><a href="#@cdklabs/sbt-aws.DetailType.BILLING_SUCCESS">BILLING_SUCCESS</a></code> | Event detail type for successful billing configuration. |
 | <code><a href="#@cdklabs/sbt-aws.DetailType.BILLING_FAILURE">BILLING_FAILURE</a></code> | Event detail type for failure to configure billing. |
@@ -7005,6 +7007,13 @@ Event detail type for failed offboarding.
 ---
 
 
+##### `PROVISION_REQUEST` <a name="PROVISION_REQUEST" id="@cdklabs/sbt-aws.DetailType.PROVISION_REQUEST"></a>
+
+Event detail type for provisioning request.
+
+---
+
+
 ##### `PROVISION_SUCCESS` <a name="PROVISION_SUCCESS" id="@cdklabs/sbt-aws.DetailType.PROVISION_SUCCESS"></a>
 
 Event detail type for successful provisioning.
@@ -7019,9 +7028,16 @@ Event detail type for failed provisioning.
 ---
 
 
+##### `DEPROVISION_REQUEST` <a name="DEPROVISION_REQUEST" id="@cdklabs/sbt-aws.DetailType.DEPROVISION_REQUEST"></a>
+
+Event detail type for provisioning request.
+
+---
+
+
 ##### `DEPROVISION_SUCCESS` <a name="DEPROVISION_SUCCESS" id="@cdklabs/sbt-aws.DetailType.DEPROVISION_SUCCESS"></a>
 
-Event detail type for successful deprovisioning.
+/**   Event detail type for successful deprovisioning.
 
 ---
 

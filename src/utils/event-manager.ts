@@ -49,6 +49,10 @@ export enum DetailType {
   OFFBOARDING_FAILURE = 'offboardingFailure',
 
   /**
+   * Event detail type for provisioning request.
+   */
+  PROVISION_REQUEST = 'provisionRequest',
+  /**
    * Event detail type for successful provisioning.
    */
   PROVISION_SUCCESS = 'provisionSuccess',
@@ -57,6 +61,10 @@ export enum DetailType {
    */
   PROVISION_FAILURE = 'provisionFailure',
 
+  /**
+   * Event detail type for deprovisioning request.
+   */
+  DEPROVISION_REQUEST = 'deprovisionRequest',
   /**
    * Event detail type for successful deprovisioning.
    */
@@ -269,8 +277,10 @@ export class EventManager extends Construct implements IEventManager {
       offboardingRequest: this.controlPlaneEventSource,
       offboardingSuccess: this.applicationPlaneEventSource,
       offboardingFailure: this.applicationPlaneEventSource,
+      provisionRequest: this.controlPlaneEventSource,
       provisionSuccess: this.applicationPlaneEventSource,
       provisionFailure: this.applicationPlaneEventSource,
+      deprovisionRequest: this.controlPlaneEventSource,
       deprovisionSuccess: this.applicationPlaneEventSource,
       deprovisionFailure: this.applicationPlaneEventSource,
       billingSuccess: this.controlPlaneEventSource,
