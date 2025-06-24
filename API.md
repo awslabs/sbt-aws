@@ -4986,6 +4986,7 @@ const scriptJobProps: ScriptJobProps = { ... }
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.outgoingEvent">outgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.OutgoingEventDefinitions">OutgoingEventDefinitions</a></code> | The outgoing event definitions that are emitted upon job success or failure. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.permissions">permissions</a></code> | <code>aws-cdk-lib.aws_iam.PolicyDocument</code> | The IAM permission document for the ScriptJob. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.script">script</a></code> | <code>string</code> | The bash script to run as part of the ScriptJob. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.buildImage">buildImage</a></code> | <code>aws-cdk-lib.aws_codebuild.IBuildImage</code> | The CodeBuild build image to use for the ScriptJob. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.environmentJSONVariablesFromIncomingEvent">environmentJSONVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the ScriptJob from event details field. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.environmentStringVariablesFromIncomingEvent">environmentStringVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the ScriptJob from event details field. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.EnvironmentVariablesToOutgoingEventProps">EnvironmentVariablesToOutgoingEventProps</a></code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
@@ -5088,6 +5089,20 @@ public readonly script: string;
 - *Type:* string
 
 The bash script to run as part of the ScriptJob.
+
+---
+
+##### `buildImage`<sup>Optional</sup> <a name="buildImage" id="@cdklabs/sbt-aws.ScriptJobProps.property.buildImage"></a>
+
+```typescript
+public readonly buildImage: IBuildImage;
+```
+
+- *Type:* aws-cdk-lib.aws_codebuild.IBuildImage
+
+The CodeBuild build image to use for the ScriptJob.
+
+If not provided, the default is `codebuild.LinuxBuildImage.AMAZON_LINUX_2_5`.
 
 ---
 
@@ -5294,6 +5309,7 @@ const tenantLifecycleScriptJobProps: TenantLifecycleScriptJobProps = { ... }
 | <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.eventManager">eventManager</a></code> | <code><a href="#@cdklabs/sbt-aws.IEventManager">IEventManager</a></code> | The EventManager instance that allows connecting to events flowing between the Control Plane and other components. |
 | <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.permissions">permissions</a></code> | <code>aws-cdk-lib.aws_iam.PolicyDocument</code> | The IAM permission document for the ScriptJob. |
 | <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.script">script</a></code> | <code>string</code> | The bash script to run as part of the ScriptJob. |
+| <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.buildImage">buildImage</a></code> | <code>aws-cdk-lib.aws_codebuild.IBuildImage</code> | The CodeBuild build image to use for the ScriptJob. |
 | <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.environmentJSONVariablesFromIncomingEvent">environmentJSONVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the ScriptJob from event details field. |
 | <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.environmentStringVariablesFromIncomingEvent">environmentStringVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the ScriptJob from event details field. |
 | <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.EnvironmentVariablesToOutgoingEventProps">EnvironmentVariablesToOutgoingEventProps</a></code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
@@ -5336,6 +5352,20 @@ public readonly script: string;
 - *Type:* string
 
 The bash script to run as part of the ScriptJob.
+
+---
+
+##### `buildImage`<sup>Optional</sup> <a name="buildImage" id="@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.buildImage"></a>
+
+```typescript
+public readonly buildImage: IBuildImage;
+```
+
+- *Type:* aws-cdk-lib.aws_codebuild.IBuildImage
+
+The CodeBuild build image to use for the ScriptJob.
+
+If not provided, the default is `codebuild.LinuxBuildImage.AMAZON_LINUX_2_5`.
 
 ---
 

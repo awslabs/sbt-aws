@@ -14,20 +14,8 @@
 import { AwsCdkConstructLibrary } from 'projen/lib/awscdk';
 import { JobPermission } from 'projen/lib/github/workflows-model';
 
-export interface RunTestsWorkflowOptions {
-  /**
-   * Name of the build job that must complete successfully before tests run
-   * @default 'build'
-   */
-  buildJobId?: string;
-}
-
-export function runTestsWorkflow(
-  project: AwsCdkConstructLibrary,
-  options: RunTestsWorkflowOptions = {}
-) {
+export function runTestsWorkflow(project: AwsCdkConstructLibrary) {
   // Set default values
-  const buildJobId = options.buildJobId || 'build';
   const runTests = project.github?.addWorkflow('run-tests');
   if (runTests) {
     // Use regular pull_request trigger for better security
@@ -47,13 +35,11 @@ export function runTestsWorkflow(
           idToken: JobPermission.WRITE,
           contents: JobPermission.READ,
         },
-        // Make dependency conditional - only for PR events, not for manual workflow_dispatch
-        needs: [buildJobId],
         // Run if either:
         // 1. It's a manual workflow dispatch OR
-        // 2. It's a PR where build succeeded AND PR is from the same repo (not a fork)
+        // 2. It's a PR from the same repo (not a fork)
         if: `\${{ github.event_name == 'workflow_dispatch' ||
-            (needs.${buildJobId}.result == 'success' && github.event.pull_request.head.repo.full_name == github.repository) }}`,
+            github.event.pull_request.head.repo.full_name == github.repository }}`,
         steps: [
           {
             name: 'configure aws credentials',
