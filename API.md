@@ -4648,6 +4648,7 @@ public readonly applicationPlaneEventSource: string;
 ```
 
 - *Type:* string
+- *Default:* sbt.application.plane
 
 The name of the event source for events coming from the SBT application plane.
 
@@ -4660,6 +4661,7 @@ public readonly controlPlaneEventSource: string;
 ```
 
 - *Type:* string
+- *Default:* sbt.control.plane
 
 The name of the event source for events coming from the SBT control plane.
 

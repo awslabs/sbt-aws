@@ -114,12 +114,7 @@ export class ControlPlane extends Construct {
       apiCorsConfig: props.apiCorsConfig,
     });
 
-    const eventManager =
-      props.eventManager ??
-      new EventManager(this, 'EventManager', {
-        controlPlaneEventSource: 'sbt.control.plane',
-        applicationPlaneEventSource: 'sbt.application.plane',
-      });
+    const eventManager = props.eventManager ?? new EventManager(this, 'EventManager');
     const tenantManagementService = new TenantManagementService(this, 'tenantManagementService', {
       api: api.api,
       auth,

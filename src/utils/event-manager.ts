@@ -74,11 +74,13 @@ export interface EventManagerProps {
 
   /**
    * The name of the event source for events coming from the SBT control plane.
+   * @default sbt.control.plane
    */
   readonly controlPlaneEventSource?: string;
 
   /**
    * The name of the event source for events coming from the SBT application plane.
+   * @default sbt.application.plane
    */
   readonly applicationPlaneEventSource?: string;
 }
@@ -182,8 +184,9 @@ export class EventManager extends Construct implements IEventManager {
     this.busName = this.eventBus.eventBusName;
     this.busArn = this.eventBus.eventBusArn;
 
-    this.applicationPlaneEventSource = props?.applicationPlaneEventSource || 'applicationPlane';
-    this.controlPlaneEventSource = props?.controlPlaneEventSource || 'controlPlane';
+    this.applicationPlaneEventSource =
+      props?.applicationPlaneEventSource || 'sbt.application.plane';
+    this.controlPlaneEventSource = props?.controlPlaneEventSource || 'sbt.control.plane';
 
     const sourceOverrides = props?.sourceOverrides || {};
 

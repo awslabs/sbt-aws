@@ -45,7 +45,7 @@ wait_for_registration_status() {
     local id=$2
     local expected_status=$3
     local max_attempts=30
-    local wait_time=2
+    local wait_time=10
 
     for ((i=1; i<=max_attempts; i++)); do
         status=$(aws dynamodb get-item --table-name "$table_name" --key '{"tenantRegistrationId":{"S":"'$id'"}}' --query 'Item.registrationStatus.S' --output text)
