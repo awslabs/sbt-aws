@@ -1,6 +1,7 @@
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import type {PluginOptions as LlmsTxtPluginOptions} from '@signalwire/docusaurus-plugin-llms-txt';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -26,6 +27,28 @@ const config: Config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
+
+  plugins: [
+    [
+      '@signalwire/docusaurus-plugin-llms-txt',
+      {
+        siteTitle: 'SaaS Builder Toolkit for AWS (SBT-AWS)',
+        siteDescription: 'A developer toolkit to implement SaaS best practices and increase developer velocity.',
+        logLevel: 1,
+        onRouteError: 'throw',
+        depth: 2,
+        content: {
+          includeBlog: true,
+          includePages: true,
+          includeDocs: true,
+          includeVersionedDocs: true,
+          includeGeneratedIndex: true,
+          enableMarkdownFiles: true,
+          enableLlmsFullTxt: true
+        },
+      } satisfies LlmsTxtPluginOptions,
+    ],
+  ],
 
   presets: [
     [
