@@ -24,6 +24,7 @@ TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 # The --query option extracts the executionArn from the response and assigns it to EXECUTION_ARN
 EXECUTION_ARN=$(aws stepfunctions start-execution \
     --state-machine-arn "$STEP_FUNCTION_ARN" \
+    --input "{\"gitBranchName\": \"$GITHUB_HEAD_REF\"}" \
     --query 'executionArn' \
     --output text)
 
