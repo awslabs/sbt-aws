@@ -1,0 +1,42 @@
+# SaaS Builder Toolkit for AWS (SBT-AWS)
+
+> A developer toolkit to implement SaaS best practices and increase developer velocity.
+
+
+## sbt-aws
+
+Description will go into a meta tag in <head />
+
+- [SaaS Builder Toolkit for AWS (SBT-AWS)](/index.md): Description will go into a meta tag in <head />
+
+### docs
+
+- [ISV Partner Integrations](/docs/category/isv-partner-integrations.md): The SaaS Builder Toolkit (SBT-AWS) for AWS enhances your SaaS development process by offering seamless integration with popular Independent Software Vendor (ISV) products. This powerful feature allows developers to extend their applications' functionality and deliver more comprehensive solutions to customers. 
+
+SBT-AWS comes equipped with a library of pre-built integrations for leading ISV offerings, significantly reducing the time and effort required to incorporate third-party tools. These integrations are designed to work out-of-the-box, allowing developers to focus on core business logic rather than integration development.
+
+ While providing pre-built integrations, SBT-AWS also offers the flexibility to customize these components to meet specific needs. The toolkit's open-source nature enables developers to modify and extend integration components, ensuring perfect alignment with their SaaS application requirements.
+- [SBT for AWS Workshop](/docs/category/sbt-for-aws-workshop.md): Use SBT to build and deploy a multi-tenant application.
+- [SBT Tutorial - Basics](/docs/category/sbt-tutorial---basics.md): Use SBT to build and deploy a multi-tenant application.
+- [SBT Interfaces](/docs/interfaces.md): This documentation covers the interfaces that form the backbone of SBT's authentication, billing, and metering functionalities. These interfaces provide a standardized and consistent approach to handling various operations, making it easier to manage and integrate different components across the system.
+- [IAuth Interface](/docs/interfaces/auth-interface.md): Overview
+- [IBilling Interface](/docs/interfaces/billing-interface.md): Overview
+- [IMetering Interface](/docs/interfaces/metering-interface.md): Overview
+- [Introduction](/docs/partners/isv-integrations/amberflo.md): A cloud-native solution that integrates with SaaS products to enable real-time metering and usage-based billing for GenAI and SaaS applications.
+- [Introduction](/docs/partners/isv-integrations/descope.md): Integrate Descope authentication and authorization capabilities into your AWS SaaS Builder Toolkit (SBT) applications.
+- [Moesif API Monetization for AWS SBT](/docs/partners/isv-integrations/moesif.md): Provides usage-based billing support for SBT
+- [AWS Marketplace Integration](/docs/partners/marketplace-integration.md): Provides usage-based billing support for SBT
+- [Amazon ECS SaaS - Reference Architecture](/docs/reference_architectures/ecs-reference-architecture.md): The AWS SaaS Factory ECS SaaS Reference Architecture is a example architecture that illustrates how to build and manage multi-tenant Software-as-a-Service (SaaS) applications using Amazon Elastic Container Service (ECS). It serves as a guide for developers looking to implement best practices in building multi-tenant SaaS applications on AWS using ECS, offering a flexible and scalable solution tailored to various business needs. This architecture leverages SBT for both control plane and tenant deployments. Key components and considerations of this reference architecture include:
+- [Amazon EKS SaaS Reference Architecture](/docs/reference_architectures/eks-reference-architecture.md): The AWS SaaS Factory EKS SaaS Reference Architecture provides a working example of a multi-tenant SaaS solution using Amazon Elastic Kubernetes Service (EKS). This architecture, like all SaaS Factory reference architectures, are provided as examples from which to create scalable, secure, and efficient SaaS applications on AWS. This architecture leverages SBT for both control plane and tenant deployments. Key components and considerations of this reference architecture include:
+- [Serverless SaaS - Reference Solution](/docs/reference_architectures/serverless-saas-reference-architecture.md): The AWS SaaS Factory Serverless SaaS Reference Architecture is a comprehensive example of a working, multi-tenant SaaS application using serverless technologies on AWS. This architecture leverages a range of AWS services to optimize operational efficiency and scalability while minimizing the complexity of managing infrastructure. The architecture leverages SBT for its control plane and tenant deployments. Key components and  concepts of this architecture include:
+- [SaaS Builder Toolkit for AWS Workshop](/docs/tutorials/sbt-workshop/workshop.md): For a detailed step by step walkthrough, click this link to follow along in a workshop.
+- [Application plane utilities](/docs/tutorials/tutorial-basics/app-plane-utils.md): Although entirely optional, SBT includes a utility that lets you define, and run arbitrary jobs upon receipt of a control plane message, called a ScriptJob. This mechanism is extended to produce two new helper constructs ProvisioningScriptJob and DeprovisioningScriptJob which are used for onboarding and off-boarding, respectively, in the reference architectures which were ported to SBT (see references at the end of this document). That tenant provisioning/deprovisioning process is depicted below:
+- [Build the control plane](/docs/tutorials/tutorial-basics/build-it.md): Now let's build and deploy this component. Before we do, we have to modify one other file. Open up the hello-cdk.ts file in the bin directory, and replace everything that's in there with the following contents:
+- [Congratulations!](/docs/tutorials/tutorial-basics/congratulations.md)
+- [Create the application plane](/docs/tutorials/tutorial-basics/create-application-plane.md): As mentioned before, SBT is unopinionated about the application in which it's deployed. As a result, we expect you to create the ApplicationPlane construct as just another part of the CDK constructs that you'd use to define your application. Take this simple (non-functional) example:
+- [Create the control plane](/docs/tutorials/tutorial-basics/create-control-plane.md): Now that we have SBT installed, let's create a new SBT control plane. Create a new file under /lib/control-plane.ts with the following contents.
+- [Install the SaaS Builder Toolkit for AWS](/docs/tutorials/tutorial-basics/install-sbt.md): Now that you've initialized a new CDK app, let's install the SBT components. From within the hello-cdk directory, please run the following command:
+- [Tutorial Intro](/docs/tutorials/tutorial-basics/intro.md): This tutorial will walk you through creating a basic multi-tenant application using SaaS
+- [Provisioning script breakdown](/docs/tutorials/tutorial-basics/provisioning-script-breakdown.md): Let's break this script down section by section.
+- [Putting it all together](/docs/tutorials/tutorial-basics/putting-it-all-together.md): Now that we've seen the various parts of the application plane in isolation, let's put it all together. Please create the following file in the /lib directory of your CDK app and name it app-plane.ts. Now open that file and paste the following contents into it:
+- [Testing the deployment](/docs/tutorials/tutorial-basics/test-the-deployment.md): Once deployed, let's run a few tests to see our basic control plane and application plane in action. When you deployed the control plane, you should've received an email with temporary admin credentials. Let's use those credentials now to log in to that account. Please replace the placeholder ('INSERT PASSWORD HERE') with your temporary password in the script below. Once logged in, this script will onboard a new tenant, and retrieve its details. Note this script uses the jq JSON processor.

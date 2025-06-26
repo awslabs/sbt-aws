@@ -1,0 +1,1949 @@
+# SaaS Builder Toolkit for AWS (SBT-AWS)
+
+> A developer toolkit to implement SaaS best practices and increase developer velocity.
+
+
+## sbt-aws
+
+Description will go into a meta tag in <head />
+
+- [SaaS Builder Toolkit for AWS (SBT-AWS)](/index.md): Description will go into a meta tag in <head />
+
+### docs
+
+- [ISV Partner Integrations](/docs/category/isv-partner-integrations.md): The SaaS Builder Toolkit (SBT-AWS) for AWS enhances your SaaS development process by offering seamless integration with popular Independent Software Vendor (ISV) products. This powerful feature allows developers to extend their applications' functionality and deliver more comprehensive solutions to customers. 
+
+SBT-AWS comes equipped with a library of pre-built integrations for leading ISV offerings, significantly reducing the time and effort required to incorporate third-party tools. These integrations are designed to work out-of-the-box, allowing developers to focus on core business logic rather than integration development.
+
+ While providing pre-built integrations, SBT-AWS also offers the flexibility to customize these components to meet specific needs. The toolkit's open-source nature enables developers to modify and extend integration components, ensuring perfect alignment with their SaaS application requirements.
+- [SBT for AWS Workshop](/docs/category/sbt-for-aws-workshop.md): Use SBT to build and deploy a multi-tenant application.
+- [SBT Tutorial - Basics](/docs/category/sbt-tutorial---basics.md): Use SBT to build and deploy a multi-tenant application.
+- [SBT Interfaces](/docs/interfaces.md): This documentation covers the interfaces that form the backbone of SBT's authentication, billing, and metering functionalities. These interfaces provide a standardized and consistent approach to handling various operations, making it easier to manage and integrate different components across the system.
+- [IAuth Interface](/docs/interfaces/auth-interface.md): Overview
+- [IBilling Interface](/docs/interfaces/billing-interface.md): Overview
+- [IMetering Interface](/docs/interfaces/metering-interface.md): Overview
+- [Introduction](/docs/partners/isv-integrations/amberflo.md): A cloud-native solution that integrates with SaaS products to enable real-time metering and usage-based billing for GenAI and SaaS applications.
+- [Introduction](/docs/partners/isv-integrations/descope.md): Integrate Descope authentication and authorization capabilities into your AWS SaaS Builder Toolkit (SBT) applications.
+- [Moesif API Monetization for AWS SBT](/docs/partners/isv-integrations/moesif.md): Provides usage-based billing support for SBT
+- [AWS Marketplace Integration](/docs/partners/marketplace-integration.md): Provides usage-based billing support for SBT
+- [Amazon ECS SaaS - Reference Architecture](/docs/reference_architectures/ecs-reference-architecture.md): The AWS SaaS Factory ECS SaaS Reference Architecture is a example architecture that illustrates how to build and manage multi-tenant Software-as-a-Service (SaaS) applications using Amazon Elastic Container Service (ECS). It serves as a guide for developers looking to implement best practices in building multi-tenant SaaS applications on AWS using ECS, offering a flexible and scalable solution tailored to various business needs. This architecture leverages SBT for both control plane and tenant deployments. Key components and considerations of this reference architecture include:
+- [Amazon EKS SaaS Reference Architecture](/docs/reference_architectures/eks-reference-architecture.md): The AWS SaaS Factory EKS SaaS Reference Architecture provides a working example of a multi-tenant SaaS solution using Amazon Elastic Kubernetes Service (EKS). This architecture, like all SaaS Factory reference architectures, are provided as examples from which to create scalable, secure, and efficient SaaS applications on AWS. This architecture leverages SBT for both control plane and tenant deployments. Key components and considerations of this reference architecture include:
+- [Serverless SaaS - Reference Solution](/docs/reference_architectures/serverless-saas-reference-architecture.md): The AWS SaaS Factory Serverless SaaS Reference Architecture is a comprehensive example of a working, multi-tenant SaaS application using serverless technologies on AWS. This architecture leverages a range of AWS services to optimize operational efficiency and scalability while minimizing the complexity of managing infrastructure. The architecture leverages SBT for its control plane and tenant deployments. Key components and  concepts of this architecture include:
+- [SaaS Builder Toolkit for AWS Workshop](/docs/tutorials/sbt-workshop/workshop.md): For a detailed step by step walkthrough, click this link to follow along in a workshop.
+- [Application plane utilities](/docs/tutorials/tutorial-basics/app-plane-utils.md): Although entirely optional, SBT includes a utility that lets you define, and run arbitrary jobs upon receipt of a control plane message, called a ScriptJob. This mechanism is extended to produce two new helper constructs ProvisioningScriptJob and DeprovisioningScriptJob which are used for onboarding and off-boarding, respectively, in the reference architectures which were ported to SBT (see references at the end of this document). That tenant provisioning/deprovisioning process is depicted below:
+- [Build the control plane](/docs/tutorials/tutorial-basics/build-it.md): Now let's build and deploy this component. Before we do, we have to modify one other file. Open up the hello-cdk.ts file in the bin directory, and replace everything that's in there with the following contents:
+- [Congratulations!](/docs/tutorials/tutorial-basics/congratulations.md)
+- [Create the application plane](/docs/tutorials/tutorial-basics/create-application-plane.md): As mentioned before, SBT is unopinionated about the application in which it's deployed. As a result, we expect you to create the ApplicationPlane construct as just another part of the CDK constructs that you'd use to define your application. Take this simple (non-functional) example:
+- [Create the control plane](/docs/tutorials/tutorial-basics/create-control-plane.md): Now that we have SBT installed, let's create a new SBT control plane. Create a new file under /lib/control-plane.ts with the following contents.
+- [Install the SaaS Builder Toolkit for AWS](/docs/tutorials/tutorial-basics/install-sbt.md): Now that you've initialized a new CDK app, let's install the SBT components. From within the hello-cdk directory, please run the following command:
+- [Tutorial Intro](/docs/tutorials/tutorial-basics/intro.md): This tutorial will walk you through creating a basic multi-tenant application using SaaS
+- [Provisioning script breakdown](/docs/tutorials/tutorial-basics/provisioning-script-breakdown.md): Let's break this script down section by section.
+- [Putting it all together](/docs/tutorials/tutorial-basics/putting-it-all-together.md): Now that we've seen the various parts of the application plane in isolation, let's put it all together. Please create the following file in the /lib directory of your CDK app and name it app-plane.ts. Now open that file and paste the following contents into it:
+- [Testing the deployment](/docs/tutorials/tutorial-basics/test-the-deployment.md): Once deployed, let's run a few tests to see our basic control plane and application plane in action. When you deployed the control plane, you should've received an email with temporary admin credentials. Let's use those credentials now to log in to that account. Please replace the placeholder ('INSERT PASSWORD HERE') with your temporary password in the script below. Once logged in, this script will onboard a new tenant, and retrieve its details. Note this script uses the jq JSON processor.
+
+
+---
+
+# Full Documentation Content
+
+## ISV Partner Integrations
+
+> The SaaS Builder Toolkit (SBT-AWS) for AWS enhances your SaaS development process by offering seamless integration with popular Independent Software Vendor (ISV) products. This powerful feature allows developers to extend their applications' functionality and deliver more comprehensive solutions to customers. 
+
+SBT-AWS comes equipped with a library of pre-built integrations for leading ISV offerings, significantly reducing the time and effort required to incorporate third-party tools. These integrations are designed to work out-of-the-box, allowing developers to focus on core business logic rather than integration development.
+
+ While providing pre-built integrations, SBT-AWS also offers the flexibility to customize these components to meet specific needs. The toolkit's open-source nature enables developers to modify and extend integration components, ensuring perfect alignment with their SaaS application requirements.
+
+## [📄️<!-- --> <!-- -->Amberflo](/sbt-aws/docs/partners/isv-integrations/amberflo.md)
+
+[A cloud-native solution that integrates with SaaS products to enable real-time metering and usage-based billing for GenAI and SaaS applications.](/sbt-aws/docs/partners/isv-integrations/amberflo.md)
+
+
+---
+
+## SBT for AWS Workshop
+
+> Use SBT to build and deploy a multi-tenant application.
+
+## [📄️<!-- --> <!-- -->SaaS Builder Toolkit for AWS Workshop](/sbt-aws/docs/tutorials/sbt-workshop/workshop.md)
+
+[For a detailed step by step walkthrough, click this link to follow along in a workshop.](/sbt-aws/docs/tutorials/sbt-workshop/workshop.md)
+
+
+---
+
+## SBT Tutorial - Basics
+
+> Use SBT to build and deploy a multi-tenant application.
+
+## [📄️<!-- --> <!-- -->Tutorial Intro](/sbt-aws/docs/tutorials/tutorial-basics/intro.md)
+
+[This tutorial will walk you through creating a basic multi-tenant application using SaaS](/sbt-aws/docs/tutorials/tutorial-basics/intro.md)
+
+
+---
+
+## SBT Interfaces
+
+> This documentation covers the interfaces that form the backbone of SBT's authentication, billing, and metering functionalities. These interfaces provide a standardized and consistent approach to handling various operations, making it easier to manage and integrate different components across the system.
+
+# SBT Interfaces
+
+This documentation covers the interfaces that form the backbone of SBT's authentication, billing, and metering functionalities. These interfaces provide a standardized and consistent approach to handling various operations, making it easier to manage and integrate different components across the system.
+
+By following a consistent interface-driven approach, SBT maintains a high degree of modularity, extensibility, and maintainability. This allows for easy integration of new features, replacement of implementations, and adherence to best practices.
+
+Below, you'll find detailed explanations of each interface, their key features, and links to dive deeper into their documentation.
+
+## IAuth Interface[​](#iauth-interface "Direct link to IAuth Interface")
+
+The IAuth interface defines the contracts for authentication and authorization in an application. It provides various configurations and endpoints related to JSON Web Tokens (JWT), OAuth, client IDs, client secrets, and scopes for different operations. Additionally, it includes Lambda functions for managing users.
+
+Key features include:
+
+🔑 JWT and OAuth Configuration: Properties for setting up JWT issuer, audience, token endpoint, and OAuth client IDs and secrets.
+
+🔍 Scope Management: Scopes for authorizing requests related to tenant registration, user management, and other operations.
+
+👤 User Management: Lambda functions for creating, fetching, updating, enabling, and disabling users.
+
+The interface ensures a consistent and standardized way of handling authentication and authorization across the application, making it easier to manage security-related configurations and user operations.
+
+To learn more about the IAuth interface and its properties and methods, you can dive deeper into the documentation by [clicking here](/sbt-aws/docs/interfaces/auth-interface.md).
+
+## IBilling Interface[​](#ibilling-interface "Direct link to IBilling Interface")
+
+The IBilling interface defines a standardized way of handling billing-related operations in a cloud-native application. It encapsulates functions for customer and user management, data ingestion, and usage data handling.
+
+Key Features include:
+
+👪 Customer Management: Create and delete customers (entities that can have zero or more users).
+
+🧑‍🤝‍🧑 User Management (Optional): Create and delete users belonging to customers.
+
+📥 Data Ingestion (Optional): Aggregate raw billing data using a data ingestor.
+
+📊 Usage Data Handling (Optional): Push aggregated data to the billing provider on a scheduled basis.
+
+🔗 Webhook Support (Optional): Trigger a function when a webhook request is received.
+
+The interface includes properties for defining the required functions and their triggers, such as onboarding requests, offboarding requests, user creation/deletion events, and scheduled data pushes.
+
+To learn more about the IBilling interface and its functions, you can dive deeper into the documentation by [clicking here](/sbt-aws/docs/interfaces/billing-interface.md).
+
+## IMetering Interface[​](#imetering-interface "Direct link to IMetering Interface")
+
+The IMetering interface defines the contracts for metering operations in a system. It provides functions for managing meters, ingesting usage events, handling customer (tenant) operations, and retrieving usage data.
+
+Key features include:
+
+📏 Meter Management: Create, fetch, update, and delete meters used for tracking usage metrics.
+
+📊 Usage Ingestion: Ingest usage events associated with meters to measure and analyze usage data.
+
+👤 Customer Management: Create and delete customers (tenants) for tracking usage.
+
+📥 Usage Retrieval: Fetch usage data for specific meters, supporting features like pagination.
+
+🗑️ Event Cancellation: Cancel or exclude specific usage events from being recorded.
+
+The interface ensures a consistent and standardized way of handling metering operations, making it easier to integrate or replace the implementation in different parts of the system.
+
+To learn more about the IMetering interface and its functions, you can dive deeper into the documentation by [clicking here](/sbt-aws/docs/interfaces/metering-interface.md).
+
+## Appendix[​](#appendix "Direct link to Appendix")
+
+* [Auth Interface](/sbt-aws/docs/interfaces/auth-interface.md)
+* [Metering Interface](/sbt-aws/docs/interfaces/metering-interface.md)
+* [Billing Interface](/sbt-aws/docs/interfaces/billing-interface.md)
+
+
+---
+
+## IAuth Interface
+
+> Overview
+
+# IAuth Interface
+
+## Overview[​](#overview "Direct link to Overview")
+
+The IAuth interface encapsulates the properties and methods required for authentication and authorization in the application. It provides various configurations and endpoints related to JSON Web Tokens (JWT), OAuth, client IDs, client secrets, and scopes for different operations. Additionally, it includes Lambda functions for managing users.
+
+## Properties[​](#properties "Direct link to Properties")
+
+### jwtIssuer[​](#jwtissuer "Direct link to jwtIssuer")
+
+* Type: string
+* Description: The JWT issuer domain for the identity provider. This is the domain where the JSON Web Tokens (JWTs) are issued from.
+
+### jwtAudience[​](#jwtaudience "Direct link to jwtAudience")
+
+* Type: string\[]
+* Description: The list of recipients (audience) for which the JWT is intended. This will be checked by the API Gateway to ensure only authorized clients are provided access.
+
+### tokenEndpoint[​](#tokenendpoint "Direct link to tokenEndpoint")
+
+* Type: string
+* Description: The endpoint URL for granting OAuth tokens. This is the URL where OAuth tokens can be obtained from the authorization server.
+
+### userClientId[​](#userclientid "Direct link to userClientId")
+
+* Type: string
+* Description: The client ID enabled for user-centric authentication flows, such as Authorization Code flow. This client ID is used for authenticating end-users.
+
+### machineClientId[​](#machineclientid "Direct link to machineClientId")
+
+* Type: string
+* Description: The client ID enabled for machine-to-machine authorization flows, such as Client Credentials flow. This client ID is used for authenticating applications or services.
+
+### machineClientSecret[​](#machineclientsecret "Direct link to machineClientSecret")
+
+* Type: SecretValue
+* Description: The client secret enabled for machine-to-machine authorization flows, such as Client Credentials flow. This secret is used in combination with the machine client ID for authenticating applications or services.
+
+### machineClientAudience[​](#machineclientaudience "Direct link to machineClientAudience")
+
+* Type: string | undefined
+* Description: The audience for the machine client. If provided, this value will be used in the call to generate the access token for the Client Credentials flow.
+
+### fetchTenantRegistrationScope[​](#fetchtenantregistrationscope "Direct link to fetchTenantRegistrationScope")
+
+* Type: string | undefined
+* Description: The scope required to authorize requests for fetching a single tenant registration. This scope grants permission to fetch the details of a specific tenant registration.
+
+### fetchAllTenantRegistrationsScope[​](#fetchalltenantregistrationsscope "Direct link to fetchAllTenantRegistrationsScope")
+
+* Type: string | undefined
+* Description: The scope required to authorize requests for fetching all tenants. This scope grants permission to fetch the details of all tenants.
+
+### deleteTenantRegistrationScope[​](#deletetenantregistrationscope "Direct link to deleteTenantRegistrationScope")
+
+* Type: string | undefined
+* Description: The scope required to authorize requests for deleting a tenant registration. This scope grants permission to delete a specific tenant registration.
+
+### createTenantRegistrationScope[​](#createtenantregistrationscope "Direct link to createTenantRegistrationScope")
+
+* Type: string | undefined
+* Description: The scope required to authorize requests for creating a tenant registration. This scope grants permission to create a new tenant registration.
+
+### updateTenantRegistrationScope[​](#updatetenantregistrationscope "Direct link to updateTenantRegistrationScope")
+
+* Type: string | undefined
+* Description: The scope required to authorize requests for updating a tenant registration. This scope grants permission to update the details of a specific tenant registration.
+
+### activateTenantRegistrationScope[​](#activatetenantregistrationscope "Direct link to activateTenantRegistrationScope")
+
+* Type: string | undefined
+* Description: The scope required to authorize requests for activating a tenant via the tenant registration endpoint. This scope grants permission to activate a specific tenant.
+
+### deactivateTenantRegistrationScope[​](#deactivatetenantregistrationscope "Direct link to deactivateTenantRegistrationScope")
+
+* Type: string | undefined
+* Description: The scope required to authorize requests for deactivating a tenant via the tenant registration endpoint. This scope grants permission to deactivate a specific tenant.
+
+### fetchUserScope[​](#fetchuserscope "Direct link to fetchUserScope")
+
+* Type: string | undefined
+* Description: The scope required to authorize requests for fetching a single user. This scope grants permission to fetch the details of a specific user.
+
+### fetchAllUsersScope[​](#fetchallusersscope "Direct link to fetchAllUsersScope")
+
+* Type: string | undefined
+* Description: The scope required to authorize requests for fetching all users. This scope grants permission to fetch the details of all users.
+
+### deleteUserScope[​](#deleteuserscope "Direct link to deleteUserScope")
+
+* Type: string | undefined
+* Description: The scope required to authorize requests for deleting a user. This scope grants permission to delete a specific user.
+
+### createUserScope[​](#createuserscope "Direct link to createUserScope")
+
+* Type: string | undefined
+* Description: The scope required to authorize requests for creating a user. This scope grants permission to create a new user.
+
+### updateUserScope[​](#updateuserscope "Direct link to updateUserScope")
+
+* Type: string | undefined
+* Description: The scope required to authorize requests for updating a user. This scope grants permission to update the details of a specific user.
+
+### disableUserScope[​](#disableuserscope "Direct link to disableUserScope")
+
+* Type: string | undefined
+* Description: The scope required to authorize requests for disabling a user. This scope grants permission to disable a specific user.
+
+### enableUserScope[​](#enableuserscope "Direct link to enableUserScope")
+
+* Type: string | undefined
+* Description: The scope required to authorize requests for enabling a user. This scope grants permission to enable a specific user.
+
+### wellKnownEndpointUrl[​](#wellknownendpointurl "Direct link to wellKnownEndpointUrl")
+
+* Type: string
+* Description: The well-known endpoint URL for the control plane identity provider. This URL provides configuration information about the identity provider, such as issuer, authorization endpoint, and token endpoint.
+
+### createUserFunction[​](#createuserfunction "Direct link to createUserFunction")
+
+* Type: IFunction
+* Description: The Lambda function for creating a user. (POST /users)
+
+### fetchAllUsersFunction[​](#fetchallusersfunction "Direct link to fetchAllUsersFunction")
+
+* Type: IFunction
+* Description: The Lambda function for fetching all users. (GET /users)
+
+### fetchUserFunction[​](#fetchuserfunction "Direct link to fetchUserFunction")
+
+* Type: IFunction
+* Description: The Lambda function for fetching a user. (GET /user/{userId})
+
+### updateUserFunction[​](#updateuserfunction "Direct link to updateUserFunction")
+
+* Type: IFunction
+* Description: The Lambda function for updating a user. (PUT /user/{userId})
+
+### deleteUserFunction[​](#deleteuserfunction "Direct link to deleteUserFunction")
+
+* Type: IFunction
+* Description: The Lambda function for deleting a user. (DELETE /user/{userId})
+
+### disableUserFunction[​](#disableuserfunction "Direct link to disableUserFunction")
+
+* Type: IFunction
+* Description: The Lambda function for disabling a user. (PUT /user/{userId}/disable)
+
+### enableUserFunction[​](#enableuserfunction "Direct link to enableUserFunction")
+
+* Type: IFunction
+* Description: The Lambda function for enabling a user. (PUT /user/{userId}/enable)
+
+## Methods[​](#methods "Direct link to Methods")
+
+### createAdminUser(scope: Construct, id: string, props: CreateAdminUserProps): void[​](#createadminuserscope-construct-id-string-props-createadminuserprops-void "Direct link to createAdminUser(scope: Construct, id: string, props: CreateAdminUserProps): void")
+
+* Description: Function to create an admin user.
+
+* Parameters:
+
+  <!-- -->
+
+  * scope (Construct): The scope in which the admin user should be created.
+  * id (string): The unique identifier for the admin user.
+  * props (CreateAdminUserProps): An object containing the properties for creating the admin user.
+
+The CreateAdminUserProps interface has the following properties:
+
+* name (string): The name of the new admin user.
+* email (string): The email address of the new admin user.
+* role (string): The name of the role of the new admin user.
+
+## Usage[​](#usage "Direct link to Usage")
+
+To use the IAuth interface, you'll need to implement it and provide the required configurations and Lambda functions. Here's an example of how you might use it:
+
+```
+import { IAuth, CreateAdminUserProps } from './auth-interface';
+
+class MyAuth implements IAuth {
+  // Implement the properties and methods of the IAuth interface
+  // ...
+
+  createAdminUser(scope: Construct, id: string, props: CreateAdminUserProps): void {
+    // Implement the logic to create an admin user
+    // ...
+  }
+}
+
+const myAuth = new MyAuth();
+
+// Use the properties and methods of the IAuth interface
+const jwtIssuer = myAuth.jwtIssuer;
+const tokenEndpoint = myAuth.tokenEndpoint;
+
+// Create an admin user
+const adminUserProps: CreateAdminUserProps = {
+  name: 'John Doe',
+  email: 'john.doe@example.com',
+  role: 'Admin',
+};
+myAuth.createAdminUser(this, 'AdminUser', adminUserProps);
+```
+
+
+---
+
+## IBilling Interface
+
+> Overview
+
+# IBilling Interface
+
+## Overview[​](#overview "Direct link to Overview")
+
+The IBilling interface encapsulates the list of properties for a billing construct. It includes functions for customer and user management, data ingestion, and usage data handling. This interface is designed to provide a standardized way of handling billing-related operations in a cloud-native application.
+
+## Properties[​](#properties "Direct link to Properties")
+
+### createCustomerFunction[​](#createcustomerfunction "Direct link to createCustomerFunction")
+
+* Type: IASyncFunction
+* Description: The async function responsible for creating a new customer. A customer in this context is an entity that can have zero or more users.
+* Default Event Trigger: ONBOARDING\_REQUEST
+
+### deleteCustomerFunction[​](#deletecustomerfunction "Direct link to deleteCustomerFunction")
+
+* Type: IASyncFunction
+* Description: The async function responsible for deleting an existing customer. A customer in this context is an entity that can have zero or more users.
+* Default Event Trigger: OFFBOARDING\_REQUEST
+
+### createUserFunction[​](#createuserfunction "Direct link to createUserFunction")
+
+* Type: IASyncFunction (Optional)
+* Description: The async function responsible for creating a new user. A user in this context is an entity that belongs to a customer.
+* Default Event Trigger: TENANT\_USER\_CREATED
+
+### deleteUserFunction[​](#deleteuserfunction "Direct link to deleteUserFunction")
+
+* Type: IASyncFunction (Optional)
+* Description: The async function responsible for deleting an existing user. A user in this context is an entity that belongs to a customer.
+* Default Event Trigger: TENANT\_USER\_DELETED
+
+### ingestor[​](#ingestor "Direct link to ingestor")
+
+* Type: IDataIngestorAggregator (Optional)
+* Description: The IDataIngestorAggregator responsible for accepting and aggregating raw billing data.
+
+### putUsageFunction[​](#putusagefunction "Direct link to putUsageFunction")
+
+* Type: IFunctionSchedule (Optional)
+* Description: The async function responsible for taking the aggregated data and pushing it to the billing provider.
+* Default Event Trigger: events.Schedule.rate(cdk.Duration.hours(24)) (Triggered every 24 hours)
+
+### webhookFunction[​](#webhookfunction "Direct link to webhookFunction")
+
+* Type: IFunctionPath (Optional)
+* Description: The function to trigger when a webhook request is received.
+* Default HTTP Path: POST /billing/{$webhookPath}
+
+## Additional Interfaces[​](#additional-interfaces "Direct link to Additional Interfaces")
+
+### IFunctionSchedule[​](#ifunctionschedule "Direct link to IFunctionSchedule")
+
+This interface allows specifying both the function to trigger and the schedule by which to trigger it.
+
+Properties:
+
+* handler: The function definition (IFunction).
+* schedule: The schedule that will trigger the handler function (Schedule).
+
+### IFunctionPath[​](#ifunctionpath "Direct link to IFunctionPath")
+
+This interface allows specifying both the function to trigger and the path on the API Gateway that triggers it.
+
+Properties:
+
+* path: The path to the webhook resource (string).
+* handler: The function definition (IFunction).
+
+## Usage[​](#usage "Direct link to Usage")
+
+To use the IBilling interface, you need to implement the required properties and pass them to the billing construct. Here's an example:
+
+```
+import { IBilling } from 'your-billing-interface';
+
+const billing: IBilling = {
+  createCustomerFunction: /* Provide your implementation */,
+  deleteCustomerFunction: /* Provide your implementation */,
+  createUserFunction: /* Provide your implementation (optional) */,
+  deleteUserFunction: /* Provide your implementation (optional) */,
+  ingestor: /* Provide your implementation (optional) */,
+  putUsageFunction: /* Provide your implementation (optional) */,
+  webhookFunction: /* Provide your implementation (optional) */,
+};
+
+// Pass the `billing` object to your billing construct
+const billingConstruct = new BillingConstruct(scope, 'BillingConstruct', billing);
+```
+
+In this example, you need to provide implementations for the required properties (createCustomerFunction and deleteCustomerFunction). The optional properties can be provided based on your specific requirements.
+
+
+---
+
+## IMetering Interface
+
+> Overview
+
+# IMetering Interface
+
+## Overview[​](#overview "Direct link to Overview")
+
+The IMetering interface encapsulates the properties and functions required for metering operations in a system. It defines the contracts for various actions related to meter management, usage ingestion, customer (tenant) management, and usage data retrieval.
+
+## Properties[​](#properties "Direct link to Properties")
+
+1. **createMeterFunction (ISyncFunction)**: This function is responsible for creating a new meter. A meter is used to track and analyze specific usage metrics for tenants. It corresponds to the POST /meters endpoint.
+
+2. **fetchMeterFunction (ISyncFunction)**: This function retrieves a single meter based on its unique identifier (id). It corresponds to the GET /meters/{meterId} endpoint.
+
+3. **fetchAllMetersFunction (ISyncFunction)**: This function fetches multiple meters. It should support pagination to handle large result sets. It corresponds to the GET /meters endpoint.
+
+4. **updateMeterFunction (Optional, ISyncFunction)**: This function updates an existing meter. It corresponds to the PUT /meters/{meterId} endpoint.
+
+5. **deleteMeterFunction (Optional, ISyncFunction)**: This function deletes an existing meter. It corresponds to the DELETE /meters/{meterId} endpoint.
+
+6. **ingestUsageEventFunction (IASyncFunction)**: This asynchronous function is responsible for ingesting a usage event. Usage events are used to measure and track the usage metrics associated with a meter. It is typically triggered by the INGEST\_USAGE event.
+
+7. **fetchUsageFunction (ISyncFunction)**: This function retrieves the usage data for a specific meter. It corresponds to the GET /usage/{meterId} endpoint.
+
+8. **cancelUsageEventsFunction (Optional, ISyncFunction)**: This function is used to exclude specific events from being recorded or included in the usage data. It is helpful for canceling events that were incorrectly ingested. It corresponds to the DELETE /usage endpoint.
+
+9. **createCustomerFunction (Optional, IASyncFunction)**: This asynchronous function is responsible for creating a new customer (tenant). It is typically triggered by the ONBOARDING\_REQUEST event.
+
+10. **deleteCustomerFunction (Optional, IASyncFunction)**: This asynchronous function is responsible for deleting an existing customer (tenant). It is typically triggered by the OFFBOARDING\_REQUEST event.
+
+## Usage[​](#usage "Direct link to Usage")
+
+The IMetering interface can be implemented by a class or object that provides the required functionality for metering operations. The implementation should define the functions and properties according to the interface contract.
+
+Here's an example of how the interface might be used:
+
+```
+import { IMetering } from './metering';
+
+class MeteringService implements IMetering {
+  // Implement the properties and functions defined in the IMetering interface
+}
+
+const meteringService = new MeteringService();
+
+// Create a new meter
+const newMeterId = await meteringService.createMeterFunction({ /* meter data */ });
+
+// Fetch a meter
+const meter = await meteringService.fetchMeterFunction({ meterId: newMeterId });
+
+// Ingest a usage event
+await meteringService.ingestUsageEventFunction({ /* usage event data */ });
+
+// Fetch usage data for a meter
+const usageData = await meteringService.fetchUsageFunction({ meterId: newMeterId });
+```
+
+By adhering to the IMetering interface, the implementation can be easily integrated into other parts of the system or replaced with a different implementation if needed, as long as the new implementation adheres to the same interface contract.
+
+
+---
+
+## Introduction
+
+> A cloud-native solution that integrates with SaaS products to enable real-time metering and usage-based billing for GenAI and SaaS applications.
+
+# Introduction
+
+[Amberflo](https://www.amberflo.io/) is a cloud-based platform designed to help businesses implement and manage metering, usage-based billing, and analytics for their SaaS (Software as a Service) products and services. Amberflo offers a robust platform for real-time tracking, metering and billing of usage events such as LLM tokens, API transactions, and consumption of compute, storage, and network resources, enabling precise billing based on actual usage. Whether you’re managing a subscription-based business model or billing customers per unique user, Amberflo’s billing cloud streamlines the invoicing process and integrates seamlessly with popular payment gateways like Stripe or ERP systems like Netsuite, ensuring smooth, automated customer invoicing and payment collection.
+
+This module enables precise near real-time metering and usage based billing for any Data platforms, SaaS or AI applications. It extends AWS SaaS Builder ToolKit (SBT) capability by integrating Amberflo’s cloud native solution to enable builders to track, meter and bill usage events such as LLM tokens, API transactions, and consumption of compute, storage, and network resources in near real-time. With this integration, you can effortlessly implement a modern, usage-based billing for your SaaS and GenAI applications out-of-the-box.
+
+# Installation instructions
+
+## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+
+* Deploy a SBT Project: If you don't already have a SBT project deployed, follow AWS SBT's tutorial to deploy the sample hello-cdk project with a ControlPlane and CoreApplicationPlane.
+
+* Amberflo Account: You need an Amberflo account for this project. If you don’t have an Amberflo account, you can sign up for one here: [Amberflo Signup](https://www.amberflo.io/aws-saas-factory).
+
+* API Key Secret: After signing up, the Amberflo API Key must be stored as a secret in AWS Secrets Manager. The application by default expects the secret to be created with the name AmberfloApiKey. However, you can create a secret with your own custom name and pass it in as a parameter to AmberfloMetering.
+
+  `Secret Name:` The name of the secret in AWS Secrets Manager<br />`Secret Key:` The key within the secret JSON that contains the API Key
+
+## Obtaining the Plugin[​](#obtaining-the-plugin "Direct link to Obtaining the Plugin")
+
+*Option 1:* Clone the repository
+
+`git clone https://github.com/amberflo/sbt-aws-amberflo.git`
+
+*Option 2:* Download the latest release Visit the [sbt-aws-amberflo releases](https://github.com/amberflo/sbt-aws-amberflo/releases) and download the latest version.
+
+## Installation Steps[​](#installation-steps "Direct link to Installation Steps")
+
+Within your SBT project directory, install aws-sbt-amberflo via the following command:
+
+`npm install --save sbt-aws-amberflo`
+
+![amberflo-architecture.webp](/sbt-aws/assets/images/amberflo-architecture-bb8aaab1d36114c393848218b46100fd.webp)
+
+## Configuration[​](#configuration "Direct link to Configuration")
+
+### Add AmberfloMetering to Your Control Plane[​](#add-amberflometering-to-your-control-plane "Direct link to Add AmberfloMetering to Your Control Plane")
+
+Instantiate the AmberfloMetering construct in your AWS CDK stack. Here’s an example TypeScript code snippet:
+
+```
+import { Stack } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import * as sbt from '@cdklabs/sbt-aws';
+import { AmberfloMetering } from 'sbt-aws-amberflo';
+
+export class ControlPlaneStack extends Stack {
+  constructor(scope: Construct, id: string, props: any) {
+    super(scope, id, props);
+
+    const amberfloMetering = new AmberfloMetering(this, 'AmberfloMetering', {
+      amberfloAPIKeySecretName: 'YourSecretName', 
+      amberfloAPIKeySecretId: 'YourSecretId', 
+    });
+
+    const controlPlane = new sbt.ControlPlane(this, 'ControlPlane', {
+      metering: amberfloMetering,
+    });
+  }
+}
+```
+
+### Provision a Meter[​](#provision-a-meter "Direct link to Provision a Meter")
+
+Once you deploy your updated stack, you can create and manage meters using the provided API endpoints. Here’s how you can create a meter:
+
+```
+METER=$(jq --null-input \
+'{
+  "label": "SBT Meter",
+  "meterApiName": "sbt-meter",
+  "meterType": "sum_of_all_usage"
+}')
+
+echo "creating meter..."
+curl --request POST \
+    --url "${CONTROL_PLANE_API_ENDPOINT}meters" \
+    --header "Authorization: Bearer ${ACCESS_TOKEN}" \
+    --header 'content-type: application/json' \
+    --data "$METER" | jq
+```
+
+The above 3 properties are the required properties for creating a meter. You can also pass in additional properties while creating a meter. See more on creating meters in Amberflo.
+
+### Update a Meter[​](#update-a-meter "Direct link to Update a Meter")
+
+Once you deploy your updated stack, you can update meters using the provided API endpoint. Here’s how you can update a meter:
+
+```
+UPDATE_METER=$(jq --null-input \
+'{
+  "label": "SBT trial meter",
+  "meterApiName": "sbt-trial",
+  "meterType": "sum_of_all_usage"
+}')
+
+echo "updating meter..."
+curl --request PUT \
+    --url "${CONTROL_PLANE_API_ENDPOINT}meters/<meter-id>" \
+    --header "Authorization: Bearer ${ACCESS_TOKEN}" \
+    --header 'content-type: application/json' \
+    --data "$UPDATE_METER" | jq
+```
+
+### Get a Meter[​](#get-a-meter "Direct link to Get a Meter")
+
+You can get a meter by id using the provided API endpoint. Here’s how you can get a meter:
+
+```
+curl --request GET \
+    --url "${CONTROL_PLANE_API_ENDPOINT}meters/<meterId>" \
+    --header "Authorization: Bearer ${ACCESS_TOKEN}" \
+    --silent | jq
+```
+
+### List all Meters[​](#list-all-meters "Direct link to List all Meters")
+
+You can list all meters using the provided API endpoint. Here’s how you can list all meter:
+
+```
+curl --request GET \
+    --url "${CONTROL_PLANE_API_ENDPOINT}meters/<meterId>" \
+    --header "Authorization: Bearer ${ACCESS_TOKEN}" \
+    --silent | jq
+```
+
+### Delete a Meter[​](#delete-a-meter "Direct link to Delete a Meter")
+
+You can delete a meter by id using the provided API endpoint. Here’s how you can delete a meter:
+
+```
+curl --request DELETE \
+    --url "${CONTROL_PLANE_API_ENDPOINT}meters/<meterId>" \
+    --header "Authorization: Bearer ${ACCESS_TOKEN}" \
+    --silent | jq
+```
+
+### Ingest Usage Events[​](#ingest-usage-events "Direct link to Ingest Usage Events")
+
+To ingest usage events, application or service in the application plane must emit events that represent usage metrics, which will be processed by the ingestUsageEventFunction Lambda function.
+
+Event details must contain the following required properties: ● tenantId: The identifier of the tenant to associate with the usage. ● meterApiName: The name of the meter as used in the createMeter. ● meterValue: The quantity or amount of usage to record for a tenant. These properties are necessary to accurately track and attribute usage metrics. You can also pass in additional values for dimensions, if the meter has dimensions defined.
+
+Example
+
+```
+const putEventsResponse = eventManager.eventBus.putEvents({
+  entries: [{
+    detail: {
+      "tenantId": <tenantId>,
+      "meterApiName": <meterApiName as used in create meter>,
+      "meterValue": <usage value that is to be recorded>
+    },
+    detailType: DetailType.INGEST_USAGE,
+    source: eventManager.applicationPlaneEventSource,
+  }],
+});
+```
+
+The ingestUsageEventFunction Lambda function will be triggered to handle this event and send the data to Amberflo for processing.
+
+Note: the eventManager is the eventManager passed to the CoreApplicationPlane
+
+### Fetch Usage Data[​](#fetch-usage-data "Direct link to Fetch Usage Data")
+
+To fetch usage data, use the API endpoint to retrieve data based on your meter API name: Example
+
+```
+METER_API_NAME = 'sbt-meter'
+START_TIME = 1724630400
+END_TIME = 1724716800
+
+curl --request GET \
+    --url "${CONTROL_PLANE_API_ENDPOINT}usage/<meterId>?meterApiName=${METER_API_NAME}&startTimeInSeconds=${START_TIME}&endTimeInSeconds=${END_TIME}" \
+    --header "Authorization: Bearer ${ACCESS_TOKEN}" \
+    --silent | jq
+```
+
+The meterApiName id not provided in the query string will be fetched using the meterId path parameter. The startTimeInSeconds and endTimeInSeconds are optional and default to (current time - 24hrs) and current time.
+
+### Canceling incorrect usage events[​](#canceling-incorrect-usage-events "Direct link to Canceling incorrect usage events")
+
+There are occasions where a meter event source may send or report incorrect or erroneous meters. Amberflo provides the ability to cancel (undo) one or more meter events as needed. See detailed guide on canceling usage events. Example
+
+```
+FILTER=$(jq --null-input \
+'{
+  "id": "sbt-filtering-rule",
+  "meterApiName": "sbt-trial",
+  "ingestionTimeRange": {
+    "startTimeInSeconds": 1724367600,
+    "endTimeInSeconds": 1724371200
+  }
+}')
+
+echo "creating filtering rule for canceling usage events..."
+curl --request DELETE \
+    --url "${CONTROL_PLANE_API_ENDPOINT}usage" \
+    --header "Authorization: Bearer ${ACCESS_TOKEN}" \
+    --header 'content-type: application/json' \
+    --data "$FILTER" | jq
+```
+
+The id, meterApiName and ingestionTimeRange are required parameters. The above command creates a filtering rule that cancels the events for the meter sbt-trial in the given time range. You can also cancel more specific events for specific tenants or based on specific dimensions etc. See the Amberflo API for more details.
+
+## Usage Examples[​](#usage-examples "Direct link to Usage Examples")
+
+The Amberflo metering implementation provided in this repository allows ISVs to integrate Amberflo with their SBT-based applications. This enables ISVs to:
+
+* Track and analyze usage metrics for their tenants
+* Create a more accurate and efficient billing process
+
+The AmberfloMetering construct deploys an AWS Lambda function to handle usage metering. It also provides a set of APIs for creating and updating meters, fetching usage, as well as ingesting usage events and canceling usage events. SaaS admins can use these endpoints for managing the application metering. The following endpoints are created in the control plane
+
+```
+Create Meter: POST /meters
+Update Meter: PUT /meters/{meterId}
+Ingest Usage: POST /ingest
+Cancel Usage: DELETE /usage
+Fetch Usage: GET /usage/meterId
+```
+
+Here's a brief overview of how this works:
+
+* Meter Creation: SaaS admins can create meters through the create meter API in control plane or through the Amberflo UI.
+* Event Emission: Your application or service emits an ingest usage event with the necessary details to measure usage for a specific meter.
+* Lambda Invocation: The ingestUsageEventFunction of AmberfloMetering is invoked automatically upon receiving the event.
+* Data Processing: The Lambda function processes the event data and sends it to Amberflo for recording and subsequent usage analysis.
+* Fetch Usage: SaaS admins can fetch usage through the fetch usage API in control plane or through the Amberflo UI.
+
+## Contributing[​](#contributing "Direct link to Contributing")
+
+We welcome contributions to improve the plugin! Please follow these steps:
+
+1. Fork the Repository: Click the "Fork" button on the repository page to create your own copy.
+2. Create a Branch: Create a new branch for your feature or bug fix git checkout -b my-feature-branch
+3. Make Changes: Implement your feature or bug fix while adhering to existing coding standards.
+4. Write Tests: Add tests if applicable.
+5. Commit Your Changes: git commit -m "Add feature X or fix issue Y"
+6. Push to Your Fork: git push origin my-feature-branch
+7. Submit a Pull Request: Open a pull request in the original repository with a clear description of your changes.
+
+
+---
+
+## Introduction
+
+> Integrate Descope authentication and authorization capabilities into your AWS SaaS Builder Toolkit (SBT) applications.
+
+# Introduction
+
+The Descope Plugin for SBT-AWS empowers SaaS developers with a highly flexible, secure, and developer-friendly authentication solution, designed to seamlessly integrate with the AWS SaaS Builder Toolkit (SBT). Descope allows you to quickly implement custom authentication, machine-to-machine (M2M) authentication, and comprehensive user management— transforming the way you handle identity and access for your SaaS applications. With Descope, you get not only a comprehensive set of authentication tools but also an environment that makes it incredibly easy to build and iterate on SaaS applications across all AWS services. Key Features and Benefits:
+
+* Custom Flows for Tailored User Experiences: Descope allows you to design custom authentication flows specific to your application’s needs. Using a drag & drop workflow interface, you can create varied user journeys that improve user onboarding and retention, secure accounts against credential-based threats, and save time for engineering and IT teams . This no-code configuration removes the need for complex coding, allowing you to focus on creating seamless user experiences.
+* Machine-to-Machine (M2M) Authentication: Descope supports secure, straightforward M2M authentication, enabling easy communication between devices, APIs, and automated services. With minimal setup, Descope makes M2M workflows intuitive and greatly reduces development time, allowing you to enable seamless interactions for API-to-API connections or other automated service exchanges within your application.
+* Granular Access Control: Descope fine grained authorization capabilities with role and relationship-based access control allow you to align access policies with precise business requirements, ensuring secure and accurate user access. This flexibility is ideal for SaaS applications serving diverse user types and organizations with varied permission structures.
+* Enhanced Security with MFA and Passwordless Options: Descope empowers you to add multiple layers of security with minimal setup. Offering MFA and passwordless authentication options, Descope lets users select their preferred security approach, keeping accounts safe without compromising on user experience. These options help developers maintain the highest security standards without adding undue friction that may cause drop-offs.
+* Simplified User and Tenant Management: Descope’s built-in tools support user segmentation and tenant-based configurations, making it easy to manage authentication across different customers and organizations. This setup is ideal for SaaS applications with multiple tenants, allowing you to create and manage tenant-specific configurations with ease, enhancing both security and customization.
+* Seamless Integration with AWS and SBT: Descope integrates effortlessly within the AWS ecosystem, including the SaaS Builder Toolkit (SBT). By leveraging Descope as an SBT plugin, you can streamline authentication and authorization across your entire suite of AWS-powered SaaS applications. This compatibility ensures that Descope works harmoniously with other AWS services, so you can iterate quickly and deploy efficiently without worrying about compatibility or performance issues. This integration makes Descope a highly adaptable solution for any SaaS platform aiming to leverage the best of AWS while enhancing user management capabilities.
+* Excellent Developer Experience: Descope makes authentication setup simple, with no-code/low-code interfaces and a flow editor that lets you modify user journeys without touching your codebase or redeploying your app. Seamless CI/CD integration keeps your development process streamlined, and comprehensive self-service resources—including documentation and community support—ensure developers have the guidance they need. This efficiency accelerates deployment while maintaining high security standards and freeing up engineering time for other core product initiatives.
+
+# Use Cases:
+
+1. Customer Authentication and Access Control: Support diverse passwordless login options—including social, Google One Tap, passkeys, and magic links—to enhance user experience and secure control over data and resources.
+2. B2B Multi-Tenant SaaS: Enable granular, tenant-specific authentication and access policies, supporting unique identity needs per organization and ensuring data isolation and compliance across clients.
+3. Strong, Adaptive MFA: Provide adaptive multi-factor authentication (MFA) options to secure critical user actions, reducing fraud and enhancing security with minimal friction for legitimate users.
+4. Machine-to-Machine (M2M) Authentication: Establish secure, automated communication between services and devices with simple M2M authentication setups, ideal for integrating APIs or IoT devices.
+5. SSO and Self-Service SSO Configuration: Allow tenant administrators to self-configure single sign-on (SSO) for their organization, making it easy for them to manage access without burdening your support team.
+
+# Installation instructions
+
+## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+
+* Ensure you have a Descope account. If not, sign up [here](https://www.descope.com/sign-up)
+* Have access to a [Descope Project](https://app.descope.com/settings/project), as well as a [Management Key](https://app.descope.com/settings/company/managementkeys)
+* Set up an AWS SBT Project [here](https://github.com/awslabs/sbt-aws/tree/main/docs/public)
+
+## Obtaining the Plugin[​](#obtaining-the-plugin "Direct link to Obtaining the Plugin")
+
+**Option 1: Import directly from npm**
+
+Within your SBT project directory, install sbt-aws-descope via the following command:
+
+```
+npm install --save @descope/sbt-aws-descope
+```
+
+**Option 2: Download the latest release**
+
+Visit the GitHub releases page and download the latest version.
+
+## Installation Steps[​](#installation-steps "Direct link to Installation Steps")
+
+a. Follow the prerequisite steps to get started with the installation of this plugin. b. Clone the repo of the plugin provided. c. Install the Descope plugin's npm package within the SBT project downloaded as part of the prerequisites. d. Add `DescopeAuth` as part of your SBT's Control Plane construct. This way, SBT will use Descope as the identity provider, which implements the IAuth interface defined in the SBT core package.
+
+## Configuration[​](#configuration "Direct link to Configuration")
+
+**Step 1**: Follow the prerequisite steps to prepare for plugin installation.
+
+**Step 2**: Clone the plugin repository as provided in the options above.
+
+**Step 3**: Install the Descope plugin's npm package within the SBT project:
+
+```
+npm install @descope/sbt-aws-descope
+```
+
+**Step 4**: Integrate DescopeAuth within your SBT’s Control Plane construct to enable Descope as the identity provider, implementing the IAuth interface as defined in the SBT core package.
+
+```
+import { DescopeAuth } from "sbt-aws-descope";
+
+const descopeAuth = new DescopeAuth(this, "DescopeAuth", {
+      projectId: "<<Descope Project ID>>",
+      clientSecretSSMMgmtKey: "<<Parameter Name in SSM of Descope Management Key",
+});
+
+const controlPlane = new sbt.ControlPlane(this, "ControlPlane", {
+      auth: descopeAuth,
+      systemAdminEmail: "kevin@descope.com",
+});
+```
+
+Once you’ve completed these steps, you should be able to build your SBT application and all of the built in functions will be set up for you. If you wish to add Flows or SDK/API based authentication methods to your app, you can follow our [Quickstart](https://docs.descope.com/getting-started) guide.
+
+**Step 5**: Usage Examples
+
+* ### Example 1: Implementing User Login with Passwordless Authentication Using Descope[​](#example-1-implementing-user-login-with-passwordless-authentication-using-descope "Direct link to Example 1: Implementing User Login with Passwordless Authentication Using Descope")
+
+Descope's passwordless authentication provides a flexible, highly secure way to log in without traditional passwords, reducing the risk of phishing attacks and enhancing user convenience. With Descope, you can offer users a range of secure, passwordless login options, including passkeys, social login, and magic links—all of which improve security while simplifying the user experience.
+
+* **Passkeys**: Passkeys use a combination of device-based biometric verification (like fingerprint or Face ID) and cryptographic methods to authenticate users. This approach allows users to log in using only their device, without needing to enter any passwords. Implementing passkeys with Descope is straightforward, requiring only the user's consent to set up the device-based authentication. Passkeys are stored securely on the user's device, providing a phishing-resistant method of authentication that is seamless and familiar.
+* **Social Login**: Descope supports a variety of social login providers, allowing users to authenticate via platforms they already use, like Google, Apple, or Facebook. This method enhances convenience while still ensuring a secure authentication process, as it reduces the need to create and remember yet another password.
+* **Magic Link**: Magic links provide users with a one-time link sent directly to their email. When clicked, it logs the user in without requiring a password, making the process not only user-friendly but also resistant to phishing attacks. Since magic links are sent to the user's verified email, they ensure that the person logging in is indeed the account holder.
+
+**Benefits**: Descope's passwordless options help prevent phishing by eliminating traditional passwords and offering cryptographic alternatives that are more secure. The variety of login methods allows you to choose the best option based on your application's user demographics and risk model, ensuring both security and convenience.
+
+* ### Example 2: Configuring multi-tenant user management to allow organization-specific login settings and access policies[​](#example-2-configuring-multi-tenant-user-management-to-allow-organization-specific-login-settings-and-access-policies "Direct link to Example 2: Configuring multi-tenant user management to allow organization-specific login settings and access policies")
+
+In a multi-tenant SaaS environment, organizations often have unique authentication needs, such as specific Single Sign-On (SSO) policies, access roles, and authorization rules. Descope enables you to manage each organization separately, providing customized login settings and role-based access control for each tenant.
+
+* **SSO Self-Service Configuration**: Descope enables tenant admins to configure SSO independently through a dedicated link. Once generated, this link lets an admin configure SSO settings, such as setting up SAML or OAuth integrations, without needing assistance from developers.
+
+  <!-- -->
+
+  * **Example Workflow**:
+
+    <!-- -->
+
+    1. You can generate a self-service SSO link specific to the tenant, which can be shared with the tenant admin.
+    2. **Tenant Admin SSO Configuration**: When the tenant admin accesses the link, they can complete the setup of SSO by following simple on-screen instructions. They can choose their identity provider, configure SAML assertions, and save the settings, allowing users within that tenant to log in through their chosen provider.
+
+* **Role-Based Access Control (RBAC)**: With Descope's tenant-level RBAC, you can assign users different roles based on the tenant's requirements, as well as map them from SAML groups that come from various external IdPs. For example, some users might have admin access, while others have read-only access. These roles can be configured on a per-tenant basis, allowing for flexible access control.
+
+* **Custom Tenant Authentication**: Descope lets you configure different flow behaviors and styling per tenant, including MFA requirements, password settings, and device trust. This allows you to implement granular security controls based on the tenant's risk profile, such as requiring MFA for certain users.
+
+## Troubleshooting[​](#troubleshooting "Direct link to Troubleshooting")
+
+**Common Issues and Solutions**:
+
+* **Issue**: "User Management functions or Initial SBT plugin setup and configuration failing."
+  <!-- -->
+  * **Solution**: Verify your Descope Management Key and permissions.
+* **Issue**: "Access denied errors when accessing SBT control plane."
+  <!-- -->
+  * **Solution**: Ensure the Descope plugin is properly installed and referenced in your SBT configuration.
+
+Additional Support: For detailed support, please refer to [Descope Support](https://docs.descope.com/support).
+
+## Contributing[​](#contributing "Direct link to Contributing")
+
+If you would like to contribute to the development of this plugin, please refer to our contribution guidelines on GitHub. Contributions are welcome and encouraged to improve functionality and usability.
+
+### Architecture Diagram[​](#architecture-diagram "Direct link to Architecture Diagram")
+
+* Example:
+
+![descopearch.png](/sbt-aws/assets/images/descopearch-1354eea4eaefcf52bf9ee00519a69a93.png)
+
+
+---
+
+## Moesif API Monetization for AWS SBT
+
+> Provides usage-based billing support for SBT
+
+# Moesif API Monetization for AWS SBT
+
+This module extends the AWS SaaS Builder Toolkit (SBT) to support usage-based billing through Moesif.
+
+[Moesif API Monetization](https://www.moesif.com/) provides a cloud-based solution for [usage-based billing](https://www.moesif.com/solutions/metered-api-billing) such as billing on API transactions, compute resources, or unique users. Then, you can invoice and collect payments automatically through popular payment providers like Stripe, Zuora, or custom invoicing solutions.
+
+## How it works[​](#how-it-works "Direct link to How it works")
+
+### Event Ingestion[​](#event-ingestion "Direct link to Event Ingestion")
+
+The project deploys an [Amazon Data Firehose](https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html) to ingest your raw usage events. Events can be API Calls such as from an Amazon API Gateway instance or custom actions triggered within your application. The firehose will send all events to Moesif's Collection API for metering and analytics.
+
+![moesif-firehose-diagram.png](/sbt-aws/assets/images/moesif-firehose-diagram-c3fcee72e3d6e26029b08e2044abe234.png)
+
+For more info on how the `MoesifFirehoseConstruct` works, view [Moesif docs on ingesting actions via Firehose](https://www.moesif.com/docs/ingest-action-events/aws-firehose/)
+
+### User and Tenant Management[​](#user-and-tenant-management "Direct link to User and Tenant Management")
+
+The project also deploys a [Lambda Function](https://aws.amazon.com/lambda/) for user and tenant management. The lambda will listen to events like `provisionSuccess` to create companies and subscriptions in Moesif and your payment provider. Similarly, when receiving a `deprovisionSuccess` event, all subscriptions will be canceled for the tenant. You can [inspect the code here](https://github.com/Moesif/sbt-aws-moesif/tree/master/resources/functions/billing_management).
+
+| SBT Entity | Moesif Entity | Description                                        | Parent  |
+| ---------- | ------------- | -------------------------------------------------- | ------- |
+| Tenant     | Company       | Your customer that you provisioned resources for.  | None    |
+| Tenant     | Subscription  | A single subscription for a company/tenant.        | Company |
+| User       | User          | End users of your customer who login to your SaaS. | Company |
+
+## How to use[​](#how-to-use "Direct link to How to use")
+
+### Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+
+1. If you don't already have a SBT project deployed, follow [AWS SBT's tutorial](https://github.com/awslabs/sbt-aws/tree/main/docs/public) to deploy the sample `hello-cdk` project with a `ControlPlane` and `CoreApplicationPlane`.
+2. You already have a Moesif account. You can sign up for a trial on [moesif.com](https://www.moesif.com/)
+
+### 1. Install the NPM package[​](#1-install-the-npm-package "Direct link to 1. Install the NPM package")
+
+Within your SBT project directory, install `sbt-aws-moesif` via the following command:
+
+```
+npm install --save sbt-aws-moesif
+```
+
+### 2. Add MoesifBilling to your ControlPlane[​](#2-add-moesifbilling-to-your-controlplane "Direct link to 2. Add MoesifBilling to your ControlPlane")
+
+Instantiate the [MoesifBilling](https://github.com/Moesif/sbt-aws-moesif/blob/master/lib/moesif-billing.ts) construct like below. You will need to set some properties to authenticate with Moesif.
+
+```
+export class ControlPlaneStack extends Stack {
+  public readonly regApiGatewayUrl: string;
+  public readonly eventBusArn: string;
+
+  constructor(scope: Construct, id: string, props: any) {
+    super(scope, id, props);
+    const cognitoAuth = new CognitoAuth(this, 'CognitoAuth', {
+      idpName: 'COGNITO',
+      systemAdminRoleName: 'SystemAdmin',
+      systemAdminEmail: '<<Your Admin Email>>',
+    });
+
+    const moesifBilling = new MoesifBilling(stack, 'MoesifBilling', {
+      moesifApplicationId: '<<Your Moesif Application Id>>',
+      moesifManagementAPIKey: '<<Your Moesif Management API Key>>',
+      billingProviderSlug: BillingProviderSlug.STRIPE,
+      billingProviderSecretKey: '<<Your Billing Provider\'s Secret Such as for Stripe>>'
+    }
+   );
+
+    const controlPlane = new ControlPlane(this, 'ControlPlane', {
+      auth: cognitoAuth,
+      billing: moesifBilling,
+    });
+    this.eventBusArn = controlPlane.eventBusArn;
+    this.regApiGatewayUrl = controlPlane.controlPlaneAPIGatewayUrl;
+  }
+}
+```
+
+### Moesif Billing Properties[​](#moesif-billing-properties "Direct link to Moesif Billing Properties")
+
+| Property Name              | Type                | Required                   | Description                                                                                                                                                                                                                                                                        | Default                  |
+| -------------------------- | ------------------- | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| moesifApplicationId        | string              | Required                   | Collector Application Id from your Moesif account for event ingestion                                                                                                                                                                                                              |                          |
+| moesifManagementAPIKey     | string              | Required                   | Management API Key from your Moesif account. The key must have the following scopes: create<!-- -->:companies<!-- --> create<!-- -->:subscriptions<!-- --> create<!-- -->:users<!-- --> delete<!-- -->:companies<!-- --> delete<!-- -->:subscriptions<!-- --> delete<!-- -->:users |                          |
+| moesifManagementAPIBaseUrl | string              |                            | Override the base URL for the Moesif Mangaement API. For most setups, you don't need to set this.                                                                                                                                                                                  | <https://api.moesif.com> |
+| moesifCollectorAPIBaseUrl  | string              |                            | Override the base URL for the Moesif Collector API. For most setups, you don't need to set this.                                                                                                                                                                                   | <https://api.moesif.net> |
+| billingProviderSlug        | BillingProviderSlug | Required                   | Slug for Billing Provider / Payment Gateway                                                                                                                                                                                                                                        |                          |
+| billingProviderSecretKey   | string              | Required                   | Secret Key for Billing Provider / Payment Gateway selected by billingProviderSlug                                                                                                                                                                                                  |                          |
+| billingProviderClientId    | string              | Only if Zuora              | Client Id for Billing Provider / Payment Gateway. Only used when billingProviderSlug is Zuora                                                                                                                                                                                      |                          |
+| billingProviderBaseUrl     | string              | Only if Chargebee or Zuora | Base URL for Billing Provider / Payment Gateway. Only used when billingProviderSlug is Zuora or Chargebee                                                                                                                                                                          |                          |
+| tenantPlanField            | string              |                            | Tenant object's field name that contains the plan id used when creating new subscriptions. Only used when billingProviderSlug is Zuora                                                                                                                                             | planId                   |
+| tenantPriceField           | string              |                            | Tenant object's field name that contains the price id used when creating new subscriptions.                                                                                                                                                                                        | priceId                  |
+| firehoseName               | string              |                            | The name of the Kinesis Firehose delivery stream. By default, a unique name will be generated.                                                                                                                                                                                     |                          |
+| bucketName                 | string              |                            | The name of the S3 bucket for backup. By default, a unique name will be generated.                                                                                                                                                                                                 |                          |
+| schema                     | string              |                            | Moesif Event Schema for data ingestion. By default, Moesif actions                                                                                                                                                                                                                 |                          |
+
+### 3. Provision a Tenant[​](#3-provision-a-tenant "Direct link to 3. Provision a Tenant")
+
+Once you deploy your updated stack, create a tenant in your AWS SBT setup using the SBT APIs.
+
+When you create a tenant, you must also set the price id to be used for creating subscriptions, By default, the field name is `priceId`, but this can be overridden via the above options. If you are using Zuora, you must also set the plan id. The field `email` must also be set.
+
+*If your provider is set to Zuora, [you must also set these fields](#zuora)*
+
+If you're running the `hello-cdk` project, this can be done by running [this script](https://github.com/awslabs/sbt-aws/tree/main/docs/public#test-the-deployment) to onboard a new tenant. Modify, the script to also include the price (and plan if required).
+
+> To find your plan id and price id, you can log into Moesif UI and go to Product Catalog or log into your billing provider.
+
+```
+DATA=$(jq --null-input \
+    --arg tenantEmail "$TENANT_EMAIL" \
+    --arg tenantId "$TENANT_ID" \
+    '{
+  "email": $tenantEmail,
+  "tenantId": $tenantId,
+  "priceId": "price_1MoBy5LkdIwHu7ixZhnattbh"
+}')
+
+echo "creating tenant..."
+curl --request POST \
+    --url "${CONTROL_PLANE_API_ENDPOINT}tenants" \
+    --header "Authorization: Bearer ${ID_TOKEN}" \
+    --header 'content-type: application/json' \
+    --data "$DATA"
+```
+
+Once done, you should see the company show up in the Moesif UI. There should also be a subscription for the company in the "active" status.
+
+The tenant will be subscribed to the price defined by `defaultPriceId`. This can be expanded to allow more customization.
+
+### 4. Ingest Events[​](#4-ingest-events "Direct link to 4. Ingest Events")
+
+Now that you created a tenant, you should ingest some actions in you're newly created firehose. Actions have an action name (like "Signed Up", "API Request", or "Finished Job") which represents the usage event. You can also include arbitrary metadata with an action, which enables you to create billable metrics, usage reporting, and more. For more info, [see docs on actions](https://www.moesif.com/docs/getting-started/user-actions/)
+
+You'll want to set a few fields like below:
+
+* `action_name` is a string and should include name of the event such as "Processed Payment Transaction"
+* `company_id` is your tenant identifier. [See companies](https://www.moesif.com/docs/getting-started/companies/)
+* `transaction_id` should be a random UUID for this event which Moesif uses for deduplication. [Docs on Moesif idempotency](https://www.moesif.com/docs/api#idempotency).
+* `request.time` represents the transaction time as an ISO formatted string.
+* `metadata` is an object which includes any custom properties for this event. By setting metadata, you can bill on arbitrary metrics, create metrics on them, etc. For example, if the action name is "Processed Payment Transaction", you can include an amount and the currency to bill on the total amount.
+
+For full schema and available fields, see [Actions API Reference](https://www.moesif.com/docs/api#track-user-actions-in-batch)
+
+An example action is below:
+
+```
+{
+  "action_name": "Processed Payment Transaction",
+  "request": {
+    "time": "2024-03-01T04:45:42.914"
+  },
+  "company_id": "12345", // This is your tenant id
+  "transaction_id": "a3765025-46ec-45dd-bc83-b136c8d1d257",
+  "metadata": {
+    "amount": 24.6,
+    "currency": "USD",
+    "time_seconds": 66.3
+  }
+}
+```
+
+In the above example, the action is created whenever a payment is processed. There are also two metrics we are tracking as part of the action (the amount of the payment and how long the job took). You can create billable metrics and usage reports from these attributes.
+
+> If your events are API calls, we recommend changing the MoesifEventSchema to `API_CALL` which provides a different schema than the above actions. See [API Calls](https://www.moesif.com/docs/api?int_source=docs#api-calls)
+
+### 5. Create a Billing Meter[​](#5-create-a-billing-meter "Direct link to 5. Create a Billing Meter")
+
+Now that the tenant is created, follow [these steps](https://www.moesif.com/docs/metered-billing/creating-billing-meters/) to create a billing meter in Moesif. The billing meter can filter or aggregate on any of the metadata fields you included with your action.
+
+You should also select the provider and price defined by `billingProviderSlug` and `defaultPriceId`.
+
+## Provider Specific Requirements[​](#provider-specific-requirements "Direct link to Provider Specific Requirements")
+
+### Zuora[​](#zuora "Direct link to Zuora")
+
+If you are using Zuora, the following fields must be set when creating a new tenant:
+
+```
+{
+    "email": "<Customer email address>",
+    "firstName": "<First name of customer contact>",
+    "lastName": "<Last name of customer contact>",
+    "currency": "<Three-letter ISO currency code>",
+    "address": {
+        "state": "<State or providence of the contact's address>",
+        "country": "<The country of the contact's address>"
+    }
+}
+```
+
+## Limitations[​](#limitations "Direct link to Limitations")
+
+`sbt-aws-moesif` is in preview. Development is still ongoing. There are limitations to be aware of.
+
+* Deprovisioning a tenant will cancel all subscriptions but does not delete objects in case a subscription should be reactivated.
+
+## Useful commands[​](#useful-commands "Direct link to Useful commands")
+
+* `npm run build` compile typescript to js
+* `npm run watch` watch for changes and compile
+* `npm run test` perform the jest unit tests
+
+
+---
+
+## AWS Marketplace Integration
+
+> Provides usage-based billing support for SBT
+
+# AWS Marketplace Integration
+
+## Overview[​](#overview "Direct link to Overview")
+
+The AWS Marketplace integration with SBT consists of a set of CDK constructs that can accelerate the process of getting up and running with your SaaS listing on the AWS Marketplace. It provides a seamless integration between your SaaS product and the AWS Marketplace, enabling you to manage customer subscriptions, entitlements, and metering data.
+
+## How does it work[​](#how-does-it-work "Direct link to How does it work")
+
+When a buyer subscribes to the SaaS product listed in the AWS Marketplace, they are redirected to the fulfillment URL specified for that listing. Using the optional `SampleRegistrationWebPage`, you can create a customizable landing page that can be used to gather more information about the buyer (step 4). This information can then be stored (step 5) and used to inform downstream processes like resource provisioning as part of the onboarding workflow, for example. For a detailed demonstration of the AWS Marketplace integration in action, check out our [video walkthrough](https://www.youtube.com/watch?v=G0JeP4Gj9x0).
+
+![buyer-onboarding.png](/sbt-aws/assets/images/buyer-onboarding-f81e260242f2a004acc112727fc28562.png)
+
+## Resources created[​](#resources-created "Direct link to Resources created")
+
+Based on the `pricingModel` selected, a different combination of the following resources will be created:
+
+![marketplace-resources.png](/sbt-aws/assets/images/marketplace-resources-13fb55be2b96d46887794d8f3b479356.png)
+
+* If `pricingModel` is set to `AWSMarketplaceSaaSPricingModel.CONTRACTS_WITH_SUBSCRIPTION`, then all resources shown above will be created.
+* If `pricingModel` is set to `AWSMarketplaceSaaSPricingModel.CONTRACTS`, then all resources except those marked with an orange circle will be created.
+* If `pricingModel` is set to `AWSMarketplaceSaaSPricingModel.SUBSCRIPTIONS`, then all resources except those marked with a purple circle will be created.
+
+### Key Resources[​](#key-resources "Direct link to Key Resources")
+
+1. **Subscribers Table**: A DynamoDB table that stores information about the subscribers of your SaaS product, including their registration data and entitlement details.
+2. **Entitlement Logic**: A set of resources that handle the entitlement notifications from AWS Marketplace. It includes an SQS queue, an SNS topic subscription, and a Lambda function that processes the entitlement notifications and stores the subscriber information in the Subscribers Table.
+3. **Subscription Logic**: A set of resources that handle subscription-related events from AWS Marketplace. It includes a DynamoDB table for storing metering records, an SQS queue, and Lambda functions for processing metering data and sending it to AWS Marketplace.
+4. **Registration API**: An API Gateway REST API that exposes endpoints for redirecting buyers to the registration page and creating new subscribers in the Subscribers Table.
+5. **Registration Web Page**: An optional S3-hosted static website that provides a customizable registration page for buyers to submit their information. It is fronted by a CloudFront distribution for improved performance and security.
+
+## Creating the Marketplace Constructs[​](#creating-the-marketplace-constructs "Direct link to Creating the Marketplace Constructs")
+
+The following CDK code shows how you can deploy the Marketplace integration along with SBT:
+
+```
+// ...
+import * as sbt from '@cdklabs/sbt-aws';
+// ...
+
+export class HelloCdkStack extends Stack {
+  constructor(scope: Construct, id: string, props?: StackProps) {
+    super(scope, id, props);
+
+    const myControlPlane = new sbt.ControlPlane(this, 'myControlPlane', {
+      systemAdminEmail: 'jane_doe@example.com',
+    });
+
+    // ...
+
+    const myProduct = new sbt.AWSMarketplaceSaaSProduct(this, 'myProduct', {
+      marketplaceTechAdminEmail: 'jane_doe@example.com',
+      productCode: 'abcdef01234567890',
+      entitlementSNSTopic: 'arn:aws:sns:us-east-1:111122223333:aws-mp-entitlement-notification-1234567890abcdef0',
+      subscriptionSNSTopic: 'arn:aws:sns:us-east-1:111122223333:aws-mp-subscription-notification-021345abcdef6789',
+      pricingModel: sbt.AWSMarketplaceSaaSPricingModel.CONTRACTS_WITH_SUBSCRIPTION,
+      eventManager: myControlPlane.eventManager,
+      requiredFieldsForRegistration: ['name', 'address', 'phone'],
+    });
+
+    new sbt.SampleRegistrationWebPage(this, 'S3BucketProductRegistrationWebPage', {
+      registrationAPI: myProduct.registerCustomerAPI,
+      userProvidedRequiredFieldsForRegistration: myProduct.userProvidedRequiredFieldsForRegistration,
+    });
+  }
+}
+
+// ...
+
+const app = new cdk.App();
+new HelloCdkStack(app, 'HelloCdkStack', {
+  env: {
+    // To use the Marketplace constructs, the region must be specified via environments at template synthesis
+    // see here: https://docs.aws.amazon.com/cdk/v2/guide/configure-env.html#configure-env-when
+    region: 'us-east-1', // Marketplace construct currently only supports the us-east-1 region
+  }
+});
+```
+
+Note: The following variables must be obtained from the SaaS listing created in the AWS Marketplace:
+
+* `productCode`
+* `entitlementSNSTopic`
+* `subscriptionSNSTopic`
+
+(For more information on input parameters, refer to the [documentation](https://constructs.dev/packages/@cdklabs/sbt-aws) on Construct Hub.)
+
+## Interaction with SBT[​](#interaction-with-sbt "Direct link to Interaction with SBT")
+
+Once the Marketplace construct is connected to an SBT control plane (via the optional `eventManager` input parameter of the `AWSMarketplaceSaaSProduct` construct), you will be able to integrate SBT operations with Marketplace buyer lifecycle events.
+
+### Onboarding[​](#onboarding "Direct link to Onboarding")
+
+When a buyer subscribes to your Marketplace listing and submits the fulfillment form, that information is combined with the entitlement information coming from Marketplace and used to create a `DetailType.ONBOARDING_REQUEST` event. This can then be used as a trigger for an onboarding job created as part of the `CoreApplicationPlane`.
+
+### Offboarding[​](#offboarding "Direct link to Offboarding")
+
+Similar to the onboarding event described above, a `DetailType.OFFBOARDING_REQUEST` event is emitted when a subscription expires. Just like the onboarding event, this event can also be used to trigger an offboarding job that perhaps cleans up the departing tenant's resources.
+
+## Metering with AWS Marketplace[​](#metering-with-aws-marketplace "Direct link to Metering with AWS Marketplace")
+
+For pricing models that are usage based (i.e., `AWSMarketplaceSaaSPricingModel.CONTRACTS_WITH_SUBSCRIPTION` and `AWSMarketplaceSaaSPricingModel.SUBSCRIPTIONS`), you can send metered data to Marketplace by updating the Marketplace Metering Records table created by this integration.
+
+The data to be inserted should be of the following format:
+
+```
+{
+  "create_timestamp": { "N": "<CURRENT_TIMESTAMP>" },
+  "customerIdentifier": { "S": "<CUSTOMER_IDENTIFIER>" },
+  "dimension_usage": {
+    "L": [
+      {
+        "M": {
+          "dimension": { "S": "<USAGE_DIMENSION_1>" },
+          "value": { "N": "<USAGE_DIMENSION_1_VALUE>" }
+        }
+      }
+    ]
+  },
+  "metering_pending": { "S": "true" }
+}
+```
+
+where,
+
+* `create_timestamp` is the Epoch time.
+* `customerIdentifier` is the customer identifier provided by the AWS Marketplace. (This is stored in the Marketplace Subscribers table.)
+* `dimension_usage` is a list of dimensions and the corresponding usage that you want Marketplace to record.
+
+After inserting this data, you can either manually trigger the hourly Lambda function that sends the data to AWS Marketplace or wait for its automatic scheduled invocation. You can find this lambda by searching for a lambda with the keyword "Hourly" present in the name.
+
+Once invoked, the lambda will flush that data to Marketplace. To see the result, go back to the entry you created in the Metering Records table. Once there, you should see that it has been updated to include the response from Marketplace as the metering record was submitted.
+
+## Customization[​](#customization "Direct link to Customization")
+
+The AWS Marketplace integration constructs provide several customization options to tailor the integration to your specific needs:
+
+### Registration Page[​](#registration-page "Direct link to Registration Page")
+
+When creating the `SampleRegistrationWebPage` construct, you can specify the following:
+
+* `imageLogoUrl`: The URL of the image logo to display on the registration page.
+* `userProvidedRequiredFieldsForRegistration`: Additional fields that buyers must provide during the registration process. These fields will be added to the registration form dynamically.
+
+### Required Registration Fields[​](#required-registration-fields "Direct link to Required Registration Fields")
+
+The `requiredFieldsForRegistration` property of the `AWSMarketplaceSaaSProduct` construct allows you to specify additional fields that buyers must provide during the registration process. These fields will be added to the registration form dynamically.
+
+### Seller Email[​](#seller-email "Direct link to Seller Email")
+
+If you want to send email notifications to buyers during the registration process, you can provide the `marketplaceSellerEmail` property when creating the `AWSMarketplaceSaaSProduct` construct. This email address must be verified in Amazon SES and in 'Production' mode.
+
+## Conclusion[​](#conclusion "Direct link to Conclusion")
+
+The AWS Marketplace integration with SBT provides a comprehensive set of constructs to streamline the process of listing and managing your SaaS product on the AWS Marketplace. By leveraging these constructs, you can handle customer subscriptions, entitlements, and metering data seamlessly, while also integrating with the SBT control plane for advanced onboarding and offboarding workflows.
+
+
+---
+
+## Amazon ECS SaaS - Reference Architecture
+
+> The AWS SaaS Factory ECS SaaS Reference Architecture is a example architecture that illustrates how to build and manage multi-tenant Software-as-a-Service (SaaS) applications using Amazon Elastic Container Service (ECS). It serves as a guide for developers looking to implement best practices in building multi-tenant SaaS applications on AWS using ECS, offering a flexible and scalable solution tailored to various business needs. This architecture leverages SBT for both control plane and tenant deployments. Key components and considerations of this reference architecture include:
+
+# Amazon ECS SaaS - Reference Architecture
+
+The AWS SaaS Factory ECS SaaS Reference Architecture is a example architecture that illustrates how to build and manage multi-tenant Software-as-a-Service (SaaS) applications using Amazon Elastic Container Service (ECS). It serves as a guide for developers looking to implement best practices in building multi-tenant SaaS applications on AWS using ECS, offering a flexible and scalable solution tailored to various business needs. This architecture leverages SBT for both control plane and tenant deployments. Key components and considerations of this reference architecture include:
+
+## Key Features[​](#key-features "Direct link to Key Features")
+
+* **Multi-Tenant Architecture**: The architecture supports different tenant isolation strategies, including pooled and silo models, across three tiers: Basic, Advanced, and Premium. These tiers offer varying levels of resource sharing and isolation to meet different tenant needs.
+* **AWS Integration**: The solution leverages native AWS services for routing, observability, and service discovery. It uses AWS CloudFormation, AWS CDK, and ECS Service Connect for seamless integration and management of services.
+* **AWS SaaS Builder Toolkit (SBT)**: This toolkit extends the SaaS control plane with functionalities like tenant onboarding, user management, and billing. It also integrates with the ECS application plane for bi-directional communication necessary for SaaS operations.
+
+## Architectural Tiers[​](#architectural-tiers "Direct link to Architectural Tiers")
+
+* **Basic Tier**: Utilizes shared ECS services across all tenants in a pooled model. This tier is preloaded in the baseline architecture and shares resources like product and order microservices.
+* **Advanced Tier**: Features a shared ECS cluster with dedicated ECS services per tenant, following a silo model. This setup provides more isolation compared to the Basic tier.
+* **Premium Tier**: Offers dedicated ECS clusters per tenant, providing the highest level of isolation and customization for each tenant.
+
+## GitHub Repository[​](#github-repository "Direct link to GitHub Repository")
+
+For a complete implementation of the sample architecture for this pattern, see the [GitHub repository](https://github.com/aws-samples/saas-reference-architecture-ecs)
+
+
+---
+
+## Amazon EKS SaaS Reference Architecture
+
+> The AWS SaaS Factory EKS SaaS Reference Architecture provides a working example of a multi-tenant SaaS solution using Amazon Elastic Kubernetes Service (EKS). This architecture, like all SaaS Factory reference architectures, are provided as examples from which to create scalable, secure, and efficient SaaS applications on AWS. This architecture leverages SBT for both control plane and tenant deployments. Key components and considerations of this reference architecture include:
+
+# Amazon EKS SaaS Reference Architecture
+
+The AWS SaaS Factory EKS SaaS Reference Architecture provides a working example of a multi-tenant SaaS solution using Amazon Elastic Kubernetes Service (EKS). This architecture, like all SaaS Factory reference architectures, are provided as examples from which to create scalable, secure, and efficient SaaS applications on AWS. This architecture leverages SBT for both control plane and tenant deployments. Key components and considerations of this reference architecture include:
+
+## Key Components[​](#key-components "Direct link to Key Components")
+
+1. **Multi-Tenant Isolation**: The architecture emphasizes tenant isolation, which is crucial for ensuring that each tenant's data and operations are secure and separate from others. This is achieved through Kubernetes namespaces and network policies.
+2. **Identity and Access Management**: Amazon Cognito is used for managing user identities and access controls, ensuring that tenant-specific access policies are enforced.
+3. **Data Partitioning**: Data for each tenant is partitioned to maintain privacy and security. This can involve using separate databases or schemas for each tenant, depending on the application's requirements.
+4. **Deployment Automation**: The architecture supports automated deployment processes, often using AWS CodePipeline, to streamline the onboarding of new tenants and updates to the application.
+5. **Microservices Architecture**: The solution leverages a microservices architecture, allowing for modular development and deployment. This approach supports scalability and flexibility in managing different components of the application.
+6. **Operational Management**: Shared services within the EKS cluster handle common operational tasks such as logging, monitoring, and configuration management, which are essential for maintaining a robust SaaS environment. This reference architecture serves as a starting point for developing SaaS applications on AWS using EKS, providing practical examples and best practices to address common challenges in multi-tenant environments.
+
+# GitHub Repository
+
+For a complete implementation of the sample architecture for this pattern, see the [GitHub repository](https://github.com/aws-samples/aws-saas-factory-eks-reference-architecture)
+
+
+---
+
+## Serverless SaaS - Reference Solution
+
+> The AWS SaaS Factory Serverless SaaS Reference Architecture is a comprehensive example of a working, multi-tenant SaaS application using serverless technologies on AWS. This architecture leverages a range of AWS services to optimize operational efficiency and scalability while minimizing the complexity of managing infrastructure. The architecture leverages SBT for its control plane and tenant deployments. Key components and  concepts of this architecture include:
+
+# Serverless SaaS - Reference Solution
+
+The AWS SaaS Factory Serverless SaaS Reference Architecture is a comprehensive example of a working, multi-tenant SaaS application using serverless technologies on AWS. This architecture leverages a range of AWS services to optimize operational efficiency and scalability while minimizing the complexity of managing infrastructure. The architecture leverages SBT for its control plane and tenant deployments. Key components and concepts of this architecture include:
+
+## Key Components[​](#key-components "Direct link to Key Components")
+
+* **Control Plane**: This is where tenant management and operational services reside. It includes components for registration, onboarding, and provisioning of tenants. The control plane is crucial for managing the lifecycle of tenants in a SaaS environment.
+* **Application Plane**: This consists of the core application services that handle business logic and data processing. It typically involves AWS Lambda for compute, Amazon API Gateway for routing requests, and Amazon DynamoDB for data storage.
+* **Identity and Access Management**: Amazon Cognito is used for user authentication and authorization, providing a secure way to manage user identities across different tenants.
+
+## Architectural Strategies[​](#architectural-strategies "Direct link to Architectural Strategies")
+
+* **Serverless Model**: By using serverless services like AWS Lambda, the architecture reduces operational overhead and allows automatic scaling based on demand. This model aligns resource consumption with tenant activity, optimizing cost efficiency.
+* **Multi-Tenant Management**: The architecture supports both pooled and siloed deployment models, allowing flexibility in how resources are shared or isolated among tenants. This can be configured using AWS Lambda layers and API Gateway usage plans to manage tenant-specific configurations.
+* **Deployment Automation**: The reference architecture includes automated deployment pipelines using AWS CodePipeline, enabling continuous integration and delivery of updates across all tenants.
+
+# GitHub Repository
+
+For a complete implementation of the sample architecture for this pattern, see the [GitHub repository](https://github.com/aws-samples/aws-saas-factory-ref-solution-serverless-saas/tree/main)
+
+
+---
+
+## SaaS Builder Toolkit for AWS Workshop
+
+> For a detailed step by step walkthrough, click this link to follow along in a workshop.
+
+# SaaS Builder Toolkit for AWS Workshop
+
+> For a detailed step by step walkthrough, click [this link](https://catalog.us-east-1.prod.workshops.aws/workshops/edc9cdde-87b1-4da3-8db8-ac0667b87cb6/en-US) to follow along in a workshop.
+
+In this workshop, you will walk through the development of a multi-tenant Software-as-a-Service (SaaS) solution using the [SaaS Builder Toolkit for AWS (SBT)](https://github.com/awslabs/sbt-aws) . SBT is an open-source toolkit designed to streamline and accelerate the development of SaaS applications by encapsulating best practices and common patterns into reusable components. As SaaS continues to dominate the software delivery model, the ability to rapidly deploy and scale applications becomes increasingly crucial. SBT utilizes the robust AWS Cloud Development Kit (CDK) to provide developers with high-level object-oriented abstractions, enabling a focus on building unique features rather than managing the underlying infrastructure.
+
+This workshop guide is structured into five comprehensive labs (with two optional ones), each aimed at enhancing your understanding and skills in utilizing the SBT to its full potential. By the end of this workshop, you will have built a fully functional SaaS application. It's important to note that prior knowledge of SBT is not required for this workshop. Instead, you can use this workshop as a step-by-step guide to gain a deeper understanding of the SBT components, enhancing your ability to effectively utilize these tools in building scalable SaaS solutions.
+
+
+---
+
+## Application plane utilities
+
+> Although entirely optional, SBT includes a utility that lets you define, and run arbitrary jobs upon receipt of a control plane message, called a ScriptJob. This mechanism is extended to produce two new helper constructs ProvisioningScriptJob and DeprovisioningScriptJob which are used for onboarding and off-boarding, respectively, in the reference architectures which were ported to SBT (see references at the end of this document). That tenant provisioning/deprovisioning process is depicted below:
+
+# Application plane utilities
+
+Although entirely optional, SBT includes a utility that lets you define, and run arbitrary jobs upon receipt of a control plane message, called a `ScriptJob`. This mechanism is extended to produce two new helper constructs `ProvisioningScriptJob` and `DeprovisioningScriptJob` which are used for onboarding and off-boarding, respectively, in the reference architectures which were ported to SBT (see references at the end of this document). That tenant provisioning/deprovisioning process is depicted below:
+
+![sbt-provisioning.png](/sbt-aws/assets/images/sbt-provisioning-ac11ea3395261eacd6c7d1478ada278c.png)
+
+Notice the use of the `provisioning.sh` and `deprovisioning.sh` scripts at the top. These scripts are fed to the `ProvisioningScriptJob` and `DeprovisioningScriptJob` as parameters. Internally the `ScriptJob` launches an AWS `CodeBuild` project, wrapped inside an AWS Step Function, to execute the bash scripts. The `ScriptJob` also lets you specify what input variables to feed to the scripts, along with what output variables you expect them to return. Note that in this version of SBT, you can create the `ScriptJob` construct with `ScriptJobProps` and configure `CoreAppPlane` with `ScriptJobs` using its `scriptJobs` property. The `CoreAppPlane` will then link these `ScriptJobs` to EventBridge. Let's take a simple example: imagine our SaaS application deployed only a single S3 bucket per tenant. Let's create a `ProvisioningScriptJob` for that provisioning now:
+
+```
+const scriptJobProps: TenantLifecycleScriptJobProps = {
+  permissions: PolicyDocument.fromJson(/*See below*/),
+  script: '' /*See below*/,
+  environmentStringVariablesFromIncomingEvent: ['tenantId', 'tier'],
+  environmentVariablesToOutgoingEvent: ['tenantS3Bucket', 'someOtherVariable', 'tenantConfig'],
+  scriptEnvironmentVariables: {
+    TEST: 'test',
+  },
+  eventManager: eventManager /*See below on how to create EventManager*/,
+};
+```
+
+| Key                                             | Type                                                                                                  | Purpose                                                                                                            |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| **script**                                      | string                                                                                                | A string in bash script format that represents the job to be run (example below)                                   |
+| **permissions**                                 | [PolicyDocument](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_iam.PolicyDocument.html) | An IAM policy document giving this job the IAM permissions it needs to do what it's being asked to do              |
+| **environmentStringVariablesFromIncomingEvent** | string\[]                                                                                             | The environment variables to import into the ScriptJob from event details field.                                   |
+| **environmentVariablesToOutgoingEvent**         | string\[]                                                                                             | The environment variables to export into the outgoing event once the ScriptJob has finished.                       |
+| **scriptEnvironmentVariables**                  | `{ [key: string]: string }`                                                                           | The variables to pass into the codebuild ScriptJob.                                                                |
+| **eventManager**                                | [IEventManager](https://github.com/awslabs/sbt-aws/blob/main/API.md#eventmanager-)                    | The EventManager instance that allows connecting to events flowing between the Control Plane and other components. |
+
+The heavy lifting of the `ScriptJob` construct (along with constructs that extend it like `ProvisioningScriptJob`) happens with the value of the script key. Let's take a look at the example provisioning script now:
+
+```
+echo "starting..."
+
+# note that this template.json is being created here, but
+# it could just as easily be pulled in from an S3 bucket.
+cat > template.json << EOM
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": {"MyBucket": {"Type": "AWS::S3::Bucket"}},
+  "Outputs": {"S3Bucket": {"Value": { "Ref": "MyBucket" }}}
+}
+EOM
+
+echo "tenantId: $tenantId"
+echo "tier: $tier"
+
+aws cloudformation create-stack --stack-name "tenantTemplateStack-\${tenantId}"  --template-body "file://template.json"
+
+aws cloudformation wait stack-create-complete --stack-name "tenantTemplateStack-\${tenantId}"
+
+export tenantS3Bucket=$(aws cloudformation describe-stacks --stack-name "tenantTemplateStack-\${tenantId}" | jq -r '.Stacks[0].Outputs[0].OutputValue')
+export someOtherVariable="this is a test"
+echo $tenantS3Bucket
+export tenantConfig=$(jq --arg SAAS_APP_USERPOOL_ID "MY_SAAS_APP_USERPOOL_ID" \
+--arg SAAS_APP_CLIENT_ID "MY_SAAS_APP_CLIENT_ID" \
+--arg API_GATEWAY_URL "MY_API_GATEWAY_URL" \
+-n '{"userPoolId":$SAAS_APP_USERPOOL_ID,"appClientId":$SAAS_APP_CLIENT_ID,"apiGatewayUrl":$API_GATEWAY_URL}')
+
+echo $tenantConfig
+export tenantStatus="created"
+
+echo "done!"
+```
+
+
+---
+
+## Build the control plane
+
+> Now let's build and deploy this component. Before we do, we have to modify one other file. Open up the hello-cdk.ts file in the bin directory, and replace everything that's in there with the following contents:
+
+# Build the control plane
+
+Now let's build and deploy this component. Before we do, we have to modify one other file. Open up the `hello-cdk.ts` file in the bin directory, and replace everything that's in there with the following contents:
+
+```
+#!/usr/bin/env node
+import 'source-map-support/register';
+import * as cdk from 'aws-cdk-lib';
+import { ControlPlaneStack } from '../lib/control-plane';
+// import { AppPlaneStack } from '../lib/app-plane';
+
+const app = new cdk.App();
+const controlPlaneStack = new ControlPlaneStack(app, 'ControlPlaneStack');
+// const appPlaneStack = new AppPlaneStack(app, 'AppPlaneStack', {
+//   eventManager: controlPlaneStack.eventManager,
+// });
+```
+
+Notice we're leaving a few lines commented out here, we'll come back to those later when we discuss the application plane. Ensure everything is saved, then from the root of your hello-cdk project, run the following:
+
+warning
+
+Because our control plane deploys Lambda functions, you'll need Docker installed to build and deploy this CDK stack
+
+```
+npm run build
+cdk bootstrap
+cdk deploy ControlPlaneStack
+```
+
+This will kick of the synthesis of your CDK application to AWS CloudFormation, then deploy that CloudFormation. Behind the scenes, a lot is getting created. This construct not only stands up the surface of our control plane API, using a new API Gateway component, it also deploys several services as AWS Lambda functions used for tenant provisioning and management.
+
+Feel free to open your AWS Console and take a look at the following (ensure you're in the same region you deployed to):
+
+* [AWS Lambda](https://console.aws.amazon.com/lambda/home)
+* [Amazon Cognito](https://console.aws.amazon.com/cognito/v2/idp/user-pools)
+* [API Gateway](https://console.aws.amazon.com/apigateway/main/apis)
+
+Once done, we now have the left side of our conceptual diagram deployed, and we did it with just a few constructs. It deployed not only the API surface of our control plane, but also wired it up to EventBridge. Next, we'll start deploy the application plane, and connect it to the same EventBridge bus, so we can act upon those control plane messages.
+
+
+---
+
+## Congratulations!
+
+# Congratulations!
+
+
+---
+
+## Create the application plane
+
+> As mentioned before, SBT is unopinionated about the application in which it's deployed. As a result, we expect you to create the ApplicationPlane construct as just another part of the CDK constructs that you'd use to define your application. Take this simple (non-functional) example:
+
+# Create the application plane
+
+As mentioned before, SBT is unopinionated about the application in which it's deployed. As a result, we expect you to create the `ApplicationPlane` construct as just another part of the CDK constructs that you'd use to define your application. Take this simple (non-functional) example:
+
+```
+export interface AppPlaneProps extends cdk.StackProps {
+  eventManager: sbt.IEventManager;
+}
+
+export class ApplicationPlaneStack extends Stack {
+  constructor(scope: Construct, id: string, props: AppPlaneProps) {
+    super(scope, id, props);
+
+    new sbt.CoreApplicationPlane(this, 'CoreApplicationPlane', {
+      eventManager: props.eventManager,
+      scriptJobs: [],
+    });
+  }
+}
+```
+
+In this example we're creating the application plane of SBT, and passing in an EventManager created using the same EventBus that we used in our control plane. This will ensure that both planes are wired to the same events in Amazon EventBridge.
+
+What's missing in this example is the subscription to EventBridge events, and the acting upon those subscriptions. As an application plane developer, a builder could hook up listeners to the various events published by the control plane, and do what's asked in the event. For example, the onboarding event is sent by the control plane with the expectation that the application plane provisions new tenant resources. The event's payload should carry enough information for the application to complete its job. Once done, it's expected that the app plane sends back a status event indicating success or failure.
+
+Again, SBT allows builders to publish and subscribe directly to EventBridge, and does not attempt to interfere with that process. However, as part of the SBT library we've published a set of utilities to assist with typical application plane workflows. Let's look one of those utilities now. Once done, we'll come back to this code and fill it in with what we learned.
+
+
+---
+
+## Create the control plane
+
+> Now that we have SBT installed, let's create a new SBT control plane. Create a new file under /lib/control-plane.ts with the following contents.
+
+# Create the control plane
+
+Now that we have SBT installed, let's create a new SBT control plane. Create a new file under `/lib/control-plane.ts` with the following contents.
+
+warning
+
+Please be sure to replace the email address with a real email as this is where you'll get the temporary admin password.
+
+```
+import * as sbt from '@cdklabs/sbt-aws';
+import { Stack } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+
+export class ControlPlaneStack extends Stack {
+  public readonly regApiGatewayUrl: string;
+  public readonly eventManager: sbt.IEventManager;
+
+  constructor(scope: Construct, id: string, props?: any) {
+    super(scope, id, props);
+    const cognitoAuth = new sbt.CognitoAuth(this, 'CognitoAuth', {
+      enableAdvancedSecurityMode: false, // only for testing purposes!
+      setAPIGWScopes: false, // only for testing purposes!
+    });
+
+    const controlPlane = new sbt.ControlPlane(this, 'ControlPlane', {
+      auth: cognitoAuth,
+      systemAdminEmail: 'ENTER YOUR EMAIL HERE',
+    });
+
+    this.eventManager = controlPlane.eventManager;
+    this.regApiGatewayUrl = controlPlane.controlPlaneAPIGatewayUrl;
+  }
+}
+```
+
+Notice here we're creating a new CDK Stack called "ControlPlaneStack". In that stack, we're creating a `ControlPlane` construct which we imported from the `@cdklabs/sbt-aws` package.
+
+Another important concept worth pointing out here is the plugability of this approach. Notice we're creating an "auth" component, called "CognitoAuth". This component implements the `IAuth` interface defined in the SBT core package. We currently have a Cognito implementation of `IAuth`, but we could technically implement that interface with any identity provider.
+
+
+---
+
+## Install the SaaS Builder Toolkit for AWS
+
+> Now that you've initialized a new CDK app, let's install the SBT components. From within the hello-cdk directory, please run the following command:
+
+# Install the SaaS Builder Toolkit for AWS
+
+Now that you've initialized a new CDK app, let's install the SBT components. From within the `hello-cdk` directory, please run the following command:
+
+```
+npm install @cdklabs/sbt-aws
+```
+
+
+---
+
+## Tutorial Intro
+
+> This tutorial will walk you through creating a basic multi-tenant application using SaaS
+
+# Tutorial Intro
+
+This tutorial will walk you through creating a basic multi-tenant application using SaaS Builder Toolkit.
+
+## Introduction[​](#introduction "Direct link to Introduction")
+
+### What you'll need[​](#what-youll-need "Direct link to What you'll need")
+
+* [Node.js](https://nodejs.org/en/download/) version 18.0 or above:
+  <!-- -->
+  * When installing Node.js, you are recommended to check all checkboxes related to dependencies.
+* [AWS Cloud Development Kit](https://aws.amazon.com/cdk/) version XX or above:
+  <!-- -->
+  * Directions for installing are [here](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html#getting_started_install)
+
+## Step 1: CDK getting started[​](#step-1-cdk-getting-started "Direct link to Step 1: CDK getting started")
+
+Follow the instructions in CDK's getting started guide. This guide walks you through installing the pre-requisites and ensuring your environment is prepared to build your first CDK app.
+
+## Step 2: Hello SBT\![​](#step-2-hello-sbt "Direct link to Step 2: Hello SBT!")
+
+Follow the instructions in [**Step One** of CDK's "Hello CDK" project](https://docs.aws.amazon.com/cdk/v2/guide/hello_world.html#hello_world_create).
+
+You don't have to build or deploy the project, just initialize a new empty project. Once done, come back here, and we'll get started with building your first SBT-enabled multi-tenant app.
+
+
+---
+
+## Provisioning script breakdown
+
+> Let's break this script down section by section.
+
+# Provisioning script breakdown
+
+Let's break this script down section by section.
+
+## CloudFormation template[​](#cloudformation-template "Direct link to CloudFormation template")
+
+Notice the first few lines contains a sample AWS CloudFormation template that contains our S3 Bucket.
+
+```
+# note that this template.json is being created here, but
+# it could just as easily be pulled in from an S3 bucket.
+cat > template.json << EOM
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": {"MyBucket": {"Type": "AWS::S3::Bucket"}},
+  "Outputs": {"S3Bucket": {"Value": { "Ref": "MyBucket" }}}
+}
+EOM
+```
+
+In this case we're declaring it inline with the script, but as the comment points out, there's no reason this template couldn't live in an S3 bucket, or any other place supported by the CloudFormation SDK.
+
+Next we're echoing the value of the tenantId and tier environment variables below the CloudFormation template.
+
+## Imported variables('environmentStringVariablesFromIncomingEvent')[​](#imported-variablesenvironmentstringvariablesfromincomingevent "Direct link to Imported variables('environmentStringVariablesFromIncomingEvent')")
+
+```
+echo "tenantId: $tenantId"
+echo "tier: $tier"
+```
+
+Let's examine how exactly those variables get populated. Remember that the `ScriptJob` (which is used to extend the ProvisioningScriptJob construct) creates an AWS CodeBuild project internally. When the `ScriptJob` creates the CodeBuild project, it can specify what environment variables to provide. The `ScriptJob` utility is also triggered by an EventBridge message matching the criteria specified in the incomingEvent parameter of the `ScriptJobProps`. (You don't need to worry about doing that for `ProvisioningScriptJob` and `DeprovisioningScriptJob` because that is already configured.) The message that arrives via EventBridge has a detail JSON Object (see docs here) that carries with it contextual information included by the sender, in our case, the control plane. For each key in the `environmentStringVariablesFromIncomingEvent` object, the `ScriptJob` extracts the value of a matching key found in the EventBridge message's detail JSON object, and provides that value to the CodeBuild project as an environment variable.
+
+So, take for example, this sample EventBridge provisioning message sent by a control plane:
+
+```
+{
+  "version": "0",
+  "id": "6a7e8feb-b491-4cf7-a9f1-bf3703467718",
+  "detail-type": "onboardingRequest",
+  "source": "controlPlaneEventSource",
+  "account": "111122223333",
+  "time": "2017-12-22T18:43:48Z",
+  "region": "us-west-1",
+  "resources": ["arn:aws:ec2:us-west-1:123456789012:instance/i-1234567890abcdef0"],
+  "detail": {
+    "tenantId": "e6878e03-ae2c-43ed-a863-08314487318b",
+    "tier": "standard"
+  }
+}
+```
+
+When executing, the script cited above would echo both tenantId and tier with the values set according to this message.
+
+## Deploy tenant CloudFormation artifacts[​](#deploy-tenant-cloudformation-artifacts "Direct link to Deploy tenant CloudFormation artifacts")
+
+Next, we're deploying tenant infrastructure by way of the CloudFormation template we saw above.
+
+```
+aws cloudformation wait stack-create-complete --stack-name "tenantTemplateStack-\${tenantId}"
+```
+
+## Exported variables ('environmentVariablesToOutgoingEvent')[​](#exported-variables-environmentvariablestooutgoingevent "Direct link to Exported variables ('environmentVariablesToOutgoingEvent')")
+
+The final portion of the script exports environment variables containing information to return to the control plane via the outgoing EventBridge message.
+
+```
+export tenantS3Bucket=$(aws cloudformation describe-stacks --stack-name "tenantTemplateStack-\${tenantId}" | jq -r '.Stacks[0].Outputs[0].OutputValue')
+export someOtherVariable="this is a test"
+echo $tenantS3Bucket
+export tenantConfig=$(jq --arg SAAS_APP_USERPOOL_ID "MY_SAAS_APP_USERPOOL_ID" \
+--arg SAAS_APP_CLIENT_ID "MY_SAAS_APP_CLIENT_ID" \
+--arg API_GATEWAY_URL "MY_API_GATEWAY_URL" \
+-n '{"userPoolId":$SAAS_APP_USERPOOL_ID,"appClientId":$SAAS_APP_CLIENT_ID,"apiGatewayUrl":$API_GATEWAY_URL}')
+echo $tenantConfig
+export tenantStatus="created"
+```
+
+Similar to how it mapped incoming EventBridge message detail variables to environment variables, the `ScriptJob` does almost the same thing but in reverse. The variables specified in the `environmentVariablesToOutgoingEvent` section of `ScriptJobProps` will be extracted from the environment, and sent back in the EventBridge message's detail section.
+
+
+---
+
+## Putting it all together
+
+> Now that we've seen the various parts of the application plane in isolation, let's put it all together. Please create the following file in the /lib directory of your CDK app and name it app-plane.ts. Now open that file and paste the following contents into it:
+
+# Putting it all together
+
+Now that we've seen the various parts of the application plane in isolation, let's put it all together. Please create the following file in the /lib directory of your CDK app and name it app-plane.ts. Now open that file and paste the following contents into it:
+
+```
+import * as sbt from '@cdklabs/sbt-aws';
+import * as cdk from 'aws-cdk-lib';
+import { EventBus } from 'aws-cdk-lib/aws-events';
+import { PolicyDocument, PolicyStatement, Effect } from 'aws-cdk-lib/aws-iam';
+
+export interface AppPlaneProps extends cdk.StackProps {
+  eventManager: sbt.IEventManager;
+}
+export class AppPlaneStack extends cdk.Stack {
+  constructor(scope: cdk.App, id: string, props: AppPlaneProps) {
+    super(scope, id, props);
+
+    const provisioningScriptJobProps: sbt.TenantLifecycleScriptJobProps = {
+      permissions: new PolicyDocument({
+        statements: [
+          new PolicyStatement({
+            actions: [
+              'cloudformation:CreateStack',
+              'cloudformation:DescribeStacks',
+              's3:CreateBucket',
+            ],
+            resources: ['*'],
+            effect: Effect.ALLOW,
+          }),
+        ],
+      }),
+      script: `
+echo "starting..."
+
+# note that this template.yaml is being created here, but
+# it could just as easily be pulled in from an S3 bucket.
+cat > template.json << EndOfMessage
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": { "MyBucket":{ "Type": "AWS::S3::Bucket" }},
+  "Outputs": { "S3Bucket": { "Value": { "Ref": "MyBucket" }}}
+}
+EndOfMessage
+
+echo "tenantId: $tenantId"
+echo "tier: $tier"
+
+aws cloudformation create-stack --stack-name "tenantTemplateStack-\${tenantId}"  --template-body "file://template.json"
+aws cloudformation wait stack-create-complete --stack-name "tenantTemplateStack-\${tenantId}"
+export tenantS3Bucket=$(aws cloudformation describe-stacks --stack-name "tenantTemplateStack-\${tenantId}" | jq -r '.Stacks[0].Outputs[0].OutputValue')
+export someOtherVariable="this is a test"
+echo $tenantS3Bucket
+
+export tenantConfig=$(jq --arg SAAS_APP_USERPOOL_ID "MY_SAAS_APP_USERPOOL_ID" \
+--arg SAAS_APP_CLIENT_ID "MY_SAAS_APP_CLIENT_ID" \
+--arg API_GATEWAY_URL "MY_API_GATEWAY_URL" \
+-n '{"userPoolId":$SAAS_APP_USERPOOL_ID,"appClientId":$SAAS_APP_CLIENT_ID,"apiGatewayUrl":$API_GATEWAY_URL}')
+
+echo $tenantConfig
+export tenantStatus="created"
+
+echo "done!"
+`,
+      environmentStringVariablesFromIncomingEvent: ['tenantId', 'tier'],
+      environmentVariablesToOutgoingEvent: [
+        'tenantS3Bucket',
+        'someOtherVariable',
+        'tenantConfig',
+        'tenantStatus',
+      ],
+      scriptEnvironmentVariables: {
+        TEST: 'test',
+      },
+      eventManager: props.eventManager,
+    };
+
+    const provisioningJobScript: sbt.ProvisioningScriptJob = new sbt.ProvisioningScriptJob(
+      this,
+      'provisioningJobScript',
+      provisioningScriptJobProps
+    );
+
+    new sbt.CoreApplicationPlane(this, 'CoreApplicationPlane', {
+      eventManager: eventManager,
+      scriptJobs: [provisioningJobScript],
+    });
+  }
+}
+```
+
+Although this looks like a lot of code, it's still very few constructs. Now that we've defined our app plane, let's again open up the hello-cdk.ts file in the bin directory of your CDK app. Once open, uncomment each commented line. The final file should look like this:
+
+```
+#!/usr/bin/env node
+import 'source-map-support/register';
+import * as cdk from 'aws-cdk-lib';
+import { ControlPlaneStack } from '../lib/control-plane';
+import { AppPlaneStack } from '../lib/app-plane';
+
+const app = new cdk.App();
+const controlPlaneStack = new ControlPlaneStack(app, 'ControlPlaneStack');
+const appPlaneStack = new AppPlaneStack(app, 'AppPlaneStack', {
+  eventManager: controlPlaneStack.eventManager,
+});
+```
+
+Once done, ensure all files are saved, and let's deploy the solution again, but this time we'll include the application plane:
+
+```
+npm run build
+cdk deploy ControlPlaneStack AppPlaneStack
+```
+
+
+---
+
+## Testing the deployment
+
+> Once deployed, let's run a few tests to see our basic control plane and application plane in action. When you deployed the control plane, you should've received an email with temporary admin credentials. Let's use those credentials now to log in to that account. Please replace the placeholder ('INSERT PASSWORD HERE') with your temporary password in the script below. Once logged in, this script will onboard a new tenant, and retrieve its details. Note this script uses the jq JSON processor.
+
+# Testing the deployment
+
+Once deployed, let's run a few tests to see our basic control plane and application plane in action. When you deployed the control plane, you should've received an email with temporary admin credentials. Let's use those credentials now to log in to that account. Please replace the placeholder ('INSERT PASSWORD HERE') with your temporary password in the script below. Once logged in, this script will onboard a new tenant, and retrieve its details. Note this script uses the jq JSON processor.
+
+```
+PASSWORD='INSERT PASSWORD HERE'
+# Change this to a real email if you'd like to log into the tenant
+TENANT_EMAIL="tenant@example.com"
+CONTROL_PLANE_STACK_NAME="ControlPlaneStack"
+TENANT_NAME="tenant$RANDOM"
+
+CLIENT_ID=$(aws cloudformation describe-stacks \
+  --stack-name "$CONTROL_PLANE_STACK_NAME" \
+  --query "Stacks[0].Outputs[?OutputKey=='ControlPlaneIdpClientId'].OutputValue" \
+  --output text)
+
+USER_POOL_ID=$(aws cloudformation describe-stacks \
+  --stack-name "$CONTROL_PLANE_STACK_NAME" \
+  --query "Stacks[0].Outputs[?OutputKey=='ControlPlaneIdpUserPoolId'].OutputValue" \
+  --output text)
+
+USER="admin"
+
+# required in order to initiate-auth
+aws cognito-idp update-user-pool-client \
+    --user-pool-id "$USER_POOL_ID" \
+    --client-id "$CLIENT_ID" \
+    --explicit-auth-flows USER_PASSWORD_AUTH
+
+# remove need for password reset
+aws cognito-idp admin-set-user-password \
+    --user-pool-id "$USER_POOL_ID" \
+    --username "$USER" \
+    --password "$PASSWORD" \
+    --permanent
+
+# get credentials for user
+AUTHENTICATION_RESULT=$(aws cognito-idp initiate-auth \
+  --auth-flow USER_PASSWORD_AUTH \
+  --client-id "${CLIENT_ID}" \
+  --auth-parameters "USERNAME='${USER}',PASSWORD='${PASSWORD}'" \
+  --query 'AuthenticationResult')
+
+ACCESS_TOKEN=$(echo "$AUTHENTICATION_RESULT" | jq -r '.AccessToken')
+
+CONTROL_PLANE_API_ENDPOINT=$(aws cloudformation describe-stacks \
+    --stack-name "$CONTROL_PLANE_STACK_NAME" \
+    --query "Stacks[0].Outputs[?contains(OutputKey,'controlPlaneAPIEndpoint')].OutputValue" \
+    --output text)
+
+DATA=$(jq --null-input \
+    --arg tenantName "$TENANT_NAME" \
+    --arg tenantEmail "$TENANT_EMAIL" \
+    '{
+  "tenantName": $tenantName,
+  "email": $tenantEmail,
+  "tier": "basic",
+  "tenantStatus": "In progress"
+}')
+
+echo "creating tenant..."
+curl --request POST \
+    --url "${CONTROL_PLANE_API_ENDPOINT}tenants" \
+    --header "Authorization: Bearer ${ACCESS_TOKEN}" \
+    --header 'content-type: application/json' \
+    --data "$DATA" | jq
+echo "" # add newline
+
+echo "retrieving tenants..."
+curl --request GET \
+    --url "${CONTROL_PLANE_API_ENDPOINT}tenants" \
+    --header "Authorization: Bearer ${ACCESS_TOKEN}" \
+    --silent | jq
+```
+
+Now that we've onboarded a tenant, let's take a look at the console to see what got deployed.
+
+First, let's open the [DynamoDB console](https://console.aws.amazon.com/dynamodbv2/home#). Once open, click the Explore Items link on the left. On the "Tables" screen, select the table that starts with `ControlPlaneStack`. Notice there is an entry for the tenant we just onboarded. Also notice it's probably still "in progress"
+
+Recall that we deployed a `ScriptJob` with our application plane, and it's a wrapper around an AWS Step Function that runs our provisioning script via CodeBuild. Let's take a look at that Step Function now by clicking navigating to Step Functions in the console (ensure you're in the same region you deployed to).
+
+The Step Function is likely still running, but feel free to examine the execution. Once finished, it'll return the results back to EventBridge, and close the loop with the Control plane.
+
+
+---
+
+## SaaS Builder Toolkit for AWS (SBT-AWS)
+
+> Description will go into a meta tag in <head />
+
+### Powered by CDK
+
+SBT makes extensive use of the AWS Cloud Development Kit (CDK), and adheres to CDK's Construct Programming Model (CPM).
+
+
+---
+
