@@ -29,7 +29,7 @@ import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { EntitlementLogic } from './entitlement-logic';
 import { SubscriptionLogic } from './subscription-logic';
-import { DetailType, IEventManager, addTemplateTag, generateAWSManagedRuleSet } from '../../utils';
+import { IEventManager, addTemplateTag, generateAWSManagedRuleSet } from '../../utils';
 
 /**
  * Enum representing the pricing models for an AWS Marketplace SaaS product.
@@ -201,7 +201,7 @@ export class AWSMarketplaceSaaSProduct extends Construct {
       );
       grantOrRevokeAccessFunctionPython.addEnvironment(
         'OFFBOARDING_DETAIL_TYPE',
-        DetailType.OFFBOARDING_REQUEST
+        props.eventManager.events.offboardingRequest.detailType
       );
 
       props.eventManager.grantPutEventsTo(grantOrRevokeAccessFunctionPython);
@@ -250,7 +250,7 @@ export class AWSMarketplaceSaaSProduct extends Construct {
       );
       registerNewMarketplaceCustomerPython.addEnvironment(
         'ONBOARDING_DETAIL_TYPE',
-        DetailType.ONBOARDING_REQUEST
+        props.eventManager.events.onboardingRequest.detailType
       );
       props.eventManager.grantPutEventsTo(registerNewMarketplaceCustomerPython);
     }

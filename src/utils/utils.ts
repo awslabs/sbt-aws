@@ -15,7 +15,7 @@ import { Stack } from 'aws-cdk-lib';
 import * as apigatewayV2 from 'aws-cdk-lib/aws-apigatewayv2';
 import { IFunction } from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
-import { DetailType } from './event-manager';
+import { EventDefinition } from './event-manager';
 
 export const addTemplateTag = (construct: Construct, tag: string) => {
   const stackDesc = Stack.of(construct).templateOptions.description;
@@ -142,7 +142,7 @@ export interface IASyncFunction {
   readonly handler: IFunction;
 
   /**
-   * The detail-type that will trigger the handler function.
+   * The event definition that will trigger the handler function.
    */
-  readonly trigger?: DetailType;
+  readonly trigger?: EventDefinition;
 }

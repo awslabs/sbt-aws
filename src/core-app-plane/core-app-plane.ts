@@ -50,7 +50,7 @@ export class CoreApplicationPlane extends Construct {
 
     props.scriptJobs?.forEach((scriptJob) => {
       this.eventManager.addTargetToEvent(this, {
-        eventType: scriptJob.incomingEvent,
+        eventDefinition: scriptJob.incomingEvent,
         target: scriptJob.eventTarget,
       });
     });
