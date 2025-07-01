@@ -156,6 +156,12 @@ export interface ScriptJobProps {
    * the Control Plane and other components.
    */
   readonly eventManager: IEventManager;
+
+  /**
+   * Allows customisation of the CodeBuild project. This will overwrite any of the defaults
+   * so be aware of that.
+   */
+  readonly projectProps?: codebuild.ProjectProps;
 }
 
 /**
@@ -283,6 +289,7 @@ export class ScriptJob extends Construct {
           },
         },
       }),
+      ...props.projectProps,
     });
 
     NagSuppressions.addResourceSuppressions(codebuildProject, [

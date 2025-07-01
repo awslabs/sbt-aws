@@ -4993,6 +4993,7 @@ const scriptJobProps: ScriptJobProps = { ... }
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.environmentStringVariablesFromIncomingEvent">environmentStringVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the ScriptJob from event details field. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.EnvironmentVariablesToOutgoingEventProps">EnvironmentVariablesToOutgoingEventProps</a></code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.postScript">postScript</a></code> | <code>string</code> | The bash script to run after the main script has completed. |
+| <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.projectProps">projectProps</a></code> | <code>aws-cdk-lib.aws_codebuild.ProjectProps</code> | Allows customisation of the CodeBuild project. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.scriptEnvironmentVariables">scriptEnvironmentVariables</a></code> | <code>{[ key: string ]: string}</code> | The variables to pass into the codebuild ScriptJob. |
 | <code><a href="#@cdklabs/sbt-aws.ScriptJobProps.property.source">source</a></code> | <code>aws-cdk-lib.aws_codebuild.Source</code> | The Source to use when executing the ScriptJob. |
 
@@ -5161,6 +5162,21 @@ The bash script to run after the main script has completed.
 
 ---
 
+##### `projectProps`<sup>Optional</sup> <a name="projectProps" id="@cdklabs/sbt-aws.ScriptJobProps.property.projectProps"></a>
+
+```typescript
+public readonly projectProps: ProjectProps;
+```
+
+- *Type:* aws-cdk-lib.aws_codebuild.ProjectProps
+
+Allows customisation of the CodeBuild project.
+
+This will overwrite any of the defaults
+so be aware of that.
+
+---
+
 ##### `scriptEnvironmentVariables`<sup>Optional</sup> <a name="scriptEnvironmentVariables" id="@cdklabs/sbt-aws.ScriptJobProps.property.scriptEnvironmentVariables"></a>
 
 ```typescript
@@ -5316,6 +5332,7 @@ const tenantLifecycleScriptJobProps: TenantLifecycleScriptJobProps = { ... }
 | <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.environmentStringVariablesFromIncomingEvent">environmentStringVariablesFromIncomingEvent</a></code> | <code>string[]</code> | The environment variables to import into the ScriptJob from event details field. |
 | <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.environmentVariablesToOutgoingEvent">environmentVariablesToOutgoingEvent</a></code> | <code><a href="#@cdklabs/sbt-aws.EnvironmentVariablesToOutgoingEventProps">EnvironmentVariablesToOutgoingEventProps</a></code> | The environment variables to export into the outgoing event once the ScriptJob has finished. |
 | <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.postScript">postScript</a></code> | <code>string</code> | The bash script to run after the main script has completed. |
+| <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.projectProps">projectProps</a></code> | <code>aws-cdk-lib.aws_codebuild.ProjectProps</code> | Allows customisation of the CodeBuild project. |
 | <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.scriptEnvironmentVariables">scriptEnvironmentVariables</a></code> | <code>{[ key: string ]: string}</code> | The variables to pass into the codebuild ScriptJob. |
 | <code><a href="#@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.source">source</a></code> | <code>aws-cdk-lib.aws_codebuild.Source</code> | The Source to use when executing the ScriptJob. |
 
@@ -5421,6 +5438,21 @@ public readonly postScript: string;
 - *Type:* string
 
 The bash script to run after the main script has completed.
+
+---
+
+##### `projectProps`<sup>Optional</sup> <a name="projectProps" id="@cdklabs/sbt-aws.TenantLifecycleScriptJobProps.property.projectProps"></a>
+
+```typescript
+public readonly projectProps: ProjectProps;
+```
+
+- *Type:* aws-cdk-lib.aws_codebuild.ProjectProps
+
+Allows customisation of the CodeBuild project.
+
+This will overwrite any of the defaults
+so be aware of that.
 
 ---
 
