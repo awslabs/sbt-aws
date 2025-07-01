@@ -20,7 +20,6 @@ import { AwsSolutionsChecks, NagSuppressions } from 'cdk-nag';
 import * as sbt from '.';
 import { DestroyPolicySetter } from '../cdk-aspect/destroy-policy-setter';
 import { EventManager } from '../utils';
-//import { ComputeType, LinuxArmLambdaBuildImage, ProjectProps } from 'aws-cdk-lib/aws-codebuild';
 
 export interface IntegStackProps extends cdk.StackProps {
   eventBusArn?: string;
