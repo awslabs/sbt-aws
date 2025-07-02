@@ -12,6 +12,7 @@
  */
 
 import * as cdk from 'aws-cdk-lib';
+import { ComputeType, LinuxArmLambdaBuildImage, ProjectProps } from 'aws-cdk-lib/aws-codebuild';
 import { CfnRule, EventBus, Rule } from 'aws-cdk-lib/aws-events';
 import { Effect, PolicyDocument, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
@@ -38,6 +39,18 @@ export class IntegStack extends cdk.Stack {
     } else {
       eventManager = new EventManager(this, 'EventManager');
     }
+
+    const projectProps: ProjectProps = {
+      environment: {
+        environmentVariables: {
+          VARIABLE_NAME: {
+            value: 'someValue',
+          },
+        },
+        buildImage: LinuxArmLambdaBuildImage.AMAZON_LINUX_2023_NODE_20,
+        computeType: ComputeType.LAMBDA_2GB,
+      },
+    };
 
     const provisioningScriptJobProps: sbt.TenantLifecycleScriptJobProps = {
       permissions: new PolicyDocument({
@@ -111,6 +124,7 @@ echo "done!"
         TEST: 'test',
       },
       eventManager: eventManager,
+      projectProps: projectProps,
     };
 
     const deprovisioningScriptJobProps: sbt.TenantLifecycleScriptJobProps = {
@@ -143,6 +157,7 @@ echo "done!"
         tenantRegistrationData: ['registrationStatus'],
       },
       eventManager: eventManager,
+      projectProps: projectProps,
     };
 
     const provisioningJobScript: sbt.ProvisioningScriptJob = new sbt.ProvisioningScriptJob(

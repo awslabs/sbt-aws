@@ -11,7 +11,7 @@
  *  and limitations under the License.
  */
 
-import { IBuildImage, Source } from 'aws-cdk-lib/aws-codebuild';
+import { IBuildImage, ProjectProps, Source } from 'aws-cdk-lib/aws-codebuild';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 import { EnvironmentVariablesToOutgoingEventProps, ScriptJob, ScriptJobProps } from './script-job';
@@ -81,6 +81,12 @@ export interface TenantLifecycleScriptJobProps {
    * the Control Plane and other components.
    */
   readonly eventManager: IEventManager;
+
+  /**
+   * Allows customisation of the CodeBuild project. This will overwrite any of the defaults
+   * so be aware of that.
+   */
+  readonly projectProps?: ProjectProps;
 }
 
 /**
