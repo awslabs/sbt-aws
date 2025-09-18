@@ -15,7 +15,13 @@ function VideoPlayer({ url }) {
         url={url} 
         controls
         width="100%"
-        // height="100%"
+        config={{
+          youtube: {
+            playerVars: {
+              sandbox: 'allow-scripts allow-same-origin allow-presentation'
+            }
+          }
+        }}
       />
     </div>
   );
