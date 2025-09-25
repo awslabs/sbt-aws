@@ -62,9 +62,22 @@ The [SBT for AWS Roadmap project board](https://github.com/orgs/awslabs/projects
 We welcome community contributions and pull requests. See
 [CONTRIBUTING.md](./CONTRIBUTING.md) for information on how to set up a development environment and submit code.
 
+## Security
+
+Security is a top priority for SBT-AWS. Please see our [Security Policy](./SECURITY.md) for:
+- Reporting security vulnerabilities
+- Security best practices
+- Supported versions
+
+To run security checks locally:
+```bash
+./scripts/security-check.sh
+```
+
 ## More Resources
 
 * [SaaS on AWS](http://aws.amazon.com/saas)
+* [Security Policy](./SECURITY.md)
 * [Changelog](./CHANGELOG.md)
 * [NOTICE](./NOTICE)
 * [License](./LICENSE)

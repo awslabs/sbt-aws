@@ -1,0 +1,98 @@
+name: Security Scan
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run security scan daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies (root)
+      run: npm ci
+      continue-on-error: true
+
+    - name: Run npm audit (root)
+      run: npm audit --audit-level=moderate
+      continue-on-error: true
+
+    - name: Install dependencies (website)
+      run: |
+        cd website
+        npm ci
+      continue-on-error: true
+
+    - name: Run npm audit (website)
+      run: |
+        cd website
+        npm audit --audit-level=moderate
+      continue-on-error: true
+
+    - name: Install dependencies (point-solutions)
+      run: |
+        cd src/point-solutions/libraries
+        npm ci
+      continue-on-error: true
+
+    - name: Run npm audit (point-solutions)
+      run: |
+        cd src/point-solutions/libraries
+        npm audit --audit-level=moderate
+      continue-on-error: true
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: javascript, typescript
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:javascript"
+
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v3
+      if: always()
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+  dependency-review:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: moderate
+          allow-licenses: Apache-2.0, MIT, BSD-2-Clause, BSD-3-Clause, ISC
+          deny-licenses: GPL-2.0, GPL-3.0

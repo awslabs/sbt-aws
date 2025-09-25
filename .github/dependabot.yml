@@ -1,0 +1,99 @@
+version: 2
+updates:
+  # Enable version updates for npm (main project)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "sbt-aws-maintainers"
+    assignees:
+      - "sbt-aws-maintainers"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "security"
+    # Group security updates together
+    groups:
+      security-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "security-update"
+
+  # Enable version updates for npm (website)
+  - package-ecosystem: "npm"
+    directory: "/website"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "sbt-aws-maintainers"
+    assignees:
+      - "sbt-aws-maintainers"
+    commit-message:
+      prefix: "chore(website)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "website"
+      - "security"
+    groups:
+      security-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "security-update"
+
+  # Enable version updates for npm (point-solutions)
+  - package-ecosystem: "npm"
+    directory: "/src/point-solutions/libraries"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "sbt-aws-maintainers"
+    assignees:
+      - "sbt-aws-maintainers"
+    commit-message:
+      prefix: "chore(point-solutions)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "point-solutions"
+      - "security"
+    groups:
+      security-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "security-update"
+
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "sbt-aws-maintainers"
+    assignees:
+      - "sbt-aws-maintainers"
+    commit-message:
+      prefix: "chore(ci)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "security"
