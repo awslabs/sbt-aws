@@ -25,53 +25,41 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
-        cache: 'npm'
+        registry-url: 'https://registry.npmjs.org'
 
-    - name: Install dependencies (root)
+    - name: Configure npm for public registry
       run: |
-        if [ -f "package-lock.json" ]; then
-          npm ci || npm install
-        else
-          echo "No package-lock.json found in root, skipping npm install"
-        fi
-      continue-on-error: true
+        npm config set registry https://registry.npmjs.org/
+        npm config set //registry.npmjs.org/:_authToken=""
+        echo "Configured npm to use public registry for security scanning"
 
-    - name: Run npm audit (root)
+    - name: Security scan dependencies (root)
       run: |
         if [ -f "package.json" ]; then
-          npm audit --audit-level=moderate || echo "npm audit completed with warnings"
-        fi
-      continue-on-error: true
-
-    - name: Install dependencies (website)
-      run: |
-        if [ -f "website/package-lock.json" ]; then
-          cd website && (npm ci || npm install)
+          echo "Scanning root package.json for vulnerabilities..."
+          npm audit --registry=https://registry.npmjs.org --audit-level=moderate || echo "npm audit completed with findings"
         else
-          echo "No package-lock.json found in website, skipping npm install"
+          echo "No package.json found in root"
         fi
       continue-on-error: true
 
-    - name: Run npm audit (website)
+    - name: Security scan dependencies (website)
       run: |
         if [ -f "website/package.json" ]; then
-          cd website && (npm audit --audit-level=moderate || echo "npm audit completed with warnings")
-        fi
-      continue-on-error: true
-
-    - name: Install dependencies (point-solutions)
-      run: |
-        if [ -f "src/point-solutions/libraries/package-lock.json" ]; then
-          cd src/point-solutions/libraries && (npm ci || npm install)
+          echo "Scanning website package.json for vulnerabilities..."
+          cd website && npm audit --registry=https://registry.npmjs.org --audit-level=moderate || echo "npm audit completed with findings"
         else
-          echo "No package-lock.json found in point-solutions, skipping npm install"
+          echo "No package.json found in website"
         fi
       continue-on-error: true
 
-    - name: Run npm audit (point-solutions)
+    - name: Security scan dependencies (point-solutions)
       run: |
         if [ -f "src/point-solutions/libraries/package.json" ]; then
-          cd src/point-solutions/libraries && (npm audit --audit-level=moderate || echo "npm audit completed with warnings")
+          echo "Scanning point-solutions package.json for vulnerabilities..."
+          cd src/point-solutions/libraries && npm audit --registry=https://registry.npmjs.org --audit-level=moderate || echo "npm audit completed with findings"
+        else
+          echo "No package.json found in point-solutions"
         fi
       continue-on-error: true
 
