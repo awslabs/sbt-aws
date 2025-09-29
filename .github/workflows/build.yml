@@ -23,8 +23,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22.x
+          registry-url: 'https://registry.npmjs.org'
+      - name: Configure npm registry
+        run: npm config set registry https://registry.npmjs.org/
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: build
         run: npx projen build
       - name: Find mutations
@@ -96,6 +99,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22.x
+          registry-url: 'https://registry.npmjs.org'
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
@@ -110,6 +114,8 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           path: .repo
+      - name: Configure npm registry
+        run: npm config set registry https://registry.npmjs.org/
       - name: Install Dependencies
         run: cd .repo && npm ci
       - name: Extract build artifact
