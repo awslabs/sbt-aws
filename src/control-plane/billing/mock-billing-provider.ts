@@ -152,7 +152,7 @@ export class MockBillingProvider extends Construct implements IBilling {
         ...additionalEnv,
       },
       layers: [this.lambdaPowertoolsLayer],
-      architecture: Architecture.ARM_64,
+      architecture: Architecture.X86_64,
     });
 
     NagSuppressions.addResourceSuppressions(

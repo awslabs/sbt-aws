@@ -89,7 +89,7 @@ export class TenantConfigLambdas extends Construct {
             lambdaPowerToolsLayerARN
           ),
         ],
-        architecture: lambda.Architecture.ARM_64,
+        architecture: lambda.Architecture.X86_64,
       }
     );
 

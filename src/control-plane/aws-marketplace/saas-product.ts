@@ -189,7 +189,7 @@ export class AWSMarketplaceSaaSProduct extends Construct {
             batchSize: 1,
           }),
         ],
-        architecture: Architecture.ARM_64,
+        architecture: Architecture.X86_64,
       }
     );
 
@@ -235,7 +235,7 @@ export class AWSMarketplaceSaaSProduct extends Construct {
           NEW_SUBSCRIBERS_TABLE_NAME: this.subscribersTable.tableName,
           REQUIRED_FIELDS: requiredFields.join(','),
         },
-        architecture: Architecture.ARM_64,
+        architecture: Architecture.X86_64,
       }
     );
 

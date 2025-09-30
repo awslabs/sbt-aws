@@ -61,9 +61,9 @@ export class TenantRegistrationLambda extends Construct {
     const awsRequestsAuthLayer = new PythonLayerVersion(this, 'AwsRequestsAuthLayer', {
       entry: path.join(__dirname, '../../../resources/layers/helper'),
       compatibleRuntimes: [Runtime.PYTHON_3_13],
-      compatibleArchitectures: [Architecture.ARM_64],
+      compatibleArchitectures: [Architecture.X86_64],
       bundling: {
-        platform: 'linux/arm64',
+        platform: 'linux/amd64',
       },
     });
 
@@ -81,7 +81,7 @@ export class TenantRegistrationLambda extends Construct {
         OFFBOARDING_DETAIL_TYPE: props.eventManager.events.offboardingRequest.detailType,
       },
       layers: [lambdaPowertoolsLayer, awsRequestsAuthLayer],
-      architecture: Architecture.ARM_64,
+      architecture: Architecture.X86_64,
     });
 
     props.table.tenantRegistration.grantReadWriteData(this.tenantRegistrationFunc);

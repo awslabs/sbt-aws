@@ -65,7 +65,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   sampleCode: false,
   stability: 'experimental',
   workflowNodeVersion: '22.x',
-  workflowRunsOn: ['ubuntu-24.04-arm'],
+  workflowRunsOn: ['ubuntu-latest'],
   npmTokenSecret: 'NPM_TOKEN',
   npmAccess: NpmAccess.PUBLIC,
   githubOptions: GITHUB_OPTIONS,

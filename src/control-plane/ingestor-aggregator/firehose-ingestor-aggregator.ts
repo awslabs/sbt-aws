@@ -155,7 +155,7 @@ export class FirehoseAggregator extends Construct implements IDataIngestorAggreg
       layers: [
         lambda.LayerVersion.fromLayerVersionArn(this, 'LambdaPowerTools', lambdaPowerToolsLayerARN),
       ],
-      architecture: Architecture.ARM_64,
+      architecture: Architecture.X86_64,
     });
 
     NagSuppressions.addResourceSuppressions(

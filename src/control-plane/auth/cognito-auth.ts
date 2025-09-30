@@ -498,7 +498,7 @@ export class CognitoAuth extends Construct implements IAuth {
       environment: {
         USER_POOL_ID: this.userPool.userPoolId,
       },
-      architecture: Architecture.ARM_64,
+      architecture: Architecture.X86_64,
     });
 
     this.createUserFunction = userManagementServices;
@@ -541,7 +541,7 @@ export class CognitoAuth extends Construct implements IAuth {
       handler: 'handler',
       timeout: Duration.seconds(60),
       layers: [lambdaPowertoolsLayer],
-      architecture: Architecture.ARM_64,
+      architecture: Architecture.X86_64,
     });
     this.userPool.grant(
       this.createAdminUserFunction,

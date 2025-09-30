@@ -117,7 +117,7 @@ export class TenantManagementLambda extends Construct {
       environment: {
         TENANT_DETAILS_TABLE: props.table.tenantDetails.tableName,
       },
-      architecture: Architecture.ARM_64,
+      architecture: Architecture.X86_64,
     });
 
     this.tenantManagementFunc = tenantManagementFunc;
