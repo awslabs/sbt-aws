@@ -83,6 +83,17 @@ const project = new awscdk.AwsCdkConstructLibrary({
   buildWorkflowOptions: {
     preBuildSteps: [
       {
+        name: 'Setup Python',
+        uses: 'actions/setup-python@v4',
+        with: {
+          'python-version': '3.13',
+        },
+      },
+      {
+        name: 'Start Docker daemon',
+        run: 'sudo systemctl start docker\nsudo systemctl enable docker\ndocker --version\ndocker info',
+      },
+      {
         name: 'Configure npm registry',
         run: 'npm config set registry https://registry.npmjs.org/',
       },

@@ -23,18 +23,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22.x
+      - name: Install dependencies
+        run: npm install
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.13'
+          python-version: "3.13"
       - name: Start Docker daemon
-        run: |
+        run: |-
           sudo systemctl start docker
           sudo systemctl enable docker
           docker --version
           docker info
-      - name: Install dependencies
-        run: npm install
       - name: Configure npm registry
         run: npm config set registry https://registry.npmjs.org/
       - name: build
