@@ -76,6 +76,18 @@ const project = new awscdk.AwsCdkConstructLibrary({
   releaseTagPrefix: '@cdklabs/sbt-aws-',
 });
 
+// Add security overrides for vulnerability fixes
+project.package.addField('overrides', {
+  'semver': '^7.5.4',
+  'word-wrap': '^1.2.5',
+  'tough-cookie': '^4.1.3',
+  'postcss': '^8.4.31',
+  'follow-redirects': '^1.15.4',
+  'braces': '^3.0.3',
+  'micromatch': '^4.0.8',
+  'loader-utils': '^3.2.1'
+});
+
 // Add License header automatically
 project.eslint?.addPlugins('license-header');
 project.eslint?.addRules({
@@ -172,6 +184,17 @@ const jsiiLibraryProjectOptions: cdk.JsiiProjectOptions = {
 };
 
 const pointSolutionsLibraryProject = new cdk.JsiiProject(jsiiLibraryProjectOptions);
+
+// Add security overrides for vulnerability fixes
+pointSolutionsLibraryProject.package.addField('overrides', {
+  'semver': '^7.5.4',
+  'word-wrap': '^1.2.5',
+  'tough-cookie': '^4.1.3',
+  'postcss': '^8.4.31',
+  'follow-redirects': '^1.15.4',
+  'braces': '^3.0.3',
+  'micromatch': '^4.0.8'
+});
 
 // Add License header automatically
 pointSolutionsLibraryProject.eslint?.addPlugins('license-header');
