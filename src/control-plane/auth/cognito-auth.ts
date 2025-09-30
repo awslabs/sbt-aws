@@ -12,7 +12,6 @@
  */
 
 import * as path from 'path';
-import * as fs from 'fs';
 import { PythonFunction } from '@aws-cdk/aws-lambda-python-alpha';
 import * as cdk from 'aws-cdk-lib';
 import { CustomResource, Duration, SecretValue, Stack } from 'aws-cdk-lib';
@@ -500,21 +499,6 @@ export class CognitoAuth extends Construct implements IAuth {
         USER_POOL_ID: this.userPool.userPoolId,
       },
       architecture: Architecture.X86_64,
-      bundling: {
-        local: {
-          tryBundle(outputDir: string) {
-            if (process.env.CI) {
-              // In CI, just copy the source files without bundling
-              const sourceDir = path.join(__dirname, '../../../resources/functions/user-management');
-              if (fs.existsSync(sourceDir)) {
-                fs.cpSync(sourceDir, outputDir, { recursive: true });
-                return true;
-              }
-            }
-            return false;
-          }
-        }
-      },
     });
 
     this.createUserFunction = userManagementServices;
@@ -558,21 +542,6 @@ export class CognitoAuth extends Construct implements IAuth {
       timeout: Duration.seconds(60),
       layers: [lambdaPowertoolsLayer],
       architecture: Architecture.X86_64,
-      bundling: {
-        local: {
-          tryBundle(outputDir: string) {
-            if (process.env.CI) {
-              // In CI, just copy the source files without bundling
-              const sourceDir = path.join(__dirname, '../../../resources/functions/auth-custom-resource');
-              if (fs.existsSync(sourceDir)) {
-                fs.cpSync(sourceDir, outputDir, { recursive: true });
-                return true;
-              }
-            }
-            return false;
-          }
-        }
-      },
     });
     this.userPool.grant(
       this.createAdminUserFunction,
