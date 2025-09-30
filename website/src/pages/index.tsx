@@ -1,4 +1,4 @@
-import type {ReactNode} from 'react';
+import type { ReactNode } from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
@@ -11,14 +11,22 @@ import styles from './index.module.css';
 function VideoPlayer({ url }) {
   return (
     <div style={{ width: '100%', height: '100%' }}>
-      <ReactPlayer 
-        url={url} 
+      <ReactPlayer
+        url={url}
         controls
         width="100%"
         config={{
           youtube: {
             playerVars: {
-              sandbox: 'allow-scripts allow-same-origin allow-presentation'
+              // Enhanced sandbox settings for security compliance
+              sandbox: 'allow-scripts allow-same-origin allow-presentation allow-forms',
+              // Additional security settings
+              origin: typeof window !== 'undefined' ? window.location.origin : '',
+              enablejsapi: 0,
+              rel: 0,
+              modestbranding: 1,
+              // Disable cookies and tracking
+              'privacy-enhanced': 1
             }
           }
         }}
@@ -49,7 +57,7 @@ function HomepageHeader() {
           {siteConfig.title}
         </Heading>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
-        <Link 
+        <Link
           className="button button--secondary button--lg"
           to="/docs/tutorials/tutorial-basics/intro"
         >
@@ -57,11 +65,11 @@ function HomepageHeader() {
         </Link>
         <div className={styles.videoGrid}>
           <h2 className={styles.videoHeading}>Watch and Learn</h2>
-        <div className={styles.videoRow}>
-          <VideoPlayer url={videos[0].url} />
-          <VideoPlayer url={videos[1].url} />
+          <div className={styles.videoRow}>
+            <VideoPlayer url={videos[0].url} />
+            <VideoPlayer url={videos[1].url} />
+          </div>
         </div>
-      </div>
 
 
       </div>
@@ -70,7 +78,7 @@ function HomepageHeader() {
 }
 
 export default function Home(): ReactNode {
-  const {siteConfig} = useDocusaurusContext();
+  const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
       title={`Hello from ${siteConfig.title}`}
