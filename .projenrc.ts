@@ -80,6 +80,14 @@ const project = new awscdk.AwsCdkConstructLibrary({
       testTimeout: 30000,
     },
   },
+  buildWorkflowOptions: {
+    preBuildSteps: [
+      {
+        name: 'Configure npm registry',
+        run: 'npm config set registry https://registry.npmjs.org/',
+      },
+    ],
+  },
 });
 
 // Add security overrides for vulnerability fixes

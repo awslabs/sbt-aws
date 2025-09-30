@@ -25,6 +25,8 @@ jobs:
           node-version: 22.x
       - name: Install dependencies
         run: npm install
+      - name: Configure npm registry
+        run: npm config set registry https://registry.npmjs.org/
       - name: build
         run: npx projen build
       - name: Find mutations
