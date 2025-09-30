@@ -74,6 +74,12 @@ const project = new awscdk.AwsCdkConstructLibrary({
     ignorePatterns: NPM_IGNORE_PATTERNS,
   },
   releaseTagPrefix: '@cdklabs/sbt-aws-',
+  jestOptions: {
+    jestConfig: {
+      testEnvironment: 'node',
+      testTimeout: 30000,
+    },
+  },
 });
 
 // Add security overrides for vulnerability fixes

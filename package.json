@@ -97,6 +97,8 @@
   "version": "0.0.0",
   "jest": {
     "coverageProvider": "v8",
+    "testEnvironment": "node",
+    "testTimeout": 30000,
     "testMatch": [
       "<rootDir>/@(src|test)/**/*(*.)@(spec|test).ts?(x)",
       "<rootDir>/@(src|test)/**/__tests__/**/*.ts?(x)",
