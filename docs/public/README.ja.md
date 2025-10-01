@@ -25,7 +25,7 @@ SBT によって、新しい SaaS アプリの開発サイクルが加速する�
 
 ## ハイレベルデザイン
 
-このセクションでは、SBT の(私たちが現時点で想定している)すべての可変要素の責務を詳しく説明し、新しい開発者がスピードを上げる基盤を提供します。 明らかに SBT はまだ開発中であり、その設計はほぼ毎日行われているタスクによって形作られ、影響を受けています。 この分野での理解が深まるに従い、このドキュメンテーションを最新で関連性のあるものに保つよう努めます。 
+このセクションでは、SBT の(私たちが現時点で想定している)すべての可変要素の責務を詳しく説明し、新しい開発者がスピードを上げる基盤を提供します。 明らかに SBT はまだ開発中であり、その設計はほぼ毎日行われているタスクによって形作られ、影響を受けています。 この分野での理解が深まるに従い、このドキュメンテーションを最新で関連性のあるものに保つよう努めます。
 
 以下の図は SBT の概念図です。
 
@@ -40,6 +40,7 @@ SBT によって、新しい SaaS アプリの開発サイクルが加速する�
 中央には、Amazon EventBridge があります。 EventBridge は、大規模なイベント駆動型アプリケーションを構築するためのサーバーレスイベントバスです。 SBT では、それぞれのプレーンで SaaS ワークフローに関連するメッセージをパブリッシュしたり、そのようなメッセージをサブスクライブするためのヘルパーが提供されます。 それらのメッセージの形状と、データや期待される動作については、このドキュメントの[インターフェイス定義](https://github.com/awslabs/sbt-aws/blob/main/docs/public/README.ja.md#interface-definitions)セクションで詳しく説明されています。
 
 ## ビルダー体験
+
 SBT の具体的なコンポーネントを説明する前に、SBT の期待されるユーザー体験を最初に説明します。 SBT は AWS Cloud Development Kit (CDK) を活用し、CDK の Construct Programming Model (CPM) に準拠しています。 これは何を意味するのでしょうか。説明するよりも例を示した方が簡単かもしれません。 次の例は [CDK の入門ドキュメント](https://docs.aws.amazon.com/ja_jp/cdk/v2/guide/home.html#why_use_cdk)からそのまま抜粋したものです。
 
 ### CDK の例
@@ -49,22 +50,22 @@ export class MyEcsConstructStack extends Stack {
   constructor(scope: App, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const vpc = new ec2.Vpc(this, "MyVpc", {
-      maxAzs: 3 // デフォルトではリージョンの全ての AZ
+    const vpc = new ec2.Vpc(this, 'MyVpc', {
+      maxAzs: 3, // Default is all AZs in region
     });
 
-    const cluster = new ecs.Cluster(this, "MyCluster", {
-      vpc: vpc
+    const cluster = new ecs.Cluster(this, 'MyCluster', {
+      vpc: vpc,
     });
 
-    // 負荷分散される Fargate サービスを作成し、公開
-    new ecs_patterns.ApplicationLoadBalancedFargateService(this, "MyFargateService", {
-      cluster: cluster, // 必須
-      cpu: 512, // デフォルトは 256
-      desiredCount: 6, // デフォルトは 1
-      taskImageOptions: { image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample") },
-      memoryLimitMiB: 2048, // デフォルトは 512
-      publicLoadBalancer: true // デフォルトは false
+    // Create a load-balanced Fargate service and make it public
+    new ecs_patterns.ApplicationLoadBalancedFargateService(this, 'MyFargateService', {
+      cluster: cluster, // Required
+      cpu: 512, // Default is 256
+      desiredCount: 6, // Default is 1
+      taskImageOptions: { image: ecs.ContainerImage.fromRegistry('amazon/amazon-ecs-sample') },
+      memoryLimitMiB: 2048, // Default is 512
+      publicLoadBalancer: true, // Default is false
     });
   }
 }
@@ -75,7 +76,6 @@ Typescript に馴染みがない人でも、この部分が何を行っている
 この例に出てくるオブジェクトは CDK チームによって作成されました。 具体的には、コード内の vpc、cluster、ApplicationLoadBalancedFargateService です。 CDK では、これらのオブジェクトをコンストラクトと呼んでいます。 CDK の内部では、独自のコンストラクトを作成するためのツールと抽象化が提供されています。 一部のコンストラクトは CloudFormation のタイプと 1 対 1 の対応関係がありますが、他のコンストラクトはより高機能です (上の例の ECS サービスなど)。
 
 ### チュートリアル
-
 
 > [!WARNING]
 > このチュートリアルを実行すると、AWS アカウントで料金が発生する可能性があります。
@@ -93,29 +93,27 @@ npm install @cdklabs/sbt-aws
 SBT がインストールできたので、新しい SBT コントロールプレーンを作成しましょう。 `lib/control-plane.ts` という新しいファイルを作成し、次の内容を記入してください。 メールアドレスは、一時的な管理者パスワードを受け取るためのものなので、実際のメールアドレスに置き換えてください。
 
 ```typescript
-import { CognitoAuth, ControlPlane } from '@cdklabs/sbt-aws';
+import * as sbt from '@cdklabs/sbt-aws';
 import { Stack } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 
 export class ControlPlaneStack extends Stack {
   public readonly regApiGatewayUrl: string;
-  public readonly eventBusArn: string;
+  public readonly eventManager: sbt.IEventManager;
 
-  constructor(scope: Construct, id: string, props: any) {
+  constructor(scope: Construct, id: string, props?: any) {
     super(scope, id, props);
-    const cognitoAuth = new CognitoAuth(this, 'CognitoAuth', {
-      idpName: 'COGNITO',
-      systemAdminRoleName: 'SystemAdmin',
+    const cognitoAuth = new sbt.CognitoAuth(this, 'CognitoAuth', {
+      enableAdvancedSecurityMode: false, // only for testing purposes!
+      setAPIGWScopes: false, // only for testing purposes!
+    });
+
+    const controlPlane = new sbt.ControlPlane(this, 'ControlPlane', {
+      auth: cognitoAuth,
       systemAdminEmail: 'ENTER YOUR EMAIL HERE',
     });
 
-  // 注意: 明示的に CloudWatch ログを無効化するためには(そして CloudWatch のコストを節約するためには), 
-  // disableAPILogging フラグを true に設定してください。
-  const controlPlane = new ControlPlane(this, 'ControlPlane', {
-      auth: cognitoAuth,
-      //disableAPILogging: true
-    });
-    this.eventBusArn = controlPlane.eventBusArn;
+    this.eventManager = controlPlane.eventManager;
     this.regApiGatewayUrl = controlPlane.controlPlaneAPIGatewayUrl;
   }
 }
@@ -137,18 +135,16 @@ import { ControlPlaneStack } from '../lib/control-plane';
 // import { AppPlaneStack } from '../lib/app-plane';
 
 const app = new cdk.App();
-const cp = new ControlPlaneStack(app, 'ControlPlaneStack', {});
-// const ap = new AppPlaneStack(app, 'AppPlaneStack', {
-//   eventBusArn: cp.eventBusArn,
+const controlPlaneStack = new ControlPlaneStack(app, 'ControlPlaneStack');
+// const appPlaneStack = new AppPlaneStack(app, 'AppPlaneStack', {
+//   eventManager: controlPlaneStack.eventManager,
 // });
 ```
 
 コメントアウトされた数行は、後でアプリケーションプレーンを説明する際に戻って触れます。 すべてを保存したら、hello-cdk プロジェクトのルートから次のコマンドを実行してください。
 
-
 > [!WARNING]
 > ControlPlane が Lambda 関数 をデプロイするため、Docker がインストールされている必要があります。
->
 
 ```sh
 npm run build
@@ -171,16 +167,17 @@ AWS コンソールを開いて、次のサービスを確認してみてくだ�
 前述のとおり、SBT はデプロイされるアプリケーションについて関心がありません。 そのため、アプリケーションを定義する CDK コンストラクトの 1 つとして、`ApplicationPlane` コンストラクトを作成することを期待しています。 次のような (機能しない) 簡単な例を見てみましょう。
 
 ```typescript
-export class ApplicationPlaneStack extends Stack {
+export interface AppPlaneProps extends cdk.StackProps {
+  eventManager: sbt.IEventManager;
+}
 
-  constructor(scope: Construct, id: string, props: any) {
+export class ApplicationPlaneStack extends Stack {
+  constructor(scope: Construct, id: string, props: AppPlaneProps) {
     super(scope, id, props);
 
-    new CoreApplicationPlane(this, 'AppPlane', {
-      eventBusArn: props.eventBusArn,
-      controlPlaneSource: 'testControlPlaneEventSource',
-      applicationNamePlaneSource: 'testApplicationPlaneEventSource',
-      jobRunnerPropsList: [],
+    new sbt.CoreApplicationPlane(this, 'CoreApplicationPlane', {
+      eventManager: props.eventManager,
+      scriptJobs: [],
     });
   }
 }
@@ -201,50 +198,41 @@ export class ApplicationPlaneStack extends Stack {
 一番上にある `provisioning.sh` と `deprovisioning.sh` スクリプトに注目してください。 これらのスクリプトは `JobRunner` にパラメータとして渡されます。 `JobRunner` の内部では、AWS CodeBuild プロジェクトが AWS Step Function 内にラップされ、Bash スクリプトを実行します。 `JobRunner` では、スクリプトに渡す入力変数と、スクリプトから返すことを期待する出力変数も指定できます。 なお、この SBT のバージョンでは、`JobRunner` は `CoreAppPlane` の `jobRunnerPropsList` 入力に基づいて作成されます (上記のコードの空の配列部分)。 ここでのオブジェクトの型は `[jobRunnerProps](https://github.com/awslabs/sbt-aws/blob/main/API.md#coreapplicationplanejobrunnerprops-)` です。 簡単な例を見てみましょう。SaaS アプリケーションがテナントごとに単一の S3 バケットのみをデプロイするとします。 そのプロビジョニング用の JobRunner を作成しましょう。
 
 ```typescript
-    const provisioningJobRunnerProps = {
-      name: 'provisioning',
-      permissions: PolicyDocument.fromJson(/*下記参照*/),
-      script: '' /*下記参照*/,
-      postScript: '',
-      importedVariables: ['tenantId', 'tier'],
-      exportedVariables: ['tenantS3Bucket', 'someOtherVariable', 'tenantConfig'],
-      scriptEnvironmentVariables: {
-        TEST: 'test',
-      },
-      outgoingEvent: {
-        source: applicationNamePlaneSource,
-        detailType: provisioningDetailType,
-      },
-      incomingEvent: {
-        source: [controlPlaneSource],
-        detailType: [onboardingDetailType],
-      },
-    };
+const scriptJobProps: TenantLifecycleScriptJobProps = {
+  permissions: PolicyDocument.fromJson(/*See below*/),
+  script: '' /*See below*/,
+  environmentStringVariablesFromIncomingEvent: ['tenantId', 'tier'],
+  environmentVariablesToOutgoingEvent: ['tenantS3Bucket', 'someOtherVariable', 'tenantConfig'],
+  scriptEnvironmentVariables: {
+    TEST: 'test',
+  },
+  eventManager: eventManager /*See below on how to create EventManager*/,
+};
 ```
 
 ##### Bash ジョブランナープロパティ
 
 このオブジェクトを詳しく見ていきましょう。
 
-| キー                           | タイプ                                                                                                | 用途                                                                         |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------- | -----------------------------------------------------------------------------|
-| **name**                       | string                                                                                                | name キーはこのジョブの名前です                                              |
-| **script**                     | string                                                                                                | 実行されるジョブを表す Bash スクリプト形式の文字列 (以下に例があります)      |
-| **permissions**                | [PolicyDocument](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_iam.PolicyDocument.html) |このジョブが要求されたタスクを実行するために必要な IAM ポリシードキュメント   |
-| **postScript**                 | string                                                                                                | メインスクリプトが完了した後に実行される Bash スクリプト                     |
-| **importedVariables**          | string[]                                                                                              | イベントの詳細フィールドから BashJobRunner にインポートする環境変数          |
-| **exportedVariables**          | string[]                                                                                              | BashJobRunner が完了したら、送信イベントにエクスポートする環境変数           |
-| **scriptEnvironmentVariables** | `{ [key: string]: string }`                                                                           | codebuild BashJobRunner に渡す変数                                           |
-| **outgoingEvent**              | any                                                                                                   | EventBridgeに送信するイベント情報                                            |
-| **incomingEvent**              | any                                                                                                   | EventBridgeから受信するイベント情報                                          |
+| キー                           | タイプ                                                                                                | 用途                                                                        |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| **name**                       | string                                                                                                | name キーはこのジョブの名前です                                             |
+| **script**                     | string                                                                                                | 実行されるジョブを表す Bash スクリプト形式の文字列 (以下に例があります)     |
+| **permissions**                | [PolicyDocument](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_iam.PolicyDocument.html) | このジョブが要求されたタスクを実行するために必要な IAM ポリシードキュメント |
+| **postScript**                 | string                                                                                                | メインスクリプトが完了した後に実行される Bash スクリプト                    |
+| **importedVariables**          | string[]                                                                                              | イベントの詳細フィールドから BashJobRunner にインポートする環境変数         |
+| **exportedVariables**          | string[]                                                                                              | BashJobRunner が完了したら、送信イベントにエクスポートする環境変数          |
+| **scriptEnvironmentVariables** | `{ [key: string]: string }`                                                                           | codebuild BashJobRunner に渡す変数                                          |
+| **outgoingEvent**              | any                                                                                                   | EventBridgeに送信するイベント情報                                           |
+| **incomingEvent**              | any                                                                                                   | EventBridgeから受信するイベント情報                                         |
 
-ジョブランナーの本質的な部分は、`script` キーの値にあります。 この特定の例がプロビジョニング用であり、また SaaS アプリケーションが各テナントに S3 バケットを 1 つプロビジョニングするだけだということを思い出してください。 その例のプロビジョニングスクリプトを見てみましょう。 
+ジョブランナーの本質的な部分は、`script` キーの値にあります。 この特定の例がプロビジョニング用であり、また SaaS アプリケーションが各テナントに S3 バケットを 1 つプロビジョニングするだけだということを思い出してください。 その例のプロビジョニングスクリプトを見てみましょう。
 
 ```sh
 echo "starting..."
 
-# この template.json はここで作成されていますが、
-# S3 バケットから取得することも可能です。
+# note that this template.json is being created here, but
+# it could just as easily be pulled in from an S3 bucket.
 cat > template.json << EOM
 {
   "AWSTemplateFormatVersion": "2010-09-09",
@@ -269,6 +257,7 @@ export tenantConfig=$(jq --arg SAAS_APP_USERPOOL_ID "MY_SAAS_APP_USERPOOL_ID" \
 -n '{"userPoolId":$SAAS_APP_USERPOOL_ID,"appClientId":$SAAS_APP_CLIENT_ID,"apiGatewayUrl":$API_GATEWAY_URL}')
 
 echo $tenantConfig
+export tenantStatus="created"
 
 echo "done!"
 ```
@@ -282,8 +271,8 @@ echo "done!"
 最初の数行には、S3 バケットを含むサンプルの AWS CloudFormation テンプレートが含まれています。
 
 ```sh
-# この template.json はここで作成されていますが、
-# S3 バケットから取得することも可能です。
+# note that this template.json is being created here, but
+# it could just as easily be pulled in from an S3 bucket.
 cat > template.json << EOM
 {
   "AWSTemplateFormatVersion": "2010-09-09",
@@ -293,9 +282,8 @@ cat > template.json << EOM
 EOM
 ```
 
-この場合、テンプレートはスクリプト内でインラインで宣言されていますが、コメントにあるようにこのテンプレートを S3 バケットに保存することも可能です。 
+この場合、テンプレートはスクリプト内でインラインで宣言されていますが、コメントにあるようにこのテンプレートを S3 バケットに保存することも可能です。
 次に、CloudFormation テンプレートの下に `tenantId` と `tier` の環境変数の値を echo しています。
-
 
 ---
 
@@ -306,9 +294,7 @@ echo "tenantId: $tenantId"
 echo "tier: $tier"
 ```
 
-
 これらの変数がどのように設定されるかを確認してみましょう。 `JobRunner` は内部的に [AWS CodeBuild](https://docs.aws.amazon.com/ja_jp/codebuild/latest/userguide/welcome.html) プロジェクトを作成することを思い出してください。 `JobRunner` が CodeBuild プロジェクトを作成するとき、どの環境変数を提供するかを指定できます。 また、`JobRunner` ユーティリティは、`incomingEvent` パラメータで指定された条件を満たす EventBridge メッセージによって起動されることを思い出してください。EventBridge を介して到着するメッセージには、送信者 (この場合はコントロールプレーン) が含めたコンテキスト情報を持つ `detail` JSON オブジェクトがあります (ドキュメントは[こちら](https://docs.aws.amazon.com/ja_jp/eventbridge/latest/userguide/eb-events-structure.html))。 `importedVariables` の各キーに対して、`JobRunner` は EventBridge メッセージの `detail` JSON オブジェクトから一致するキーの値を取得し、その値を環境変数として CodeBuild プロジェクトに提供します。
-
 
 例えば、次のようなプロビジョニングメッセージがコントロールプレーンから EventBridge 経由で送信された場合を考えてみましょう。
 
@@ -316,14 +302,12 @@ echo "tier: $tier"
 {
   "version": "0",
   "id": "6a7e8feb-b491-4cf7-a9f1-bf3703467718",
-  "detail-type": "onboarding",
-  "source": "application-plane-source",
+  "detail-type": "onboardingRequest",
+  "source": "controlPlaneEventSource",
   "account": "111122223333",
   "time": "2017-12-22T18:43:48Z",
   "region": "us-west-1",
-  "resources": [
-    "arn:aws:ec2:us-west-1:123456789012:instance/i-1234567890abcdef0"
-  ],
+  "resources": ["arn:aws:ec2:us-west-1:123456789012:instance/i-1234567890abcdef0"],
   "detail": {
     "tenantId": "e6878e03-ae2c-43ed-a863-08314487318b",
     "tier": "standard"
@@ -336,7 +320,6 @@ echo "tier: $tier"
 ---
 
 ###### テナント用 CloudFormation アーティファクトのデプロイ
-
 
 次に、上で見た CloudFormation テンプレートを利用してテナント用のインフラストラクチャーをデプロイしています。
 
@@ -359,6 +342,7 @@ export tenantConfig=$(jq --arg SAAS_APP_USERPOOL_ID "MY_SAAS_APP_USERPOOL_ID" \
 --arg API_GATEWAY_URL "MY_API_GATEWAY_URL" \
 -n '{"userPoolId":$SAAS_APP_USERPOOL_ID,"appClientId":$SAAS_APP_CLIENT_ID,"apiGatewayUrl":$API_GATEWAY_URL}')
 echo $tenantConfig
+export tenantStatus="created"
 ```
 
 `importedVariables` に対して実行したのと同様に、JobRunner は `exportedVariables` で指定された変数を抽出し、発信 EventBridge メッセージの `detail` セクションに含めます。
@@ -368,41 +352,68 @@ echo $tenantConfig
 さまざまな部分を個別に見てきましたが、ここでまとめましょう。 `/lib` ディレクトリーに `app-plane.ts` という新しいファイルを作成し、次の内容を貼り付けてください。
 
 ```typescript
-import { CoreApplicationPlane, DetailType, EventManager } from '@cdklabs/sbt-aws';
+import * as sbt from '@cdklabs/sbt-aws';
 import * as cdk from 'aws-cdk-lib';
-import { PolicyDocument } from 'aws-cdk-lib/aws-iam';
+import { EventBus } from 'aws-cdk-lib/aws-events';
+import { PolicyDocument, PolicyStatement, Effect } from 'aws-cdk-lib/aws-iam';
 
 export interface AppPlaneProps extends cdk.StackProps {
-  eventBusArn: string;
+  eventManager: sbt.IEventManager;
 }
 export class AppPlaneStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props: AppPlaneProps) {
     super(scope, id, props);
-    const provisioningJobRunnerProps = {
-      name: 'provisioning',
-      permissions: PolicyDocument.fromJson(
-        JSON.parse(`
-{
-  "Version":"2012-10-17",
-  "Statement":[
-      {
-        "Action":[
-            "cloudformation:CreateStack",
-            "cloudformation:DescribeStacks",
-            "s3:CreateBucket"
+    const deprovisioningScriptJobProps: sbt.TenantLifecycleScriptJobProps = {
+      permissions: new PolicyDocument({
+        statements: [
+          new PolicyStatement({
+            actions: [
+              'cloudformation:DeleteStack',
+              'cloudformation:DescribeStacks',
+              's3:DeleteBucket',
+            ],
+            resources: ['*'],
+            effect: Effect.ALLOW,
+          }),
         ],
-        "Resource":"*",
-        "Effect":"Allow"
-      }
-  ]
-}
-`)
-      ),
+      }),
       script: `
 echo "starting..."
 
-# この template.json はここで作成されていますが、
-# S3 バケットから取得することも可能です。
+echo "tenantId: $tenantId"
+
+aws cloudformation delete-stack --stack-name "tenantTemplateStack-\${tenantId}"
+aws cloudformation wait stack-delete-complete --stack-name "tenantTemplateStack-\${tenantId}"
+export status="deleted stack: tenantTemplateStack-\${tenantId}"
+export registrationStatus="deleted"
+echo "done!"
+`,
+      environmentStringVariablesFromIncomingEvent: ['tenantId'],
+      environmentVariablesToOutgoingEvent: {
+        tenantRegistrationData: ['registrationStatus'],
+      },
+      eventManager: props.eventManager,
+    };
+
+    const provisioningScriptJobProps: sbt.TenantLifecycleScriptJobProps = {
+      permissions: new PolicyDocument({
+        statements: [
+          new PolicyStatement({
+            actions: [
+              'cloudformation:CreateStack',
+              'cloudformation:DescribeStacks',
+              's3:CreateBucket',
+            ],
+            resources: ['*'],
+            effect: Effect.ALLOW,
+          }),
+        ],
+      }),
+      script: `
+echo "starting..."
+
+# note that this template.yaml is being created here, but
+# it could just as easily be pulled in from an S3 bucket.
 cat > template.json << EndOfMessage
 {
   "AWSTemplateFormatVersion": "2010-09-09",
@@ -426,26 +437,39 @@ export tenantConfig=$(jq --arg SAAS_APP_USERPOOL_ID "MY_SAAS_APP_USERPOOL_ID" \
 -n '{"userPoolId":$SAAS_APP_USERPOOL_ID,"appClientId":$SAAS_APP_CLIENT_ID,"apiGatewayUrl":$API_GATEWAY_URL}')
 
 echo $tenantConfig
+export tenantStatus="created"
 
 echo "done!"
 `,
-      postScript: '',
-      importedVariables: ['tenantId', 'tier'],
-      exportedVariables: ['tenantS3Bucket', 'someOtherVariable', 'tenantConfig'],
+      environmentStringVariablesFromIncomingEvent: ['tenantId', 'tier'],
+      environmentVariablesToOutgoingEvent: {
+        tenantData: ['tenantS3Bucket', 'tenantConfig', 'someOtherVariable', 'tenantStatus'],
+        tenantRegistrationData: ['registrationStatus'],
+      },
       scriptEnvironmentVariables: {
         TEST: 'test',
       },
-      outgoingEvent: DetailType.PROVISION_SUCCESS,
-      incomingEvent: DetailType.ONBOARDING_REQUEST,
+      eventManager: props.eventManager,
     };
 
-    new CoreApplicationPlane(this, 'CoreApplicationPlane', {
-      eventBusArn: props.eventBusArn,
-      jobRunnerPropsList: [provisioningJobRunnerProps],
+    const provisioningJobScript: sbt.ProvisioningScriptJob = new sbt.ProvisioningScriptJob(
+      this,
+      'provisioningJobScript',
+      provisioningScriptJobProps
+    );
+
+    const deprovisioningJobScript: sbt.DeprovisioningScriptJob = new sbt.DeprovisioningScriptJob(
+      this,
+      'deprovisioningJobScript',
+      deprovisioningScriptJobProps
+    );
+
+    new sbt.CoreApplicationPlane(this, 'CoreApplicationPlane', {
+      eventManager: props.eventManager,
+      scriptJobs: [provisioningJobScript, deprovisioningJobScript],
     });
   }
 }
-
 ```
 
 これは長いコードに見えるかもしれませんが、それでも単一のコンストラクトで、さまざまな設定を渡しているだけです。アプリケーションプレーンを定義できたので、もう一度 bin ディレクトリーの hello-cdk.ts ファイルを開きましょう。 コメントアウトされている行をすべてコメントを外してください。最終的なファイルは次のようになります。
@@ -458,9 +482,9 @@ import { ControlPlaneStack } from '../lib/control-plane';
 import { AppPlaneStack } from '../lib/app-plane';
 
 const app = new cdk.App();
-const cp = new ControlPlaneStack(app, 'ControlPlaneStack', {});
-const ap = new AppPlaneStack(app, 'AppPlaneStack', {
-  eventBusArn: cp.eventBusArn,
+const controlPlaneStack = new ControlPlaneStack(app, 'ControlPlaneStack');
+const appPlaneStack = new AppPlaneStack(app, 'AppPlaneStack', {
+  eventManager: controlPlaneStack.eventManager,
 });
 ```
 
@@ -476,37 +500,45 @@ cdk deploy --all --require-approval never
 デプロイが完了したら、基本的なコントロールプレーンとアプリケーションプレーンをいくつかのテストで確認しましょう。 コントロールプレーンをデプロイしたときに、一時的な Admin クレデンシャルがメールで届いているはずです。 そのクレデンシャルを使って、以下のスクリプトでプレースホルダー ( “INSERT PASSWORD HERE” )を置き換えてください。ログインに成功すると、このスクリプトは新しいテナントをオンボーディングし、その詳細を取得します。 このスクリプトでは [JSON プロセッサの jq](https://jqlang.github.io/jq/) を使用しています。
 
 ```sh
-PASSWORD="INSERT PASSWORD HERE"
-# テナントへのログインが必要であれば、実際のメールアドレスに変更してください。
-TENANT_EMAIL="tenant@example.com" 
+PASSWORD='INSERT PASSWORD HERE'
+# Change this to a real email if you'd like to log into the tenant
+TENANT_EMAIL="tenant@example.com"
 CONTROL_PLANE_STACK_NAME="ControlPlaneStack"
 TENANT_NAME="tenant$RANDOM"
 
-CLIENT_ID=$(aws cloudformation describe-stacks --stack-name ControlPlaneStack --query "Stacks[0].Outputs[?OutputKey=='ControlPlaneIdpDetails'].OutputValue" | jq -r '.[0]' | jq -r '.idp.clientId')
-USER_POOL_ID=$(aws cloudformation describe-stacks --stack-name ControlPlaneStack --query "Stacks[0].Outputs[?OutputKey=='ControlPlaneIdpDetails'].OutputValue" | jq -r '.[0]' | jq -r '.idp.userPoolId')
+CLIENT_ID=$(aws cloudformation describe-stacks \
+  --stack-name "$CONTROL_PLANE_STACK_NAME" \
+  --query "Stacks[0].Outputs[?OutputKey=='ControlPlaneIdpClientId'].OutputValue" \
+  --output text)
+
+USER_POOL_ID=$(aws cloudformation describe-stacks \
+  --stack-name "$CONTROL_PLANE_STACK_NAME" \
+  --query "Stacks[0].Outputs[?OutputKey=='ControlPlaneIdpUserPoolId'].OutputValue" \
+  --output text)
+
 USER="admin"
 
-# initiate-auth 実行のために必須
+# required in order to initiate-auth
 aws cognito-idp update-user-pool-client \
     --user-pool-id "$USER_POOL_ID" \
     --client-id "$CLIENT_ID" \
-    --explicit-auth-flows USER_PASSWORD_AUTH
+    --explicit-auth-flows USER_PASSWORD_AUTH > /dev/null
 
-# パスワードリセットの要求を無効化
+# remove need for password reset
 aws cognito-idp admin-set-user-password \
     --user-pool-id "$USER_POOL_ID" \
     --username "$USER" \
     --password "$PASSWORD" \
     --permanent
 
-# ユーザー用のクレデンシャル取得
+# get credentials for user
 AUTHENTICATION_RESULT=$(aws cognito-idp initiate-auth \
-    --auth-flow USER_PASSWORD_AUTH \
-    --client-id "${CLIENT_ID}" \
-    --auth-parameters "USERNAME=${USER},PASSWORD='${PASSWORD}'" \
-    --query 'AuthenticationResult')
+  --auth-flow USER_PASSWORD_AUTH \
+  --client-id "${CLIENT_ID}" \
+  --auth-parameters "USERNAME='${USER}',PASSWORD='${PASSWORD}'" \
+  --query 'AuthenticationResult')
 
-ID_TOKEN=$(echo "$AUTHENTICATION_RESULT" | jq -r '.IdToken')
+ACCESS_TOKEN=$(echo "$AUTHENTICATION_RESULT" | jq -r '.AccessToken')
 
 CONTROL_PLANE_API_ENDPOINT=$(aws cloudformation describe-stacks \
     --stack-name "$CONTROL_PLANE_STACK_NAME" \
@@ -517,26 +549,67 @@ DATA=$(jq --null-input \
     --arg tenantName "$TENANT_NAME" \
     --arg tenantEmail "$TENANT_EMAIL" \
     '{
-  "tenantName": $tenantName,
-  "email": $tenantEmail,
-  "tier": "basic",
-  "tenantStatus": "In progress"
+      "tenantData": {
+        "tenantName": $tenantName,
+        "email": $tenantEmail,
+        "tier": "basic"
+        },
+      "tenantRegistrationData": {
+        "registrationStatus": "In progress"
+      }
 }')
 
 echo "creating tenant..."
-curl --request POST \
-    --url "${CONTROL_PLANE_API_ENDPOINT}tenants" \
-    --header "Authorization: Bearer ${ID_TOKEN}" \
+CREATION_RESPONSE=$(curl --request POST \
+    --url "${CONTROL_PLANE_API_ENDPOINT}tenant-registrations" \
+    --header "Authorization: Bearer ${ACCESS_TOKEN}" \
     --header 'content-type: application/json' \
-    --data "$DATA"
-echo "" # 新規に行を追加
+    --data "$DATA")
 
-echo "retrieving tenants..."
+echo "$CREATION_RESPONSE" | jq
+echo "" # add newline
+
+# Extract both IDs from the creation response
+TENANT_ID=$(echo "$CREATION_RESPONSE" | jq -r '.data.tenantId')
+TENANT_REGISTRATION_ID=$(echo "$CREATION_RESPONSE" | jq -r '.data.tenantRegistrationId')
+
+# Function to check tenant status
+check_tenant_status() {
+    local status=$(curl --silent \
+        --url "${CONTROL_PLANE_API_ENDPOINT}tenant-registrations" \
+        --header "Authorization: Bearer ${ACCESS_TOKEN}" \
+        | jq -r ".data[] | select(.tenantId == \"$TENANT_ID\") | .registrationStatus")
+    echo "$status"
+}
+
+# Wait for tenant to be fully provisioned
+echo "waiting for tenant to be fully provisioned..."
+while true; do
+    STATUS=$(check_tenant_status)
+    echo "Current status: $STATUS"
+    if [ "$STATUS" = "" ]; then
+        echo "Tenant provisioning completed"
+        break
+    elif [ "$STATUS" = "In progress" ]; then
+        echo "Still provisioning... waiting 10 seconds"
+        sleep 10
+    else
+        echo "Unexpected status: $STATUS"
+        exit 1
+    fi
+done
+
+echo "deleting tenant..."
+curl --request DELETE \
+    --url "${CONTROL_PLANE_API_ENDPOINT}tenant-registrations/${TENANT_REGISTRATION_ID}" \
+    --header "Authorization: Bearer ${ACCESS_TOKEN}" \
+    --header 'content-type: application/json' | jq
+
+echo "verifying deletion..."
 curl --request GET \
-    --url "${CONTROL_PLANE_API_ENDPOINT}tenants" \
-    --header "Authorization: Bearer ${ID_TOKEN}" \
+    --url "${CONTROL_PLANE_API_ENDPOINT}tenant-registrations" \
+    --header "Authorization: Bearer ${ACCESS_TOKEN}" \
     --silent | jq
-
 ```
 
 これでテナントのオンボーディングができたので、コンソールを確認してデプロイされたものを確認しましょう。
@@ -555,98 +628,118 @@ Step Functions はまだ実行中の可能性がありますが、色々と調�
 
 #### テナントのオンボーディング
 
-コントロールプレーンは、新しいテナントをオンボーディングするたびにこのイベントをパブリッシュします。 このイベントには、アプリケーションプレーンがテナントリソースをプロビジョニングするのに必要なすべての情報が含まれている必要があります。 これには、テナント名、メールアドレス、ティアなどが含まれます。
+コントロール・プレーンは、新しいテナントをオンボードするたびに、このイベントを発行します。このイベントには、テナント作成リクエスト（POST /tenants）に含まれるすべての情報と、テナント管理サービスによって追加されたフィールドが含まれます。上記の場合、オンボーディング・イベントは次のようになります：
 
 ##### サンプルのオンボーディングイベント
 
 ```json
 {
-    "source": "sbt-control-plane-api",
-    "detail-type": "Onboarding",
-    "detail": {
-        "tenantId": "guid string",
-        "tenantStatus": "see notes",
-        "tenantName": "tenant name",
-        "email": "admin@saas.com",
-        "isActive": "boolean"
-    }
+  "source": "controlPlaneEventSource",
+  "detail-type": "onboardingRequest",
+  "detail": {
+    "tenantId": "guid string",
+    "tenantName": "tenant$RANDOM",
+    "email": "tenant@example.com",
+    "tier": "basic",
+    "tenantStatus": "In progress"
+  }
 }
 ```
 
-#### オンボーディングステータス
+#### テナント・プロビジョンの成功
 
-アプリケーションプレーンは、オンボーディングの完了時にこのイベントをパブリッシュします。これは必ずしもオンボーディング要求が成功したことを意味するわけではなく、成功、失敗、またはタイムアウトの結果として完了まで実行されたことを意味することに注意してください。このイベントは、イベントパブリッシュ時のオンボーディング要求のステータスを含みます。
+設定に従って、アプリケーションプレーンはオンボーディングの完了時にこのイベントを発行する。このイベントには、`tenantId` と、`environmentVariablesToOutgoingEvent` パラメータで指定した環境変数（キーと値のペア）を含む `jobOutput` オブジェクトが含まれる。上記の例では、プロビジョニング成功イベントは以下のようになります：
 
-返却された `tenantConfig` オブジェクトは、アプリケーションプレーンのオンボーディングイベントに適した任意の情報を含むエスケープされた JSON 文字列です。 Serverless SaaS リファレンスアーキテクチャの SBT 実装では、このペイロードにテナントの Cognito ユーザープール ID、アプリケーションクライアント ID、API Gateway URL が含まれています。
-
-テナントプロビジョニングが成功すると、Serverless SaaS リファレンスアーキテクチャは Complete を返します。
-
-##### サンプルのオンボーディングステータスイベント
+##### プロビジョニング成功イベントのサンプル
 
 ```json
 {
-    "source": "sbt-application-plane-api",
-    "detail-type": "Onboarding",
-    "detail": {
-        "tenantConfig": "json string - see notes",
-        "tenantStatus": "Complete",
-    }
+  "source": "applicationPlaneEventSource",
+  "detail-type": "provisionSuccess",
+  "detail": {
+    "jobOutput": {
+      "tenantStatus": "created",
+      "tenantConfig": "{\n  \"userPoolId\": \"MY_SAAS_APP_USERPOOL_ID\",\n  \"appClientId\": \"MY_SAAS_APP_CLIENT_ID\",\n  \"apiGatewayUrl\": \"MY_API_GATEWAY_URL\"\n}",
+      "tenantName": "tenant$RANDOM",
+      "tenantS3Bucket": "mybucket",
+      "someOtherVariable": "this is a test",
+      "email": "tenant@example.com"
+    },
+    "tenantId": "guid string"
+  }
 }
 ```
 
-#### オフボーディング
+#### テナントプロビジョニング成功
 
-コントロールプレーンは、テナントをオフボーディングするたびにこのイベントをパブリッシュします。 最低限、このイベントにはテナント ID やティアが含まれる必要があります。 オフボーディングは、テナントユーザーがシステムにログインできなくなるだけでなく、SBT からテナントのインフラストラクチャも削除されます。
+設定に従って、アプリケーションプレーンはオンボーディングの完了時にこのイベントを発行します。このイベントには、`tenantId`と、`environmentVariablesToOutgoingEvent`パラメータで指定されたキーを持つ環境変数（キー/値ペア）を含む`jobOutput`オブジェクトが含まれています。上記の例では、プロビジョニング成功イベントは次のようになります。
 
-##### サンプルのオフボーディングイベント
+##### サンプルのプロビジョニング成功イベント
 
 ```json
 {
-    "source": "sbt-control-plane-api",
-    "detail-type": "Offboarding",
-    "detail": {
-        "tenantId": "string",
-        "tier": "string",
-    }
+  "source": "applicationPlaneEventSource",
+  "detail-type": "provisionSuccess",
+  "detail": {
+    "jobOutput": {
+      "tenantStatus": "created",
+      "tenantConfig": "{\n  \"userPoolId\": \"MY_SAAS_APP_USERPOOL_ID\",\n  \"appClientId\": \"MY_SAAS_APP_CLIENT_ID\",\n  \"apiGatewayUrl\": \"MY_API_GATEWAY_URL\"\n}",
+      "tenantName": "tenant$RANDOM",
+      "tenantS3Bucket": "mybucket",
+      "someOtherVariable": "this is a test",
+      "email": "tenant@example.com"
+    },
+    "tenantId": "guid string"
+  }
 }
 ```
 
-#### オフボーディングステータス
+#### テナントオフボーディングリクエスト
 
-アプリケーションプレーンは、オフボーディングが完了したらこのイベントをパブリッシュします。 オンボーディングと同様、このイベントは必ずしも成功を示すわけではなく、ステータスがイベントのペイロードに含まれています。
+コントロール・プレーンはテナントをオフボーディングするたびにこのイベントを発行する。このイベントの詳細には、テナントオブジェクト全体（つまり、テナント作成リクエストで定義されたフィールドと `tenantId` などのフィールド）が含まれます。上記で定義したオンボーディングジョブと同様に、オフボーディングは、テナントの専用インフラストラクチャの削除を含むがこれに限定されない、アプリケーションが必要とするものであれば何でも可能です。
 
-##### サンプルのオフボーディングステータスイベント 
+##### オフボーディングリクエストイベントのサンプル
 
 ```json
 {
-    "source": "sbt-application-plane-api",
-    "detail-type": "Offboarding",
-    "detail": {
-        "tenantStatus": "Deleted",
-    }
+  "source": "controlPlaneEventSource",
+  "detail-type": "offboardingRequest",
+  "detail": {
+    // <entire tenant object>
+  }
 }
 ```
 
-#### テナントの無効化
+#### テナントデプロビジョンの成功
 
-コントロールプレーンは、テナントを無効化するときにこのイベントをパブリッシュします。 SBT のコンテキストでは、無効化によりテナントユーザーがテナントアプリケーションにログインできなくなりますが、必ずしもテナントのインフラストラクチャが削除されるわけではありません。
+アプリケーション・プレーンは、テナントのデプロビジョニングが正常に完了すると、このイベントを発行します。このイベントには、ソース、詳細タイプ、およびデプロビジョニング・プロセスに関与したリソースを含む、標準の EventBridge メタデータが含まれます。イベントの詳細セクションには、tenantData（通常、デプロビジョニング後は空）と、最終的な登録ステータスを含むtenantRegistrationData、およびオフボーディングされたテナントのtenantRegistrationIdを含むjobOutputオブジェクトが含まれます。jobOutputの具体的な内容は、デプロビジョニング・ジョブの構成とenvironmentVariablesToOutgoingEventパラメータによって決定されるため、全体的に一貫した形式を維持しながら、含まれる情報に柔軟性を持たせることができます。このイベントは、テナントに必要なすべてのクリーンアップとデプロビジョニング・アクションが完了したことを確認する役割を果たします。
 
-##### サンプルのテナント無効化イベント
+#### デプロビジョンの成功イベントのサンプル
 
-#### 無効化ステータス 
-
-アプリケーションプレーンは、テナント無効化が完了したらこのイベントをパブリッシュします。 このイベントは、必ずしも無効化が成功したことを示すわけではなく、ステータスがペイロードに含まれています。 
-
-##### サンプルの無効化ステータスイベント
-
-#### テナントの有効化
-
-##### サンプルのテナント有効化イベント
-
-#### 有効化ステータスイベント
-
-##### サンプルの有効化ステータスイベント
-
+```json
+{
+  "version": "0",
+  "id": "guid-string",
+  "detail-type": "deprovisionSuccess",
+  "source": "applicationPlaneEventSource",
+  "account": "account-id",
+  "time": "timestamp",
+  "region": "region",
+  "resources": [
+    "arn:aws:states:region:account-id:stateMachine:deprovisioningJobScriptprovisioningStateMachine-id",
+    "arn:aws:states:region:account-id:execution:deprovisioningJobScriptprovisioningStateMachine-id:execution-id"
+  ],
+  "detail": {
+    "jobOutput": {
+      "tenantData": {},
+      "tenantRegistrationData": {
+        "registrationStatus": "deleted"
+      }
+    },
+    "tenantRegistrationId": "registration-guid-string"
+  }
+}
+```
 
 ## 設計方針
 
@@ -660,17 +753,41 @@ Step Functions はまだ実行中の可能性がありますが、色々と調�
 ## 追加のドキュメントとリソース
 
 #### テナント管理
+
 現在、このサービスは単にアプリケーションプレーンに送信された正常なオンボーディング要求の結果を記録するだけで、今のところシンプルです。 SBT モデルでさらにリファレンスアーキテクチャを構築し続けると、テナント設定、ルーティング、ID 管理など、追加の機能が必要になる可能性があります。
+
 #### システムユーザー管理
+
 システムユーザーは、SaaS 環境を管理する管理ユーザーを表します。 これらのユーザーには、異なるシステムユーザーを認証し管理するための独自の ID メカニズムが必要です。 これらのユーザーのライフサイクルとネイチャーはテナントユーザーよりもはるかに単純です。 これらのユーザーはコントロールプレーンによって提供される体験を通してのみ存在し使用されるため、カスタマイズも少なく、コントロールプレーンのネイティブなツーリングやコンソールを通してアクセスされます。
+
 #### テナントユーザー管理
+
 すべての SaaS システムには、そのシステムのユーザーを管理する方法が必要です。 これらのユーザーは、アプリケーションプレーン内でのみ管理することも可能です。 しかし、これらの同じユーザーもオンボーディングと認証の体験の一部としてテナントに接続される必要があります。 このテナントと ID を関連付ける必要性から、テナントユーザーはコントロールプレーンの範囲内で保存および管理される必要があります。 これにより、コントロールプレーン内でユーザーをテナントに接続し、テナントコンテキストでユーザーを認証し、テナントコンテキストをアプリケーションプレーンに注入するなど、はるかに大きな自動化が可能になります。 しかし、テナントユーザー管理がコントロールプレーン内にホストされると、このサービスには、さまざまな環境におけるテナントユーザーに関連する追加の属性を管理する責任が加わります。 つまり、コントロールプレーンをサービスとして提供する場合、ビルダーがテナントユーザーの設定をより細かく制御できるよう、より大きな柔軟性とカスタマイズ性を可能にする必要があります。 実際、アプリケーションプレーンにも、このテナント管理サービスと統合するユーザーエクスペリエンスが含まれ、テナントユーザーを管理/設定できるシナリオがあるかもしれません。
+
 #### オンボーディング
+
 テナントオンボーディングのライフサイクル全体を管理することは、コントロールプレーンの最も重要な役割の 1 つです。このサービスは、新しいテナントの導入に関連するすべての設定とダウンストリームイベントのオーケストレーションに責任を持ちます。そのため、ここではテナント管理とテナントユーザー管理の両方との相互作用が見られます。さて、オンボーディングがさらに面白くなるのは、オンボーディングがアプリケーションプレーンとの統合にも依存している点です。各新規テナントがコントロールプレーンを介してオンボーディングされると、このサービスはアプリケーションプレーンにもイベントを送信し、テナントごとに必要となる可能性のあるアプリケーションプレーンリソース/インフラストラクチャの作成をトリガーする必要があります。ボーディング・サービスは、このアプリケーション・プロビジョニング・イベントをパブリッシュし、アプリケーションプレーンのテナントプロビジョニングライフサイクルの進捗を表すさまざまなイベントを受けられるようにしておく必要があります。
+
 #### 請求
+
 多くの SaaS プロバイダーは、自社のティアリングとマネタイズ戦略にマップされる課金プランを作成できる課金サービスと統合しています。 一般的なアプローチは、コントロールプレーン内に API を提供し、課金アカウントの作成 (オンボーディング) と個々のテナントの課金/消費イベントの公開に対する、汎用的なメカニズムを提供することです。 このサービスには、テナントの状態イベントを課金サービスに送受信するためのテナント管理との統合も含まれます。 例えば、テナントが無効化された場合、課金からテナント管理にトリガーが送られる可能性があります。ティアの変更もこの統合の一部となる可能性があります。
 
 #### メトリクス
+
 マルチテナント運用チームは、多くの場合、テナントやティアのアクティビティや消費プロファイルに関するテナント認識のインサイトが必要です。 このデータは様々な文脈で使用され、チームはパターンに基づいて運用上、ビジネス上、設計上の決定を下すことができます。これらのパターンは、アプリケーションティアから公開されるメトリクスを通して観察できるはずです。 コントロールプレーンは、これらのメトリクスイベントを受け入れるための標準化されたメトリクス API を提供します。 また、テナントおよびティアのコンテキストを伝える方法に関して、ある程度の標準化を行いながら、ビルダーがカストムイベントを定義できるようにします。 これらのメトリクスはすべてコントロールプレーンで集約され、コントロールプレーン管理コンソールのダッシュボードに表示されます。また、他の分析ツールにメトリクスデータを取り込むサポートも提供される可能性があります。
+
 #### ティアリング
+
 ティアリングはコントロールプレーン内の非常に基本的な構成要素です。 しかし、SaaS 環境のティアリング設定に対する、一元化された中央リポジトリを提供する必要があります。 これにより、アプリケーションプレーンとコントロールプレーンの間で、テナントとティアの間のマッピングについて明確な合意点ができます。このマッピングは、コントロールプレーンの内外の多くの体験で使用されます。
+
+### AWS Marketplace との統合
+
+SaaS Builder Toolkit は、SaaS アプリケーションと AWS Marketplace との統合を簡素化するためのコンストラクトを提供します。AWSMarketplaceSaaSProduct` コンストラクトは、登録 API、サブスクライバ情報を格納するための DynamoDB テーブル、サブスクリプションとエンタイトルメントイベントを処理するために必要な AWS Lambda 関数とイベントソースを含む、AWS Marketplace SaaS プロダクトを作成できます。
+
+ツールキットには `SampleRegistrationWebPage` コンストラクトも含まれており、Amazon S3 にホストされ、Amazon CloudFront によってフロントされるサンプル登録 Web ページが作成される。このWebページには、ユーザがSaaS製品に登録するための動的なフォームが含まれており、登録に必要なフィールドはコンストラクトのpropとして指定される。
+
+さらに、ツールキットは、AWS Marketplaceからのサブスクリプションイベントの処理、使用量の計測、サブスクリプションステータスに基づく製品へのアクセスの許可または取り消しなど、エンタイトルメントとサブスクリプションロジックを管理するためのユーティリティを提供します。
+
+これらのコンストラクトとユーティリティを活用することで、SaaS アプリケーションと AWS Marketplace の統合プロセスを合理化し、Marketplace の要件への準拠を保証し、顧客にシームレスな登録とサブスクリプションのエクスペリエンスを提供することができます。
+
+詳細については、[AWS Marketplace Integration](/docs/public/marketplace-integration.md) を参照してください。
