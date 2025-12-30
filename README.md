@@ -7,7 +7,7 @@
 
 [![View on Construct Hub](https://constructs.dev/badge?package=%40cdklabs%2Fsbt-aws)](https://constructs.dev/packages/@cdklabs/sbt-aws)
 
-The **SaaS Builder Toolkit for AWS** (SBT) is an open-source developer toolkit to implement SaaS best practices and increase developer velocity.
+The **SaaS Builder Toolkit for AWS** (SBT) is an open-source developer toolkit to implement SaaS best practices and increase developer velocity. SBT should be considered sample code and, as such, you should ensure that proper security concerns such as authorization and other security is implemented per your organziation's standards before you deploy this into production environments.
 
 It offers a high-level object-oriented abstraction to define SaaS resources on AWS imperatively using the power of modern programming languages. Using SBT’s library of infrastructure constructs, you can easily encapsulate SaaS best practices in your SaaS application, and share it without worrying about boilerplate logic.
 
