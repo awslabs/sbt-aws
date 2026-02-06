@@ -232,9 +232,11 @@ export class ScriptJob extends Construct {
       }
     }
 
-    const codeBuildProjectEncryptionKey = new kms.Key(this, `codeBuildProjectEncryptionKey`, {
-      enableKeyRotation: true,
-    });
+    const codeBuildProjectEncryptionKey = props.projectProps?.encryptionKey
+      ? props.projectProps.encryptionKey
+      : new kms.Key(this, `codeBuildProjectEncryptionKey`, {
+          enableKeyRotation: true,
+        });
 
     var codeBuildProjectExportedVariables: string[] = [];
     if (props.environmentVariablesToOutgoingEvent?.tenantData) {

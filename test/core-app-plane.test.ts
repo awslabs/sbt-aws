@@ -14,6 +14,7 @@
 import * as cdk from 'aws-cdk-lib';
 import { Annotations, Match, Template } from 'aws-cdk-lib/assertions';
 import { PolicyDocument, PolicyStatement, Effect } from 'aws-cdk-lib/aws-iam';
+import * as kms from 'aws-cdk-lib/aws-kms';
 import { AwsSolutionsChecks, NagSuppressions } from 'cdk-nag';
 import { Construct, IConstruct } from 'constructs';
 import { CoreApplicationPlane, ProvisioningScriptJob } from '../src/core-app-plane';
@@ -198,5 +199,104 @@ describe('CoreApplicationPlane', () => {
     });
 
     cdk.Aspects.of(app).add(new AwsSolutionsChecks());
+  });
+
+  test('should create a new KMS key when encryptionKey is not provided', () => {
+    const app = new cdk.App();
+    class CoreApplicationPlaneStack extends cdk.Stack {
+      constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+        super(scope, id, props);
+        const eventManager = new EventManager(this, 'EventManager', {
+          controlPlaneEventSource: 'test.control.plane',
+          applicationPlaneEventSource: 'test.app.plane',
+        });
+        const provisioningJobScript: ProvisioningScriptJob = new ProvisioningScriptJob(
+          this,
+          'provisioningJobScript',
+          {
+            permissions: new PolicyDocument({
+              statements: [
+                new PolicyStatement({
+                  actions: ['cloudformation:CreateStack'],
+                  resources: ['*'],
+                  effect: Effect.ALLOW,
+                }),
+              ],
+            }),
+            script: '',
+            eventManager: eventManager,
+          }
+        );
+        new CoreApplicationPlane(this, 'CoreApplicationPlane', {
+          eventManager: eventManager,
+          scriptJobs: [provisioningJobScript],
+        });
+      }
+    }
+
+    const coreApplicationPlaneStack = new CoreApplicationPlaneStack(app, 'appPlaneStack');
+    const template = Template.fromStack(coreApplicationPlaneStack);
+
+    // check that codebuild has the created key
+    template.hasResourceProperties('AWS::CodeBuild::Project', {
+      EncryptionKey: Match.anyValue(),
+    });
+
+    cdk.Aspects.of(app).add(new AwsSolutionsChecks());
+    app.synth();
+  });
+
+  test.only('should use provided KMS key and not create a new one', () => {
+    const app = new cdk.App();
+    class CoreApplicationPlaneStack extends cdk.Stack {
+      constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+        super(scope, id, props);
+        const eventManager = new EventManager(this, 'EventManager', {
+          controlPlaneEventSource: 'test.control.plane',
+          applicationPlaneEventSource: 'test.app.plane',
+        });
+        const myCustomKey = new kms.Key(this, 'CustomKey');
+
+        const provisioningJobScript: ProvisioningScriptJob = new ProvisioningScriptJob(
+          this,
+          'provisioningJobScript',
+          {
+            permissions: new PolicyDocument({
+              statements: [
+                new PolicyStatement({
+                  actions: ['cloudformation:CreateStack'],
+                  resources: ['*'],
+                  effect: Effect.ALLOW,
+                }),
+              ],
+            }),
+            script: '',
+            eventManager: eventManager,
+            projectProps: {
+              encryptionKey: myCustomKey,
+            },
+          }
+        );
+        new CoreApplicationPlane(this, 'CoreApplicationPlane', {
+          eventManager: eventManager,
+          scriptJobs: [provisioningJobScript],
+        });
+      }
+    }
+
+    const coreApplicationPlaneStack = new CoreApplicationPlaneStack(app, 'appPlaneStack');
+    const template = Template.fromStack(coreApplicationPlaneStack);
+
+    // check that no unwanted extra keys have been created
+    template.resourceCountIs('AWS::KMS::Key', 1);
+    // check that codebuild points to the arn of myCustomKey
+    template.hasResourceProperties('AWS::CodeBuild::Project', {
+      EncryptionKey: {
+        'Fn::GetAtt': [Match.stringLikeRegexp('CustomKey.*'), 'Arn'],
+      },
+    });
+
+    cdk.Aspects.of(app).add(new AwsSolutionsChecks());
+    app.synth();
   });
 });
