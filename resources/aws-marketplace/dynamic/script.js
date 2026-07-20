@@ -52,24 +52,44 @@ const toggleSpinnerAndText = (button, showSpinner) => {
 
   if (showSpinner) {
     button.disabled = true;
-    button.innerHTML = '';
-    button.appendChild(spinner);
+    button.replaceChildren(spinner);
   } else {
     button.disabled = false;
-    button.innerHTML = 'Register';
+    button.textContent = 'Register';
   }
 };
 
-const showAlert = (cssClass, message) => {
-  const html = `
-    <div class="alert alert-${cssClass} alert-dismissible" role="alert">
-        <strong>${message}</strong>
-        <button class="close" type="button" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">×</span>
-        </button>
-    </div>`;
+// Only allow known Bootstrap contextual classes to reach the DOM.
+const ALLOWED_ALERT_CLASSES = ['primary', 'danger'];
 
-  document.querySelector('#alert').innerHTML += html;
+const showAlert = (cssClass, message) => {
+  if (!ALLOWED_ALERT_CLASSES.includes(cssClass)) {
+    cssClass = 'primary';
+  }
+
+  const alertDiv = document.createElement('div');
+  alertDiv.className = `alert alert-${cssClass} alert-dismissible`;
+  alertDiv.setAttribute('role', 'alert');
+
+  // Render the message as text, never as HTML, to prevent DOM-based XSS.
+  const strong = document.createElement('strong');
+  strong.textContent = message;
+
+  const closeButton = document.createElement('button');
+  closeButton.className = 'close';
+  closeButton.type = 'button';
+  closeButton.setAttribute('data-dismiss', 'alert');
+  closeButton.setAttribute('aria-label', 'Close');
+
+  const closeIcon = document.createElement('span');
+  closeIcon.setAttribute('aria-hidden', 'true');
+  closeIcon.textContent = '×';
+  closeButton.appendChild(closeIcon);
+
+  alertDiv.appendChild(strong);
+  alertDiv.appendChild(closeButton);
+
+  document.querySelector('#alert').appendChild(alertDiv);
 };
 
 const getUrlParameter = (name) => {
