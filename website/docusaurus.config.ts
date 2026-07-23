@@ -20,6 +20,12 @@ const config: Config = {
    onBrokenLinks: 'throw',
    onBrokenMarkdownLinks: 'warn',
 
+   // Disable the base-URL issue banner. It injects an inline script that writes
+   // `window.location.pathname` into the DOM via innerHTML, which AppSec/ACAT
+   // flags as a DOM-based XSS sink. Disabling it removes that inline script from
+   // every generated page (also required for strict Content-Security-Policy).
+   baseUrlIssueBanner: false,
+
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
