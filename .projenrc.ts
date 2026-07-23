@@ -76,6 +76,26 @@ const project = new awscdk.AwsCdkConstructLibrary({
   releaseTagPrefix: '@cdklabs/sbt-aws-',
 });
 
+// Pin third-party GitHub Actions to full commit SHAs. Mutable tags (@v4 etc.)
+// can be retagged, which is a supply-chain risk. These overrides are applied by
+// projen during synthesis to every generated workflow that uses the action, so
+// they survive `npx projen` regeneration (a direct edit to the generated YAML
+// would be reverted by the build's self-mutation check). Official actions/* are
+// left on tags, matching the maintainer preference. The version tag is kept in
+// the comment here for traceability.
+project.github?.actions.set(
+  'aws-actions/configure-aws-credentials@v4',
+  'aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a' // v4
+);
+project.github?.actions.set(
+  'peter-evans/create-pull-request@v6',
+  'peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c' // v6
+);
+project.github?.actions.set(
+  'amannn/action-semantic-pull-request@v5.4.0',
+  'amannn/action-semantic-pull-request@e9fabac35e210fea40ca5b14c0da95a099eff26f' // v5.4.0
+);
+
 // Add License header automatically
 project.eslint?.addPlugins('license-header');
 project.eslint?.addRules({
